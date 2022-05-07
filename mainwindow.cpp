@@ -3,6 +3,7 @@
 #include "Channel/jscontext.h"
 #include "Public/appsignal.h"
 #include "gdal_priv.h"
+#include "Dialog/dialogabout.h"
 
 #include <QScreen>
 #include <QWebEngineSettings>
@@ -31,6 +32,8 @@ MainWindow::MainWindow(QWidget *parent)
 
 MainWindow::~MainWindow()
 {
+    delete mJsContext;
+
     // 清理 tif 缓存
     QDir dir = QApplication::applicationDirPath();
     if (!dir.exists("caches")) return;
@@ -66,6 +69,7 @@ void MainWindow::init()
     connect(AppSignal::getInstance(), &AppSignal::sgl_add_tiff_entity, this, &MainWindow::slot_add_tiff_entity);
     connect(AppSignal::getInstance(), &AppSignal::sgl_change_entity_status, this, &MainWindow::slot_change_entity_status);
     connect(AppSignal::getInstance(), &AppSignal::sgl_delete_cesium_data_source, this, &MainWindow::slot_delete_cesium_data_source);
+    connect(AppSignal::getInstance(), &AppSignal::sgl_fly_to_entity, this, &MainWindow::slot_fly_to_entity);
 
     ui->widgetCesium->settings()->setAttribute(QWebEngineSettings::LocalContentCanAccessFileUrls, true);
     ui->widgetCesium->settings()->setAttribute(QWebEngineSettings::WebGLEnabled, true);
@@ -73,22 +77,23 @@ void MainWindow::init()
 
     // 菜单
     connect(ui->actionOpen, &QAction::triggered, this, &MainWindow::slot_open_files);
-    connect(ui->actionExit, &QAction::triggered, [](){exit(0);});
+    connect(ui->actionExit, &QAction::triggered, this, []{ exit(0);});
 
     connect(ui->actionMeasureLine, &QAction::triggered, this, &MainWindow::slot_start_measure_line);
     connect(ui->actionMeasurePolygn, &QAction::triggered, this, &MainWindow::slot_start_measure_polygn);
 
-    connect(ui->actionVersion, &QAction::triggered, this, []{});
+    // 版本信息
+    connect(ui->actionVersion, &QAction::triggered, this, [this]{ DialogAbout dialog(this); dialog.exec(); });
 }
 
 void MainWindow::slot_add_kml_entity(const QString &path)
 {
-    emit mJsContext->sgl_send_client_msg("add", "kml", path);
+    emit mJsContext->sgl_add_entity("kml", path);
 }
 
 void MainWindow::slot_add_kmz_entity(const QString &path)
 {
-    emit mJsContext->sgl_send_client_msg("add", "kmz", path);
+    emit mJsContext->sgl_add_entity("kmz", path);
 }
 
 void MainWindow::slot_add_tiff_entity(const QString &path)
@@ -138,18 +143,22 @@ void MainWindow::slot_add_tiff_entity(const QString &path)
                                                  QString::number(latitudeEnd, 'f', 6),
                                                  QString("%1/caches/%2-%3.png").arg(dir.absolutePath(), info.baseName(), suffixTime));
 
-    emit mJsContext->sgl_send_client_msg("add", "tif", args);
+    emit mJsContext->sgl_add_entity("tif", args);
 }
 
-void MainWindow::slot_change_entity_status(const QString &type, const QString &name, const QString &visible)
+void MainWindow::slot_change_entity_status(const QString &type, const QString &name, bool visible, const QString &parentid)
 {
-    //qDebug() << " A " << "change" + type << " " << name << " " << visible;
-    emit mJsContext->sgl_send_client_msg("change" + type, name, visible);
+    emit mJsContext->sgl_change_entity_visible(type, name, visible, parentid);
 }
 
 void MainWindow::slot_delete_cesium_data_source(const QString &type, const QString &name)
 {
-    emit mJsContext->sgl_send_client_msg("delete", type, name);
+    emit mJsContext->sgl_delete_entity(type, name);
+}
+
+void MainWindow::slot_fly_to_entity(const QString &type, const QString &id, const QString &parentId)
+{
+    emit mJsContext->sgl_fly_to_entity(type, id, parentId);
 }
 
 void MainWindow::slot_open_files()
@@ -162,19 +171,19 @@ void MainWindow::slot_open_files()
     QFileInfo info(path);
     QString suffix = info.suffix();
     if (suffix == "tif") { slot_add_tiff_entity(path); }
-    else emit mJsContext->sgl_send_client_msg("add", suffix, path);
+    else emit mJsContext->sgl_add_entity(suffix, path);
 }
 
 void MainWindow::slot_start_measure_line()
 {
     QString id = QDateTime::currentDateTime().toString("yyyyMMddHHmmsszzz");
-    emit mJsContext->sgl_send_client_msg("measure", "MLA", id);
+    emit mJsContext->sgl_start_measure("mla", id);
 }
 
 void MainWindow::slot_start_measure_polygn()
 {
     QString id = QDateTime::currentDateTime().toString("yyyyMMddHHmmsszzz");
-    emit mJsContext->sgl_send_client_msg("measure", "MPA", id);
+    emit mJsContext->sgl_start_measure("mpa", id);
 }
 
 bool MainWindow::removeFolderContent(const QString &folderDir)

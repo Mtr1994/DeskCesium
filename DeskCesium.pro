@@ -36,6 +36,7 @@ DESTDIR = ../output
 
 SOURCES += \
     Channel/jscontext.cpp \
+    Dialog/dialogabout.cpp \
     EntityView/entitytreeview.cpp \
     Message/messagewidget.cpp \
     Public/appsignal.cpp \
@@ -44,6 +45,7 @@ SOURCES += \
 
 HEADERS += \
     Channel/jscontext.h \
+    Dialog/dialogabout.h \
     EntityView/entitytreeview.h \
     Message/messagewidget.h \
     Public/appsignal.h \
@@ -51,6 +53,7 @@ HEADERS += \
     mainwindow.h
 
 FORMS += \
+    Dialog/dialogabout.ui \
     mainwindow.ui
 
 TRANSLATIONS += \

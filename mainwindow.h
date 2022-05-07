@@ -23,8 +23,9 @@ public slots:
     void slot_add_kml_entity(const QString &path);
     void slot_add_kmz_entity(const QString &path);
     void slot_add_tiff_entity(const QString &path);
-    void slot_change_entity_status(const QString &type, const QString &name, const QString &visible);
+    void slot_change_entity_status(const QString &type, const QString &name, bool visible, const QString &parentid = "");
     void slot_delete_cesium_data_source(const QString &type, const QString &name);
+    void slot_fly_to_entity(const QString &type, const QString &id, const QString &parentId);
 
 private slots:
     void slot_open_files();

@@ -154,7 +154,7 @@ QCheckBox::indicator:checked
     border-image: url(:/image/checkbox_checked.png);
 }
 
-/* QTableView */
+/* QTreeView */
 QTreeView
 {
     border: none;
@@ -172,13 +172,13 @@ QTreeView::item
 QTreeView::branch:has-children:!has-siblings:closed,
 QTreeView::branch:closed:has-children:has-siblings {
     border-image: none;
-    image: url(:/resources/image/public/tree_view_right.png);
+    image: url(:/Resource/image/tree_view_right.png);
 }
 
 QTreeView::branch:open:has-children:!has-siblings,
 QTreeView::branch:open:has-children:has-siblings  {
     border-image: none;
-    image: url(:/resources/image/public/tree_view_down.png);
+    image: url(:/Resource/image/tree_view_down.png);
 }
 
 QHeaderView
@@ -263,3 +263,30 @@ QMenu::item:pressed
     border:1px solid transparent;
 }
 
+/* QScrollBar */
+QScrollBar::vertical
+{
+    background: #dddddd;
+    border: 1px solid #dddddd;
+    border-radius: 0.2em;
+    margin:0px,0px,0px,0px;
+    width: 0.5em;
+}
+
+QScrollBar::handle:vertical {
+    background-color: rgb(108, 113, 125);
+    border: none;
+    border-radius: 0.1em;
+    min-height: 1em;
+    width: 0.4em;
+}
+
+QScrollBar::add-line:vertical {
+    height: 0em;
+    subcontrol-origin: margin;
+}
+
+QScrollBar::sub-line:vertical {
+    height: 0em;
+    subcontrol-origin:margin;
+}

@@ -26,13 +26,16 @@ signals:
     void sgl_add_tiff_entity(const QString &path);
 
     // 添加实体结果
-    void sgl_add_entity_finish(const QString &type, const QString &arg);
+    void sgl_add_entity_finish(const QString &type, const QString &arg, const QString &list);
 
     // 删除实体结果
     void sgl_delete_entity_finish(const QString &arg);
 
     // 改变实体展示状态
-    void sgl_change_entity_status(const QString &type, const QString &name, const QString &visible);
+    void sgl_change_entity_status(const QString &type, const QString &name, bool visible, const QString &parentid = "");
+
+    // 飞到选中实体
+    void sgl_fly_to_entity(const QString &type, const QString &id, const QString &parentId);
 
     // 根据 名称 删除实体
     void sgl_delete_cesium_data_source(const QString &type, const QString &name);

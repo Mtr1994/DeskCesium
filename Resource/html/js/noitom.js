@@ -8,45 +8,69 @@ function init() {
     {
         new QWebChannel(qt.webChannelTransport, function(channel) { 
 			context = channel.objects.context; 
-			
-			context.sgl_send_client_msg.connect(function(action, type, arg) {
-				if (action === "add") {
-					if (type === "kml") {
-						addKmlEntity(arg);
-					} else if (type === "kmz") {
-						addKmzEntity(arg)
-					} else if (type === "tif") {
-						addTifEntity(arg)
-					}
-				} else if (action === "changesource") {
-					changeDataSourceVisible(type, arg);
-				} else if (action === "changetif") {
-					let entity = cesiumViewer.entities.getById(type)
-					if (undefined === entity) return;
-					entity.show = (arg === "true") ? true : false;
-				} else if (action === "changeMLA") {
-					changeMeasureLineSourceVisible(type, arg);
-				} else if (action === "changeMPA") {
-					changeMeasurePolygnSourceVisible(type, arg);
-				} else if (action === "delete") {
-					if (type === "tif") {
-						let entity = cesiumViewer.entities.getById(arg)
-						if (undefined === entity) return;
-						cesiumViewer.entities.remove(entity);
-						context.recvMsg("delete", type, true, arg);
-					} else if (type == "MLA") {
-						deleteMeasureLineSource(arg);
-						context.recvMsg("delete", type, true, arg);
-					} else if (type == "MPA") {
-						deleteMeasurePolygnSource(arg);
-						context.recvMsg("delete", type, true, arg);
+			context.sgl_add_entity.connect(function(type, path) {
+				if (type === "kml") {
+					addKmlEntity(path);
+				} else if (type === "kmz") {
+					addKmzEntity(path)
+				} else if (type === "tif") {
+					addTifEntity(path)
+				}
+			});
+			context.sgl_change_entity_visible.connect(function(type, id, visible, parentId) {
+				if (type === "kml" || type === "kmz") {
+					if (parentId !== "") {
+						changeDataSourceChildVisible(id, visible, parentId)
 					} else {
-						deleteDataSource(type, arg)
+						changeDataSourceVisible(id, visible, parentId);
 					}
-				} else if (action === "measure") {
-					if (type == "MLA") startMeasureLine(arg);
-					else if (type == "MPA")  startMeasurePolygn(arg);
-					else context.recvMsg("measure", type, false, arg);
+				} else if (type === "mla") {
+					changeMeasureLineSourceVisible(id, visible);
+				} else if (type === "mpa") {
+					changeMeasurePolygnSourceVisible(id, visible);
+				} else {
+					let entity = cesiumViewer.entities.getById(id)
+					if (undefined === entity) return;
+					entity.show = visible;
+				}
+			});
+			context.sgl_delete_entity.connect(function(type, id) {
+				if (type === "kml" || type === "kmz") {
+					deleteDataSource(type, id)
+				} else if (type == "mla") {
+					deleteMeasureLineSource(id);
+				} else if (type == "mpa") {
+					deleteMeasurePolygnSource(id);
+				} else {
+					let entity = cesiumViewer.entities.getById(id)
+					cesiumViewer.entities.remove(entity);
+				}
+				context.recvMsg("delete", type, true, id);
+			});
+			context.sgl_start_measure.connect(function(type, id) {
+				if (type == "mla") {
+					startMeasureLine(id);
+				} else if (type == "mpa")  {
+					startMeasurePolygn(id);
+				}
+			});
+			context.sgl_fly_to_entity.connect(function(type, id, parentId) {
+				if (parentId !== "") {
+					let dataSourceArray = cesiumViewer.dataSources.getByName(parentId);
+					if (undefined == dataSourceArray) return;
+					let len = dataSourceArray.length;
+					for (let i = 0; i < len; i++) {
+						let entity = dataSourceArray[i].entities.getById(id)
+						if (undefined === entity) continue;
+						cesiumViewer.flyTo(entity, {duration: 2, maximumHeight: 15000, offset: new Cesium.HeadingPitchRange(0, -90, 0.0)});
+					}
+				} else {
+					let entity = cesiumViewer.entities.getById(id);
+					if (undefined == entity) {
+						alert("can not find ")
+					} else {
+						cesiumViewer.flyTo(entity, {duration: 2, maximumHeight: 15000, offset: new Cesium.HeadingPitchRange(0, -90, 0.0)});
+					}
 				}
 			});
 		});
@@ -55,6 +79,13 @@ function init() {
     {
         alert("qt对象获取失败！");
     }
+	
+	let earthMap;
+	if (navigator.onLine) {
+		earthMap = new Cesium.WebMapServiceImageryProvider({ url: 'https://www.gmrt.org/services/mapserver/wms_merc', layers: 'GMRT' });
+	} else {
+		earthMap = new Cesium.TileMapServiceImageryProvider({ url: Cesium.buildModuleUrl("Assets/Textures/NaturalEarthII")});
+	}
 
 	cesiumViewer = new Cesium.Viewer('cesiumContainer', {
 	  shadows: false,
@@ -67,10 +98,7 @@ function init() {
 	  infoBox: false,
 	  geocoder: false,
 	  navigationHelpButton: false,
-	  imageryProvider: new Cesium.WebMapServiceImageryProvider({
-		url: 'https://www.gmrt.org/services/mapserver/wms_merc',
-		layers: 'GMRT'
-	  })
+	  imageryProvider: earthMap
 	})
 	cesiumViewer._cesiumWidget._creditContainer.style.display = 'none'
 	cesiumViewer.scene.sun.show = false
@@ -81,6 +109,9 @@ function init() {
 	cesiumViewer.scene.skyBox.show = false
 
 	cesiumViewer.cesiumWidget.screenSpaceEventHandler.removeInputAction(Cesium.ScreenSpaceEventType.LEFT_DOUBLE_CLICK)
+	
+	// 默认开启鼠标浮动
+	startMousePicking();
 }
 
 function sendMessage(msg, arg) {
@@ -104,26 +135,44 @@ function handleDragOver(event) {
 
 // 添加 kml 实体
 function addKmlEntity(path) {
-	const options = { camera: cesiumViewer.scene.camera, canvas: cesiumViewer.scene.canvas, screenOverlayContainer: cesiumViewer.container, clampToGround: true };
+	const options = { camera: cesiumViewer.scene.camera, canvas: cesiumViewer.scene.canvas, screenOverlayContainer: cesiumViewer.container };
 	cesiumViewer.dataSources.add(Cesium.KmlDataSource.load(path, options)).then(function (dataSource) { 
 		let entitySize = dataSource.entities.values.length;
-		for (let i = 0; i < entitySize; i++) {
-			dataSource.entities.values[i].show = true;
+		let entityList = "";
+		let screenOverlaySize = dataSource._screenOverlays.length;
+		for (let j = 0; j < screenOverlaySize; j++) {
+			entityList = entityList + "Legend," + j + "#";
 		}
-		context.recvMsg("add", "source", true, dataSource.name);
+		
+		for (let i = 0; i < entitySize; i++) {
+			let entity = dataSource.entities.values[i]
+			entity.show = true;
+			entityList = entityList + entity.name + "," + entity.id + "#";
+		}
+		context.recvMsg("add", "kml", true, dataSource.name, entityList);
 	});
 }
+
 // 添加 kmz 实体
 function addKmzEntity(path) {
 	const options = { camera: cesiumViewer.scene.camera, canvas: cesiumViewer.scene.canvas, screenOverlayContainer: cesiumViewer.container};
 	cesiumViewer.dataSources.add(Cesium.KmlDataSource.load(path, options)).then(function (dataSource) {
 		let entitySize = dataSource.entities.values.length;
-		for (let i = 0; i < entitySize; i++) {
-			dataSource.entities.values[i].show = true;
+		let entityList = "";
+		let screenOverlaySize = dataSource._screenOverlays.length;
+		for (let j = 0; j < screenOverlaySize; j++) {
+			entityList = entityList + "Legend," + j + "#";
 		}
-		context.recvMsg("add", "source", true, dataSource.name);
+		
+		for (let i = 0; i < entitySize; i++) {
+			let entity = dataSource.entities.values[i]
+			entity.show = true;
+			entityList = entityList + entity.name + "," + entity.id + "#";
+		}
+		context.recvMsg("add", "kmz", true, dataSource.name, entityList);
 	});
 }
+
 // 添加 tif 实体
 function addTifEntity(arg) {
 	let array = arg.split(",")
@@ -151,11 +200,40 @@ function changeDataSourceVisible(name, visible) {
 	
 	let len = dataSourceArray.length;
 	for (let i = 0; i < len; i++) {
-		dataSourceArray[i].show = (visible === "true") ? true : false;
+		dataSourceArray[i].show = visible;
 		
 		let screenOverlaySize = dataSourceArray[i]._screenOverlays.length;
 		for (let j = 0; j < screenOverlaySize; j++) {
 			dataSourceArray[i]._screenOverlays[j].style.visibility = dataSourceArray[i].show ? "visible" : "hidden";
+		}
+	}
+}
+
+// 修改数据集子集可视化状态
+function changeDataSourceChildVisible(id, visible, name) {
+	let dataSourceArray = cesiumViewer.dataSources.getByName(name);
+	if (undefined == dataSourceArray) return;
+	
+	if (id.startsWith("Legend")) {
+		let array = id.split("-");
+		
+		if (array.length != 2) return;
+		let index = parseInt(array[1]);
+		let len = dataSourceArray.length;
+		for (let i = 0; i < len; i++) {
+			let screenOverlaySize = dataSourceArray[i]._screenOverlays.length;
+			if (screenOverlaySize <= index) continue;
+			for (let j = 0; j < screenOverlaySize; j++) {
+				dataSourceArray[i]._screenOverlays[index].style.visibility = visible ? "visible" : "hidden";
+			}
+		}
+	} else {
+		let len = dataSourceArray.length;
+		for (let i = 0; i < len; i++) {
+			let entity = dataSourceArray[i].entities.getById(id);
+			if (undefined == entity) continue;
+			entity.show = visible;
+			break;
 		}
 	}
 }
@@ -169,7 +247,6 @@ function deleteDataSource(type, name) {
 	for (let i = 0; i < len; i++) {
 		cesiumViewer.dataSources.remove(dataSourceArray[i], true);
 	}
-	context.recvMsg("delete", type, true, name);
 }
 
 // 距离测量 (arg 为 时间 id)
@@ -213,12 +290,12 @@ function startMeasureLine(arg) {
             getSpaceDistance(positions);
 			if (positions.length == 3) {
 				// 返回测线 id
-				context.recvMsg("add", "MLA", true, arg);
+				context.recvMsg("add", "mla", true, arg);
 			}
         } else if (positions.length == 2) {
             //在三维场景中添加Label
             floatingPoint = cesiumViewer.entities.add({
-				id: "MLA" + arg + cesiumViewer.entities.values.length,
+				id: "mla" + arg + cesiumViewer.entities.values.length,
                 name: '空间距离',
                 position: labelPt,
                 point: {
@@ -244,7 +321,7 @@ function startMeasureLine(arg) {
     var PolyLinePrimitive = (function () {
         function _(positions) {
             this.options = {
-				id: "MLA" + arg + cesiumViewer.entities.values.length,
+				id: "mla" + arg + cesiumViewer.entities.values.length,
                 name: '直线',
                 polyline: {
                     show: true,
@@ -307,7 +384,7 @@ function startMeasureLine(arg) {
             if (distance > 10000)
                 textDisance = (distance / 1000.0).toFixed(2) + "千米";
             floatingPoint = cesiumViewer.entities.add({
-				id: "MLA" + arg + cesiumViewer.entities.values.length,
+				id: "mla" + arg + cesiumViewer.entities.values.length,
                 name: '贴地距离',
                 position: labelPt,
                 point: {
@@ -334,9 +411,9 @@ function startMeasureLine(arg) {
 function changeMeasureLineSourceVisible(id, visible) {
 	let len = cesiumViewer.entities.values.length
 	for (let i = 0 ; i <= len; i++) {
-		let entity = cesiumViewer.entities.getById("MLA" + id + i);
+		let entity = cesiumViewer.entities.getById("mla" + id + i);
 		if (undefined === entity) continue;
-		entity.show = (visible === "true") ? true : false;
+		entity.show = visible;
 	}
 }
 
@@ -349,7 +426,7 @@ function deleteMeasureLineSource(id) {
 		if (undefined === entity) continue;
 		let entityId = entity.id;
 		
-		if (entityId.startsWith("MLA" + id)) {
+		if (entityId.startsWith("mla" + id)) {
 			entityIdArray.push(entityId)
 		}
 	}
@@ -396,7 +473,7 @@ function startMeasurePolygn(arg) {
         positions.push(cartesian);
 		
 		// 返回测量区域 id
-		if (positions.length === 2) context.recvMsg("add", "MPA", true, arg);
+		if (positions.length === 2) context.recvMsg("add", "mpa", true, arg);
 		
         //在三维场景中添加点
         var cartographic = Cesium.Cartographic.fromCartesian(positions[positions.length - 1]);
@@ -406,7 +483,7 @@ function startMeasurePolygn(arg) {
         var labelText = "(" + longitudeString.toFixed(2) + "," + latitudeString.toFixed(2) + ")";
         tempPoints.push({ lon: longitudeString, lat: latitudeString, hei: heightString });
         floatingPoint = cesiumViewer.entities.add({
-			id: "MPA" + arg + cesiumViewer.entities.values.length,
+			id: "mpa" + arg + cesiumViewer.entities.values.length,
             name: '多边形面积',
             position: positions[positions.length - 1],
             point: {
@@ -423,7 +500,7 @@ function startMeasurePolygn(arg) {
         positions.pop();
         var textArea = getArea(tempPoints) + "平方公里";
         cesiumViewer.entities.add({
-			id: "MPA" + arg + cesiumViewer.entities.values.length,
+			id: "mpa" + arg + cesiumViewer.entities.values.length,
             name: '多边形面积',
             position: positions[positions.length - 1],
             label: {
@@ -483,7 +560,7 @@ function startMeasurePolygn(arg) {
  
     function PolygonPrimitive(positions) {
         polygon = cesiumViewer.entities.add({
-			id: "MPA" + arg + cesiumViewer.entities.values.length,
+			id: "mpa" + arg + cesiumViewer.entities.values.length,
             polygon: {
                 hierarchy: positions,
                 material: Cesium.Color.GREEN.withAlpha(0.1),
@@ -509,9 +586,9 @@ function startMeasurePolygn(arg) {
 function changeMeasurePolygnSourceVisible(id, visible) {
 	let len = cesiumViewer.entities.values.length
 	for (let i = 0 ; i <= len; i++) {
-		let entity = cesiumViewer.entities.getById("MPA" + id + i);
+		let entity = cesiumViewer.entities.getById("mpa" + id + i);
 		if (undefined === entity) continue;
-		entity.show = (visible === "true") ? true : false;
+		entity.show = visible;
 	}
 }
 
@@ -524,7 +601,7 @@ function deleteMeasurePolygnSource(id) {
 		if (undefined === entity) continue;
 		let entityId = entity.id;
 		
-		if (entityId.startsWith("MPA" + id)) {
+		if (entityId.startsWith("mpa" + id)) {
 			entityIdArray.push(entityId)
 		}
 	}
@@ -533,4 +610,46 @@ function deleteMeasurePolygnSource(id) {
 	for (let j = 0; j < len; j++) {
 		cesiumViewer.entities.removeById(entityIdArray[j])
 	}
+}
+
+// 开启鼠标浮动展示经纬度位置
+function startMousePicking() {
+	const entity = cesiumViewer.entities.add({
+      id: "mouseover-label",
+      label: {
+        show: false,
+        showBackground: true,
+        font: "14px monospace",
+        horizontalOrigin: Cesium.HorizontalOrigin.LEFT,
+        verticalOrigin: Cesium.VerticalOrigin.TOP,
+        pixelOffset: new Cesium.Cartesian2(15, 0),
+      }
+    });
+	// Mouse over the globe to see the cartographic position
+	let handler = new Cesium.ScreenSpaceEventHandler(cesiumViewer.scene.canvas);
+	handler.setInputAction(function (movement) {
+	  const cartesian = cesiumViewer.camera.pickEllipsoid(
+		movement.endPosition,
+		cesiumViewer.scene.globe.ellipsoid
+	  );
+	  if (cartesian) {
+		const cartographic = Cesium.Cartographic.fromCartesian(
+		  cartesian
+		);
+		const longitudeString = Cesium.Math.toDegrees(
+		  cartographic.longitude
+		).toFixed(6);
+		const latitudeString = Cesium.Math.toDegrees(
+		  cartographic.latitude
+		).toFixed(6);
+
+		entity.position = cartesian;
+		entity.label.show = true;
+		entity.label.text =
+		  `Longitude: ${`   ${longitudeString}`.slice(-12)}\u00B0` +
+		  `\nLatitude: ${`   ${latitudeString}`.slice(-12)}\u00B0`;
+	  } else {
+		entity.label.show = false;
+	  }
+	}, Cesium.ScreenSpaceEventType.MOUSE_MOVE);
 }

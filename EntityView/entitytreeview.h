@@ -21,6 +21,8 @@ protected:
     void dragEnterEvent(QDragEnterEvent *event) override;
     void dropEvent(QDropEvent *event) override;
 
+    void mouseDoubleClickEvent(QMouseEvent *event) override;
+
 private slots:
     void slot_context_menu_request(const QPoint &pos);
 
@@ -37,7 +39,7 @@ private:
     void handleTiffFile(const QString &path);
 
     // handle add entity result
-    void slot_add_entity_finish(const QString &type, const QString &arg);
+    void slot_add_entity_finish(const QString &type, const QString &arg, const QString &list);
 
     // handle delete entity result
     void slot_delete_entity_finish(const QString &arg);

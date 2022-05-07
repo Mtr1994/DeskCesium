@@ -5,5 +5,7 @@
         <file>Resource/image/error.svg</file>
         <file>Resource/image/info.svg</file>
         <file>Resource/image/success.svg</file>
+        <file>Resource/image/tree_view_down.png</file>
+        <file>Resource/image/tree_view_right.png</file>
     </qresource>
 </RCC>
