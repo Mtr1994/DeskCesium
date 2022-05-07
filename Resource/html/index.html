@@ -1,0 +1,33 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <!-- Include the CesiumJS JavaScript and CSS files -->
+  <script src="./Cesium-1.93/Build/Cesium/Cesium.js"></script>
+  <script src="./js/qwebchannel.js"></script>
+  <script src="./js/noitom.js"></script>
+  <link href="./Cesium-1.93/Build/Cesium/Widgets/widgets.css" rel="stylesheet">
+</head>
+<body>
+  <div id="cesiumContainer" class = "div-cesium-viewer" ondrop="handleDrop(event)" ondragover="handleDragOver(event)"></div>
+<style>
+  .div-cesium-viewer {
+	  position:absolute;
+	  left:0;
+	  top: 0;
+	  bottom: 0;
+	  right: 0;
+	  margin: auto;
+  }
+  body {
+	background-color: #000000;
+	overflow: hidden;
+  }
+</style>
+
+<script type="text/javascript">
+  init();
+</script>
+
+</body>
+</html>

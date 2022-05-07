@@ -9,6 +9,9 @@
 *.so.*
 *.dll
 *.dylib
+*.exe
+*.db
+*.zip
 
 # Qt-es
 object_script.*.Release
@@ -31,6 +34,10 @@ Makefile*
 *build-*
 *.qm
 *.prl
+Cesium-1.93
+output
+share
+ThirdPart
 
 # Qt unit tests
 target_wrapper.*

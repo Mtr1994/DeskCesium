@@ -1,0 +1,9 @@
+<RCC>
+    <qresource prefix="/">
+        <file>Resource/icon/icon.ico</file>
+        <file>Resource/qss/style.qss</file>
+        <file>Resource/image/error.svg</file>
+        <file>Resource/image/info.svg</file>
+        <file>Resource/image/success.svg</file>
+    </qresource>
+</RCC>
