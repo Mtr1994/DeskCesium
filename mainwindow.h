@@ -3,10 +3,20 @@
 
 #include <QMainWindow>
 #include <QWebEngineView>
+#include <QMap>
+#include <QVector>
+#include <mutex>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
+
+typedef struct
+{
+    float longitude;
+    float latitude;
+    float altitude;
+} GrdPoint;
 
 class JsContext;
 class MainWindow : public QMainWindow
@@ -23,9 +33,15 @@ public slots:
     void slot_add_kml_entity(const QString &path);
     void slot_add_kmz_entity(const QString &path);
     void slot_add_tiff_entity(const QString &path);
+    void slot_add_grd_entity(const QString &path);
     void slot_change_entity_status(const QString &type, const QString &name, bool visible, const QString &parentid = "");
     void slot_delete_cesium_data_source(const QString &type, const QString &name);
     void slot_fly_to_entity(const QString &type, const QString &id, const QString &parentId);
+    void slot_change_mouse_over_pick(bool open);
+    void slot_search_local_altitude(double longitude, double latitude);
+
+    // 接收系统错误信息
+    void slot_thread_report_system_error(const QString & msg);
 
 private slots:
     void slot_open_files();
@@ -35,6 +51,8 @@ private slots:
 private:
     bool removeFolderContent(const QString &folderDir);
 
+    double getValue(char *array, int index, int cellsize, int celltype);
+
 private:
     Ui::MainWindow *ui;
 
@@ -42,5 +60,15 @@ private:
 
     // 通信类
     JsContext *mJsContext = nullptr;
+
+    // GRD 文件的高程数据
+    QMap<QString, QVector<GrdPoint*>> mMapPositions;
+
+    // 当前计算的经纬度位置
+    double mCurrentLongitude = 0.0;
+    double mCurrentLatitude = 0.0;
+
+    // 经纬度缓存调度锁
+    std::mutex mMutexGeoInfo;
 };
 #endif // MAINWINDOW_H

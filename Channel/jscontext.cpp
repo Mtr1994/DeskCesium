@@ -1,6 +1,6 @@
 ﻿#include "jscontext.h"
 #include "Public/appsignal.h"
-
+#include "Public/softconfig.h"
 
 // test
 #include <QDebug>
@@ -18,8 +18,24 @@ void JsContext::sendMsg()
 
 void JsContext::recvMsg(const QString &action, const QString &type, bool status, const QString &arg, const QString &list)
 {
-    qDebug() << action << " " << status << " " << arg << " " << list.length();
+    // qDebug() << action << " " << status << " " << arg << " " << list.length();
 
-    if (action == "add") emit AppSignal::getInstance()->sgl_add_entity_finish(type, arg, list);
-    else if (action == "delete") emit AppSignal::getInstance()->sgl_delete_entity_finish(arg);
+    if (action == "add")
+    {
+        emit AppSignal::getInstance()->sgl_add_entity_finish(type, arg, list);
+    }
+    else if (action == "delete")
+    {
+        emit AppSignal::getInstance()->sgl_delete_entity_finish(arg);
+    }
+    else if (action == "init")
+    {
+        bool isOpen = SoftConfig::getInstance()->getValue("Base", "openMouseOver").toUInt();
+        emit AppSignal::getInstance()->sgl_change_mouse_over_pick(isOpen);
+    }
+}
+
+void JsContext::searchPosition(const QString &longitude, const QString &latitude)
+{
+    emit AppSignal::getInstance()->sgl_search_local_altitude(longitude.toDouble(), latitude.toDouble());
 }

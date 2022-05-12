@@ -1,6 +1,9 @@
 let context;
 let cesiumViewer;
 let measureStatus = 0;
+let glMouseOverHandler = undefined;
+let hoverLongitude = 0.0;
+let hoverLatitude = 0.0;
 
 // 初始化
 function init() {
@@ -15,6 +18,8 @@ function init() {
 					addKmzEntity(path)
 				} else if (type === "tif") {
 					addTifEntity(path)
+				} else if (type === "grd") {
+					addGrdEntity(path)
 				}
 			});
 			context.sgl_change_entity_visible.connect(function(type, id, visible, parentId) {
@@ -66,13 +71,44 @@ function init() {
 					}
 				} else {
 					let entity = cesiumViewer.entities.getById(id);
-					if (undefined == entity) {
-						alert("can not find ")
+					if (undefined == entity) return;
+					cesiumViewer.flyTo(entity, {duration: 2, maximumHeight: 15000, offset: new Cesium.HeadingPitchRange(0, -90, 0.0)});
+				}
+			});
+			context.sgl_change_mouse_over_status.connect(function(isOpen) {
+				if (isOpen) {
+					openMousePicking();
+				} else {
+					closeMousePicking();
+				}
+			});
+			context.sgl_search_mouse_over_altitude.connect(function(longitude, latitude, result, altitude) {
+				if (hoverLongitude !== parseFloat(longitude).toFixed(6) || hoverLatitude !== parseFloat(latitude).toFixed(6)) return;
+				if (result) {
+					let geoinfo = document.getElementById("geoinfo");
+					geoinfo.innerHTML = `Longitude: ${`${hoverLongitude}`.slice(-12)}\u00B0` + `&nbsp&nbsp&nbsp&nbsp Latitude: ${`${hoverLatitude}`.slice(-12)}\u00B0` + `&nbsp&nbsp&nbsp&nbspElevation: ${`${altitude.toFixed(6)}`.slice(-12)} m (Local)`;
+				} else {
+					if (!navigator.onLine) {
+						geoinfo.innerHTML = `Longitude: ${`${hoverLongitude}`.slice(-12)}\u00B0` + `&nbsp&nbsp&nbsp&nbsp Latitude: ${`${hoverLatitude}`.slice(-12)}\u00B0` + `&nbsp&nbsp&nbsp&nbspElevation: nds`;
 					} else {
-						cesiumViewer.flyTo(entity, {duration: 2, maximumHeight: 15000, offset: new Cesium.HeadingPitchRange(0, -90, 0.0)});
+						let xmlHttp = new XMLHttpRequest();
+						let url = `https://www.gmrt.org/services/PointServer?latitude=${hoverLatitude}&longitude=${hoverLongitude}&&format=json`;
+						xmlHttp.onreadystatechange = function () {
+							if (xmlHttp.readyState == 4 && xmlHttp.status == 200){
+								let response_data = xmlHttp.response;
+								let jsonData = JSON.parse(response_data);
+								if (hoverLongitude == parseFloat(jsonData.longitude).toFixed(6) && hoverLatitude == parseFloat(jsonData.latitude).toFixed(6)) {
+									geoinfo.innerHTML = `Longitude: ${`${hoverLongitude}`.slice(-12)}\u00B0` + `&nbsp&nbsp&nbsp&nbsp Latitude: ${`${hoverLatitude}`.slice(-12)}\u00B0` + `&nbsp&nbsp&nbsp&nbspElevation: ${`${parseFloat(jsonData.elevation).toFixed(6)}`.slice(-12)} m (Remote)`;
+								}
+							}
+						};
+						xmlHttp.open('GET', url, true);
+						xmlHttp.send();
 					}
 				}
 			});
+			
+			context.recvMsg("init", "", true, "");
 		});
     }
     else
@@ -82,7 +118,7 @@ function init() {
 	
 	let earthMap;
 	if (navigator.onLine) {
-		earthMap = new Cesium.WebMapServiceImageryProvider({ url: 'https://www.gmrt.org/services/mapserver/wms_merc', layers: 'GMRT' });
+		earthMap = new Cesium.WebMapServiceImageryProvider({ url: 'https://www.gmrt.org/services/mapserver/wms_merc', layers: 'GMRT',minimumLevel: 0, maximumLevel : 18 });
 	} else {
 		earthMap = new Cesium.TileMapServiceImageryProvider({ url: Cesium.buildModuleUrl("Assets/Textures/NaturalEarthII")});
 	}
@@ -109,20 +145,6 @@ function init() {
 	cesiumViewer.scene.skyBox.show = false
 
 	cesiumViewer.cesiumWidget.screenSpaceEventHandler.removeInputAction(Cesium.ScreenSpaceEventType.LEFT_DOUBLE_CLICK)
-	
-	// 默认开启鼠标浮动
-	startMousePicking();
-}
-
-function sendMessage(msg, arg) {
-	if(typeof context == 'undefined')
-    {
-        alert("context对象获取失败！");
-    }
-    else
-    {
-        context.slot_recv_html_meg(msg, arg);
-    }
 }
 
 function handleDrop(event) {
@@ -192,6 +214,27 @@ function addTifEntity(arg) {
 		context.recvMsg("add", "tif", true, array[4]);
 	}
 }
+
+// 添加 grd 实体
+function addGrdEntity(arg) {
+	let array = arg.split(",")
+	if (array.length !== 5) {
+		context.recvMsg("add", "grd",false, arg);
+	} else {
+		let size = cesiumViewer.entities.values.length;
+		cesiumViewer.entities.add({
+			id: array[4],
+			rectangle: {
+			coordinates: Cesium.Rectangle.fromDegrees(parseFloat(array[0]), parseFloat(array[1]), parseFloat(array[2]), parseFloat(array[3])),
+			material: array[4],
+			zIndex: size,
+		  }
+		})
+		
+		context.recvMsg("add", "grd", true, array[4]);
+	}
+}
+
 
 // 修改数据集可视化状态
 function changeDataSourceVisible(name, visible) {
@@ -613,21 +656,13 @@ function deleteMeasurePolygnSource(id) {
 }
 
 // 开启鼠标浮动展示经纬度位置
-function startMousePicking() {
-	const entity = cesiumViewer.entities.add({
-      id: "mouseover-label",
-      label: {
-        show: false,
-        showBackground: true,
-        font: "14px monospace",
-        horizontalOrigin: Cesium.HorizontalOrigin.LEFT,
-        verticalOrigin: Cesium.VerticalOrigin.TOP,
-        pixelOffset: new Cesium.Cartesian2(15, 0),
-      }
-    });
+function openMousePicking() {
+	let geoinfo = document.getElementById("geoinfo");
+	geoinfo.style.visibility = "visible";
+	
 	// Mouse over the globe to see the cartographic position
-	let handler = new Cesium.ScreenSpaceEventHandler(cesiumViewer.scene.canvas);
-	handler.setInputAction(function (movement) {
+	glMouseOverHandler = new Cesium.ScreenSpaceEventHandler(cesiumViewer.scene.canvas);
+	glMouseOverHandler.setInputAction(function (movement) {
 	  const cartesian = cesiumViewer.camera.pickEllipsoid(
 		movement.endPosition,
 		cesiumViewer.scene.globe.ellipsoid
@@ -636,20 +671,33 @@ function startMousePicking() {
 		const cartographic = Cesium.Cartographic.fromCartesian(
 		  cartesian
 		);
-		const longitudeString = Cesium.Math.toDegrees(
+		hoverLongitude = Cesium.Math.toDegrees(
 		  cartographic.longitude
 		).toFixed(6);
-		const latitudeString = Cesium.Math.toDegrees(
+		hoverLatitude = Cesium.Math.toDegrees(
 		  cartographic.latitude
 		).toFixed(6);
-
-		entity.position = cartesian;
-		entity.label.show = true;
-		entity.label.text =
-		  `Longitude: ${`   ${longitudeString}`.slice(-12)}\u00B0` +
-		  `\nLatitude: ${`   ${latitudeString}`.slice(-12)}\u00B0`;
+		
+		geoinfo.innerHTML = `Longitude: ${`${hoverLongitude}`.slice(-12)}\u00B0` + `&nbsp&nbsp&nbsp&nbsp Latitude: ${`${hoverLatitude}`.slice(-12)}\u00B0` + `&nbsp&nbsp&nbsp&nbsp Elevation: ----`;
+		
+		// 本地查询
+		context.searchPosition(hoverLongitude, hoverLatitude);
 	  } else {
-		entity.label.show = false;
+		hoverLongitude = 0.0;
+		hoverLatitude = 0.0;
+		geoinfo.innerHTML = `Longitude: ----` + `&nbsp&nbsp&nbsp&nbsp Latitude: ----` + `&nbsp&nbsp&nbsp&nbspElevation: ----`;
 	  }
 	}, Cesium.ScreenSpaceEventType.MOUSE_MOVE);
+}
+
+// 关闭鼠标浮动展示经纬度位置
+function closeMousePicking() {
+	let geoinfo = document.getElementById("geoinfo");
+	geoinfo.style.visibility = "hidden";
+	 
+	if (undefined == glMouseOverHandler) return;
+	
+	// 关闭事件句柄
+	glMouseOverHandler.destroy(); 
+	glMouseOverHandler = undefined;
 }

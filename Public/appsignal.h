@@ -39,6 +39,15 @@ signals:
 
     // 根据 名称 删除实体
     void sgl_delete_cesium_data_source(const QString &type, const QString &name);
+
+    // 修改鼠标浮动拾取功能开启状态
+    void sgl_change_mouse_over_pick(bool open);
+
+    // 检索本地高程数据
+    void sgl_search_local_altitude(double longitude, double latitude);
+
+    // 系统错误信息报告
+    void sgl_thread_report_system_error(const QString & msg);
 };
 
 #endif // APPSIGNAL_H

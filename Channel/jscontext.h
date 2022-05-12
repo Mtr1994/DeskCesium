@@ -25,12 +25,20 @@ signals:
     // start fly to
     void sgl_fly_to_entity(const QString &type, const QString &id, const QString &parentId);
 
+    // change mouse over
+    void sgl_change_mouse_over_status(bool open);
+
+    // search mouse altitude
+    void sgl_search_mouse_over_altitude(double longitude, double latitude, bool result, double altitude);
+
 public:
     // sent msg to html
     void sendMsg();
 
 public slots:
     void recvMsg(const QString &action, const QString &type, bool status, const QString &arg, const QString &list = "");
+
+    void searchPosition(const QString &longitude, const QString &latitude);
 
 };
 

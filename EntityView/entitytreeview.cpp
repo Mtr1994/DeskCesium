@@ -8,9 +8,6 @@
 #include <QFileInfo>
 #include <QMenu>
 
-// test
-#include <QDebug>
-
 EntityTreeView::EntityTreeView(QWidget *parent)
     : QTreeView{parent}
 {
@@ -82,9 +79,13 @@ void EntityTreeView::slot_context_menu_request(const QPoint &pos)
     actionHide.setEnabled(visible);
     connect(&actionHide, &QAction::triggered, [&item]() { item->setCheckState(Qt::Unchecked); });
     menu.addAction(&actionHide);
+
     QAction actionDel("删除数据集");
-    connect(&actionDel, &QAction::triggered, this, [id, type] { emit AppSignal::getInstance()->sgl_delete_cesium_data_source(type, id); });
-    menu.addAction(&actionDel);
+    if (nullptr == item->parent())
+    {
+        connect(&actionDel, &QAction::triggered, this, [id, type] { emit AppSignal::getInstance()->sgl_delete_cesium_data_source(type, id); });
+        menu.addAction(&actionDel);
+    }
 
     menu.exec(QCursor::pos());
 }
@@ -93,9 +94,7 @@ void EntityTreeView::handleDropFile(const QString &path)
 {
     QFileInfo info(path);
     if (!info.exists()) return;
-
     QString suffix = info.suffix();
-
     if (suffix == "kml")
     {
         handleKmlFile(path);
@@ -110,7 +109,7 @@ void EntityTreeView::handleDropFile(const QString &path)
     }
     else
     {
-        MessageWidget *message = new MessageWidget(MessageWidget::M_Info, MessageWidget::P_Top_Center, this->nativeParentWidget());
+        MessageWidget *message = new MessageWidget(MessageWidget::M_Info, MessageWidget::P_Top_Center, this->parentWidget()->parentWidget()->parentWidget());
         message->showMessage("未支持的数据类型");
     }
 }
@@ -137,6 +136,11 @@ void EntityTreeView::slot_add_entity_finish(const QString &type, const QString &
     {
         QFileInfo info(text);
         text = info.baseName() + ".tif";
+    }
+    if (type == "grd")
+    {
+        QFileInfo info(text);
+        text = info.baseName() + ".grd";
     }
     else if (type == "mla")
     {

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1027</width>
-    <height>669</height>
+    <width>1246</width>
+    <height>698</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -107,7 +107,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1027</width>
+     <width>1246</width>
      <height>21</height>
     </rect>
    </property>
@@ -120,9 +120,9 @@
    </widget>
    <widget class="QMenu" name="menu_2">
     <property name="title">
-     <string>视图</string>
+     <string>设置</string>
     </property>
-    <addaction name="actionViewDataList"/>
+    <addaction name="actionSetting"/>
    </widget>
    <widget class="QMenu" name="menu_3">
     <property name="title">
@@ -182,12 +182,12 @@
     <string>版本信息</string>
    </property>
   </action>
-  <action name="actionViewDataList">
+  <action name="actionSetting">
    <property name="text">
-    <string>暂无视图控制</string>
+    <string>首选项</string>
    </property>
    <property name="toolTip">
-    <string>暂无视图控制</string>
+    <string>首选项</string>
    </property>
   </action>
  </widget>
