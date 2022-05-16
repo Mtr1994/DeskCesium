@@ -6,7 +6,7 @@
 QWidget[Background="true"]
 {
     background-color: #fefefe;
-    font: 10pt "微软雅黑";
+    font: 9pt "微软雅黑";
 }
 
 QWidget#widgetBase

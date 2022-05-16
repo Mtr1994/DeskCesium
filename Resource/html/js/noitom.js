@@ -143,6 +143,8 @@ function init() {
 	cesiumViewer.scene.skyAtmosphere.show = false
 	cesiumViewer.scene.sun.show = false
 	cesiumViewer.scene.skyBox.show = false
+	cesiumViewer.scene.globe.enableLighting = false;
+    cesiumViewer.shadows = false
 
 	cesiumViewer.cesiumWidget.screenSpaceEventHandler.removeInputAction(Cesium.ScreenSpaceEventType.LEFT_DOUBLE_CLICK)
 }
@@ -206,7 +208,7 @@ function addTifEntity(arg) {
 		xhr.open('GET', array[4]);
 		xhr.responseType = 'arraybuffer';
 		xhr.onload = function (e) {
-			Tiff.initialize({TOTAL_MEMORY: parseInt(array[5]) + 10240 })
+			Tiff.initialize({TOTAL_MEMORY: parseInt(array[5]) * 1.2})
 			let tiff = new Tiff({buffer: xhr.response});
 			let canvas = tiff.toCanvas();
 			let size = cesiumViewer.entities.values.length;
@@ -688,7 +690,7 @@ function openMousePicking() {
 		  cartographic.latitude
 		).toFixed(6);
 		
-		geoinfo.innerHTML = `Longitude: ${`${hoverLongitude}`.slice(-12)}\u00B0` + `&nbsp&nbsp&nbsp&nbsp Latitude: ${`${hoverLatitude}`.slice(-12)}\u00B0` + `&nbsp&nbsp&nbsp&nbsp Elevation: ----`;
+		// geoinfo.innerHTML = `Longitude: ${`${hoverLongitude}`.slice(-12)}\u00B0` + `&nbsp&nbsp&nbsp&nbsp Latitude: ${`${hoverLatitude}`.slice(-12)}\u00B0` + `&nbsp&nbsp&nbsp&nbsp Elevation: ----`;
 		
 		// 本地查询
 		context.searchPosition(hoverLongitude, hoverLatitude);

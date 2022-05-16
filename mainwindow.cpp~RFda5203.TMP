@@ -247,7 +247,7 @@ void MainWindow::slot_add_grd_entity(const QString &path)
             return;
         }
 
-        double emptyValue = poBand->GetNoDataValue();
+        double emptyVlaue = poBand->GetNoDataValue();
 
         QLinearGradient linearGrad({0, 0}, {100, 0});
         linearGrad.setColorAt(0, QColor(0, 0, 255));
@@ -263,22 +263,40 @@ void MainWindow::slot_add_grd_entity(const QString &path)
         painter.drawRect(tempImage.rect());
 
         QImage image(xLength, yLength, QImage::Format_ARGB32_Premultiplied);
+        // QVector<GrdPoint*> vectorPoint;
         for (int m = 0 ; m < xLength; m++)
         {
             for (int n = 0; n < yLength; n++)
             {
+                double Xgeo = adfGeoTransform[0] + m * adfGeoTransform[1] + n * adfGeoTransform[2];
+                double Ygeo = adfGeoTransform[3] + m * adfGeoTransform[4] + n * adfGeoTransform[5];
+
                 double value = getValue(pafScanline, m + xLength * n, cellSize, cellType);
-                if ((value == emptyValue) || (value < adfMinMax[0]) || (value > adfMinMax[1]))
+                if ((value == emptyVlaue) || (value < adfMinMax[0]) || (value > adfMinMax[1]))
                 {
+//                    GrdPoint* point = new GrdPoint;
+//                    point->longitude = Xgeo;
+//                    point->latitude = Ygeo;
+//                    point->altitude = 10000;
+//                    vectorPoint.append(point);
+
                     image.setPixel(m, n, qRgba(0, 0, 0, 0));
                     continue;
                 }
+
+//                GrdPoint* point = new GrdPoint;
+//                point->longitude = Xgeo;
+//                point->latitude = Ygeo;
+//                point->altitude = value;
+//                vectorPoint.append(point);
 
                 value = floor((value - adfMinMax[0]) * 100 / range);
                 QColor color = tempImage.pixelColor((value >= 100 ? 99 : value), 0);
                 image.setPixelColor(m, n, qRgba(color.redF() * 255, color.greenF() * 255, color.blueF() * 255, 255));
             }
         }
+
+        // delete [] pafScanline;
 
         GDALClose((GDALDatasetH)poDataset);
 
@@ -288,8 +306,11 @@ void MainWindow::slot_add_grd_entity(const QString &path)
             bool status = dir.mkdir("caches");
             if (!status)
             {
-                delete [] adfGeoTransform;
-                delete [] pafScanline;
+//                for (auto &point : vectorPoint)
+//                {
+//                    delete point;
+//                }
+
                 emit AppSignal::getInstance()->sgl_thread_report_system_error("创建缓存文件夹失败");
                 return;
             }
@@ -300,8 +321,10 @@ void MainWindow::slot_add_grd_entity(const QString &path)
         bool status = image.save(QString("caches/%1-%2.png").arg(info.baseName(), suffixTime));
         if (!status)
         {
-            delete [] adfGeoTransform;
-            delete [] pafScanline;
+            for (auto &point : vectorPoint)
+            {
+                delete point;
+            }
             emit AppSignal::getInstance()->sgl_thread_report_system_error("生成图片失败");
             return;
         }
@@ -312,8 +335,17 @@ void MainWindow::slot_add_grd_entity(const QString &path)
                                                      QString::number(latitudeEnd, 'f', 6),
                                                      QString("%1/caches/%2-%3.png").arg(dir.absolutePath(), info.baseName(), suffixTime));
 
-        GrdDataSet data = {xLength, yLength, cellSize, cellType, emptyValue, adfMinMax[0], adfMinMax[1], adfGeoTransform, pafScanline, QString("%1/caches/%2-%3.png").arg(dir.absolutePath(), info.baseName(), suffixTime).toStdString()};
-        mListGrdData.append(data);
+
+        // 缓存坐标
+        QString rect = QString("%1,%2,%3,%4,%5").arg(QString::number(adfGeoTransform[0], 'f', 6),
+                QString::number(adfGeoTransform[0] + (xLength - 1) * adfGeoTransform[1] + (yLength - 1) * adfGeoTransform[2], 'f', 6),
+                QString::number(adfGeoTransform[3], 'f' ,6),
+                QString::number(adfGeoTransform[3] + (xLength - 1) * adfGeoTransform[4] + (yLength - 1) * adfGeoTransform[5], 'f', 6),
+                QString("%1/caches/%2-%3.png").arg(dir.absolutePath(), info.baseName(), suffixTime));
+
+        // mMapPositions.insert(rect, vectorPoint);
+
+        mMapPositions2.insert(adfGeoTransform, pafScanline);
 
         emit mJsContext->sgl_add_entity("grd", args);
     };
@@ -333,14 +365,17 @@ void MainWindow::slot_delete_cesium_data_source(const QString &type, const QStri
     {
         auto func = [this, name]
         {
-            for (int i = 0; i < mListGrdData.size(); i++)
+            QMap<QString, QVector<GrdPoint*>>::const_iterator iter = mMapPositions.constBegin();
+            while (iter != mMapPositions.constEnd())
             {
-                auto dataset = mListGrdData.at(i);
-                if (dataset.name != name.toStdString()) continue;
-                delete [] dataset.geoTransform;
-                delete [] dataset.data;
+                auto list = iter.key().split(',');
+                if (name != list[4]) continue;
 
-                mListGrdData.takeAt(i);
+                QVector<GrdPoint*> vector = mMapPositions.take(iter.key());
+                for (auto &point : vector)
+                {
+                    delete point;
+                }
                 break;
             }
         };
@@ -364,12 +399,6 @@ void MainWindow::slot_change_mouse_over_pick()
     emit mJsContext->sgl_change_mouse_over_status(isOpen);
 }
 
-///
-/// \brief MainWindow::slot_search_local_altitude
-/// \param longitude
-/// \param latitude
-/// 检索 grd 栅格文件的高程数据
-///
 void MainWindow::slot_search_local_altitude(double longitude, double latitude)
 {
     if ((longitude == mCurrentLongitude) && (latitude == mCurrentLatitude)) return;
@@ -378,47 +407,58 @@ void MainWindow::slot_search_local_altitude(double longitude, double latitude)
 
     auto func = [longitude, latitude, this]
     {
-        double altitude = 10000.00;
-        for (auto &dataset : mListGrdData)
-        {
-            double left = dataset.geoTransform[0];
-            double right = dataset.geoTransform[0] + (dataset.width - 1) * dataset.geoTransform[1] + (dataset.height - 1) * dataset.geoTransform[2];
-            double top = dataset.geoTransform[3];
-            double bottom = dataset.geoTransform[3] + (dataset.width - 1) * dataset.geoTransform[4] + (dataset.height - 1) * dataset.geoTransform[5];
-            if ((longitude < left) || (longitude > right) || (latitude < bottom) || (latitude > top)) continue;
 
-            int m = dataset.width * ((longitude - left) / (right - left)), n = dataset.height * ((latitude - top) / (top - bottom));
-            for (;m < dataset.width; m++)
+        double altitude = 10000.00;
+        QMap<double*, char*>::const_iterator iter = mMapPositions2.constBegin();
+        while (iter != mMapPositions2.constEnd())
+        {
+            auto list = iter.key().split(',');
+            if ((longitude < list.at(0).toDouble()) || (longitude > list.at(1).toDouble()) || (latitude < list.at(3).toDouble()) || (latitude > list.at(2).toDouble()))
             {
-                if (dataset.geoTransform[0] + m * dataset.geoTransform[1] + n * dataset.geoTransform[2] >= longitude)
+                iter++;
+                continue;
+            }
+
+            double minRange = 500.00;
+            QVector<GrdPoint*> vector = iter.value();
+            for (auto &point : vector)
+            {
+                double tmpRange = sqrt(pow(abs(point->longitude - longitude), 2) + pow(abs(point->latitude - latitude), 2));
+                if (minRange > tmpRange)
                 {
-                    for (;n < dataset.height; n++)
-                    {
-                        if (dataset.geoTransform[3] + m * dataset.geoTransform[4] + n * dataset.geoTransform[5] <= latitude)
-                        {
-                            break;
-                        }
-                    }
-                    break;
+                    minRange = tmpRange;
+                    altitude = point->altitude;
                 }
             }
-
-            double lx = dataset.geoTransform[0] + (m - 1) * dataset.geoTransform[1] + (n - 1) * dataset.geoTransform[2];
-            double rx = dataset.geoTransform[0] + m * dataset.geoTransform[1] + n * dataset.geoTransform[2];
-            m = ((longitude - lx) >= (rx - longitude)) ? m : (m - 1);
-
-            double ty = dataset.geoTransform[3] + (m - 1) * dataset.geoTransform[4] + (n - 1) * dataset.geoTransform[5];
-            double by = dataset.geoTransform[3] + m * dataset.geoTransform[4] + n * dataset.geoTransform[5];
-            n = ((ty - latitude) >= (latitude - by)) ? n : (n - 1);
-
-            altitude = getValue(dataset.data, m + dataset.width * n, dataset.cellSize, dataset.cellType);
-            if ((altitude == dataset.emptyValue) || (altitude < dataset.minValue) || (altitude > dataset.maxValue))
-            {
-                altitude = 10000.0;
-            }
+            break;
         }
-
         emit mJsContext->sgl_search_mouse_over_altitude(longitude, latitude, altitude != 10000.00, altitude);
+
+//        double altitude = 10000.00;
+//        QMap<QString, QVector<GrdPoint*>>::const_iterator iter = mMapPositions.constBegin();
+//        while (iter != mMapPositions.constEnd())
+//        {
+//            auto list = iter.key().split(',');
+//            if ((longitude < list.at(0).toDouble()) || (longitude > list.at(1).toDouble()) || (latitude < list.at(3).toDouble()) || (latitude > list.at(2).toDouble()))
+//            {
+//                iter++;
+//                continue;
+//            }
+
+//            double minRange = 500.00;
+//            QVector<GrdPoint*> vector = iter.value();
+//            for (auto &point : vector)
+//            {
+//                double tmpRange = sqrt(pow(abs(point->longitude - longitude), 2) + pow(abs(point->latitude - latitude), 2));
+//                if (minRange > tmpRange)
+//                {
+//                    minRange = tmpRange;
+//                    altitude = point->altitude;
+//                }
+//            }
+//            break;
+//        }
+//        emit mJsContext->sgl_search_mouse_over_altitude(longitude, latitude, altitude != 10000.00, altitude);
     };
 
     std::thread th(func);

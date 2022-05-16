@@ -3,9 +3,8 @@
 
 #include <QMainWindow>
 #include <QWebEngineView>
-#include <QMap>
+#include <QList>
 #include <QVector>
-#include <mutex>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -13,10 +12,17 @@ QT_END_NAMESPACE
 
 typedef struct
 {
-    float longitude;
-    float latitude;
-    float altitude;
-} GrdPoint;
+    int width;
+    int height;
+    int cellSize;
+    int cellType;
+    double emptyValue;
+    double minValue;
+    double maxValue;
+    double *geoTransform;
+    char *data;
+    std::string name;
+} GrdDataSet;
 
 class JsContext;
 class MainWindow : public QMainWindow
@@ -64,14 +70,10 @@ private:
     // 通信类
     JsContext *mJsContext = nullptr;
 
-    // GRD 文件的高程数据
-    QMap<QString, QVector<GrdPoint*>> mMapPositions;
+    QList<GrdDataSet> mListGrdData;
 
     // 当前计算的经纬度位置
     double mCurrentLongitude = 0.0;
     double mCurrentLatitude = 0.0;
-
-    // 经纬度缓存调度锁
-    std::mutex mMutexGeoInfo;
 };
 #endif // MAINWINDOW_H
