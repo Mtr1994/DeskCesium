@@ -77,7 +77,7 @@
          <widget class="QWidget" name="widgetEntity" native="true">
           <layout class="QGridLayout" name="gridLayout_4">
            <item row="0" column="0">
-            <widget class="EntityTreeView" name="widgetEntityView" native="true">
+            <widget class="EntityTreeWidget" name="widgetEntityView" native="true">
              <property name="contextMenuPolicy">
               <enum>Qt::CustomContextMenu</enum>
              </property>
@@ -199,9 +199,9 @@
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>EntityTreeView</class>
+   <class>EntityTreeWidget</class>
    <extends>QWidget</extends>
-   <header>./EntityView/entitytreeview.h</header>
+   <header>./EntityTreeWidget/entitytreewidget.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

@@ -1,7 +1,7 @@
-﻿#ifndef ENTITYTREEVIEW_H
-#define ENTITYTREEVIEW_H
+﻿#ifndef ENTITYTREEWIDGET_H
+#define ENTITYTREEWIDGET_H
 
-#include <QObject>
+#include <QWidget>
 #include <QTreeView>
 #include <QDragEnterEvent>
 #include <QDropEvent>
@@ -13,15 +13,21 @@ class EntityTreeView : public QTreeView
 public:
     explicit EntityTreeView(QWidget *parent = nullptr);
 
-    void init();
+protected:
+    void mouseDoubleClickEvent(QMouseEvent *event);;
+};
 
-signals:
+class EntityTreeWidget : public QWidget
+{
+    Q_OBJECT
+public:
+    explicit EntityTreeWidget(QWidget *parent = nullptr);
+
+    void init();
 
 protected:
     void dragEnterEvent(QDragEnterEvent *event) override;
     void dropEvent(QDropEvent *event) override;
-
-    void mouseDoubleClickEvent(QMouseEvent *event) override;
 
 private slots:
     void slot_context_menu_request(const QPoint &pos);
@@ -38,6 +44,9 @@ private:
     // handle tif file
     void handleTiffFile(const QString &path);
 
+    // handle grd file
+    void handlGrdFile(const QString &path);
+
     // handle add entity result
     void slot_add_entity_finish(const QString &type, const QString &arg, const QString &list);
 
@@ -45,7 +54,11 @@ private:
     void slot_delete_entity_finish(const QString &arg);
 
 private:
+    // 数据模型
     QStandardItemModel *mEntityModel = nullptr;
+
+    // 视图
+    EntityTreeView *mTreeView = nullptr;
 };
 
-#endif // ENTITYTREEVIEW_H
+#endif // ENTITYTREEWIDGET_H

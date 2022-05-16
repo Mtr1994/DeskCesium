@@ -25,6 +25,9 @@ signals:
     // 添加 TIFF 实体
     void sgl_add_tiff_entity(const QString &path);
 
+    // 添加 grd 实体
+    void sgl_add_grd_entity(const QString &path);
+
     // 添加实体结果
     void sgl_add_entity_finish(const QString &type, const QString &arg, const QString &list);
 
@@ -48,6 +51,9 @@ signals:
 
     // 系统错误信息报告
     void sgl_thread_report_system_error(const QString & msg);
+
+    // cesium 加载完成
+    void sgl_cesium_init_finish();
 };
 
 #endif // APPSIGNAL_H

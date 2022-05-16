@@ -30,8 +30,7 @@ void JsContext::recvMsg(const QString &action, const QString &type, bool status,
     }
     else if (action == "init")
     {
-        bool isOpen = SoftConfig::getInstance()->getValue("Base", "openMouseOver").toUInt();
-        emit AppSignal::getInstance()->sgl_change_mouse_over_pick(isOpen);
+        emit AppSignal::getInstance()->sgl_cesium_init_finish();
     }
 }
 

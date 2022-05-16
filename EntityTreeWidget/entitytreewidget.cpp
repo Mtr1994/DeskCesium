@@ -1,4 +1,4 @@
-﻿#include "entitytreeview.h"
+﻿#include "entitytreewidget.h"
 #include "Public/appsignal.h"
 #include "Public/treeitemdelegate.h"
 #include "Message/messagewidget.h"
@@ -7,50 +7,20 @@
 #include <QMimeData>
 #include <QFileInfo>
 #include <QMenu>
+#include <QGridLayout>
 
 EntityTreeView::EntityTreeView(QWidget *parent)
-    : QTreeView{parent}
+    : QTreeView(parent)
 {
-    init();
-}
 
-void EntityTreeView::init()
-{
-    mEntityModel = new QStandardItemModel(this);
-
-    setAcceptDrops(true);
-    setDragDropMode(QTreeView::InternalMove);
-
-    setModel(mEntityModel);
-    setEditTriggers(QTreeView::NoEditTriggers);
-
-    setItemDelegate(new TreeItemDelegate);
-
-    header()->setVisible(false);
-
-    connect(AppSignal::getInstance(), &AppSignal::sgl_add_entity_finish, this, &EntityTreeView::slot_add_entity_finish);
-    connect(AppSignal::getInstance(), &AppSignal::sgl_delete_entity_finish, this, &EntityTreeView::slot_delete_entity_finish);
-
-    connect(this, &QTreeView::customContextMenuRequested, this, &EntityTreeView::slot_context_menu_request);
-}
-
-void EntityTreeView::dragEnterEvent(QDragEnterEvent *event)
-{
-    event->accept();
-}
-
-void EntityTreeView::dropEvent(QDropEvent *event)
-{
-    QString path = event->mimeData()->urls().first().toString().remove("file:///");
-    handleDropFile(path);
 }
 
 void EntityTreeView::mouseDoubleClickEvent(QMouseEvent *event)
 {
     Q_UNUSED(event);
-    QModelIndex index = currentIndex();
+    QModelIndex index = this->currentIndex();
     if (!index.isValid()) return;
-    QStandardItem* item = mEntityModel->itemFromIndex(index);
+    QStandardItem *item = ((QStandardItemModel*)this->model())->itemFromIndex(index);
     if (nullptr == item) return;
 
     QString type = item->data().toString();
@@ -60,9 +30,50 @@ void EntityTreeView::mouseDoubleClickEvent(QMouseEvent *event)
     emit AppSignal::getInstance()->sgl_fly_to_entity(type, id, parentId);
 }
 
-void EntityTreeView::slot_context_menu_request(const QPoint &pos)
+EntityTreeWidget::EntityTreeWidget(QWidget *parent)
+    : QWidget{parent}
 {
-    QModelIndex index = this->indexAt(pos);
+    init();
+}
+
+void EntityTreeWidget::init()
+{
+    mEntityModel = new QStandardItemModel(this);
+
+    mTreeView = new EntityTreeView(this);
+    mTreeView->setModel(mEntityModel);
+    mTreeView->setEditTriggers(QTreeView::NoEditTriggers);
+    mTreeView->setItemDelegate(new TreeItemDelegate);
+    mTreeView->header()->setVisible(false);
+
+    QGridLayout *layout = new QGridLayout(this);
+    layout->addWidget(mTreeView);
+    layout->setContentsMargins(0, 0, 0, 0);
+
+    setLayout(layout);
+
+    setAcceptDrops(true);
+
+    connect(AppSignal::getInstance(), &AppSignal::sgl_add_entity_finish, this, &EntityTreeWidget::slot_add_entity_finish);
+    connect(AppSignal::getInstance(), &AppSignal::sgl_delete_entity_finish, this, &EntityTreeWidget::slot_delete_entity_finish);
+
+    connect(this, &QTreeView::customContextMenuRequested, this, &EntityTreeWidget::slot_context_menu_request);
+}
+
+void EntityTreeWidget::dragEnterEvent(QDragEnterEvent *event)
+{
+    event->accept();
+}
+
+void EntityTreeWidget::dropEvent(QDropEvent *event)
+{
+    QString path = event->mimeData()->urls().first().toString().remove("file:///");
+    handleDropFile(path);
+}
+
+void EntityTreeWidget::slot_context_menu_request(const QPoint &pos)
+{
+    QModelIndex index = mTreeView->indexAt(pos);
     if (!index.isValid()) return;
 
     QStandardItem *item = mEntityModel->itemFromIndex(index);
@@ -90,7 +101,7 @@ void EntityTreeView::slot_context_menu_request(const QPoint &pos)
     menu.exec(QCursor::pos());
 }
 
-void EntityTreeView::handleDropFile(const QString &path)
+void EntityTreeWidget::handleDropFile(const QString &path)
 {
     QFileInfo info(path);
     if (!info.exists()) return;
@@ -107,6 +118,10 @@ void EntityTreeView::handleDropFile(const QString &path)
     {
         handleTiffFile(path);
     }
+    else if (suffix == "grd")
+    {
+        handlGrdFile(path);
+    }
     else
     {
         MessageWidget *message = new MessageWidget(MessageWidget::M_Info, MessageWidget::P_Top_Center, this->parentWidget()->parentWidget()->parentWidget());
@@ -114,22 +129,27 @@ void EntityTreeView::handleDropFile(const QString &path)
     }
 }
 
-void EntityTreeView::handleKmlFile(const QString &path)
+void EntityTreeWidget::handleKmlFile(const QString &path)
 {
     emit AppSignal::getInstance()->sgl_add_kml_entity(path);
 }
 
-void EntityTreeView::handleKmzFile(const QString &path)
+void EntityTreeWidget::handleKmzFile(const QString &path)
 {
     emit AppSignal::getInstance()->sgl_add_kmz_entity(path);
 }
 
-void EntityTreeView::handleTiffFile(const QString &path)
+void EntityTreeWidget::handleTiffFile(const QString &path)
 {
     emit AppSignal::getInstance()->sgl_add_tiff_entity(path);
 }
 
-void EntityTreeView::slot_add_entity_finish(const QString &type, const QString &arg, const QString &list)
+void EntityTreeWidget::handlGrdFile(const QString &path)
+{
+    emit AppSignal::getInstance()->sgl_add_grd_entity(path);
+}
+
+void EntityTreeWidget::slot_add_entity_finish(const QString &type, const QString &arg, const QString &list)
 {
     QString text = arg;
     if (type == "tif")
@@ -171,6 +191,8 @@ void EntityTreeView::slot_add_entity_finish(const QString &type, const QString &
         for (int i = 0; i < count; i++)
         {
             QStandardItem *child = item->child(i);
+            child->setDragEnabled(false);
+            child->setDropEnabled(false);
             if (nullptr == child) continue;
             child->setCheckState(item->checkState());
         }
@@ -206,7 +228,7 @@ void EntityTreeView::slot_add_entity_finish(const QString &type, const QString &
     }
 }
 
-void EntityTreeView::slot_delete_entity_finish(const QString &arg)
+void EntityTreeWidget::slot_delete_entity_finish(const QString &arg)
 {
     QModelIndexList list = mEntityModel->match(mEntityModel->index(0, 0), Qt::UserRole + 2, arg, -1, Qt::MatchExactly | Qt::MatchRecursive);
     if (list.isEmpty()) return;
@@ -216,4 +238,3 @@ void EntityTreeView::slot_delete_entity_finish(const QString &arg)
         mEntityModel->removeRow(index.row());
     }
 }
-

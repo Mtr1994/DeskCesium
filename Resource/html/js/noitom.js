@@ -198,20 +198,30 @@ function addKmzEntity(path) {
 // 添加 tif 实体
 function addTifEntity(arg) {
 	let array = arg.split(",")
-	if (array.length !== 5) {
+	if (array.length !== 6) {
 		context.recvMsg("add", "tif",false, arg);
 	} else {
-		let size = cesiumViewer.entities.values.length;
-		cesiumViewer.entities.add({
-			id: array[4],
-			rectangle: {
-			coordinates: Cesium.Rectangle.fromDegrees(parseFloat(array[0]), parseFloat(array[1]), parseFloat(array[2]), parseFloat(array[3])),
-			material: array[4],
-			zIndex: size,
-		  }
-		})
 		
-		context.recvMsg("add", "tif", true, array[4]);
+		let xhr = new XMLHttpRequest();
+		xhr.open('GET', array[4]);
+		xhr.responseType = 'arraybuffer';
+		xhr.onload = function (e) {
+			Tiff.initialize({TOTAL_MEMORY: parseInt(array[5]) })
+			let tiff = new Tiff({buffer: xhr.response});
+			let canvas = tiff.toCanvas();
+			let size = cesiumViewer.entities.values.length;
+			cesiumViewer.entities.add({
+			  id: array[4],
+			  rectangle: {
+				coordinates: Cesium.Rectangle.fromDegrees(parseFloat(array[0]), parseFloat(array[1]), parseFloat(array[2]), parseFloat(array[3])),
+				material: canvas,
+				zIndex: size,
+			  }
+			});
+			
+			context.recvMsg("add", "tif", true, array[4]);
+		};
+		xhr.send();
 	}
 }
 

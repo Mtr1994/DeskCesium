@@ -30,7 +30,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 # In order to do so, uncomment the following line.
 # You can also select to disable deprecated APIs only up to a certain version of Qt.
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
-INCLUDEPATH += $$PWD/ThirdPart/GDAL3_3_0/gdal/include
+INCLUDEPATH += $$PWD/ThirdPart/gdal303/gdal/include
 
 DESTDIR = ../output
 
@@ -38,7 +38,7 @@ SOURCES += \
     Channel/jscontext.cpp \
     Dialog/dialogabout.cpp \
     Dialog/dialogsetting.cpp \
-    EntityView/entitytreeview.cpp \
+    EntityTreeWidget/entitytreewidget.cpp \
     Message/messagewidget.cpp \
     Public/appsignal.cpp \
     Public/softconfig.cpp \
@@ -49,7 +49,7 @@ HEADERS += \
     Channel/jscontext.h \
     Dialog/dialogabout.h \
     Dialog/dialogsetting.h \
-    EntityView/entitytreeview.h \
+    EntityTreeWidget/entitytreewidget.h \
     Message/messagewidget.h \
     Public/appsignal.h \
     Public/softconfig.h \
@@ -77,6 +77,6 @@ RESOURCES += \
 #0x0800代表和系统当前语言一致
 RC_LANG = 0x0800
 
-LIBS += -L$$PWD/ThirdPart/GDAL3_3_0/gdal/lib \
+LIBS += -L$$PWD/ThirdPart/gdal303/gdal/lib \
 -lgdal_i
 

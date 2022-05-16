@@ -26,6 +26,7 @@
 
 // test
 #include <QDebug>
+#include <QElapsedTimer>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -70,19 +71,25 @@ void MainWindow::init()
     channel->registerObject("context", mJsContext);
     ui->widgetCesium->page()->setWebChannel(channel);
 
+    GDALAllRegister();
+
     connect(AppSignal::getInstance(), &AppSignal::sgl_add_kml_entity, this, &MainWindow::slot_add_kml_entity);
     connect(AppSignal::getInstance(), &AppSignal::sgl_add_kmz_entity, this, &MainWindow::slot_add_kmz_entity);
     connect(AppSignal::getInstance(), &AppSignal::sgl_add_tiff_entity, this, &MainWindow::slot_add_tiff_entity);
+    connect(AppSignal::getInstance(), &AppSignal::sgl_add_grd_entity, this, &MainWindow::slot_add_grd_entity);
     connect(AppSignal::getInstance(), &AppSignal::sgl_change_entity_status, this, &MainWindow::slot_change_entity_status);
     connect(AppSignal::getInstance(), &AppSignal::sgl_delete_cesium_data_source, this, &MainWindow::slot_delete_cesium_data_source);
     connect(AppSignal::getInstance(), &AppSignal::sgl_fly_to_entity, this, &MainWindow::slot_fly_to_entity);
     connect(AppSignal::getInstance(), &AppSignal::sgl_change_mouse_over_pick, this, &MainWindow::slot_change_mouse_over_pick);
     connect(AppSignal::getInstance(), &AppSignal::sgl_search_local_altitude, this, &MainWindow::slot_search_local_altitude);
+    connect(AppSignal::getInstance(), &AppSignal::sgl_cesium_init_finish, this, &MainWindow::slot_cesium_init_finish);
     connect(AppSignal::getInstance(), &AppSignal::sgl_thread_report_system_error, this, &MainWindow::slot_thread_report_system_error, Qt::QueuedConnection);
 
     ui->widgetCesium->settings()->setAttribute(QWebEngineSettings::LocalContentCanAccessFileUrls, true);
     ui->widgetCesium->settings()->setAttribute(QWebEngineSettings::WebGLEnabled, true);
     ui->widgetCesium->page()->load(QUrl(QString("%1/../Resource/html/index.html").arg(QApplication::applicationDirPath())).toString());
+    ui->widgetCesium->page()->setBackgroundColor(QColor(0, 0, 0));
+    ui->widgetCesium->setVisible(false);
 
     // 菜单
     connect(ui->actionOpen, &QAction::triggered, this, &MainWindow::slot_open_files);
@@ -109,90 +116,18 @@ void MainWindow::slot_add_kmz_entity(const QString &path)
 
 void MainWindow::slot_add_tiff_entity(const QString &path)
 {
-    GDALDataset *poDataset;
-    GDALAllRegister();
-    poDataset = (GDALDataset *) GDALOpen(path.toStdString().data(), GA_ReadOnly);
-
-    if(poDataset == nullptr)
+    auto func = [path, this]
     {
-        emit AppSignal::getInstance()->sgl_thread_report_system_error("栅格图片异常");
-        return;
-    }
-    int xLength = 0, yLength = 0;
-    xLength = poDataset->GetRasterXSize();
-    yLength = poDataset->GetRasterYSize();
 
-    double adfGeoTransform[6];
-    if(poDataset->GetGeoTransform(adfGeoTransform) != CE_None )
-    {
-        GDALClose((GDALDatasetH)poDataset);
-        return;
-    }
+        QElapsedTimer ep;
+        ep.start();
 
-    double longitudeFrom = adfGeoTransform[0];
-    double longitudeEnd = adfGeoTransform[0] + xLength * adfGeoTransform[1] + yLength * adfGeoTransform[2];
-    double latitudeFrom = adfGeoTransform[3] + xLength * adfGeoTransform[4] + yLength * adfGeoTransform[5];
-    double latitudeEnd = adfGeoTransform[3];
-
-    // 投影坐标
-    OGRSpatialReference spatialReference;
-    spatialReference.importFromWkt(poDataset->GetProjectionRef());
-
-    // 地理坐标
-    OGRSpatialReference *pLonLat = spatialReference.CloneGeogCS();
-    OGRCoordinateTransformation *mLonLat2XY = OGRCreateCoordinateTransformation(&spatialReference, pLonLat);
-
-    if (!mLonLat2XY->Transform(1, &longitudeFrom, &latitudeFrom) || !mLonLat2XY->Transform(1, &longitudeEnd, &latitudeEnd))
-    {
-        emit AppSignal::getInstance()->sgl_thread_report_system_error("无法解析的经纬度信息");
-        GDALClose((GDALDatasetH)poDataset);
-        return;
-    }
-
-    QFileInfo info(path);
-    QImage image(path);
-
-    QDir dir = QApplication::applicationDirPath();
-    if (!dir.exists("caches"))
-    {
-        bool status = dir.mkdir("caches");
-        if (!status)
-        {
-            emit AppSignal::getInstance()->sgl_thread_report_system_error("创建缓存文件夹失败");
-            return;
-        }
-    }
-
-    QString suffixTime = QDateTime::currentDateTime().toString("yyyyMMddHHmmsszzz");
-    bool status = image.save(QString("caches/%1-%2.png").arg(info.baseName(), suffixTime));
-    if (!status)
-    {
-        emit AppSignal::getInstance()->sgl_thread_report_system_error("生成图片失败");
-        return;
-    }
-
-    QString args = QString("%1,%2,%3,%4,%5").arg(QString::number(longitudeFrom, 'f', 6),
-                                                 QString::number(latitudeFrom, 'f', 6),
-                                                 QString::number(longitudeEnd, 'f', 6),
-                                                 QString::number(latitudeEnd, 'f', 6),
-                                                 QString("%1/caches/%2-%3.png").arg(dir.absolutePath(), info.baseName(), suffixTime));
-
-    emit mJsContext->sgl_add_entity("tif", args);
-
-    GDALClose((GDALDatasetH)poDataset);
-}
-
-void MainWindow::slot_add_grd_entity(const QString &path)
-{
-    auto func = [path, this]()
-    {
         GDALDataset *poDataset;
-        GDALAllRegister();
-        poDataset = (GDALDataset *) GDALOpen(path.toStdString().data(), GA_ReadOnly);
+        poDataset = (GDALDataset *)GDALOpen(path.toStdString().data(), GA_ReadOnly);
 
         if(poDataset == nullptr)
         {
-            emit AppSignal::getInstance()->sgl_thread_report_system_error("打开栅格文件失败");
+            emit AppSignal::getInstance()->sgl_thread_report_system_error("栅格图片异常");
             return;
         }
         int xLength = 0, yLength = 0;
@@ -213,9 +148,68 @@ void MainWindow::slot_add_grd_entity(const QString &path)
 
         // 投影坐标
         OGRSpatialReference spatialReference;
+        spatialReference.importFromWkt(poDataset->GetProjectionRef());
+        spatialReference.SetAxisMappingStrategy(OAMS_TRADITIONAL_GIS_ORDER);
+
+        // 地理坐标
+        OGRSpatialReference *pLonLat = spatialReference.CloneGeogCS();
+        OGRCoordinateTransformation *mLonLat2XY = OGRCreateCoordinateTransformation(&spatialReference, pLonLat);
+
+        if (!mLonLat2XY->Transform(1, &longitudeFrom, &latitudeFrom) || !mLonLat2XY->Transform(1, &longitudeEnd, &latitudeEnd))
+        {
+            emit AppSignal::getInstance()->sgl_thread_report_system_error("无法解析的经纬度信息");
+            GDALClose((GDALDatasetH)poDataset);
+            return;
+        }
+
+        QFileInfo info(path);
+        QString args = QString("%1,%2,%3,%4,%5,%6").arg(QString::number(longitudeFrom, 'f', 6),
+                                                     QString::number(latitudeFrom, 'f', 6),
+                                                     QString::number(longitudeEnd, 'f', 6),
+                                                     QString::number(latitudeEnd, 'f', 6),
+                                                     QString("%1").arg(path),
+                                                     QString::number(info.size()));
+        emit mJsContext->sgl_add_entity("tif", args);
+        GDALClose((GDALDatasetH)poDataset);
+    };
+
+    std::thread th(func);
+    th.detach();
+}
+
+void MainWindow::slot_add_grd_entity(const QString &path)
+{
+    auto func = [path, this]()
+    {
+        GDALDataset *poDataset;
+        poDataset = (GDALDataset *)GDALOpen(path.toStdString().data(), GA_ReadOnly);
+        if(poDataset == nullptr)
+        {
+            emit AppSignal::getInstance()->sgl_thread_report_system_error("打开栅格文件失败");
+            return;
+        }
+        int xLength = 0, yLength = 0;
+        xLength = poDataset->GetRasterXSize();
+        yLength = poDataset->GetRasterYSize();
+
+        double adfGeoTransform[6];
+        if(poDataset->GetGeoTransform(adfGeoTransform) != CE_None)
+        {
+            GDALClose((GDALDatasetH)poDataset);
+            return;
+        }
+
+        double longitudeFrom = adfGeoTransform[0];
+        double longitudeEnd = adfGeoTransform[0] + xLength * adfGeoTransform[1] + yLength * adfGeoTransform[2];
+        double latitudeFrom = adfGeoTransform[3] + xLength * adfGeoTransform[4] + yLength * adfGeoTransform[5];
+        double latitudeEnd = adfGeoTransform[3];
+
+        // 投影坐标
+        OGRSpatialReference spatialReference;
         OGRErr error = spatialReference.importFromWkt(poDataset->GetProjectionRef());
         if (OGRERR_NONE == error)
         {
+            spatialReference.SetAxisMappingStrategy(OAMS_TRADITIONAL_GIS_ORDER);
             // 地理坐标
             OGRSpatialReference *pLonLat = spatialReference.CloneGeogCS();
             OGRCoordinateTransformation *mLonLat2XY = OGRCreateCoordinateTransformation(&spatialReference, pLonLat);
@@ -398,9 +392,10 @@ void MainWindow::slot_fly_to_entity(const QString &type, const QString &id, cons
     emit mJsContext->sgl_fly_to_entity(type, id, parentId);
 }
 
-void MainWindow::slot_change_mouse_over_pick(bool open)
+void MainWindow::slot_change_mouse_over_pick()
 {
-    emit mJsContext->sgl_change_mouse_over_status(open);
+    bool isOpen = SoftConfig::getInstance()->getValue("Base", "openMouseOver").toUInt();
+    emit mJsContext->sgl_change_mouse_over_status(isOpen);
 }
 
 void MainWindow::slot_search_local_altitude(double longitude, double latitude)
@@ -446,6 +441,13 @@ void MainWindow::slot_thread_report_system_error(const QString &msg)
 {
     MessageWidget *message = new MessageWidget(MessageWidget::M_Info, MessageWidget::P_Top_Center, ui->widgetBase);
     message->showMessage(msg);
+}
+
+void MainWindow::slot_cesium_init_finish()
+{
+    ui->widgetCesium->setVisible(true);
+    // 检查是否开启鼠标浮动
+    slot_change_mouse_over_pick();
 }
 
 void MainWindow::slot_open_files()
