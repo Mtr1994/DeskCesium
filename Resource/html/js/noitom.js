@@ -206,7 +206,7 @@ function addTifEntity(arg) {
 		xhr.open('GET', array[4]);
 		xhr.responseType = 'arraybuffer';
 		xhr.onload = function (e) {
-			Tiff.initialize({TOTAL_MEMORY: parseInt(array[5]) })
+			Tiff.initialize({TOTAL_MEMORY: parseInt(array[5]) + 10240 })
 			let tiff = new Tiff({buffer: xhr.response});
 			let canvas = tiff.toCanvas();
 			let size = cesiumViewer.entities.values.length;
