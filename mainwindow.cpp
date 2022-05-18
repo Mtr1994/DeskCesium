@@ -87,6 +87,8 @@ void MainWindow::init()
 
     ui->widgetCesium->settings()->setAttribute(QWebEngineSettings::LocalContentCanAccessFileUrls, true);
     ui->widgetCesium->settings()->setAttribute(QWebEngineSettings::WebGLEnabled, true);
+    ui->widgetCesium->settings()->setAttribute(QWebEngineSettings::LocalContentCanAccessRemoteUrls, true);
+
     ui->widgetCesium->page()->load(QUrl(QString("%1/../Resource/html/index.html").arg(QApplication::applicationDirPath())).toString());
     ui->widgetCesium->page()->setBackgroundColor(QColor(0, 0, 0));
     ui->widgetCesium->setVisible(false);

@@ -4,6 +4,7 @@ let measureStatus = 0;
 let glMouseOverHandler = undefined;
 let hoverLongitude = 0.0;
 let hoverLatitude = 0.0;
+let createMeasurePoint = false
 
 // 初始化
 function init() {
@@ -145,7 +146,15 @@ function init() {
 	cesiumViewer.scene.skyBox.show = false
 	cesiumViewer.scene.globe.enableLighting = false;
     cesiumViewer.shadows = false
+	
+	// 曲线抗锯齿处理
+	cesiumViewer.scene.fxaa = false;
+	cesiumViewer.scene.postProcessStages.fxaa.enabled = true;
+	if (Cesium.FeatureDetection.supportsImageRenderingPixelated()) { // 判断是否支持图像渲染像素化处理
+		cesiumViewer.resolutionScale = window.devicePixelRatio;
+	}
 
+	// 禁止双击聚焦操作
 	cesiumViewer.cesiumWidget.screenSpaceEventHandler.removeInputAction(Cesium.ScreenSpaceEventType.LEFT_DOUBLE_CLICK)
 }
 
@@ -208,7 +217,7 @@ function addTifEntity(arg) {
 		xhr.open('GET', array[4]);
 		xhr.responseType = 'arraybuffer';
 		xhr.onload = function (e) {
-			Tiff.initialize({TOTAL_MEMORY: parseInt(array[5]) * 1.2})
+			Tiff.initialize({TOTAL_MEMORY: parseInt(array[5]) * 2})
 			let tiff = new Tiff({buffer: xhr.response});
 			let canvas = tiff.toCanvas();
 			let size = cesiumViewer.entities.values.length;
@@ -304,7 +313,7 @@ function deleteDataSource(type, name) {
 	}
 }
 
-// 距离测量 (arg 为 时间 id)
+// 距离测量 (arg 为 时间 id) （可能解决大量实体导致的卡顿问题 https://www.jianshu.com/p/5a74c607a591）
 function startMeasureLine(arg) {
 	if (measureStatus == 1) return;
 	measureStatus = 1;
@@ -315,6 +324,9 @@ function startMeasureLine(arg) {
     var cartesian = null;
     var floatingPoint;
     var labelPt;
+	
+	createMeasurePoint = false;
+	
     handler.setInputAction(function (movement) {
         let ray = cesiumViewer.camera.getPickRay(movement.endPosition);
         cartesian = cesiumViewer.scene.globe.pick(ray, cesiumViewer.scene);
@@ -331,6 +343,7 @@ function startMeasureLine(arg) {
     }, Cesium.ScreenSpaceEventType.MOUSE_MOVE);
  
     handler.setInputAction(function (movement) {
+		if (createMeasurePoint) return;
         let ray = cesiumViewer.camera.getPickRay(movement.position);
         cartesian = cesiumViewer.scene.globe.pick(ray, cesiumViewer.scene);
         if (!Cesium.defined(cartesian)) //跳出地球时异常
@@ -338,10 +351,12 @@ function startMeasureLine(arg) {
         if (positions.length == 0) {
             positions.push(cartesian.clone());
         }
+		
         positions.push(cartesian);
         //记录鼠标单击时的节点位置，异步计算贴地距离
         labelPt = positions[positions.length - 1];
         if (positions.length > 2) {
+			createMeasurePoint = true;
             getSpaceDistance(positions);
 			if (positions.length == 3) {
 				// 返回测线 id
@@ -458,6 +473,8 @@ function startMeasureLine(arg) {
                     pixelOffset: new Cesium.Cartesian2(20, -20),
                 }
             });
+			
+			createMeasurePoint = false;
         });
     }
 }
