@@ -119,7 +119,7 @@ function init() {
 	
 	let earthMap;
 	if (navigator.onLine) {
-		earthMap = new Cesium.WebMapServiceImageryProvider({ url: 'https://www.gmrt.org/services/mapserver/wms_merc', layers: 'GMRT',minimumLevel: 0, maximumLevel : 18 });
+		earthMap = new Cesium.WebMapServiceImageryProvider({ url: 'https://www.gmrt.org/services/mapserver/wms_merc?', layers: 'GMRT'});
 	} else {
 		earthMap = new Cesium.TileMapServiceImageryProvider({ url: Cesium.buildModuleUrl("Assets/Textures/NaturalEarthII")});
 	}
@@ -144,8 +144,6 @@ function init() {
 	cesiumViewer.scene.skyAtmosphere.show = false
 	cesiumViewer.scene.sun.show = false
 	cesiumViewer.scene.skyBox.show = false
-	cesiumViewer.scene.globe.enableLighting = false;
-    cesiumViewer.shadows = false
 	
 	// 曲线抗锯齿处理
 	cesiumViewer.scene.fxaa = false;
