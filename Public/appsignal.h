@@ -49,8 +49,11 @@ signals:
     // 检索本地高程数据
     void sgl_search_local_altitude(double longitude, double latitude);
 
-    // 系统错误信息报告
+    // 系统错误信息报告 (线程)
     void sgl_thread_report_system_error(const QString & msg);
+
+    // 系统错误信息报告
+    void sgl_report_system_error(const QString & msg);
 
     // cesium 加载完成
     void sgl_cesium_init_finish();

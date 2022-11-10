@@ -1,37 +1,157 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <!-- Include the CesiumJS JavaScript and CSS files -->
-  <script src="./Cesium-1.93/Build/Cesium/Cesium.js"></script>
-  <script src="./js/qwebchannel.js"></script>
-  <script src="./js/noitom.js"></script>
-  <script src="./js/tiff.min.js"></script>
-  <link href="./Cesium-1.93/Build/Cesium/Widgets/widgets.css" rel="stylesheet">
+	<meta charset="utf-8">
+	<!-- Include the CesiumJS JavaScript and CSS files -->
+	<script src="./Cesium-1.93/Build/Cesium/Cesium.js"></script>
+	<script src="./js/qwebchannel.js"></script>
+	<script src="./js/noitom.js"></script>
+	<script src="./js/tiff.min.js"></script>
+	<link href="./Cesium-1.93/Build/Cesium/Widgets/widgets.css" rel="stylesheet">
 </head>
 <body>
-  <div id="cesiumContainer" class = "div-cesium-viewer" ondrop="handleDrop(event)" ondragover="handleDragOver(event)"> </div>
-  <div id="geoinfo" class="div-dev-info"> Longitude: ----&nbsp&nbsp&nbsp&nbsp Latitude: ----&nbsp&nbsp&nbsp&nbspElevation: ----</div>
+	<div id="cesiumContainer" class = "div-cesium-viewer" ondrop="handleDrop(event)" ondragover="handleDragOver(event)"> </div>
+	<div id="geoinfo" class="div-dev-info"> Longitude: ----&nbsp&nbsp&nbsp&nbsp Latitude: ----&nbsp&nbsp&nbsp&nbspElevation: ----</div>
+  
+	<div id="entityDescription" class="div-entity-description">
+		<h3>声学疑似点信息</h3>
+		<div class="text-div" style="width: 100%;" title="编号：TS-26-DT07-LL01-073">
+			疑似点编号：<span class="text-value" id="text-id">TS-26-DT07-LL01-073</span>
+		</div>
+		<div class="text-div" style="width: 100%;">
+			优先级：<span class="text-value" id="text-priority">1</span>
+		</div>
+		<div class="text-div" style="width: 100%;" title="计算机时间：02:16:00.000">
+			计算机时间：<span class="text-value" id="text-computer-time">02:16:00.000</span>
+		</div>
+		<div class="text-div" style="width: 100%;" title="拖体时间：13:27:00.000">
+			拖体记录时间：<span class="text-value" id="text-dt-time">13:27:00.000</span>
+		</div>
+		<div style="display: flex">
+			<div class="text-div" style="width: 50%;" title="经度：126.3413">
+				经度：<span class="text-value" id="text-longitude">126.3413</span>
+			</div>
+			<div class="text-div" style="width: 50%;" title="纬度：23.3748">
+				纬度：<span class="text-value" id="text-latitude">23.3748</span>
+			</div>
+		</div>
+		<div class="text-div" style="width: 100%;" title="深度：23.3748">
+			深度：<span class="text-value" id="text-altitude">2423.3748 米</span>
+		</div>
+		<div class="text-div" style="width: 100%;" title="拖体速度：1.6 Knot">
+			拖体速度：<span class="text-value" id="text-dt-speed">1.6 Knot</span>
+		</div>
+		<div class="text-div" style="width: 100%;">
+			水平距离：<span class="text-value" id="text-horizontal-range-value">左 / 150.00 米</span>
+		</div>
+		<div class="text-div" style="width: 100%;">
+			离底高度：<span class="text-value" id="text-height-from-bottom">100.00 米</span>
+		</div>
+		<div class="text-div" style="width: 100%;">
+			航迹向分辨率：<span class="text-value" id="text-r-theat">2.07188</span>
+		</div>
+		<div class="text-div" style="width: 100%;">
+			长：<span class="text-value" id="text-along-track">35.9 米</span>
+		</div>
+		<div class="text-div" style="width: 100%;">
+			宽：<span class="text-value" id="text-across-track">5.9 米</span>
+		</div>
+		<div class="text-div" style="width: 100%;">
+			备注说明：<span class="text-value" id="text-remarks">疑似岩石或沉船</span>
+		</div>
+		<div class="text-div" style="width: 100%;">
+			推测尺寸：<span class="text-value" id="text-suppose-size">18.45 米</span>
+		</div>
+		
+		<h3>水下查证信息</h3>
+		<div style="display: flex">
+			<div class="text-div" style="width: 50%;" title="经度：126.3413">
+				目标经度：<span class="text-value" id="text-target-longitude">126.3413</span>
+			</div>
+			<div class="text-div" style="width: 50%;" title="纬度：23.3748">
+				目标纬度：<span class="text-value" id="text-target-latitude">23.3748</span>
+			</div>
+		</div>
+		<div class="text-div" style="width: 100%;">
+			定位误差：<span class="text-value" id="text-position-error">20 米</span>
+		</div>
+		<div class="text-div" style="width: 100%;">
+			航次号：<span class="text-value" id="text-cruise-number">TS-26</span>
+		</div>
+		<div class="text-div" style="width: 100%;">
+			潜次号：<span class="text-value" id="text-dive_number">FDZ107</span>
+		</div>
+		<div class="text-div" style="width: 100%;">
+			查证照片描述：<span class="text-value" id="text-image-description">长约10米的大块沉木</span>
+		</div>
+		
+		<h3>查证照片</h3>
+		<div style="margin-top: 2em;">
+			<img src="http://101.34.253.220/image/upload/TS-26/image/FDZ-108-01.jpg" style="width: 100%; margin-bottom: 1em; border-radius: 6px; border: 2px solid #4169E1;">
+			<img src="http://101.34.253.220/image/upload/TS-26/image/FDZ108-02.jpg" style="width: 100%; margin-bottom: 1em; border-radius: 6px; border: 2px solid #4169E1;">
+			<img src="http://101.34.253.220/image/upload/TS-26/image/TS-26-DT07-LL01-074-FDZ107.jpg" style="width: 100%; margin-bottom: 1em; border-radius: 6px; border: 2px solid #4169E1;">
+		</div>
+		
+		<div id="div-empty-image" style="width: 100%; text-align: center; padding: 6em 0em; border: 2px dotted #4169E1; border-radius: 1em;">
+			暂无查证照片
+		</div>
+	</div>
+	
 <style>
-  .div-cesium-viewer {
-	  position:absolute;
-	  left:0;
-	  top: 0;
-	  bottom: 0;
-	  right: 0;
-	  margin: auto;
-  }
-  .div-dev-info {
-	position:absolute;
-	bottom:10px;
-	left:10px;
-	z-index:10;
-	color: #f5e23d;
-  }
-  body {
-	background-color: #000000;
-	overflow: hidden;
-  }
+	.div-cesium-viewer {
+		position:absolute;
+		left:0;
+		top: 0;
+		bottom: 0;
+		right: 0;
+		margin: auto;
+	}
+	.div-dev-info {
+		position:absolute;
+		bottom:10px;
+		left:10px;
+		z-index:10;
+		color: #f5e23d;
+	}
+	.div-entity-description {
+		position:absolute;
+		z-index:12;
+		right:1em;
+		bottom:1em;
+		padding: 1em;
+		padding-top: 0px;
+		width: 24em;
+		height: 80%;
+		border-radius: 10px;
+		border:2px solid #d0d0d0;
+		background-color: #ffffff;
+		overflow-y:hidden;
+		overflow-y: scroll;
+		visibility: hidden;
+	}
+	body {
+		width: 100%
+		height: 100%;
+		background-color: #000000;
+		overflow: hidden;
+		font-size: 12px;
+		font-family: "Source Sans Pro", "Segoe UI", Arial, Geneva, sans-serif;
+	}
+	.text-div {
+		overflow: hidden;
+		white-space: nowrap;
+		text-overflow: ellipsis;
+		padding: 0.3em 0em;
+		margin-left: 1em;
+		color: #00000066;
+	}
+	.text-value {
+		color: #000000;
+		font-size: 13px;
+	}
+	::-webkit-scrollbar {
+		display: none;
+	}
 </style>
 
 <script type="text/javascript">

@@ -98,6 +98,10 @@ void EntityTreeWidget::slot_context_menu_request(const QPoint &pos)
         menu.addAction(&actionDel);
     }
 
+    menu.setStyleSheet("border: 1px solid #d0d0d0; border-radius: 0.3em; padding: 0.6em 0em; background-color: #fefefe;");
+
+    menu.setWindowFlags(menu.windowFlags() | Qt::FramelessWindowHint | Qt::NoDropShadowWindowHint);
+    menu.setAttribute(Qt::WA_TranslucentBackground);
     menu.exec(QCursor::pos());
 }
 

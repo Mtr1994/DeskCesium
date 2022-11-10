@@ -8,6 +8,7 @@
 #include "Message/messagewidget.h"
 #include "Dialog/dialogsetting.h"
 #include "Public/softconfig.h"
+#include "Dialog/dialoguploaddata.h"
 
 #include <QScreen>
 #include <QWebEngineSettings>
@@ -51,21 +52,6 @@ MainWindow::~MainWindow()
 
 void MainWindow::init()
 {
-    QScreen *screen = QGuiApplication::screens().at(0);
-    float width = 1024;
-    float height = 640;
-    if (nullptr != screen)
-    {
-        QRect rect = screen->availableGeometry();
-        width = rect.width() * 0.64 < 1024 ? 1024 : rect.width() * 0.64;
-        height = rect.height() * 0.64 < 640 ? 640 : rect.height() * 0.64;
-    }
-
-    resize(width, height);
-
-    ui->splitter->setStretchFactor(0, 1);
-    ui->splitter->setStretchFactor(1, 72);
-
     mJsContext = new JsContext(this);
     QWebChannel *channel = new QWebChannel(this);
     channel->registerObject("context", mJsContext);
@@ -84,6 +70,7 @@ void MainWindow::init()
     connect(AppSignal::getInstance(), &AppSignal::sgl_search_local_altitude, this, &MainWindow::slot_search_local_altitude);
     connect(AppSignal::getInstance(), &AppSignal::sgl_cesium_init_finish, this, &MainWindow::slot_cesium_init_finish);
     connect(AppSignal::getInstance(), &AppSignal::sgl_thread_report_system_error, this, &MainWindow::slot_thread_report_system_error, Qt::QueuedConnection);
+    connect(AppSignal::getInstance(), &AppSignal::sgl_report_system_error, this, &MainWindow::slot_thread_report_system_error);
 
     ui->widgetCesium->settings()->setAttribute(QWebEngineSettings::LocalContentCanAccessFileUrls, true);
     ui->widgetCesium->settings()->setAttribute(QWebEngineSettings::WebGLEnabled, true);
@@ -93,8 +80,16 @@ void MainWindow::init()
     ui->widgetCesium->page()->setBackgroundColor(QColor(0, 0, 0));
     ui->widgetCesium->setVisible(false);
 
+    ////// 网页调试部分，发布时请注释此段代码 S
+//    QWebEngineView *debuPage = new QWebEngineView;
+//    ui->widgetCesium->page()->setDevToolsPage(debuPage->page());
+//    ui->widgetCesium->page()->triggerAction(QWebEnginePage::WebAction::InspectElement);
+//    debuPage->show();
+    ////// 网页调试部分，发布时请注释此段代码 E
+
     // 菜单
     connect(ui->actionOpen, &QAction::triggered, this, &MainWindow::slot_open_files);
+    connect(ui->actionImportData, &QAction::triggered, this, &MainWindow::slot_import_cruise_data);
     connect(ui->actionExit, &QAction::triggered, this, [this]{ this->close();});
 
     connect(ui->actionSetting, &QAction::triggered, this, [this]{ DialogSetting dialog(this); dialog.exec(); });
@@ -464,6 +459,13 @@ void MainWindow::slot_start_measure_polygn()
 {
     QString id = QDateTime::currentDateTime().toString("yyyyMMddHHmmsszzz");
     emit mJsContext->sgl_start_measure("mpa", id);
+}
+
+void MainWindow::slot_import_cruise_data()
+{
+    // 生成一个 Dialog，所有的操作均在该窗体中完成
+    DialogUploadData dialog(this);
+    dialog.exec();
 }
 
 bool MainWindow::removeFolderContent(const QString &folderDir)

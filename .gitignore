@@ -37,7 +37,7 @@ Makefile*
 Cesium-1.93
 output
 share
-ThirdPart
+Sdk
 
 # Qt unit tests
 target_wrapper.*

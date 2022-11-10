@@ -57,6 +57,8 @@ private slots:
     void slot_start_measure_line();
     void slot_start_measure_polygn();
 
+    void slot_import_cruise_data();
+
 private:
     bool removeFolderContent(const QString &folderDir);
 

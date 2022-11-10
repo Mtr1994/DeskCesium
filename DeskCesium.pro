@@ -2,7 +2,7 @@ QT       += core gui webenginewidgets webchannel
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
-CONFIG += c++17
+CONFIG += c++11
 
 lessThan(QT_MAJOR_VERSION, 6): win32: QMAKE_CXXFLAGS += -execution-charset:utf-8
 
@@ -30,7 +30,10 @@ DEFINES += QT_DEPRECATED_WARNINGS
 # In order to do so, uncomment the following line.
 # You can also select to disable deprecated APIs only up to a certain version of Qt.
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
-INCLUDEPATH += $$PWD/ThirdPart/gdal303/gdal/include
+INCLUDEPATH += $$PWD/Sdk/gdal303/gdal/include
+INCLUDEPATH += $$PWD/Sdk/qxlsx/include
+INCLUDEPATH += $$PWD/Sdk/proto/include
+INCLUDEPATH += $$PWD/Sdk/hpsocket/include
 
 DESTDIR = ../output
 
@@ -38,8 +41,13 @@ SOURCES += \
     Channel/jscontext.cpp \
     Dialog/dialogabout.cpp \
     Dialog/dialogsetting.cpp \
+    Dialog/dialoguploaddata.cpp \
     EntityTreeWidget/entitytreewidget.cpp \
+    Ftp/ftpmanager.cpp \
     Message/messagewidget.cpp \
+    Net/basesocket.cpp \
+    Net/tcpsocket.cpp \
+    Proto/sidescansource.pb.cc \
     Public/appsignal.cpp \
     Public/softconfig.cpp \
     main.cpp \
@@ -47,10 +55,16 @@ SOURCES += \
 
 HEADERS += \
     Channel/jscontext.h \
+    Common/common.h \
     Dialog/dialogabout.h \
     Dialog/dialogsetting.h \
+    Dialog/dialoguploaddata.h \
     EntityTreeWidget/entitytreewidget.h \
+    Ftp/ftpmanager.h \
     Message/messagewidget.h \
+    Net/basesocket.h \
+    Net/tcpsocket.h \
+    Proto/sidescansource.pb.h \
     Public/appsignal.h \
     Public/softconfig.h \
     Public/treeitemdelegate.h \
@@ -59,6 +73,7 @@ HEADERS += \
 FORMS += \
     Dialog/dialogabout.ui \
     Dialog/dialogsetting.ui \
+    Dialog/dialoguploaddata.ui \
     mainwindow.ui
 
 TRANSLATIONS += \
@@ -77,6 +92,15 @@ RESOURCES += \
 #0x0800代表和系统当前语言一致
 RC_LANG = 0x0800
 
-LIBS += -L$$PWD/ThirdPart/gdal303/gdal/lib \
+LIBS += -L$$PWD/Sdk/gdal303/gdal/lib \
 -lgdal_i
+
+LIBS +=-L$$PWD/Sdk/qxlsx/lib \
+-lqxlsx
+
+LIBS +=-L$$PWD/Sdk/proto/lib \
+-llibprotobuf
+
+LIBS += -L$$PWD/Sdk/hpsocket/lib \
+-lHPSocket_U
 

@@ -1,0 +1,40 @@
+syntax = "proto3";
+
+message SideScanSource 
+{
+	string id = 1;
+	string computer_time = 2;
+	string dt_time = 3;
+	double longitude = 4;
+	double latitude = 5;
+	float dt_speed = 6;
+	string horizontal_range_direction = 7;
+	float horizontal_range_value = 8;
+	float height_from_bottom = 9;
+	float r_theat = 10;
+	string side_scan_image_name = 11;
+	float along_track = 12;
+	float across_track = 13;
+	string remarks = 14;
+	float suppose_size = 15;
+	uint32 priority = 16;
+	string verify_image_paths = 17;
+	string image_description = 18;
+	double target_longitude = 19;
+	double target_latitude = 20;
+	float position_error = 21;
+	string cruise_number = 22;
+	string dive_number = 23;
+	uint32 status = 24;
+}
+
+message SideScanSourceList 
+{
+	repeated SideScanSource list = 1;
+}
+
+message StatusResponse 
+{
+	bool status = 1;
+	string message = 2;
+}

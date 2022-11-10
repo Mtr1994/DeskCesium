@@ -68,12 +68,12 @@ function init() {
 					for (let i = 0; i < len; i++) {
 						let entity = dataSourceArray[i].entities.getById(id)
 						if (undefined === entity) continue;
-						cesiumViewer.flyTo(entity, {duration: 2, maximumHeight: 15000, offset: new Cesium.HeadingPitchRange(0, -90, 0.0)});
+						cesiumViewer.flyTo(entity, {duration: 1, maximumHeight: 15000, offset: new Cesium.HeadingPitchRange(0, -90, 0.0)});
 					}
 				} else {
 					let entity = cesiumViewer.entities.getById(id);
 					if (undefined == entity) return;
-					cesiumViewer.flyTo(entity, {duration: 2, maximumHeight: 15000, offset: new Cesium.HeadingPitchRange(0, -90, 0.0)});
+					cesiumViewer.flyTo(entity, {duration: 1, maximumHeight: 15000, offset: new Cesium.HeadingPitchRange(0, -90, 0.0)});
 				}
 			});
 			context.sgl_change_mouse_over_status.connect(function(isOpen) {
@@ -87,7 +87,7 @@ function init() {
 				if (hoverLongitude !== parseFloat(longitude).toFixed(6) || hoverLatitude !== parseFloat(latitude).toFixed(6)) return;
 				if (result) {
 					let geoinfo = document.getElementById("geoinfo");
-					geoinfo.innerHTML = `Longitude: ${`${hoverLongitude}`.slice(-12)}\u00B0` + `&nbsp&nbsp&nbsp&nbsp Latitude: ${`${hoverLatitude}`.slice(-12)}\u00B0` + `&nbsp&nbsp&nbsp&nbspElevation: ${`${altitude.toFixed(6)}`.slice(-12)} m (Local)`;
+					geoinfo.innerHTML = `Longitude: ${`${hoverLongitude}`.slice(-12)}\u00B0` + `&nbsp&nbsp&nbsp&nbsp Latitude: ${`${hoverLatitude}`.slice(-12)}\u00B0` + `&nbsp&nbsp&nbsp&nbspElevation: ${`${altitude.toFixed(0)}`.slice(-12)} m (Local)`;
 				} else {
 					if (!navigator.onLine) {
 						geoinfo.innerHTML = `Longitude: ${`${hoverLongitude}`.slice(-12)}\u00B0` + `&nbsp&nbsp&nbsp&nbsp Latitude: ${`${hoverLatitude}`.slice(-12)}\u00B0` + `&nbsp&nbsp&nbsp&nbspElevation: nds`;
@@ -99,7 +99,7 @@ function init() {
 								let response_data = xmlHttp.response;
 								let jsonData = JSON.parse(response_data);
 								if (hoverLongitude == parseFloat(jsonData.longitude).toFixed(6) && hoverLatitude == parseFloat(jsonData.latitude).toFixed(6)) {
-									geoinfo.innerHTML = `Longitude: ${`${hoverLongitude}`.slice(-12)}\u00B0` + `&nbsp&nbsp&nbsp&nbsp Latitude: ${`${hoverLatitude}`.slice(-12)}\u00B0` + `&nbsp&nbsp&nbsp&nbspElevation: ${`${parseFloat(jsonData.elevation).toFixed(6)}`.slice(-12)} m (Remote)`;
+									geoinfo.innerHTML = `Longitude: ${`${hoverLongitude}`.slice(-12)}\u00B0` + `&nbsp&nbsp&nbsp&nbsp Latitude: ${`${hoverLatitude}`.slice(-12)}\u00B0` + `&nbsp&nbsp&nbsp&nbspElevation: ${`${parseFloat(jsonData.elevation).toFixed(0)}`.slice(-12)} m (Remote)`;
 								}
 							}
 						};
@@ -154,6 +154,25 @@ function init() {
 
 	// 禁止双击聚焦操作
 	cesiumViewer.cesiumWidget.screenSpaceEventHandler.removeInputAction(Cesium.ScreenSpaceEventType.LEFT_DOUBLE_CLICK)
+	
+	var handler = new Cesium.ScreenSpaceEventHandler(cesiumViewer.scene.canvas);
+	handler.setInputAction(function (movement) {
+		var pick = cesiumViewer.scene.pick(movement.position);
+		let entityDescription = document.getElementById("entityDescription");
+		if (undefined === pick) {
+			if (undefined !== entityDescription) {
+				entityDescription.style.visibility = "hidden";
+			}
+		} else {
+			if (undefined !== entityDescription) {
+				console.log("pick.id._description", pick.id._description)
+				if (undefined === pick.id._description) {
+					entityDescription.style.visibility = "visible";
+					// entityDescription.innerHTML = "啊哈哈哈哈"; //pick.id._description._value
+				}
+			}
+		}
+	}, Cesium.ScreenSpaceEventType.LEFT_CLICK);
 }
 
 function handleDrop(event) {
