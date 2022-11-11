@@ -44,6 +44,12 @@ struct TableStruct_sidescansource_2eproto {
   static const uint32_t offsets[];
 };
 extern const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable descriptor_table_sidescansource_2eproto;
+class CruiseRouteSource;
+struct CruiseRouteSourceDefaultTypeInternal;
+extern CruiseRouteSourceDefaultTypeInternal _CruiseRouteSource_default_instance_;
+class CruiseRouteSourceList;
+struct CruiseRouteSourceListDefaultTypeInternal;
+extern CruiseRouteSourceListDefaultTypeInternal _CruiseRouteSourceList_default_instance_;
 class SideScanSource;
 struct SideScanSourceDefaultTypeInternal;
 extern SideScanSourceDefaultTypeInternal _SideScanSource_default_instance_;
@@ -54,6 +60,8 @@ class StatusResponse;
 struct StatusResponseDefaultTypeInternal;
 extern StatusResponseDefaultTypeInternal _StatusResponse_default_instance_;
 PROTOBUF_NAMESPACE_OPEN
+template<> ::CruiseRouteSource* Arena::CreateMaybeMessage<::CruiseRouteSource>(Arena*);
+template<> ::CruiseRouteSourceList* Arena::CreateMaybeMessage<::CruiseRouteSourceList>(Arena*);
 template<> ::SideScanSource* Arena::CreateMaybeMessage<::SideScanSource>(Arena*);
 template<> ::SideScanSourceList* Arena::CreateMaybeMessage<::SideScanSourceList>(Arena*);
 template<> ::StatusResponse* Arena::CreateMaybeMessage<::StatusResponse>(Arena*);
@@ -826,6 +834,348 @@ class StatusResponse final :
   struct Impl_ {
     ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr message_;
     bool status_;
+    mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  };
+  union { Impl_ _impl_; };
+  friend struct ::TableStruct_sidescansource_2eproto;
+};
+// -------------------------------------------------------------------
+
+class CruiseRouteSource final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:CruiseRouteSource) */ {
+ public:
+  inline CruiseRouteSource() : CruiseRouteSource(nullptr) {}
+  ~CruiseRouteSource() override;
+  explicit PROTOBUF_CONSTEXPR CruiseRouteSource(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  CruiseRouteSource(const CruiseRouteSource& from);
+  CruiseRouteSource(CruiseRouteSource&& from) noexcept
+    : CruiseRouteSource() {
+    *this = ::std::move(from);
+  }
+
+  inline CruiseRouteSource& operator=(const CruiseRouteSource& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline CruiseRouteSource& operator=(CruiseRouteSource&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()
+  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
+        && GetOwningArena() != nullptr
+  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
+    ) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const CruiseRouteSource& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const CruiseRouteSource* internal_default_instance() {
+    return reinterpret_cast<const CruiseRouteSource*>(
+               &_CruiseRouteSource_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    3;
+
+  friend void swap(CruiseRouteSource& a, CruiseRouteSource& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(CruiseRouteSource* other) {
+    if (other == this) return;
+  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() != nullptr &&
+        GetOwningArena() == other->GetOwningArena()) {
+   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() == other->GetOwningArena()) {
+  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(CruiseRouteSource* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  CruiseRouteSource* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<CruiseRouteSource>(arena);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
+  void CopyFrom(const CruiseRouteSource& from);
+  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
+  void MergeFrom( const CruiseRouteSource& from) {
+    CruiseRouteSource::MergeImpl(*this, from);
+  }
+  private:
+  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  uint8_t* _InternalSerialize(
+      uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _impl_._cached_size_.Get(); }
+
+  private:
+  void SharedCtor(::PROTOBUF_NAMESPACE_ID::Arena* arena, bool is_message_owned);
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(CruiseRouteSource* other);
+
+  private:
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "CruiseRouteSource";
+  }
+  protected:
+  explicit CruiseRouteSource(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                       bool is_message_owned = false);
+  public:
+
+  static const ClassData _class_data_;
+  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kCruiseFieldNumber = 1,
+    kTypeFieldNumber = 2,
+    kNameFieldNumber = 3,
+  };
+  // string cruise = 1;
+  void clear_cruise();
+  const std::string& cruise() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_cruise(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_cruise();
+  PROTOBUF_NODISCARD std::string* release_cruise();
+  void set_allocated_cruise(std::string* cruise);
+  private:
+  const std::string& _internal_cruise() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_cruise(const std::string& value);
+  std::string* _internal_mutable_cruise();
+  public:
+
+  // string type = 2;
+  void clear_type();
+  const std::string& type() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_type(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_type();
+  PROTOBUF_NODISCARD std::string* release_type();
+  void set_allocated_type(std::string* type);
+  private:
+  const std::string& _internal_type() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_type(const std::string& value);
+  std::string* _internal_mutable_type();
+  public:
+
+  // string name = 3;
+  void clear_name();
+  const std::string& name() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_name(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_name();
+  PROTOBUF_NODISCARD std::string* release_name();
+  void set_allocated_name(std::string* name);
+  private:
+  const std::string& _internal_name() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_name(const std::string& value);
+  std::string* _internal_mutable_name();
+  public:
+
+  // @@protoc_insertion_point(class_scope:CruiseRouteSource)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  struct Impl_ {
+    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr cruise_;
+    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr type_;
+    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr name_;
+    mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  };
+  union { Impl_ _impl_; };
+  friend struct ::TableStruct_sidescansource_2eproto;
+};
+// -------------------------------------------------------------------
+
+class CruiseRouteSourceList final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:CruiseRouteSourceList) */ {
+ public:
+  inline CruiseRouteSourceList() : CruiseRouteSourceList(nullptr) {}
+  ~CruiseRouteSourceList() override;
+  explicit PROTOBUF_CONSTEXPR CruiseRouteSourceList(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  CruiseRouteSourceList(const CruiseRouteSourceList& from);
+  CruiseRouteSourceList(CruiseRouteSourceList&& from) noexcept
+    : CruiseRouteSourceList() {
+    *this = ::std::move(from);
+  }
+
+  inline CruiseRouteSourceList& operator=(const CruiseRouteSourceList& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline CruiseRouteSourceList& operator=(CruiseRouteSourceList&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()
+  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
+        && GetOwningArena() != nullptr
+  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
+    ) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const CruiseRouteSourceList& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const CruiseRouteSourceList* internal_default_instance() {
+    return reinterpret_cast<const CruiseRouteSourceList*>(
+               &_CruiseRouteSourceList_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    4;
+
+  friend void swap(CruiseRouteSourceList& a, CruiseRouteSourceList& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(CruiseRouteSourceList* other) {
+    if (other == this) return;
+  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() != nullptr &&
+        GetOwningArena() == other->GetOwningArena()) {
+   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() == other->GetOwningArena()) {
+  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(CruiseRouteSourceList* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  CruiseRouteSourceList* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<CruiseRouteSourceList>(arena);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
+  void CopyFrom(const CruiseRouteSourceList& from);
+  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
+  void MergeFrom( const CruiseRouteSourceList& from) {
+    CruiseRouteSourceList::MergeImpl(*this, from);
+  }
+  private:
+  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  uint8_t* _InternalSerialize(
+      uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _impl_._cached_size_.Get(); }
+
+  private:
+  void SharedCtor(::PROTOBUF_NAMESPACE_ID::Arena* arena, bool is_message_owned);
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(CruiseRouteSourceList* other);
+
+  private:
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "CruiseRouteSourceList";
+  }
+  protected:
+  explicit CruiseRouteSourceList(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                       bool is_message_owned = false);
+  public:
+
+  static const ClassData _class_data_;
+  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kListFieldNumber = 1,
+  };
+  // repeated .CruiseRouteSource list = 1;
+  int list_size() const;
+  private:
+  int _internal_list_size() const;
+  public:
+  void clear_list();
+  ::CruiseRouteSource* mutable_list(int index);
+  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::CruiseRouteSource >*
+      mutable_list();
+  private:
+  const ::CruiseRouteSource& _internal_list(int index) const;
+  ::CruiseRouteSource* _internal_add_list();
+  public:
+  const ::CruiseRouteSource& list(int index) const;
+  ::CruiseRouteSource* add_list();
+  const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::CruiseRouteSource >&
+      list() const;
+
+  // @@protoc_insertion_point(class_scope:CruiseRouteSourceList)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  struct Impl_ {
+    ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::CruiseRouteSource > list_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   };
   union { Impl_ _impl_; };
@@ -1740,9 +2090,211 @@ inline void StatusResponse::set_allocated_message(std::string* message) {
   // @@protoc_insertion_point(field_set_allocated:StatusResponse.message)
 }
 
+// -------------------------------------------------------------------
+
+// CruiseRouteSource
+
+// string cruise = 1;
+inline void CruiseRouteSource::clear_cruise() {
+  _impl_.cruise_.ClearToEmpty();
+}
+inline const std::string& CruiseRouteSource::cruise() const {
+  // @@protoc_insertion_point(field_get:CruiseRouteSource.cruise)
+  return _internal_cruise();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void CruiseRouteSource::set_cruise(ArgT0&& arg0, ArgT... args) {
+ 
+ _impl_.cruise_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:CruiseRouteSource.cruise)
+}
+inline std::string* CruiseRouteSource::mutable_cruise() {
+  std::string* _s = _internal_mutable_cruise();
+  // @@protoc_insertion_point(field_mutable:CruiseRouteSource.cruise)
+  return _s;
+}
+inline const std::string& CruiseRouteSource::_internal_cruise() const {
+  return _impl_.cruise_.Get();
+}
+inline void CruiseRouteSource::_internal_set_cruise(const std::string& value) {
+  
+  _impl_.cruise_.Set(value, GetArenaForAllocation());
+}
+inline std::string* CruiseRouteSource::_internal_mutable_cruise() {
+  
+  return _impl_.cruise_.Mutable(GetArenaForAllocation());
+}
+inline std::string* CruiseRouteSource::release_cruise() {
+  // @@protoc_insertion_point(field_release:CruiseRouteSource.cruise)
+  return _impl_.cruise_.Release();
+}
+inline void CruiseRouteSource::set_allocated_cruise(std::string* cruise) {
+  if (cruise != nullptr) {
+    
+  } else {
+    
+  }
+  _impl_.cruise_.SetAllocated(cruise, GetArenaForAllocation());
+#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (_impl_.cruise_.IsDefault()) {
+    _impl_.cruise_.Set("", GetArenaForAllocation());
+  }
+#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:CruiseRouteSource.cruise)
+}
+
+// string type = 2;
+inline void CruiseRouteSource::clear_type() {
+  _impl_.type_.ClearToEmpty();
+}
+inline const std::string& CruiseRouteSource::type() const {
+  // @@protoc_insertion_point(field_get:CruiseRouteSource.type)
+  return _internal_type();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void CruiseRouteSource::set_type(ArgT0&& arg0, ArgT... args) {
+ 
+ _impl_.type_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:CruiseRouteSource.type)
+}
+inline std::string* CruiseRouteSource::mutable_type() {
+  std::string* _s = _internal_mutable_type();
+  // @@protoc_insertion_point(field_mutable:CruiseRouteSource.type)
+  return _s;
+}
+inline const std::string& CruiseRouteSource::_internal_type() const {
+  return _impl_.type_.Get();
+}
+inline void CruiseRouteSource::_internal_set_type(const std::string& value) {
+  
+  _impl_.type_.Set(value, GetArenaForAllocation());
+}
+inline std::string* CruiseRouteSource::_internal_mutable_type() {
+  
+  return _impl_.type_.Mutable(GetArenaForAllocation());
+}
+inline std::string* CruiseRouteSource::release_type() {
+  // @@protoc_insertion_point(field_release:CruiseRouteSource.type)
+  return _impl_.type_.Release();
+}
+inline void CruiseRouteSource::set_allocated_type(std::string* type) {
+  if (type != nullptr) {
+    
+  } else {
+    
+  }
+  _impl_.type_.SetAllocated(type, GetArenaForAllocation());
+#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (_impl_.type_.IsDefault()) {
+    _impl_.type_.Set("", GetArenaForAllocation());
+  }
+#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:CruiseRouteSource.type)
+}
+
+// string name = 3;
+inline void CruiseRouteSource::clear_name() {
+  _impl_.name_.ClearToEmpty();
+}
+inline const std::string& CruiseRouteSource::name() const {
+  // @@protoc_insertion_point(field_get:CruiseRouteSource.name)
+  return _internal_name();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void CruiseRouteSource::set_name(ArgT0&& arg0, ArgT... args) {
+ 
+ _impl_.name_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:CruiseRouteSource.name)
+}
+inline std::string* CruiseRouteSource::mutable_name() {
+  std::string* _s = _internal_mutable_name();
+  // @@protoc_insertion_point(field_mutable:CruiseRouteSource.name)
+  return _s;
+}
+inline const std::string& CruiseRouteSource::_internal_name() const {
+  return _impl_.name_.Get();
+}
+inline void CruiseRouteSource::_internal_set_name(const std::string& value) {
+  
+  _impl_.name_.Set(value, GetArenaForAllocation());
+}
+inline std::string* CruiseRouteSource::_internal_mutable_name() {
+  
+  return _impl_.name_.Mutable(GetArenaForAllocation());
+}
+inline std::string* CruiseRouteSource::release_name() {
+  // @@protoc_insertion_point(field_release:CruiseRouteSource.name)
+  return _impl_.name_.Release();
+}
+inline void CruiseRouteSource::set_allocated_name(std::string* name) {
+  if (name != nullptr) {
+    
+  } else {
+    
+  }
+  _impl_.name_.SetAllocated(name, GetArenaForAllocation());
+#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (_impl_.name_.IsDefault()) {
+    _impl_.name_.Set("", GetArenaForAllocation());
+  }
+#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:CruiseRouteSource.name)
+}
+
+// -------------------------------------------------------------------
+
+// CruiseRouteSourceList
+
+// repeated .CruiseRouteSource list = 1;
+inline int CruiseRouteSourceList::_internal_list_size() const {
+  return _impl_.list_.size();
+}
+inline int CruiseRouteSourceList::list_size() const {
+  return _internal_list_size();
+}
+inline void CruiseRouteSourceList::clear_list() {
+  _impl_.list_.Clear();
+}
+inline ::CruiseRouteSource* CruiseRouteSourceList::mutable_list(int index) {
+  // @@protoc_insertion_point(field_mutable:CruiseRouteSourceList.list)
+  return _impl_.list_.Mutable(index);
+}
+inline ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::CruiseRouteSource >*
+CruiseRouteSourceList::mutable_list() {
+  // @@protoc_insertion_point(field_mutable_list:CruiseRouteSourceList.list)
+  return &_impl_.list_;
+}
+inline const ::CruiseRouteSource& CruiseRouteSourceList::_internal_list(int index) const {
+  return _impl_.list_.Get(index);
+}
+inline const ::CruiseRouteSource& CruiseRouteSourceList::list(int index) const {
+  // @@protoc_insertion_point(field_get:CruiseRouteSourceList.list)
+  return _internal_list(index);
+}
+inline ::CruiseRouteSource* CruiseRouteSourceList::_internal_add_list() {
+  return _impl_.list_.Add();
+}
+inline ::CruiseRouteSource* CruiseRouteSourceList::add_list() {
+  ::CruiseRouteSource* _add = _internal_add_list();
+  // @@protoc_insertion_point(field_add:CruiseRouteSourceList.list)
+  return _add;
+}
+inline const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::CruiseRouteSource >&
+CruiseRouteSourceList::list() const {
+  // @@protoc_insertion_point(field_list:CruiseRouteSourceList.list)
+  return _impl_.list_;
+}
+
 #ifdef __GNUC__
   #pragma GCC diagnostic pop
 #endif  // __GNUC__
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
 // -------------------------------------------------------------------
 
 // -------------------------------------------------------------------

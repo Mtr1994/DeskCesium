@@ -38,3 +38,15 @@ message StatusResponse
 	bool status = 1;
 	string message = 2;
 }
+
+message CruiseRouteSource 
+{
+	string cruise = 1;
+	string type = 2;
+	string name = 3;
+}
+
+message CruiseRouteSourceList
+{
+	repeated CruiseRouteSource list = 1;
+}

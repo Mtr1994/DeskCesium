@@ -83,7 +83,35 @@ struct StatusResponseDefaultTypeInternal {
   };
 };
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 StatusResponseDefaultTypeInternal _StatusResponse_default_instance_;
-static ::_pb::Metadata file_level_metadata_sidescansource_2eproto[3];
+PROTOBUF_CONSTEXPR CruiseRouteSource::CruiseRouteSource(
+    ::_pbi::ConstantInitialized): _impl_{
+    /*decltype(_impl_.cruise_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
+  , /*decltype(_impl_.type_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
+  , /*decltype(_impl_.name_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
+  , /*decltype(_impl_._cached_size_)*/{}} {}
+struct CruiseRouteSourceDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR CruiseRouteSourceDefaultTypeInternal()
+      : _instance(::_pbi::ConstantInitialized{}) {}
+  ~CruiseRouteSourceDefaultTypeInternal() {}
+  union {
+    CruiseRouteSource _instance;
+  };
+};
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 CruiseRouteSourceDefaultTypeInternal _CruiseRouteSource_default_instance_;
+PROTOBUF_CONSTEXPR CruiseRouteSourceList::CruiseRouteSourceList(
+    ::_pbi::ConstantInitialized): _impl_{
+    /*decltype(_impl_.list_)*/{}
+  , /*decltype(_impl_._cached_size_)*/{}} {}
+struct CruiseRouteSourceListDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR CruiseRouteSourceListDefaultTypeInternal()
+      : _instance(::_pbi::ConstantInitialized{}) {}
+  ~CruiseRouteSourceListDefaultTypeInternal() {}
+  union {
+    CruiseRouteSourceList _instance;
+  };
+};
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 CruiseRouteSourceListDefaultTypeInternal _CruiseRouteSourceList_default_instance_;
+static ::_pb::Metadata file_level_metadata_sidescansource_2eproto[5];
 static constexpr ::_pb::EnumDescriptor const** file_level_enum_descriptors_sidescansource_2eproto = nullptr;
 static constexpr ::_pb::ServiceDescriptor const** file_level_service_descriptors_sidescansource_2eproto = nullptr;
 
@@ -133,17 +161,37 @@ const uint32_t TableStruct_sidescansource_2eproto::offsets[] PROTOBUF_SECTION_VA
   ~0u,  // no _inlined_string_donated_
   PROTOBUF_FIELD_OFFSET(::StatusResponse, _impl_.status_),
   PROTOBUF_FIELD_OFFSET(::StatusResponse, _impl_.message_),
+  ~0u,  // no _has_bits_
+  PROTOBUF_FIELD_OFFSET(::CruiseRouteSource, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  ~0u,  // no _inlined_string_donated_
+  PROTOBUF_FIELD_OFFSET(::CruiseRouteSource, _impl_.cruise_),
+  PROTOBUF_FIELD_OFFSET(::CruiseRouteSource, _impl_.type_),
+  PROTOBUF_FIELD_OFFSET(::CruiseRouteSource, _impl_.name_),
+  ~0u,  // no _has_bits_
+  PROTOBUF_FIELD_OFFSET(::CruiseRouteSourceList, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  ~0u,  // no _inlined_string_donated_
+  PROTOBUF_FIELD_OFFSET(::CruiseRouteSourceList, _impl_.list_),
 };
 static const ::_pbi::MigrationSchema schemas[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
   { 0, -1, -1, sizeof(::SideScanSource)},
   { 30, -1, -1, sizeof(::SideScanSourceList)},
   { 37, -1, -1, sizeof(::StatusResponse)},
+  { 45, -1, -1, sizeof(::CruiseRouteSource)},
+  { 54, -1, -1, sizeof(::CruiseRouteSourceList)},
 };
 
 static const ::_pb::Message* const file_default_instances[] = {
   &::_SideScanSource_default_instance_._instance,
   &::_SideScanSourceList_default_instance_._instance,
   &::_StatusResponse_default_instance_._instance,
+  &::_CruiseRouteSource_default_instance_._instance,
+  &::_CruiseRouteSourceList_default_instance_._instance,
 };
 
 const char descriptor_table_protodef_sidescansource_2eproto[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) =
@@ -164,13 +212,16 @@ const char descriptor_table_protodef_sidescansource_2eproto[] PROTOBUF_SECTION_V
   "\027 \001(\t\022\016\n\006status\030\030 \001(\r\"3\n\022SideScanSourceL"
   "ist\022\035\n\004list\030\001 \003(\0132\017.SideScanSource\"1\n\016St"
   "atusResponse\022\016\n\006status\030\001 \001(\010\022\017\n\007message\030"
-  "\002 \001(\tb\006proto3"
+  "\002 \001(\t\"\?\n\021CruiseRouteSource\022\016\n\006cruise\030\001 \001"
+  "(\t\022\014\n\004type\030\002 \001(\t\022\014\n\004name\030\003 \001(\t\"9\n\025Cruise"
+  "RouteSourceList\022 \n\004list\030\001 \003(\0132\022.CruiseRo"
+  "uteSourceb\006proto3"
   ;
 static ::_pbi::once_flag descriptor_table_sidescansource_2eproto_once;
 const ::_pbi::DescriptorTable descriptor_table_sidescansource_2eproto = {
-    false, false, 693, descriptor_table_protodef_sidescansource_2eproto,
+    false, false, 817, descriptor_table_protodef_sidescansource_2eproto,
     "sidescansource.proto",
-    &descriptor_table_sidescansource_2eproto_once, nullptr, 0, 3,
+    &descriptor_table_sidescansource_2eproto_once, nullptr, 0, 5,
     schemas, file_default_instances, TableStruct_sidescansource_2eproto::offsets,
     file_level_metadata_sidescansource_2eproto, file_level_enum_descriptors_sidescansource_2eproto,
     file_level_service_descriptors_sidescansource_2eproto,
@@ -1746,6 +1797,494 @@ void StatusResponse::InternalSwap(StatusResponse* other) {
       file_level_metadata_sidescansource_2eproto[2]);
 }
 
+// ===================================================================
+
+class CruiseRouteSource::_Internal {
+ public:
+};
+
+CruiseRouteSource::CruiseRouteSource(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                         bool is_message_owned)
+  : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned) {
+  SharedCtor(arena, is_message_owned);
+  // @@protoc_insertion_point(arena_constructor:CruiseRouteSource)
+}
+CruiseRouteSource::CruiseRouteSource(const CruiseRouteSource& from)
+  : ::PROTOBUF_NAMESPACE_ID::Message() {
+  CruiseRouteSource* const _this = this; (void)_this;
+  new (&_impl_) Impl_{
+      decltype(_impl_.cruise_){}
+    , decltype(_impl_.type_){}
+    , decltype(_impl_.name_){}
+    , /*decltype(_impl_._cached_size_)*/{}};
+
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  _impl_.cruise_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.cruise_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (!from._internal_cruise().empty()) {
+    _this->_impl_.cruise_.Set(from._internal_cruise(), 
+      _this->GetArenaForAllocation());
+  }
+  _impl_.type_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.type_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (!from._internal_type().empty()) {
+    _this->_impl_.type_.Set(from._internal_type(), 
+      _this->GetArenaForAllocation());
+  }
+  _impl_.name_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.name_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (!from._internal_name().empty()) {
+    _this->_impl_.name_.Set(from._internal_name(), 
+      _this->GetArenaForAllocation());
+  }
+  // @@protoc_insertion_point(copy_constructor:CruiseRouteSource)
+}
+
+inline void CruiseRouteSource::SharedCtor(
+    ::_pb::Arena* arena, bool is_message_owned) {
+  (void)arena;
+  (void)is_message_owned;
+  new (&_impl_) Impl_{
+      decltype(_impl_.cruise_){}
+    , decltype(_impl_.type_){}
+    , decltype(_impl_.name_){}
+    , /*decltype(_impl_._cached_size_)*/{}
+  };
+  _impl_.cruise_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.cruise_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  _impl_.type_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.type_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  _impl_.name_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.name_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+}
+
+CruiseRouteSource::~CruiseRouteSource() {
+  // @@protoc_insertion_point(destructor:CruiseRouteSource)
+  if (auto *arena = _internal_metadata_.DeleteReturnArena<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>()) {
+  (void)arena;
+    return;
+  }
+  SharedDtor();
+}
+
+inline void CruiseRouteSource::SharedDtor() {
+  GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
+  _impl_.cruise_.Destroy();
+  _impl_.type_.Destroy();
+  _impl_.name_.Destroy();
+}
+
+void CruiseRouteSource::SetCachedSize(int size) const {
+  _impl_._cached_size_.Set(size);
+}
+
+void CruiseRouteSource::Clear() {
+// @@protoc_insertion_point(message_clear_start:CruiseRouteSource)
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  _impl_.cruise_.ClearToEmpty();
+  _impl_.type_.ClearToEmpty();
+  _impl_.name_.ClearToEmpty();
+  _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+const char* CruiseRouteSource::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
+#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
+  while (!ctx->Done(&ptr)) {
+    uint32_t tag;
+    ptr = ::_pbi::ReadTag(ptr, &tag);
+    switch (tag >> 3) {
+      // string cruise = 1;
+      case 1:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 10)) {
+          auto str = _internal_mutable_cruise();
+          ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(ptr);
+          CHK_(::_pbi::VerifyUTF8(str, "CruiseRouteSource.cruise"));
+        } else
+          goto handle_unusual;
+        continue;
+      // string type = 2;
+      case 2:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 18)) {
+          auto str = _internal_mutable_type();
+          ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(ptr);
+          CHK_(::_pbi::VerifyUTF8(str, "CruiseRouteSource.type"));
+        } else
+          goto handle_unusual;
+        continue;
+      // string name = 3;
+      case 3:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 26)) {
+          auto str = _internal_mutable_name();
+          ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(ptr);
+          CHK_(::_pbi::VerifyUTF8(str, "CruiseRouteSource.name"));
+        } else
+          goto handle_unusual;
+        continue;
+      default:
+        goto handle_unusual;
+    }  // switch
+  handle_unusual:
+    if ((tag == 0) || ((tag & 7) == 4)) {
+      CHK_(ptr);
+      ctx->SetLastTag(tag);
+      goto message_done;
+    }
+    ptr = UnknownFieldParse(
+        tag,
+        _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
+        ptr, ctx);
+    CHK_(ptr != nullptr);
+  }  // while
+message_done:
+  return ptr;
+failure:
+  ptr = nullptr;
+  goto message_done;
+#undef CHK_
+}
+
+uint8_t* CruiseRouteSource::_InternalSerialize(
+    uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+  // @@protoc_insertion_point(serialize_to_array_start:CruiseRouteSource)
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // string cruise = 1;
+  if (!this->_internal_cruise().empty()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->_internal_cruise().data(), static_cast<int>(this->_internal_cruise().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "CruiseRouteSource.cruise");
+    target = stream->WriteStringMaybeAliased(
+        1, this->_internal_cruise(), target);
+  }
+
+  // string type = 2;
+  if (!this->_internal_type().empty()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->_internal_type().data(), static_cast<int>(this->_internal_type().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "CruiseRouteSource.type");
+    target = stream->WriteStringMaybeAliased(
+        2, this->_internal_type(), target);
+  }
+
+  // string name = 3;
+  if (!this->_internal_name().empty()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->_internal_name().data(), static_cast<int>(this->_internal_name().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "CruiseRouteSource.name");
+    target = stream->WriteStringMaybeAliased(
+        3, this->_internal_name(), target);
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
+        _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:CruiseRouteSource)
+  return target;
+}
+
+size_t CruiseRouteSource::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:CruiseRouteSource)
+  size_t total_size = 0;
+
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  // string cruise = 1;
+  if (!this->_internal_cruise().empty()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->_internal_cruise());
+  }
+
+  // string type = 2;
+  if (!this->_internal_type().empty()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->_internal_type());
+  }
+
+  // string name = 3;
+  if (!this->_internal_name().empty()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->_internal_name());
+  }
+
+  return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
+}
+
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData CruiseRouteSource::_class_data_ = {
+    ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSourceCheck,
+    CruiseRouteSource::MergeImpl
+};
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*CruiseRouteSource::GetClassData() const { return &_class_data_; }
+
+
+void CruiseRouteSource::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg) {
+  auto* const _this = static_cast<CruiseRouteSource*>(&to_msg);
+  auto& from = static_cast<const CruiseRouteSource&>(from_msg);
+  // @@protoc_insertion_point(class_specific_merge_from_start:CruiseRouteSource)
+  GOOGLE_DCHECK_NE(&from, _this);
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (!from._internal_cruise().empty()) {
+    _this->_internal_set_cruise(from._internal_cruise());
+  }
+  if (!from._internal_type().empty()) {
+    _this->_internal_set_type(from._internal_type());
+  }
+  if (!from._internal_name().empty()) {
+    _this->_internal_set_name(from._internal_name());
+  }
+  _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+}
+
+void CruiseRouteSource::CopyFrom(const CruiseRouteSource& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:CruiseRouteSource)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool CruiseRouteSource::IsInitialized() const {
+  return true;
+}
+
+void CruiseRouteSource::InternalSwap(CruiseRouteSource* other) {
+  using std::swap;
+  auto* lhs_arena = GetArenaForAllocation();
+  auto* rhs_arena = other->GetArenaForAllocation();
+  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &_impl_.cruise_, lhs_arena,
+      &other->_impl_.cruise_, rhs_arena
+  );
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &_impl_.type_, lhs_arena,
+      &other->_impl_.type_, rhs_arena
+  );
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &_impl_.name_, lhs_arena,
+      &other->_impl_.name_, rhs_arena
+  );
+}
+
+::PROTOBUF_NAMESPACE_ID::Metadata CruiseRouteSource::GetMetadata() const {
+  return ::_pbi::AssignDescriptors(
+      &descriptor_table_sidescansource_2eproto_getter, &descriptor_table_sidescansource_2eproto_once,
+      file_level_metadata_sidescansource_2eproto[3]);
+}
+
+// ===================================================================
+
+class CruiseRouteSourceList::_Internal {
+ public:
+};
+
+CruiseRouteSourceList::CruiseRouteSourceList(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                         bool is_message_owned)
+  : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned) {
+  SharedCtor(arena, is_message_owned);
+  // @@protoc_insertion_point(arena_constructor:CruiseRouteSourceList)
+}
+CruiseRouteSourceList::CruiseRouteSourceList(const CruiseRouteSourceList& from)
+  : ::PROTOBUF_NAMESPACE_ID::Message() {
+  CruiseRouteSourceList* const _this = this; (void)_this;
+  new (&_impl_) Impl_{
+      decltype(_impl_.list_){from._impl_.list_}
+    , /*decltype(_impl_._cached_size_)*/{}};
+
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  // @@protoc_insertion_point(copy_constructor:CruiseRouteSourceList)
+}
+
+inline void CruiseRouteSourceList::SharedCtor(
+    ::_pb::Arena* arena, bool is_message_owned) {
+  (void)arena;
+  (void)is_message_owned;
+  new (&_impl_) Impl_{
+      decltype(_impl_.list_){arena}
+    , /*decltype(_impl_._cached_size_)*/{}
+  };
+}
+
+CruiseRouteSourceList::~CruiseRouteSourceList() {
+  // @@protoc_insertion_point(destructor:CruiseRouteSourceList)
+  if (auto *arena = _internal_metadata_.DeleteReturnArena<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>()) {
+  (void)arena;
+    return;
+  }
+  SharedDtor();
+}
+
+inline void CruiseRouteSourceList::SharedDtor() {
+  GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
+  _impl_.list_.~RepeatedPtrField();
+}
+
+void CruiseRouteSourceList::SetCachedSize(int size) const {
+  _impl_._cached_size_.Set(size);
+}
+
+void CruiseRouteSourceList::Clear() {
+// @@protoc_insertion_point(message_clear_start:CruiseRouteSourceList)
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  _impl_.list_.Clear();
+  _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+const char* CruiseRouteSourceList::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
+#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
+  while (!ctx->Done(&ptr)) {
+    uint32_t tag;
+    ptr = ::_pbi::ReadTag(ptr, &tag);
+    switch (tag >> 3) {
+      // repeated .CruiseRouteSource list = 1;
+      case 1:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 10)) {
+          ptr -= 1;
+          do {
+            ptr += 1;
+            ptr = ctx->ParseMessage(_internal_add_list(), ptr);
+            CHK_(ptr);
+            if (!ctx->DataAvailable(ptr)) break;
+          } while (::PROTOBUF_NAMESPACE_ID::internal::ExpectTag<10>(ptr));
+        } else
+          goto handle_unusual;
+        continue;
+      default:
+        goto handle_unusual;
+    }  // switch
+  handle_unusual:
+    if ((tag == 0) || ((tag & 7) == 4)) {
+      CHK_(ptr);
+      ctx->SetLastTag(tag);
+      goto message_done;
+    }
+    ptr = UnknownFieldParse(
+        tag,
+        _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
+        ptr, ctx);
+    CHK_(ptr != nullptr);
+  }  // while
+message_done:
+  return ptr;
+failure:
+  ptr = nullptr;
+  goto message_done;
+#undef CHK_
+}
+
+uint8_t* CruiseRouteSourceList::_InternalSerialize(
+    uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+  // @@protoc_insertion_point(serialize_to_array_start:CruiseRouteSourceList)
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // repeated .CruiseRouteSource list = 1;
+  for (unsigned i = 0,
+      n = static_cast<unsigned>(this->_internal_list_size()); i < n; i++) {
+    const auto& repfield = this->_internal_list(i);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+        InternalWriteMessage(1, repfield, repfield.GetCachedSize(), target, stream);
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
+        _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:CruiseRouteSourceList)
+  return target;
+}
+
+size_t CruiseRouteSourceList::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:CruiseRouteSourceList)
+  size_t total_size = 0;
+
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  // repeated .CruiseRouteSource list = 1;
+  total_size += 1UL * this->_internal_list_size();
+  for (const auto& msg : this->_impl_.list_) {
+    total_size +=
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(msg);
+  }
+
+  return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
+}
+
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData CruiseRouteSourceList::_class_data_ = {
+    ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSourceCheck,
+    CruiseRouteSourceList::MergeImpl
+};
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*CruiseRouteSourceList::GetClassData() const { return &_class_data_; }
+
+
+void CruiseRouteSourceList::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg) {
+  auto* const _this = static_cast<CruiseRouteSourceList*>(&to_msg);
+  auto& from = static_cast<const CruiseRouteSourceList&>(from_msg);
+  // @@protoc_insertion_point(class_specific_merge_from_start:CruiseRouteSourceList)
+  GOOGLE_DCHECK_NE(&from, _this);
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  _this->_impl_.list_.MergeFrom(from._impl_.list_);
+  _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+}
+
+void CruiseRouteSourceList::CopyFrom(const CruiseRouteSourceList& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:CruiseRouteSourceList)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool CruiseRouteSourceList::IsInitialized() const {
+  return true;
+}
+
+void CruiseRouteSourceList::InternalSwap(CruiseRouteSourceList* other) {
+  using std::swap;
+  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  _impl_.list_.InternalSwap(&other->_impl_.list_);
+}
+
+::PROTOBUF_NAMESPACE_ID::Metadata CruiseRouteSourceList::GetMetadata() const {
+  return ::_pbi::AssignDescriptors(
+      &descriptor_table_sidescansource_2eproto_getter, &descriptor_table_sidescansource_2eproto_once,
+      file_level_metadata_sidescansource_2eproto[4]);
+}
+
 // @@protoc_insertion_point(namespace_scope)
 PROTOBUF_NAMESPACE_OPEN
 template<> PROTOBUF_NOINLINE ::SideScanSource*
@@ -1759,6 +2298,14 @@ Arena::CreateMaybeMessage< ::SideScanSourceList >(Arena* arena) {
 template<> PROTOBUF_NOINLINE ::StatusResponse*
 Arena::CreateMaybeMessage< ::StatusResponse >(Arena* arena) {
   return Arena::CreateMessageInternal< ::StatusResponse >(arena);
+}
+template<> PROTOBUF_NOINLINE ::CruiseRouteSource*
+Arena::CreateMaybeMessage< ::CruiseRouteSource >(Arena* arena) {
+  return Arena::CreateMessageInternal< ::CruiseRouteSource >(arena);
+}
+template<> PROTOBUF_NOINLINE ::CruiseRouteSourceList*
+Arena::CreateMaybeMessage< ::CruiseRouteSourceList >(Arena* arena) {
+  return Arena::CreateMessageInternal< ::CruiseRouteSourceList >(arena);
 }
 PROTOBUF_NAMESPACE_CLOSE
 

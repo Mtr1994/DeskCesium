@@ -12,15 +12,18 @@
 <body>
 	<div id="cesiumContainer" class = "div-cesium-viewer" ondrop="handleDrop(event)" ondragover="handleDragOver(event)"> </div>
 	<div id="geoinfo" class="div-dev-info"> Longitude: ----&nbsp&nbsp&nbsp&nbsp Latitude: ----&nbsp&nbsp&nbsp&nbspElevation: ----</div>
-  
+
 	<div id="entityDescription" class="div-entity-description">
-		<h3>声学疑似点信息</h3>
+		<div class="div-title-container">
+			<h3>声学疑似点信息</h3>
+			<div class="div-priority-container">
+				优先级 <span id="text-priority">1</span>
+			</div>
+		</div>
 		<div class="text-div" style="width: 100%;" title="编号：TS-26-DT07-LL01-073">
 			疑似点编号：<span class="text-value" id="text-id">TS-26-DT07-LL01-073</span>
 		</div>
-		<div class="text-div" style="width: 100%;">
-			优先级：<span class="text-value" id="text-priority">1</span>
-		</div>
+
 		<div class="text-div" style="width: 100%;" title="计算机时间：02:16:00.000">
 			计算机时间：<span class="text-value" id="text-computer-time">02:16:00.000</span>
 		</div>
@@ -63,7 +66,9 @@
 			推测尺寸：<span class="text-value" id="text-suppose-size">18.45 米</span>
 		</div>
 		
-		<h3>水下查证信息</h3>
+		<div class="div-title-container">
+			<h3>水下查证信息</h3>
+		</div>
 		<div style="display: flex">
 			<div class="text-div" style="width: 50%;" title="经度：126.3413">
 				目标经度：<span class="text-value" id="text-target-longitude">126.3413</span>
@@ -85,8 +90,11 @@
 			查证照片描述：<span class="text-value" id="text-image-description">长约10米的大块沉木</span>
 		</div>
 		
-		<h3>查证照片</h3>
-		<div style="margin-top: 2em;">
+		<div class="div-title-container">
+			<h3>查证照片</h3>
+		</div>
+		
+		<div style="margin-top: 1em;">
 			<img src="http://101.34.253.220/image/upload/TS-26/image/FDZ-108-01.jpg" style="width: 100%; margin-bottom: 1em; border-radius: 6px; border: 2px solid #4169E1;">
 			<img src="http://101.34.253.220/image/upload/TS-26/image/FDZ108-02.jpg" style="width: 100%; margin-bottom: 1em; border-radius: 6px; border: 2px solid #4169E1;">
 			<img src="http://101.34.253.220/image/upload/TS-26/image/TS-26-DT07-LL01-074-FDZ107.jpg" style="width: 100%; margin-bottom: 1em; border-radius: 6px; border: 2px solid #4169E1;">
@@ -95,8 +103,8 @@
 		<div id="div-empty-image" style="width: 100%; text-align: center; padding: 6em 0em; border: 2px dotted #4169E1; border-radius: 1em;">
 			暂无查证照片
 		</div>
-	</div>
-	
+	</div>  
+
 <style>
 	.div-cesium-viewer {
 		position:absolute;
@@ -113,22 +121,7 @@
 		z-index:10;
 		color: #f5e23d;
 	}
-	.div-entity-description {
-		position:absolute;
-		z-index:12;
-		right:1em;
-		bottom:1em;
-		padding: 1em;
-		padding-top: 0px;
-		width: 24em;
-		height: 80%;
-		border-radius: 10px;
-		border:2px solid #d0d0d0;
-		background-color: #ffffff;
-		overflow-y:hidden;
-		overflow-y: scroll;
-		visibility: hidden;
-	}
+
 	body {
 		width: 100%
 		height: 100%;
@@ -137,11 +130,45 @@
 		font-size: 12px;
 		font-family: "Source Sans Pro", "Segoe UI", Arial, Geneva, sans-serif;
 	}
+	.div-entity-description {
+		position:absolute;
+		z-index:12;
+		right: 8px;
+		bottom: 7px;
+		padding: 1em;
+		padding-top: 0px;
+		width: 24em;
+		height: 80%;
+		border-radius: 1em;
+		border:2px solid #d0d0d0;
+		background-color: #ffffff;
+		overflow-y:hidden;
+		overflow-y: scroll;
+		visibility: hidden;
+	}
+	.div-title-container {
+		display: flex;
+		width: 100%;
+		border: none;
+		align-items: center;
+		padding: 1em 0em;
+	}
+	.div-priority-container {
+		width: 5em;
+		border-radius: 1.2em;
+		padding: 0.5em;
+		position: absolute;
+		right: 1em;
+		text-align: center;
+		border: none;
+		background-color:#4bcc7f;
+		color: #f1f2f3;
+	}
 	.text-div {
 		overflow: hidden;
 		white-space: nowrap;
 		text-overflow: ellipsis;
-		padding: 0.3em 0em;
+		padding: 0.2em 0em;
 		margin-left: 1em;
 		color: #00000066;
 	}

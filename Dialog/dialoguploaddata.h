@@ -12,13 +12,15 @@ namespace Ui {
 class DialogUploadData;
 }
 
-typedef struct
+typedef struct DataUploadTask
 {
     // 任务类型 upload (上传文件) insert （写入数据库）
     QString type;
 
     std::string arg1;
-    std::string arg2;
+    std::string arg2 = "";
+
+    uint16_t arg3 = 0;
 
 } DataUploadTask;
 
@@ -40,7 +42,7 @@ public:
 signals:
     void sgl_thread_report_check_status(uint8_t status, const QString &msg, bool stop = true);
 
-    void sgl_recv_system_notice_message(uint8_t status, const QString &msg, bool stop = false);
+    void sgl_send_system_notice_message(uint8_t status, const QString &msg, bool stop = false);
 
     void sgl_thread_check_data_finish();
 

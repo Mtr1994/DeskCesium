@@ -84,7 +84,7 @@ void DialogUploadData::init()
 
     connect(this, &DialogUploadData::sgl_thread_report_check_status, this, &DialogUploadData::slot_thread_report_check_status, Qt::QueuedConnection);
     connect(this, &DialogUploadData::sgl_thread_check_data_finish, this, &DialogUploadData::slot_thread_check_data_finish, Qt::QueuedConnection);
-    connect(this, &DialogUploadData::sgl_recv_system_notice_message, this, &DialogUploadData::slot_thread_report_check_status);
+    connect(this, &DialogUploadData::sgl_send_system_notice_message, this, &DialogUploadData::slot_thread_report_check_status);
     connect(this, &DialogUploadData::sgl_start_next_task, this, &DialogUploadData::slot_start_next_task);
 
     // 准备执行 SQL 任务
@@ -92,7 +92,7 @@ void DialogUploadData::init()
     connect(mTcpSocket, &TcpSocket::sgl_recv_socket_data, this, &DialogUploadData::slot_recv_socket_data);
     connect(mTcpSocket, &TcpSocket::sgl_tcp_socket_connect, this, [this](uint64_t dwconnid)
     {
-        emit sgl_recv_system_notice_message(STATUS_SUCCESS, QString("数据服务已连接 { id: %1 }").arg(QString::number(dwconnid)));
+        emit sgl_send_system_notice_message(STATUS_SUCCESS, QString("数据服务已连接 { id: %1 }").arg(QString::number(dwconnid)));
         mTcpServerFlag = true;
 
         // 数据服务连接后，通过数据服务查询文件服务是否开启
@@ -211,7 +211,7 @@ void DialogUploadData::threadCheckData()
     // 先锁住任务队列
     std::lock_guard<std::mutex> lockQueue(mMutexQueue);
 
-    SideScanSourceList sourceList;;
+    SideScanSourceList sideScanSource;
 
     // 主目录一定要是航次名称（此处可以加格式限制）
     QString cruiseNumber = rootDir.dirName();
@@ -231,7 +231,7 @@ void DialogUploadData::threadCheckData()
         // 纯粹的空行不用解析
         if (emptyColumnNumber == 23) continue;
 
-        SideScanSource *source = sourceList.add_list();
+        SideScanSource *source = sideScanSource.add_list();
         if (nullptr == source)
         {
             emit sgl_thread_report_check_status(STATUS_ERROR, "系统内存不足，无法创建数据结构");
@@ -404,18 +404,24 @@ void DialogUploadData::threadCheckData()
         source->set_status(0);
     }
 
-    if (sourceList.list_size() == 0)
+    if (sideScanSource.list_size() == 0)
     {
         emit sgl_thread_report_check_status(STATUS_INFO, "文件解析结束，未能找到有效数据");
         return;
     }
 
+    CruiseRouteSourceList routeSourceList;
     // AUV 轨迹文件
     auto listTrack = navigationAUVDir.entryInfoList(QStringList("*.txt"), QDir::Files | QDir::NoSymLinks);
     for (auto &track : listTrack)
     {
         DataUploadTask task = {"upload", QString("upload/%1/Navigation/AUV").arg(cruiseNumber).toStdString(), track.absoluteFilePath().toStdString()};
         mTaskQueue.append(task);
+
+        CruiseRouteSource *source = routeSourceList.add_list();
+        source->set_cruise(cruiseNumber.toStdString());
+        source->set_type("AUV");
+        source->set_name(track.fileName().toStdString());
     }
 
     // DTV 轨迹文件
@@ -424,6 +430,11 @@ void DialogUploadData::threadCheckData()
     {
         DataUploadTask task = {"upload", QString("upload/%1/Navigation/DTV").arg(cruiseNumber).toStdString(), track.absoluteFilePath().toStdString()};
         mTaskQueue.append(task);
+
+        CruiseRouteSource *source = routeSourceList.add_list();
+        source->set_cruise(cruiseNumber.toStdString());
+        source->set_type("DTV");
+        source->set_name(track.fileName().toStdString());
     }
 
     // HOV 轨迹文件
@@ -432,6 +443,11 @@ void DialogUploadData::threadCheckData()
     {
         DataUploadTask task = {"upload", QString("upload/%1/Navigation/HOV").arg(cruiseNumber).toStdString(), track.absoluteFilePath().toStdString()};
         mTaskQueue.append(task);
+
+        CruiseRouteSource *source = routeSourceList.add_list();
+        source->set_cruise(cruiseNumber.toStdString());
+        source->set_type("HOV");
+        source->set_name(track.fileName().toStdString());
     }
 
     // SHIP 轨迹文件
@@ -440,12 +456,20 @@ void DialogUploadData::threadCheckData()
     {
         DataUploadTask task = {"upload", QString("upload/%1/Navigation/SHIP").arg(cruiseNumber).toStdString(), track.absoluteFilePath().toStdString()};
         mTaskQueue.append(task);
+
+        CruiseRouteSource *source = routeSourceList.add_list();
+        source->set_cruise(cruiseNumber.toStdString());
+        source->set_type("SHIP");
+        source->set_name(track.fileName().toStdString());
     }
 
-    DataUploadTask task = {"insert", sourceList.SerializeAsString(), ""};
-    mTaskQueue.append(task);
+    DataUploadTask taskSideScan = {"insert", sideScanSource.SerializeAsString(), "", CMD_INSERT_SIDE_SCAN_SOURCE_DATA};
+    mTaskQueue.append(taskSideScan);
 
-    emit sgl_thread_report_check_status(STATUS_INFO, QString("文件解析结束，共【%1】 条记录，【%2】 个文件").arg(QString::number(sourceList.list_size()), QString::number(mTaskQueue.size() - 1)), false);
+    DataUploadTask taskRouteSource = {"insert", routeSourceList.SerializeAsString(), "", CMD_INSERT_CRUISE_ROUTE_SOURCE_DATA};
+    mTaskQueue.append(taskRouteSource);
+
+    emit sgl_thread_report_check_status(STATUS_INFO, QString("文件解析结束，共【%1】 条记录，【%2】 个文件").arg(QString::number(sideScanSource.list_size()), QString::number(mTaskQueue.size() - 1)), false);
 
     emit sgl_thread_check_data_finish();
 
@@ -457,19 +481,25 @@ void DialogUploadData::slot_btn_upload_data_click()
 {
     if (mRunThreadCheck)
     {
-        emit AppSignal::getInstance()->sgl_report_system_error("请等待当前数据上传完成");
+        emit sgl_send_system_notice_message(STATUS_INFO, "请等待当前数据解析完成");
         return;
     }
 
     if (!mFtpServerFlag)
     {
-        emit AppSignal::getInstance()->sgl_report_system_error("请检查文件服务状态");
+        emit sgl_send_system_notice_message(STATUS_INFO, "请检查文件服务状态");
         return;
     }
 
     if (!mTcpServerFlag)
     {
-        emit AppSignal::getInstance()->sgl_report_system_error("请检查数据服务状态");
+        emit sgl_send_system_notice_message(STATUS_INFO, "请检查数据服务状态");
+        return;
+    }
+
+    if (mTaskQueue.size() > 0)
+    {
+        emit sgl_send_system_notice_message(STATUS_INFO, "请等待当前数据录入完成");
         return;
     }
 
@@ -573,27 +603,48 @@ void DialogUploadData::slot_recv_socket_data(uint64_t dwconnid, const std::strin
     memcpy(&cmd, data.data() + 2, 2);
 
     switch (cmd) {
-    case CMD_INSERT_SUMMARY_SOURCE_DATA_RESPONSE:
+    case CMD_INSERT_SIDE_SCAN_SOURCE_DATA_RESPONSE:
     {
         StatusResponse response;
         response.ParseFromString(data.substr(8));
 
         if (response.status())
         {
-            slot_thread_report_check_status(STATUS_SUCCESS, QString("数据录入成功 %1").arg(response.message().data()), false);
+            slot_thread_report_check_status(STATUS_SUCCESS, QString("异常点数据录入成功 %1").arg(response.message().data()), false);
             // 此处可以尝试开启下一个任务
             emit sgl_start_next_task();
         }
         else
         {
-            slot_thread_report_check_status(STATUS_ERROR, QString("数据录入失败 %1").arg(response.message().data()), false);
+            slot_thread_report_check_status(STATUS_ERROR, QString("异常点数据录入失败 %1").arg(response.message().data()), false);
 
             std::lock_guard<std::mutex> lock(mMutexQueue);
             mTaskQueue.clear();
             emit sgl_thread_report_check_status(STATUS_INFO, "数据录入流程中止", false);
             emit sgl_thread_report_check_status(STATUS_INFO, QString(72, '-'), false);
         }
+        break;
+    }
+    case CMD_INSERT_CRUISE_ROUTE_SOURCE_DATA_RESPONSE:
+    {
+        StatusResponse response;
+        response.ParseFromString(data.substr(8));
 
+        if (response.status())
+        {
+            slot_thread_report_check_status(STATUS_SUCCESS, QString("轨迹数据录入成功 %1").arg(response.message().data()), false);
+            // 此处可以尝试开启下一个任务
+            emit sgl_start_next_task();
+        }
+        else
+        {
+            slot_thread_report_check_status(STATUS_ERROR, QString("轨迹点数据录入失败 %1").arg(response.message().data()), false);
+
+            std::lock_guard<std::mutex> lock(mMutexQueue);
+            mTaskQueue.clear();
+            emit sgl_thread_report_check_status(STATUS_INFO, "数据录入流程中止", false);
+            emit sgl_thread_report_check_status(STATUS_INFO, QString(72, '-'), false);
+        }
         break;
     }
     case CMD_QUERY_FTP_SERVER_STATUS_RESPONSE:
@@ -662,7 +713,9 @@ void DialogUploadData::slot_start_next_task()
             emit sgl_thread_report_check_status(STATUS_ERROR, QString("数据服务关闭，请联系管理员"), false);
             return;
         }
-        QByteArray message = createPackage(CMD_INSERT_SUMMARY_SOURCE_DATA, QByteArray::fromStdString(task.arg1));
+
+
+        QByteArray message = createPackage(task.arg3, QByteArray::fromStdString(task.arg1));
         mTcpSocket->write(message.toStdString());
     }
 }
