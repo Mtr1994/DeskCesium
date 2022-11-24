@@ -22,6 +22,8 @@ QMAKE_TARGET_COPYRIGHT = mtr company Co., Ltd
 # deprecated API in order to know how to port your code away from it.
 DEFINES += QT_DEPRECATED_WARNINGS
 
+DEFINES += PROTOBUF_USE_DLLS
+
 # 禁用 QDebug 输出调试i信息
 #DEFINES += QT_NO_DEBUG_OUTPUT
 

@@ -11,7 +11,6 @@ public:
 
     virtual bool connect(const QString &ipv4, uint16_t port) = 0;
     virtual bool connect() = 0;
-    virtual QString getServerKey() = 0;
     virtual bool write(const std::string &data) = 0;
     virtual bool closeSocket() = 0;
 

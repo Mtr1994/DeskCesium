@@ -66,41 +66,6 @@ signals:
     void sgl_tcp_socket_disconnect(uint64_t dwconnid);
     void sgl_thread_recv_socket_data(uint64_t dwconnid, const std::string &data);
 
-private:
-    QString getServerAddress(ITcpClient* pSender)
-    {
-        TCHAR szAddress[100];
-        int iAddressLen = sizeof(szAddress) / sizeof(TCHAR);
-        USHORT usPort = 0;
-        pSender->GetRemoteHost(szAddress, iAddressLen, usPort);
-        return QString::fromStdWString(szAddress);
-    }
-
-    uint16_t getServerPort(ITcpClient* pSender)
-    {
-        TCHAR szAddress[100];
-        int iAddressLen = sizeof(szAddress) / sizeof(TCHAR);
-        USHORT usPort = 0;
-        pSender->GetRemoteHost(szAddress, iAddressLen, usPort);
-        return usPort;
-    }
-    QString getSocketAddress(ITcpClient* pSender)
-    {
-        TCHAR szAddress[100];
-        int iAddressLen = sizeof(szAddress) / sizeof(TCHAR);
-        USHORT usPort = 0;
-        pSender->GetLocalAddress(szAddress, iAddressLen, usPort);
-        return QString::fromStdWString(szAddress);
-    }
-
-    uint16_t getSocketPort(ITcpClient* pSender)
-    {
-        TCHAR szAddress[100];
-        int iAddressLen = sizeof(szAddress) / sizeof(TCHAR);
-        USHORT usPort = 0;
-        pSender->GetLocalAddress(szAddress, iAddressLen, usPort);
-        return usPort;
-    }
 };
 
 class TcpSocket : public BaseSocket
@@ -111,7 +76,6 @@ public:
 
     bool connect(const QString &ipv4, uint16_t port);
     bool connect();
-    QString getServerKey();
     bool write(const std::string &data);
     bool closeSocket();
 

@@ -3,29 +3,30 @@ syntax = "proto3";
 message SideScanSource 
 {
 	string id = 1;
-	string computer_time = 2;
-	string dt_time = 3;
-	double longitude = 4;
-	double latitude = 5;
-	float dt_speed = 6;
-	string horizontal_range_direction = 7;
-	float horizontal_range_value = 8;
-	float height_from_bottom = 9;
-	float r_theat = 10;
-	string side_scan_image_name = 11;
-	float along_track = 12;
-	float across_track = 13;
-	string remarks = 14;
-	float suppose_size = 15;
-	uint32 priority = 16;
+	string dt_time = 2;
+	double longitude = 3;
+	double latitude = 4;
+	float dt_speed = 5;
+	string horizontal_range_direction = 6;
+	float horizontal_range_value = 7;
+	float height_from_bottom = 8;
+	float r_theat = 9;
+	string side_scan_image_name = 10;
+	float along_track = 11;
+	float across_track = 12;
+	string remarks = 13;
+	float suppose_size = 14;
+	uint32 priority = 15;
+	string verify_auv_sss_image_paths = 16;
 	string verify_image_paths = 17;
 	string image_description = 18;
-	double target_longitude = 19;
-	double target_latitude = 20;
-	float position_error = 21;
+	string target_longitude = 19;
+	string target_latitude = 20;
+	string position_error = 21;
 	string cruise_number = 22;
 	string dive_number = 23;
-	uint32 status = 24;
+	string verify_time = 24;
+	uint32 status = 25;
 }
 
 message SideScanSourceList 

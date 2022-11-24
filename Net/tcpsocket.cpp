@@ -28,14 +28,9 @@ bool TcpSocket::connect()
     return mTcpClientPtr->Start(LPCTSTR(mServerAddress.toStdWString().data()), mServerPort);
 }
 
-QString TcpSocket::getServerKey()
-{
-    return QString("TCPCLIENT:%1:%2").arg(mServerAddress, QString::number(mServerPort));
-}
-
 bool TcpSocket::write(const std::string &data)
 {
-    return mTcpClientPtr->Send((BYTE*)data.data(), data.length());
+    return mTcpClientPtr->Send((BYTE*)data.data(), (int)data.length());
 }
 
 bool TcpSocket::closeSocket()
