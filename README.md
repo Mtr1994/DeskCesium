@@ -90,7 +90,7 @@
 * 下载程序：`https://github.com/protocolbuffers/protobuf/releases/download/v21.9/protoc-21.9-win64.zip`，用于序列化结构体
 * 语法格式：`https://developers.google.cn/protocol-buffers/docs/proto3`
 * 编写 `proto` 结构体文件：`protoc --cpp_out=./ .\source.proto` (处理当前文件夹下的 `source.proto` 文件， 生成的结果也放在当前文件夹下)
-* 修改：生成的头文件中加入定义 `#define PROTOBUF_USE_DLLS`
+* 修改：生成的头文件中加入定义 `#define PROTOBUF_USE_DLLS ` 或者在 `pro` 文件中加入 `DEFINES += PROTOBUF_USE_DLLS`，清理后编译
 * 源码编译：`https://github.com/protocolbuffers/protobuf/releases/download/v21.9/protobuf-cpp-3.21.9.zip`
 * 编译完成后，通过 `CMake` 引用时，需要将生成的 `.cc 和 .h` 文件加入 `source_group` 中，否则会导致消息类找不到
 * 引用的库是 `libprotobuf.so` 动态库，生成的 `libprotobuf-lite` 是需要通过 `protoc` 运行参数配置的，用于程序运行时依赖,而不是编译时
