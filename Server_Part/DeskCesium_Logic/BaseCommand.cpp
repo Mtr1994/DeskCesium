@@ -130,7 +130,7 @@ void CBaseCommand::logic_insert_side_scan_source_data(const CMessage_Source& sou
 
 		sprintf(sql, "REPLACE INTO t_source_data_side_scan VALUES('%s', '%s', %f, %f, %f, '%s', '%s', %f, %f, '%s', %f, %f, '%s', '%s', %d, '%s', '%s', '%s', '%s', '%s', '%s', '%s','%s', '%s', 0)", 
 				source.id().data(), source.dt_time().data(), source.longitude(), source.latitude(), source.dt_speed(), source.horizontal_range_direction().data(), 
-				source.horizontal_range_value().data(), source.height_from_bottom(), source.r_theat(), source.side_scan_image_name().data(), source.along_track(), 
+				source.horizontal_range_value().data(), source.height_from_bottom(), source.r_theta(), source.side_scan_image_name().data(), source.along_track(), 
 				source.across_track(), source.remarks().data(), source.suppose_size().data(), source.priority(), source.verify_auv_sss_image_paths().data(), source.verify_image_paths().data(), 
 				source.image_description().data(), source.target_longitude().data(), source.target_latitude().data(), source.position_error().data(), source.cruise_number().data(), source.dive_number().data(), source.verify_time().data());
 		
