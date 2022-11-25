@@ -210,7 +210,7 @@ class SideScanSource final :
     kLatitudeFieldNumber = 4,
     kDtSpeedFieldNumber = 5,
     kHeightFromBottomFieldNumber = 8,
-    kRTheatFieldNumber = 9,
+    kRThetaFieldNumber = 9,
     kAlongTrackFieldNumber = 11,
     kAcrossTrackFieldNumber = 12,
     kPriorityFieldNumber = 15,
@@ -476,13 +476,13 @@ class SideScanSource final :
   void _internal_set_height_from_bottom(float value);
   public:
 
-  // float r_theat = 9;
-  void clear_r_theat();
-  float r_theat() const;
-  void set_r_theat(float value);
+  // float r_theta = 9;
+  void clear_r_theta();
+  float r_theta() const;
+  void set_r_theta(float value);
   private:
-  float _internal_r_theat() const;
-  void _internal_set_r_theat(float value);
+  float _internal_r_theta() const;
+  void _internal_set_r_theta(float value);
   public:
 
   // float along_track = 11;
@@ -549,7 +549,7 @@ class SideScanSource final :
     double latitude_;
     float dt_speed_;
     float height_from_bottom_;
-    float r_theat_;
+    float r_theta_;
     float along_track_;
     float across_track_;
     uint32_t priority_;
@@ -1513,24 +1513,24 @@ inline void SideScanSource::set_height_from_bottom(float value) {
   // @@protoc_insertion_point(field_set:SideScanSource.height_from_bottom)
 }
 
-// float r_theat = 9;
-inline void SideScanSource::clear_r_theat() {
-  _impl_.r_theat_ = 0;
+// float r_theta = 9;
+inline void SideScanSource::clear_r_theta() {
+  _impl_.r_theta_ = 0;
 }
-inline float SideScanSource::_internal_r_theat() const {
-  return _impl_.r_theat_;
+inline float SideScanSource::_internal_r_theta() const {
+  return _impl_.r_theta_;
 }
-inline float SideScanSource::r_theat() const {
-  // @@protoc_insertion_point(field_get:SideScanSource.r_theat)
-  return _internal_r_theat();
+inline float SideScanSource::r_theta() const {
+  // @@protoc_insertion_point(field_get:SideScanSource.r_theta)
+  return _internal_r_theta();
 }
-inline void SideScanSource::_internal_set_r_theat(float value) {
+inline void SideScanSource::_internal_set_r_theta(float value) {
   
-  _impl_.r_theat_ = value;
+  _impl_.r_theta_ = value;
 }
-inline void SideScanSource::set_r_theat(float value) {
-  _internal_set_r_theat(value);
-  // @@protoc_insertion_point(field_set:SideScanSource.r_theat)
+inline void SideScanSource::set_r_theta(float value) {
+  _internal_set_r_theta(value);
+  // @@protoc_insertion_point(field_set:SideScanSource.r_theta)
 }
 
 // string side_scan_image_name = 10;

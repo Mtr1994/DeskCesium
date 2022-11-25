@@ -42,7 +42,7 @@ PROTOBUF_CONSTEXPR SideScanSource::SideScanSource(
   , /*decltype(_impl_.latitude_)*/0
   , /*decltype(_impl_.dt_speed_)*/0
   , /*decltype(_impl_.height_from_bottom_)*/0
-  , /*decltype(_impl_.r_theat_)*/0
+  , /*decltype(_impl_.r_theta_)*/0
   , /*decltype(_impl_.along_track_)*/0
   , /*decltype(_impl_.across_track_)*/0
   , /*decltype(_impl_.priority_)*/0u
@@ -131,7 +131,7 @@ const uint32_t TableStruct_sidescansource_2eproto::offsets[] PROTOBUF_SECTION_VA
   PROTOBUF_FIELD_OFFSET(::SideScanSource, _impl_.horizontal_range_direction_),
   PROTOBUF_FIELD_OFFSET(::SideScanSource, _impl_.horizontal_range_value_),
   PROTOBUF_FIELD_OFFSET(::SideScanSource, _impl_.height_from_bottom_),
-  PROTOBUF_FIELD_OFFSET(::SideScanSource, _impl_.r_theat_),
+  PROTOBUF_FIELD_OFFSET(::SideScanSource, _impl_.r_theta_),
   PROTOBUF_FIELD_OFFSET(::SideScanSource, _impl_.side_scan_image_name_),
   PROTOBUF_FIELD_OFFSET(::SideScanSource, _impl_.along_track_),
   PROTOBUF_FIELD_OFFSET(::SideScanSource, _impl_.across_track_),
@@ -202,7 +202,7 @@ const char descriptor_table_protodef_sidescansource_2eproto[] PROTOBUF_SECTION_V
   "ude\030\003 \001(\001\022\020\n\010latitude\030\004 \001(\001\022\020\n\010dt_speed\030"
   "\005 \001(\002\022\"\n\032horizontal_range_direction\030\006 \001("
   "\t\022\036\n\026horizontal_range_value\030\007 \001(\t\022\032\n\022hei"
-  "ght_from_bottom\030\010 \001(\002\022\017\n\007r_theat\030\t \001(\002\022\034"
+  "ght_from_bottom\030\010 \001(\002\022\017\n\007r_theta\030\t \001(\002\022\034"
   "\n\024side_scan_image_name\030\n \001(\t\022\023\n\013along_tr"
   "ack\030\013 \001(\002\022\024\n\014across_track\030\014 \001(\002\022\017\n\007remar"
   "ks\030\r \001(\t\022\024\n\014suppose_size\030\016 \001(\t\022\020\n\010priori"
@@ -272,7 +272,7 @@ SideScanSource::SideScanSource(const SideScanSource& from)
     , decltype(_impl_.latitude_){}
     , decltype(_impl_.dt_speed_){}
     , decltype(_impl_.height_from_bottom_){}
-    , decltype(_impl_.r_theat_){}
+    , decltype(_impl_.r_theta_){}
     , decltype(_impl_.along_track_){}
     , decltype(_impl_.across_track_){}
     , decltype(_impl_.priority_){}
@@ -439,7 +439,7 @@ inline void SideScanSource::SharedCtor(
     , decltype(_impl_.latitude_){0}
     , decltype(_impl_.dt_speed_){0}
     , decltype(_impl_.height_from_bottom_){0}
-    , decltype(_impl_.r_theat_){0}
+    , decltype(_impl_.r_theta_){0}
     , decltype(_impl_.along_track_){0}
     , decltype(_impl_.across_track_){0}
     , decltype(_impl_.priority_){0u}
@@ -651,10 +651,10 @@ const char* SideScanSource::_InternalParse(const char* ptr, ::_pbi::ParseContext
         } else
           goto handle_unusual;
         continue;
-      // float r_theat = 9;
+      // float r_theta = 9;
       case 9:
         if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 77)) {
-          _impl_.r_theat_ = ::PROTOBUF_NAMESPACE_ID::internal::UnalignedLoad<float>(ptr);
+          _impl_.r_theta_ = ::PROTOBUF_NAMESPACE_ID::internal::UnalignedLoad<float>(ptr);
           ptr += sizeof(float);
         } else
           goto handle_unusual;
@@ -920,14 +920,14 @@ uint8_t* SideScanSource::_InternalSerialize(
     target = ::_pbi::WireFormatLite::WriteFloatToArray(8, this->_internal_height_from_bottom(), target);
   }
 
-  // float r_theat = 9;
+  // float r_theta = 9;
   static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
-  float tmp_r_theat = this->_internal_r_theat();
-  uint32_t raw_r_theat;
-  memcpy(&raw_r_theat, &tmp_r_theat, sizeof(tmp_r_theat));
-  if (raw_r_theat != 0) {
+  float tmp_r_theta = this->_internal_r_theta();
+  uint32_t raw_r_theta;
+  memcpy(&raw_r_theta, &tmp_r_theta, sizeof(tmp_r_theta));
+  if (raw_r_theta != 0) {
     target = stream->EnsureSpace(target);
-    target = ::_pbi::WireFormatLite::WriteFloatToArray(9, this->_internal_r_theat(), target);
+    target = ::_pbi::WireFormatLite::WriteFloatToArray(9, this->_internal_r_theta(), target);
   }
 
   // string side_scan_image_name = 10;
@@ -1246,12 +1246,12 @@ size_t SideScanSource::ByteSizeLong() const {
     total_size += 1 + 4;
   }
 
-  // float r_theat = 9;
+  // float r_theta = 9;
   static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
-  float tmp_r_theat = this->_internal_r_theat();
-  uint32_t raw_r_theat;
-  memcpy(&raw_r_theat, &tmp_r_theat, sizeof(tmp_r_theat));
-  if (raw_r_theat != 0) {
+  float tmp_r_theta = this->_internal_r_theta();
+  uint32_t raw_r_theta;
+  memcpy(&raw_r_theta, &tmp_r_theta, sizeof(tmp_r_theta));
+  if (raw_r_theta != 0) {
     total_size += 1 + 4;
   }
 
@@ -1380,11 +1380,11 @@ void SideScanSource::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const :
     _this->_internal_set_height_from_bottom(from._internal_height_from_bottom());
   }
   static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
-  float tmp_r_theat = from._internal_r_theat();
-  uint32_t raw_r_theat;
-  memcpy(&raw_r_theat, &tmp_r_theat, sizeof(tmp_r_theat));
-  if (raw_r_theat != 0) {
-    _this->_internal_set_r_theat(from._internal_r_theat());
+  float tmp_r_theta = from._internal_r_theta();
+  uint32_t raw_r_theta;
+  memcpy(&raw_r_theta, &tmp_r_theta, sizeof(tmp_r_theta));
+  if (raw_r_theta != 0) {
+    _this->_internal_set_r_theta(from._internal_r_theta());
   }
   static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
   float tmp_along_track = from._internal_along_track();

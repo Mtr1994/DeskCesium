@@ -20,14 +20,19 @@
 QVariant getCellValue(const QXlsx::Cell* cell)
 {
     if (nullptr == cell) return "";
+
     switch (cell->cellType())
     {
+    case QXlsx::Cell::ErrorType:
+        return "";
     case QXlsx::Cell::DateType:
         return cell->dateTime();
-        break;
+    case QXlsx::Cell::NumberType:
+        return QString::number(cell->value().toDouble(), 'f', 6);
     default:
-        return cell->value();
-        break;
+        QVariant value = cell->value();
+        if (cell->hasFormula() && (value.toString() == "#VALUE!")) return "";
+        return value;
     }
 }
 
@@ -338,6 +343,10 @@ void DialogUploadData::checkData()
             // 水平距离值
             cell = xlsxDocument.cellAt(i, CELL_HORIZONTAL_RANGE_VALUE);
             source->set_horizontal_range_value(getCellValue(cell).toString().toStdString());
+            if (QString::fromStdString(source->horizontal_range_value()).toFloat() > 0)
+            {
+                source->set_horizontal_range_value(QString::number(QString::fromStdString(source->horizontal_range_value()).toFloat()).toStdString());
+            }
             if (source->horizontal_range_value().size() >= 32)
             {
                 emit sgl_thread_report_check_status(STATUS_ERROR, QString("编号 【%1】 的水平距离值长度【%2】超过最大阈值 【32】").arg(source->id().data(), QString::number(source->horizontal_range_value().size())));
@@ -350,7 +359,7 @@ void DialogUploadData::checkData()
 
             // 航迹向分辨率
             cell = xlsxDocument.cellAt(i, CELL_T_THETA);
-            source->set_r_theat(getCellValue(cell).toFloat());
+            source->set_r_theta(getCellValue(cell).toFloat());
 
             // 侧扫图片路径 (按照固定逻辑解析)
             QFileInfo sideScanImageInfo = findImage(QString("%1.tif").arg(source->id().data()));
@@ -392,7 +401,12 @@ void DialogUploadData::checkData()
 
             // 推测尺寸
             cell = xlsxDocument.cellAt(i, CELL_SUPPOSE_SIZE);
-            source->set_suppose_size(getCellValue(cell).toString().toStdString());
+            QString supposeSize = getCellValue(cell).toString();
+            if (nullptr != cell && cell->hasFormula())
+            {
+                supposeSize = QString::number(supposeSize.toDouble(), 'f', 6);
+            }
+            source->set_suppose_size(supposeSize.toStdString());
             if (source->suppose_size().size() >= 32)
             {
                 emit sgl_thread_report_check_status(STATUS_ERROR, QString("编号 【%1】 的推测尺寸长度【%2】超过最大阈值 【32】").arg(source->id().data(), QString::number(source->suppose_size().size())));
@@ -415,6 +429,10 @@ void DialogUploadData::checkData()
             // 目标经度
             cell = xlsxDocument.cellAt(i, CELL_TARGET_LONGITUDE);
             source->set_target_longitude(getCellValue(cell).toString().toStdString());
+            if (QString::fromStdString(source->target_longitude()).toFloat() > 0)
+            {
+                source->set_target_longitude(QString::number(QString::fromStdString(source->target_longitude()).toFloat()).toStdString());
+            }
             if (source->target_longitude().length() >= 64)
             {
                 emit sgl_thread_report_check_status(STATUS_ERROR, QString("编号 【%1】 的目标物经度长度超过阈值【64】").arg(source->id().data()));
@@ -424,6 +442,10 @@ void DialogUploadData::checkData()
             // 目标纬度
             cell = xlsxDocument.cellAt(i, CELL_TARGET_LATITUDE);
             source->set_target_latitude(getCellValue(cell).toString().toStdString());
+            if (QString::fromStdString(source->target_latitude()).toFloat() > 0)
+            {
+                source->set_target_latitude(QString::number(QString::fromStdString(source->target_latitude()).toFloat()).toStdString());
+            }
             if (source->target_latitude().length() >= 64)
             {
                 emit sgl_thread_report_check_status(STATUS_ERROR, QString("编号 【%1】 的目标物纬度长度超过阈值【64】").arg(source->id().data()));

@@ -10,7 +10,7 @@ message SideScanSource
 	string horizontal_range_direction = 6;
 	string horizontal_range_value = 7;
 	float height_from_bottom = 8;
-	float r_theat = 9;
+	float r_theta = 9;
 	string side_scan_image_name = 10;
 	float along_track = 11;
 	float across_track = 12;
