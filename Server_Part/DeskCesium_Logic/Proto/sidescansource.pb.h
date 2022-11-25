@@ -193,8 +193,10 @@ class SideScanSource final :
     kIdFieldNumber = 1,
     kDtTimeFieldNumber = 2,
     kHorizontalRangeDirectionFieldNumber = 6,
+    kHorizontalRangeValueFieldNumber = 7,
     kSideScanImageNameFieldNumber = 10,
     kRemarksFieldNumber = 13,
+    kSupposeSizeFieldNumber = 14,
     kVerifyAuvSssImagePathsFieldNumber = 16,
     kVerifyImagePathsFieldNumber = 17,
     kImageDescriptionFieldNumber = 18,
@@ -207,12 +209,10 @@ class SideScanSource final :
     kLongitudeFieldNumber = 3,
     kLatitudeFieldNumber = 4,
     kDtSpeedFieldNumber = 5,
-    kHorizontalRangeValueFieldNumber = 7,
     kHeightFromBottomFieldNumber = 8,
     kRTheatFieldNumber = 9,
     kAlongTrackFieldNumber = 11,
     kAcrossTrackFieldNumber = 12,
-    kSupposeSizeFieldNumber = 14,
     kPriorityFieldNumber = 15,
     kStatusFieldNumber = 25,
   };
@@ -258,6 +258,20 @@ class SideScanSource final :
   std::string* _internal_mutable_horizontal_range_direction();
   public:
 
+  // string horizontal_range_value = 7;
+  void clear_horizontal_range_value();
+  const std::string& horizontal_range_value() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_horizontal_range_value(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_horizontal_range_value();
+  PROTOBUF_NODISCARD std::string* release_horizontal_range_value();
+  void set_allocated_horizontal_range_value(std::string* horizontal_range_value);
+  private:
+  const std::string& _internal_horizontal_range_value() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_horizontal_range_value(const std::string& value);
+  std::string* _internal_mutable_horizontal_range_value();
+  public:
+
   // string side_scan_image_name = 10;
   void clear_side_scan_image_name();
   const std::string& side_scan_image_name() const;
@@ -284,6 +298,20 @@ class SideScanSource final :
   const std::string& _internal_remarks() const;
   inline PROTOBUF_ALWAYS_INLINE void _internal_set_remarks(const std::string& value);
   std::string* _internal_mutable_remarks();
+  public:
+
+  // string suppose_size = 14;
+  void clear_suppose_size();
+  const std::string& suppose_size() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_suppose_size(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_suppose_size();
+  PROTOBUF_NODISCARD std::string* release_suppose_size();
+  void set_allocated_suppose_size(std::string* suppose_size);
+  private:
+  const std::string& _internal_suppose_size() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_suppose_size(const std::string& value);
+  std::string* _internal_mutable_suppose_size();
   public:
 
   // string verify_auv_sss_image_paths = 16;
@@ -439,15 +467,6 @@ class SideScanSource final :
   void _internal_set_dt_speed(float value);
   public:
 
-  // float horizontal_range_value = 7;
-  void clear_horizontal_range_value();
-  float horizontal_range_value() const;
-  void set_horizontal_range_value(float value);
-  private:
-  float _internal_horizontal_range_value() const;
-  void _internal_set_horizontal_range_value(float value);
-  public:
-
   // float height_from_bottom = 8;
   void clear_height_from_bottom();
   float height_from_bottom() const;
@@ -484,15 +503,6 @@ class SideScanSource final :
   void _internal_set_across_track(float value);
   public:
 
-  // float suppose_size = 14;
-  void clear_suppose_size();
-  float suppose_size() const;
-  void set_suppose_size(float value);
-  private:
-  float _internal_suppose_size() const;
-  void _internal_set_suppose_size(float value);
-  public:
-
   // uint32 priority = 15;
   void clear_priority();
   uint32_t priority() const;
@@ -522,8 +532,10 @@ class SideScanSource final :
     ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr id_;
     ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr dt_time_;
     ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr horizontal_range_direction_;
+    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr horizontal_range_value_;
     ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr side_scan_image_name_;
     ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr remarks_;
+    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr suppose_size_;
     ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr verify_auv_sss_image_paths_;
     ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr verify_image_paths_;
     ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr image_description_;
@@ -536,12 +548,10 @@ class SideScanSource final :
     double longitude_;
     double latitude_;
     float dt_speed_;
-    float horizontal_range_value_;
     float height_from_bottom_;
     float r_theat_;
     float along_track_;
     float across_track_;
-    float suppose_size_;
     uint32_t priority_;
     uint32_t status_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
@@ -1433,24 +1443,54 @@ inline void SideScanSource::set_allocated_horizontal_range_direction(std::string
   // @@protoc_insertion_point(field_set_allocated:SideScanSource.horizontal_range_direction)
 }
 
-// float horizontal_range_value = 7;
+// string horizontal_range_value = 7;
 inline void SideScanSource::clear_horizontal_range_value() {
-  _impl_.horizontal_range_value_ = 0;
+  _impl_.horizontal_range_value_.ClearToEmpty();
 }
-inline float SideScanSource::_internal_horizontal_range_value() const {
-  return _impl_.horizontal_range_value_;
-}
-inline float SideScanSource::horizontal_range_value() const {
+inline const std::string& SideScanSource::horizontal_range_value() const {
   // @@protoc_insertion_point(field_get:SideScanSource.horizontal_range_value)
   return _internal_horizontal_range_value();
 }
-inline void SideScanSource::_internal_set_horizontal_range_value(float value) {
-  
-  _impl_.horizontal_range_value_ = value;
-}
-inline void SideScanSource::set_horizontal_range_value(float value) {
-  _internal_set_horizontal_range_value(value);
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void SideScanSource::set_horizontal_range_value(ArgT0&& arg0, ArgT... args) {
+ 
+ _impl_.horizontal_range_value_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
   // @@protoc_insertion_point(field_set:SideScanSource.horizontal_range_value)
+}
+inline std::string* SideScanSource::mutable_horizontal_range_value() {
+  std::string* _s = _internal_mutable_horizontal_range_value();
+  // @@protoc_insertion_point(field_mutable:SideScanSource.horizontal_range_value)
+  return _s;
+}
+inline const std::string& SideScanSource::_internal_horizontal_range_value() const {
+  return _impl_.horizontal_range_value_.Get();
+}
+inline void SideScanSource::_internal_set_horizontal_range_value(const std::string& value) {
+  
+  _impl_.horizontal_range_value_.Set(value, GetArenaForAllocation());
+}
+inline std::string* SideScanSource::_internal_mutable_horizontal_range_value() {
+  
+  return _impl_.horizontal_range_value_.Mutable(GetArenaForAllocation());
+}
+inline std::string* SideScanSource::release_horizontal_range_value() {
+  // @@protoc_insertion_point(field_release:SideScanSource.horizontal_range_value)
+  return _impl_.horizontal_range_value_.Release();
+}
+inline void SideScanSource::set_allocated_horizontal_range_value(std::string* horizontal_range_value) {
+  if (horizontal_range_value != nullptr) {
+    
+  } else {
+    
+  }
+  _impl_.horizontal_range_value_.SetAllocated(horizontal_range_value, GetArenaForAllocation());
+#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (_impl_.horizontal_range_value_.IsDefault()) {
+    _impl_.horizontal_range_value_.Set("", GetArenaForAllocation());
+  }
+#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:SideScanSource.horizontal_range_value)
 }
 
 // float height_from_bottom = 8;
@@ -1633,24 +1673,54 @@ inline void SideScanSource::set_allocated_remarks(std::string* remarks) {
   // @@protoc_insertion_point(field_set_allocated:SideScanSource.remarks)
 }
 
-// float suppose_size = 14;
+// string suppose_size = 14;
 inline void SideScanSource::clear_suppose_size() {
-  _impl_.suppose_size_ = 0;
+  _impl_.suppose_size_.ClearToEmpty();
 }
-inline float SideScanSource::_internal_suppose_size() const {
-  return _impl_.suppose_size_;
-}
-inline float SideScanSource::suppose_size() const {
+inline const std::string& SideScanSource::suppose_size() const {
   // @@protoc_insertion_point(field_get:SideScanSource.suppose_size)
   return _internal_suppose_size();
 }
-inline void SideScanSource::_internal_set_suppose_size(float value) {
-  
-  _impl_.suppose_size_ = value;
-}
-inline void SideScanSource::set_suppose_size(float value) {
-  _internal_set_suppose_size(value);
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void SideScanSource::set_suppose_size(ArgT0&& arg0, ArgT... args) {
+ 
+ _impl_.suppose_size_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
   // @@protoc_insertion_point(field_set:SideScanSource.suppose_size)
+}
+inline std::string* SideScanSource::mutable_suppose_size() {
+  std::string* _s = _internal_mutable_suppose_size();
+  // @@protoc_insertion_point(field_mutable:SideScanSource.suppose_size)
+  return _s;
+}
+inline const std::string& SideScanSource::_internal_suppose_size() const {
+  return _impl_.suppose_size_.Get();
+}
+inline void SideScanSource::_internal_set_suppose_size(const std::string& value) {
+  
+  _impl_.suppose_size_.Set(value, GetArenaForAllocation());
+}
+inline std::string* SideScanSource::_internal_mutable_suppose_size() {
+  
+  return _impl_.suppose_size_.Mutable(GetArenaForAllocation());
+}
+inline std::string* SideScanSource::release_suppose_size() {
+  // @@protoc_insertion_point(field_release:SideScanSource.suppose_size)
+  return _impl_.suppose_size_.Release();
+}
+inline void SideScanSource::set_allocated_suppose_size(std::string* suppose_size) {
+  if (suppose_size != nullptr) {
+    
+  } else {
+    
+  }
+  _impl_.suppose_size_.SetAllocated(suppose_size, GetArenaForAllocation());
+#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (_impl_.suppose_size_.IsDefault()) {
+    _impl_.suppose_size_.Set("", GetArenaForAllocation());
+  }
+#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:SideScanSource.suppose_size)
 }
 
 // uint32 priority = 15;

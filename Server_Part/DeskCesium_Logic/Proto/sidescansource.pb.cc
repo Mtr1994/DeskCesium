@@ -25,8 +25,10 @@ PROTOBUF_CONSTEXPR SideScanSource::SideScanSource(
     /*decltype(_impl_.id_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
   , /*decltype(_impl_.dt_time_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
   , /*decltype(_impl_.horizontal_range_direction_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
+  , /*decltype(_impl_.horizontal_range_value_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
   , /*decltype(_impl_.side_scan_image_name_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
   , /*decltype(_impl_.remarks_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
+  , /*decltype(_impl_.suppose_size_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
   , /*decltype(_impl_.verify_auv_sss_image_paths_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
   , /*decltype(_impl_.verify_image_paths_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
   , /*decltype(_impl_.image_description_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
@@ -39,12 +41,10 @@ PROTOBUF_CONSTEXPR SideScanSource::SideScanSource(
   , /*decltype(_impl_.longitude_)*/0
   , /*decltype(_impl_.latitude_)*/0
   , /*decltype(_impl_.dt_speed_)*/0
-  , /*decltype(_impl_.horizontal_range_value_)*/0
   , /*decltype(_impl_.height_from_bottom_)*/0
   , /*decltype(_impl_.r_theat_)*/0
   , /*decltype(_impl_.along_track_)*/0
   , /*decltype(_impl_.across_track_)*/0
-  , /*decltype(_impl_.suppose_size_)*/0
   , /*decltype(_impl_.priority_)*/0u
   , /*decltype(_impl_.status_)*/0u
   , /*decltype(_impl_._cached_size_)*/{}} {}
@@ -201,11 +201,11 @@ const char descriptor_table_protodef_sidescansource_2eproto[] PROTOBUF_SECTION_V
   "e\022\n\n\002id\030\001 \001(\t\022\017\n\007dt_time\030\002 \001(\t\022\021\n\tlongit"
   "ude\030\003 \001(\001\022\020\n\010latitude\030\004 \001(\001\022\020\n\010dt_speed\030"
   "\005 \001(\002\022\"\n\032horizontal_range_direction\030\006 \001("
-  "\t\022\036\n\026horizontal_range_value\030\007 \001(\002\022\032\n\022hei"
+  "\t\022\036\n\026horizontal_range_value\030\007 \001(\t\022\032\n\022hei"
   "ght_from_bottom\030\010 \001(\002\022\017\n\007r_theat\030\t \001(\002\022\034"
   "\n\024side_scan_image_name\030\n \001(\t\022\023\n\013along_tr"
   "ack\030\013 \001(\002\022\024\n\014across_track\030\014 \001(\002\022\017\n\007remar"
-  "ks\030\r \001(\t\022\024\n\014suppose_size\030\016 \001(\002\022\020\n\010priori"
+  "ks\030\r \001(\t\022\024\n\014suppose_size\030\016 \001(\t\022\020\n\010priori"
   "ty\030\017 \001(\r\022\"\n\032verify_auv_sss_image_paths\030\020"
   " \001(\t\022\032\n\022verify_image_paths\030\021 \001(\t\022\031\n\021imag"
   "e_description\030\022 \001(\t\022\030\n\020target_longitude\030"
@@ -255,8 +255,10 @@ SideScanSource::SideScanSource(const SideScanSource& from)
       decltype(_impl_.id_){}
     , decltype(_impl_.dt_time_){}
     , decltype(_impl_.horizontal_range_direction_){}
+    , decltype(_impl_.horizontal_range_value_){}
     , decltype(_impl_.side_scan_image_name_){}
     , decltype(_impl_.remarks_){}
+    , decltype(_impl_.suppose_size_){}
     , decltype(_impl_.verify_auv_sss_image_paths_){}
     , decltype(_impl_.verify_image_paths_){}
     , decltype(_impl_.image_description_){}
@@ -269,12 +271,10 @@ SideScanSource::SideScanSource(const SideScanSource& from)
     , decltype(_impl_.longitude_){}
     , decltype(_impl_.latitude_){}
     , decltype(_impl_.dt_speed_){}
-    , decltype(_impl_.horizontal_range_value_){}
     , decltype(_impl_.height_from_bottom_){}
     , decltype(_impl_.r_theat_){}
     , decltype(_impl_.along_track_){}
     , decltype(_impl_.across_track_){}
-    , decltype(_impl_.suppose_size_){}
     , decltype(_impl_.priority_){}
     , decltype(_impl_.status_){}
     , /*decltype(_impl_._cached_size_)*/{}};
@@ -304,6 +304,14 @@ SideScanSource::SideScanSource(const SideScanSource& from)
     _this->_impl_.horizontal_range_direction_.Set(from._internal_horizontal_range_direction(), 
       _this->GetArenaForAllocation());
   }
+  _impl_.horizontal_range_value_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.horizontal_range_value_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (!from._internal_horizontal_range_value().empty()) {
+    _this->_impl_.horizontal_range_value_.Set(from._internal_horizontal_range_value(), 
+      _this->GetArenaForAllocation());
+  }
   _impl_.side_scan_image_name_.InitDefault();
   #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
     _impl_.side_scan_image_name_.Set("", GetArenaForAllocation());
@@ -318,6 +326,14 @@ SideScanSource::SideScanSource(const SideScanSource& from)
   #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
   if (!from._internal_remarks().empty()) {
     _this->_impl_.remarks_.Set(from._internal_remarks(), 
+      _this->GetArenaForAllocation());
+  }
+  _impl_.suppose_size_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.suppose_size_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (!from._internal_suppose_size().empty()) {
+    _this->_impl_.suppose_size_.Set(from._internal_suppose_size(), 
       _this->GetArenaForAllocation());
   }
   _impl_.verify_auv_sss_image_paths_.InitDefault();
@@ -406,8 +422,10 @@ inline void SideScanSource::SharedCtor(
       decltype(_impl_.id_){}
     , decltype(_impl_.dt_time_){}
     , decltype(_impl_.horizontal_range_direction_){}
+    , decltype(_impl_.horizontal_range_value_){}
     , decltype(_impl_.side_scan_image_name_){}
     , decltype(_impl_.remarks_){}
+    , decltype(_impl_.suppose_size_){}
     , decltype(_impl_.verify_auv_sss_image_paths_){}
     , decltype(_impl_.verify_image_paths_){}
     , decltype(_impl_.image_description_){}
@@ -420,12 +438,10 @@ inline void SideScanSource::SharedCtor(
     , decltype(_impl_.longitude_){0}
     , decltype(_impl_.latitude_){0}
     , decltype(_impl_.dt_speed_){0}
-    , decltype(_impl_.horizontal_range_value_){0}
     , decltype(_impl_.height_from_bottom_){0}
     , decltype(_impl_.r_theat_){0}
     , decltype(_impl_.along_track_){0}
     , decltype(_impl_.across_track_){0}
-    , decltype(_impl_.suppose_size_){0}
     , decltype(_impl_.priority_){0u}
     , decltype(_impl_.status_){0u}
     , /*decltype(_impl_._cached_size_)*/{}
@@ -442,6 +458,10 @@ inline void SideScanSource::SharedCtor(
   #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
     _impl_.horizontal_range_direction_.Set("", GetArenaForAllocation());
   #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  _impl_.horizontal_range_value_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.horizontal_range_value_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
   _impl_.side_scan_image_name_.InitDefault();
   #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
     _impl_.side_scan_image_name_.Set("", GetArenaForAllocation());
@@ -449,6 +469,10 @@ inline void SideScanSource::SharedCtor(
   _impl_.remarks_.InitDefault();
   #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
     _impl_.remarks_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  _impl_.suppose_size_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.suppose_size_.Set("", GetArenaForAllocation());
   #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
   _impl_.verify_auv_sss_image_paths_.InitDefault();
   #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
@@ -502,8 +526,10 @@ inline void SideScanSource::SharedDtor() {
   _impl_.id_.Destroy();
   _impl_.dt_time_.Destroy();
   _impl_.horizontal_range_direction_.Destroy();
+  _impl_.horizontal_range_value_.Destroy();
   _impl_.side_scan_image_name_.Destroy();
   _impl_.remarks_.Destroy();
+  _impl_.suppose_size_.Destroy();
   _impl_.verify_auv_sss_image_paths_.Destroy();
   _impl_.verify_image_paths_.Destroy();
   _impl_.image_description_.Destroy();
@@ -528,8 +554,10 @@ void SideScanSource::Clear() {
   _impl_.id_.ClearToEmpty();
   _impl_.dt_time_.ClearToEmpty();
   _impl_.horizontal_range_direction_.ClearToEmpty();
+  _impl_.horizontal_range_value_.ClearToEmpty();
   _impl_.side_scan_image_name_.ClearToEmpty();
   _impl_.remarks_.ClearToEmpty();
+  _impl_.suppose_size_.ClearToEmpty();
   _impl_.verify_auv_sss_image_paths_.ClearToEmpty();
   _impl_.verify_image_paths_.ClearToEmpty();
   _impl_.image_description_.ClearToEmpty();
@@ -605,11 +633,13 @@ const char* SideScanSource::_InternalParse(const char* ptr, ::_pbi::ParseContext
         } else
           goto handle_unusual;
         continue;
-      // float horizontal_range_value = 7;
+      // string horizontal_range_value = 7;
       case 7:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 61)) {
-          _impl_.horizontal_range_value_ = ::PROTOBUF_NAMESPACE_ID::internal::UnalignedLoad<float>(ptr);
-          ptr += sizeof(float);
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 58)) {
+          auto str = _internal_mutable_horizontal_range_value();
+          ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(ptr);
+          CHK_(::_pbi::VerifyUTF8(str, "SideScanSource.horizontal_range_value"));
         } else
           goto handle_unusual;
         continue;
@@ -665,11 +695,13 @@ const char* SideScanSource::_InternalParse(const char* ptr, ::_pbi::ParseContext
         } else
           goto handle_unusual;
         continue;
-      // float suppose_size = 14;
+      // string suppose_size = 14;
       case 14:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 117)) {
-          _impl_.suppose_size_ = ::PROTOBUF_NAMESPACE_ID::internal::UnalignedLoad<float>(ptr);
-          ptr += sizeof(float);
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 114)) {
+          auto str = _internal_mutable_suppose_size();
+          ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(ptr);
+          CHK_(::_pbi::VerifyUTF8(str, "SideScanSource.suppose_size"));
         } else
           goto handle_unusual;
         continue;
@@ -868,14 +900,14 @@ uint8_t* SideScanSource::_InternalSerialize(
         6, this->_internal_horizontal_range_direction(), target);
   }
 
-  // float horizontal_range_value = 7;
-  static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
-  float tmp_horizontal_range_value = this->_internal_horizontal_range_value();
-  uint32_t raw_horizontal_range_value;
-  memcpy(&raw_horizontal_range_value, &tmp_horizontal_range_value, sizeof(tmp_horizontal_range_value));
-  if (raw_horizontal_range_value != 0) {
-    target = stream->EnsureSpace(target);
-    target = ::_pbi::WireFormatLite::WriteFloatToArray(7, this->_internal_horizontal_range_value(), target);
+  // string horizontal_range_value = 7;
+  if (!this->_internal_horizontal_range_value().empty()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->_internal_horizontal_range_value().data(), static_cast<int>(this->_internal_horizontal_range_value().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "SideScanSource.horizontal_range_value");
+    target = stream->WriteStringMaybeAliased(
+        7, this->_internal_horizontal_range_value(), target);
   }
 
   // float height_from_bottom = 8;
@@ -938,14 +970,14 @@ uint8_t* SideScanSource::_InternalSerialize(
         13, this->_internal_remarks(), target);
   }
 
-  // float suppose_size = 14;
-  static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
-  float tmp_suppose_size = this->_internal_suppose_size();
-  uint32_t raw_suppose_size;
-  memcpy(&raw_suppose_size, &tmp_suppose_size, sizeof(tmp_suppose_size));
-  if (raw_suppose_size != 0) {
-    target = stream->EnsureSpace(target);
-    target = ::_pbi::WireFormatLite::WriteFloatToArray(14, this->_internal_suppose_size(), target);
+  // string suppose_size = 14;
+  if (!this->_internal_suppose_size().empty()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->_internal_suppose_size().data(), static_cast<int>(this->_internal_suppose_size().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "SideScanSource.suppose_size");
+    target = stream->WriteStringMaybeAliased(
+        14, this->_internal_suppose_size(), target);
   }
 
   // uint32 priority = 15;
@@ -1087,6 +1119,13 @@ size_t SideScanSource::ByteSizeLong() const {
         this->_internal_horizontal_range_direction());
   }
 
+  // string horizontal_range_value = 7;
+  if (!this->_internal_horizontal_range_value().empty()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->_internal_horizontal_range_value());
+  }
+
   // string side_scan_image_name = 10;
   if (!this->_internal_side_scan_image_name().empty()) {
     total_size += 1 +
@@ -1099,6 +1138,13 @@ size_t SideScanSource::ByteSizeLong() const {
     total_size += 1 +
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
         this->_internal_remarks());
+  }
+
+  // string suppose_size = 14;
+  if (!this->_internal_suppose_size().empty()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->_internal_suppose_size());
   }
 
   // string verify_auv_sss_image_paths = 16;
@@ -1191,15 +1237,6 @@ size_t SideScanSource::ByteSizeLong() const {
     total_size += 1 + 4;
   }
 
-  // float horizontal_range_value = 7;
-  static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
-  float tmp_horizontal_range_value = this->_internal_horizontal_range_value();
-  uint32_t raw_horizontal_range_value;
-  memcpy(&raw_horizontal_range_value, &tmp_horizontal_range_value, sizeof(tmp_horizontal_range_value));
-  if (raw_horizontal_range_value != 0) {
-    total_size += 1 + 4;
-  }
-
   // float height_from_bottom = 8;
   static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
   float tmp_height_from_bottom = this->_internal_height_from_bottom();
@@ -1233,15 +1270,6 @@ size_t SideScanSource::ByteSizeLong() const {
   uint32_t raw_across_track;
   memcpy(&raw_across_track, &tmp_across_track, sizeof(tmp_across_track));
   if (raw_across_track != 0) {
-    total_size += 1 + 4;
-  }
-
-  // float suppose_size = 14;
-  static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
-  float tmp_suppose_size = this->_internal_suppose_size();
-  uint32_t raw_suppose_size;
-  memcpy(&raw_suppose_size, &tmp_suppose_size, sizeof(tmp_suppose_size));
-  if (raw_suppose_size != 0) {
     total_size += 1 + 4;
   }
 
@@ -1284,11 +1312,17 @@ void SideScanSource::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const :
   if (!from._internal_horizontal_range_direction().empty()) {
     _this->_internal_set_horizontal_range_direction(from._internal_horizontal_range_direction());
   }
+  if (!from._internal_horizontal_range_value().empty()) {
+    _this->_internal_set_horizontal_range_value(from._internal_horizontal_range_value());
+  }
   if (!from._internal_side_scan_image_name().empty()) {
     _this->_internal_set_side_scan_image_name(from._internal_side_scan_image_name());
   }
   if (!from._internal_remarks().empty()) {
     _this->_internal_set_remarks(from._internal_remarks());
+  }
+  if (!from._internal_suppose_size().empty()) {
+    _this->_internal_set_suppose_size(from._internal_suppose_size());
   }
   if (!from._internal_verify_auv_sss_image_paths().empty()) {
     _this->_internal_set_verify_auv_sss_image_paths(from._internal_verify_auv_sss_image_paths());
@@ -1339,13 +1373,6 @@ void SideScanSource::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const :
     _this->_internal_set_dt_speed(from._internal_dt_speed());
   }
   static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
-  float tmp_horizontal_range_value = from._internal_horizontal_range_value();
-  uint32_t raw_horizontal_range_value;
-  memcpy(&raw_horizontal_range_value, &tmp_horizontal_range_value, sizeof(tmp_horizontal_range_value));
-  if (raw_horizontal_range_value != 0) {
-    _this->_internal_set_horizontal_range_value(from._internal_horizontal_range_value());
-  }
-  static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
   float tmp_height_from_bottom = from._internal_height_from_bottom();
   uint32_t raw_height_from_bottom;
   memcpy(&raw_height_from_bottom, &tmp_height_from_bottom, sizeof(tmp_height_from_bottom));
@@ -1372,13 +1399,6 @@ void SideScanSource::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const :
   memcpy(&raw_across_track, &tmp_across_track, sizeof(tmp_across_track));
   if (raw_across_track != 0) {
     _this->_internal_set_across_track(from._internal_across_track());
-  }
-  static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
-  float tmp_suppose_size = from._internal_suppose_size();
-  uint32_t raw_suppose_size;
-  memcpy(&raw_suppose_size, &tmp_suppose_size, sizeof(tmp_suppose_size));
-  if (raw_suppose_size != 0) {
-    _this->_internal_set_suppose_size(from._internal_suppose_size());
   }
   if (from._internal_priority() != 0) {
     _this->_internal_set_priority(from._internal_priority());
@@ -1418,12 +1438,20 @@ void SideScanSource::InternalSwap(SideScanSource* other) {
       &other->_impl_.horizontal_range_direction_, rhs_arena
   );
   ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &_impl_.horizontal_range_value_, lhs_arena,
+      &other->_impl_.horizontal_range_value_, rhs_arena
+  );
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
       &_impl_.side_scan_image_name_, lhs_arena,
       &other->_impl_.side_scan_image_name_, rhs_arena
   );
   ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
       &_impl_.remarks_, lhs_arena,
       &other->_impl_.remarks_, rhs_arena
+  );
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &_impl_.suppose_size_, lhs_arena,
+      &other->_impl_.suppose_size_, rhs_arena
   );
   ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
       &_impl_.verify_auv_sss_image_paths_, lhs_arena,
