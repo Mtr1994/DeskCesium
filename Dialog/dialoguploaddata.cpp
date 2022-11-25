@@ -226,6 +226,9 @@ void DialogUploadData::checkData()
     }
     // 此处是否需要进行非空检索
 
+    // Windows 文件夹命名规则
+    std::regex regexFileName("^(?!((^(con)$)|^(con)/..*|(^(prn)$)|^(prn)/..*|(^(aux)$)|^(aux)/..*|(^(nul)$)|^(nul)/..*|(^(com)[1-9]$)|^(com)[1-9]/..*|(^(lpt)[1-9]$)|^(lpt)[1-9]/..*)|^/s+|.*/s$)(^[^/:/*/?/\"/</>/|/]{1,255}$)");
+
     // 先锁住任务队列
     std::lock_guard<std::mutex> lockQueue(mMutexQueue);
 
@@ -281,6 +284,12 @@ void DialogUploadData::checkData()
                 emit sgl_thread_report_check_status(STATUS_ERROR, QString("编号 【%1】 的长度【%2】超过最大阈值 【32】").arg(source->id().data(), QString::number(source->id().size())));
                 return;
             }
+            // 因为 ID 要作为文件命名，需要遵守一定规则 不能包含字符 [ / \ : * ? "  < > | ] 和一些系统关键字
+            if (!std::regex_match(source->id(), regexFileName))
+            {
+                emit sgl_thread_report_check_status(STATUS_ERROR, QString("编号 【%1】 不能包含 / \\ : * ? \" < > | 字符").arg(source->id().data()));
+                return;
+            }
 
             //拖体记录时间
             cell = xlsxDocument.cellAt(i, CELL_DT_TIME);
@@ -328,7 +337,12 @@ void DialogUploadData::checkData()
 
             // 水平距离值
             cell = xlsxDocument.cellAt(i, CELL_HORIZONTAL_RANGE_VALUE);
-            source->set_horizontal_range_value(getCellValue(cell).toFloat());
+            source->set_horizontal_range_value(getCellValue(cell).toString().toStdString());
+            if (source->horizontal_range_value().size() >= 32)
+            {
+                emit sgl_thread_report_check_status(STATUS_ERROR, QString("编号 【%1】 的水平距离值长度【%2】超过最大阈值 【32】").arg(source->id().data(), QString::number(source->horizontal_range_value().size())));
+                return;
+            }
 
             // 离底高度
             cell = xlsxDocument.cellAt(i, CELL_HEIGHT_FROM_BOTTOM);
@@ -354,6 +368,7 @@ void DialogUploadData::checkData()
                     return;
                 }
 
+                //qDebug() << "upload file " << sideScanImageInfo.absoluteFilePath();
                 DataUploadTask task = {"upload", QString("upload/%1/image").arg(cruiseNumber).toStdString(), sideScanImageInfo.absoluteFilePath().toStdString()};
                 mTaskQueue.append(task);
             }
@@ -377,7 +392,12 @@ void DialogUploadData::checkData()
 
             // 推测尺寸
             cell = xlsxDocument.cellAt(i, CELL_SUPPOSE_SIZE);
-            source->set_suppose_size(getCellValue(cell).toFloat());
+            source->set_suppose_size(getCellValue(cell).toString().toStdString());
+            if (source->suppose_size().size() >= 32)
+            {
+                emit sgl_thread_report_check_status(STATUS_ERROR, QString("编号 【%1】 的推测尺寸长度【%2】超过最大阈值 【32】").arg(source->id().data(), QString::number(source->suppose_size().size())));
+                return;
+            }
 
             // 优先级
             cell = xlsxDocument.cellAt(i, CELL_PRIORITY);
@@ -423,6 +443,18 @@ void DialogUploadData::checkData()
             cell = xlsxDocument.cellAt(i, CELL_CRUISE_NUMBER);
             source->set_cruise_number(getCellValue(cell).toString().trimmed().toStdString());
 
+            // 航次号要用于文件夹查询，不能突破命名规则
+            if (source->cruise_number().size() > 0)
+            {
+                auto cruiseList = QString::fromStdString(source->cruise_number()).split("/", Qt::SkipEmptyParts);
+                for (auto &cruiseNumber : cruiseList)
+                {
+                    if (std::regex_match(cruiseNumber.toStdString(), regexFileName)) continue;
+                    emit sgl_thread_report_check_status(STATUS_ERROR, QString("编号 【%1】 的航次号 【%2】 不能包含 / \\ : * ? \" < > | 字符").arg(source->id().data(), cruiseNumber));
+                    return;
+                }
+            }
+
             // 潜次号
             cell = xlsxDocument.cellAt(i, CELL_DIVE_NUMBER);
             source->set_dive_number(getCellValue(cell).toString().trimmed().toStdString());
@@ -442,6 +474,12 @@ void DialogUploadData::checkData()
                 auto listDiveNumber = QString::fromStdString(source->dive_number()).split("/", Qt::SkipEmptyParts);
                 for (auto &diveNumber : listDiveNumber)
                 {
+                    // 航次号要用于文件夹查询，不能突破命名规则
+                    if (!std::regex_match(diveNumber.toStdString(), regexFileName))
+                    {
+                        emit sgl_thread_report_check_status(STATUS_ERROR, QString("编号 【%1】 的潜次号 【%2】 不能包含 / \\ : * ? \" < > | 字符").arg(source->id().data(), diveNumber));
+                        return;
+                    }
                     // 开始查询 AUV 查证图片
                     QString name = QString("%1-%2-AS.jpg").arg(source->id().data(), diveNumber);
                     for (uint16_t i = 1; i <= 10; i++)

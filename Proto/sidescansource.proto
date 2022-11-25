@@ -8,14 +8,14 @@ message SideScanSource
 	double latitude = 4;
 	float dt_speed = 5;
 	string horizontal_range_direction = 6;
-	float horizontal_range_value = 7;
+	string horizontal_range_value = 7;
 	float height_from_bottom = 8;
 	float r_theat = 9;
 	string side_scan_image_name = 10;
 	float along_track = 11;
 	float across_track = 12;
 	string remarks = 13;
-	float suppose_size = 14;
+	string suppose_size = 14;
 	uint32 priority = 15;
 	string verify_auv_sss_image_paths = 16;
 	string verify_image_paths = 17;

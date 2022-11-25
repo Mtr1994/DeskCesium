@@ -461,7 +461,8 @@ private:
         //qDebug() << "mServerFileInfo " << mServerFileInfo;
         if (mServerFileInfo.startsWith('-')) // linux 下的文件标志
         {
-            if (list.size() != 9)
+            // 文件名称可能有空格存在，导致数量大于 9
+            if (list.size() < 9)
             {
                 mResultMessage = "Linux 系统文件大小解析失败";
                 clear();
