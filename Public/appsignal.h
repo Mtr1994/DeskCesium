@@ -25,6 +25,9 @@ signals:
     // 添加 TIFF 实体
     void sgl_add_tiff_entity(const QString &path);
 
+    // 添加远程 TIFF 实体
+    void sgl_add_remote_tiff_entity(const QString &path, const QString &remoteobject);
+
     // 添加 grd 实体
     void sgl_add_grd_entity(const QString &path);
 

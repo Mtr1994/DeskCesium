@@ -5,6 +5,7 @@
 #include "Ftp/ftpmanager.h"
 #include "Net/tcpsocket.h"
 #include "Common/common.h"
+#include "Protocol/protocolhelper.h"
 
 #include <QDateTime>
 #include <thread>
@@ -34,27 +35,6 @@ QVariant getCellValue(const QXlsx::Cell* cell)
         if (cell->hasFormula() && (value.toString() == "#VALUE!")) return "";
         return value;
     }
-}
-
-QByteArray createPackage(uint16_t cmd, const QByteArray &data = "")
-{
-    uint32_t size = data.length();
-    QByteArray array;
-    array.resize(size + 8);
-
-    uint16_t version = 0x1107;
-    // 版本
-    memcpy(array.data(), &version, 2);
-
-    // 命令
-    memcpy(array.data() + 2, &cmd, 2);
-
-    // 长度
-    memcpy(array.data() + 4, &size, 4);
-
-    // 数据
-    memcpy(array.data() + 8, data.data(), size);
-    return array;
 }
 
 DialogUploadData::DialogUploadData(QWidget *parent) :
@@ -100,11 +80,11 @@ void DialogUploadData::init()
     connect(mTcpSocket, &TcpSocket::sgl_tcp_socket_connect, this, [this](uint64_t dwconnid)
     {
         Q_UNUSED(dwconnid);
-        emit sgl_send_system_notice_message(STATUS_SUCCESS, QString("数据服务已连接"));
+        emit sgl_send_system_notice_message(STATUS_SUCCESS, QString("数据服务连接成功"));
         mTcpServerFlag = true;
 
         // 数据服务连接后，通过数据服务查询文件服务是否开启
-        QByteArray pack = createPackage(CMD_QUERY_FTP_SERVER_STATUS);
+        QByteArray pack = ProtocolHelper::getInstance()->createPackage(CMD_QUERY_FTP_SERVER_STATUS);
         mTcpSocket->write(pack.toStdString());
     });
     connect(mTcpSocket, &TcpSocket::sgl_tcp_socket_disconnect, this, [this](uint64_t dwconnid)
@@ -118,7 +98,7 @@ void DialogUploadData::init()
     mTcpSocket->connect("101.34.253.220", 60011);
 
     // test
-    ui->tbRootDir->setText("C:/Users/admin/Desktop/TestExample/TS2-12-1");
+    ui->tbRootDir->setText("C:/Users/admin/Desktop/TestExample/TS-24-4");
 }
 
 void DialogUploadData::checkData()
@@ -178,8 +158,10 @@ void DialogUploadData::checkData()
         return;
     }
 
-    // 擦汗寻文件夹下存在的图片文件信息
+    // 查寻文件夹下存在的图片文件信息
     QFileInfoList listSideScanFile = traverseFolder(sideScanDir.absolutePath());
+    QStringList listCruiseNumber;
+    listCruiseNumber.append(rootDir.dirName());
 
     // 根据名称获取文件信息
     auto findImage = [&](const QString &fileName)
@@ -471,7 +453,21 @@ void DialogUploadData::checkData()
                 auto cruiseList = QString::fromStdString(source->cruise_number()).split("/", Qt::SkipEmptyParts);
                 for (auto &cruiseNumber : cruiseList)
                 {
-                    if (std::regex_match(cruiseNumber.toStdString(), regexFileName)) continue;
+                    if (std::regex_match(cruiseNumber.toStdString(), regexFileName))
+                    {
+                        // 如果这个航次没出现过，记录下，并检索文件夹下所有 jpg 文件
+                        if (!listCruiseNumber.contains(cruiseNumber))
+                        {
+                            listCruiseNumber.append(cruiseNumber);
+                            QString newRootDir = QString("%1/../%2/image").arg(rootDir.absolutePath(), cruiseNumber);
+                            if (QDir(newRootDir).exists())
+                            {
+                                listSideScanFile.append(traverseFolder(newRootDir));
+                            }
+                            // 此处需要报告一个警告？
+                        }
+                        continue;
+                    }
                     emit sgl_thread_report_check_status(STATUS_ERROR, QString("编号 【%1】 的航次号 【%2】 不能包含 / \\ : * ? \" < > | 字符").arg(source->id().data(), cruiseNumber));
                     return;
                 }
@@ -487,7 +483,7 @@ void DialogUploadData::checkData()
             }
 
             ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-            /// 根据潜次号，才能查询查证的图片名称
+            /// 根据航次号定位文件夹，根据潜次号，才能查询查证的图片名称
             // 查证 AUV 图片路径 需要根据 反斜杠 分类检索
             QString auvImagePaths;
             QString imagePaths;
@@ -496,7 +492,7 @@ void DialogUploadData::checkData()
                 auto listDiveNumber = QString::fromStdString(source->dive_number()).split("/", Qt::SkipEmptyParts);
                 for (auto &diveNumber : listDiveNumber)
                 {
-                    // 航次号要用于文件夹查询，不能突破命名规则
+                    // 潜次号要用于文件夹查询，不能突破命名规则
                     if (!std::regex_match(diveNumber.toStdString(), regexFileName))
                     {
                         emit sgl_thread_report_check_status(STATUS_ERROR, QString("编号 【%1】 的潜次号 【%2】 不能包含 / \\ : * ? \" < > | 字符").arg(source->id().data(), diveNumber));
@@ -573,7 +569,7 @@ void DialogUploadData::checkData()
             }
 
             // 数据状态
-            source->set_status(0);
+            source->set_status_flag(0);
 
             // 有效数据数量递增
             dataCount++;
@@ -688,7 +684,7 @@ void DialogUploadData::checkData()
         increaceTaskNumber++;
     }
 
-    emit sgl_thread_report_check_status(STATUS_INFO, QString("文件夹解析结束，共【%1】条异常点记录，【%2】个轨迹文件").arg(QString::number(sideScanSource.list_size()), QString::number(mTaskQueue.size() - increaceTaskNumber)), false);
+    emit sgl_thread_report_check_status(STATUS_INFO, QString("文件夹解析结束，共【%1】条异常点记录，【%2】条轨迹文件记录").arg(QString::number(sideScanSource.list_size()), QString::number(routeSourceList.list_size())), false);
 
     emit sgl_thread_check_data_finish();
 }
@@ -792,49 +788,8 @@ void DialogUploadData::slot_thread_report_check_status(uint8_t status, const QSt
 void DialogUploadData::slot_thread_check_data_finish()
 {
     mRunThreadCheck = false;
-
-    if (nullptr == mFtpManager)
-    {
-        mFtpManager = new FtpManager;
-        mFtpManager->setFtpHost("101.34.253.220");
-        mFtpManager->setFtpUserName("idsse");
-        mFtpManager->setFtpUserPass("123456");
-
-        connect(mFtpManager, &FtpManager::sgl_file_upload_process, this, [this](const QString &file, float percent)
-        {
-            if (percent == 100)
-            {
-                emit sgl_thread_report_check_status(STATUS_SUCCESS, QString("上传文件成功 %1").arg(file), false);
-
-                emit sgl_start_next_task();
-            }
-        });
-    }
-
-//        connect(ftpManager, &FtpManager::sgl_ftp_task_response, this, &MainWindow::slot_ftp_task_response);
-
-    // 直接使用 FTP 类开始上传图片文件，实时发送上传结果到界面（不需要进度，文件较小），提前新建一个航次名称对应的文件夹（便于后期管理员查看）
-    // 如果失败，发送删除？？？
-    // 全部成功则给出提示
     emit sgl_thread_report_check_status(STATUS_INFO, QString("开始数据上传任务"), false);
-
     emit sgl_start_next_task();
-
-    // 直接使用 FTP 类开始上传轨迹文件，实时发送上传结果到界面（不需要进度，文件较小）
-    // 如果失败，发送删除？？？
-    // 全部成功则给出提示
-
-    // 发送异常点数据到服务器，服务器程序执行数据录入工作（开启事务）
-    // 如果录入成功，返回成功的结果，否则，给出 MySQL 返回的错误结果信息并开始回滚 （不提交事务）
-
-    // 发送航次轨迹文件路径数据到服务器，服务器程序执行数据录入工作（开启事务）
-    // 如果录入成功，返回成功的结果，否则，给出 MySQL 返回的错误结果信息并开始回滚 （提交事务）
-
-    // 发送数据录入完成的结果，可以包括数量等信息
-
-    // 测试直接跳出
-
-    // 最后修改录入状态
 }
 
 void DialogUploadData::slot_recv_socket_data(uint64_t dwconnid, const std::string &data)
@@ -896,6 +851,31 @@ void DialogUploadData::slot_recv_socket_data(uint64_t dwconnid, const std::strin
 
         // 文件服务状态
         mFtpServerFlag = response.status();
+
+        // 开始连接文件服务
+        if (mFtpServerFlag)
+        {
+            if (nullptr != mFtpManager) return;
+            mFtpManager = new FtpManager("101.34.253.220", "idsse", "123456");
+            connect(mFtpManager, &FtpManager::sgl_connect_to_ftp_server_status_change, this, [this](bool status)
+            {
+                emit sgl_thread_report_check_status(status ? STATUS_SUCCESS : STATUS_ERROR, status ? "文件服务连接成功" : QString("文件服务连接失败"), false);
+            });
+            connect(mFtpManager, &FtpManager::sgl_ftp_upload_task_finish, this, [this](const QString &file, bool status)
+            {
+                if (status)
+                {
+                    emit sgl_thread_report_check_status(STATUS_SUCCESS, QString("上传文件成功 %1").arg(file), false);
+                    emit sgl_start_next_task();
+                }
+                else
+                {
+                    emit sgl_thread_report_check_status(STATUS_ERROR, QString("上传文件失败 %1").arg(file), false);
+                    emit sgl_start_next_task();
+                }
+            });
+            mFtpManager->init();
+        }
         break;
     }
     default:
@@ -905,6 +885,7 @@ void DialogUploadData::slot_recv_socket_data(uint64_t dwconnid, const std::strin
 
 void DialogUploadData::slot_start_next_task()
 {
+    qDebug() << "DialogUploadData::slot_start_next_task " << mTaskQueue.size();
     if (mTaskQueue.isEmpty())
     {
         emit sgl_thread_report_check_status(STATUS_INFO, QString("数据录入流程结束"), false);
@@ -955,7 +936,7 @@ void DialogUploadData::slot_start_next_task()
             return;
         }
 
-        QByteArray message = createPackage(task.arg3, QByteArray::fromStdString(task.arg1));
+        QByteArray message = ProtocolHelper::getInstance()->createPackage(task.arg3, QByteArray::fromStdString(task.arg1).toStdString());
         mTcpSocket->write(message.toStdString());
     }
 }

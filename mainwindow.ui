@@ -76,12 +76,30 @@
          </property>
          <widget class="QWidget" name="widgetEntity" native="true">
           <layout class="QGridLayout" name="gridLayout_4">
-           <item row="0" column="0">
+           <property name="leftMargin">
+            <number>0</number>
+           </property>
+           <property name="topMargin">
+            <number>0</number>
+           </property>
+           <property name="rightMargin">
+            <number>0</number>
+           </property>
+           <property name="bottomMargin">
+            <number>0</number>
+           </property>
+           <property name="horizontalSpacing">
+            <number>0</number>
+           </property>
+           <item row="1" column="0">
             <widget class="EntityTreeWidget" name="widgetEntityView" native="true">
              <property name="contextMenuPolicy">
               <enum>Qt::CustomContextMenu</enum>
              </property>
             </widget>
+           </item>
+           <item row="0" column="0">
+            <widget class="WidgetSearch" name="widgetSearchContent" native="true"/>
            </item>
           </layout>
          </widget>
@@ -236,6 +254,12 @@
    <class>EntityTreeWidget</class>
    <extends>QWidget</extends>
    <header>./EntityTreeWidget/entitytreewidget.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>WidgetSearch</class>
+   <extends>QWidget</extends>
+   <header>./Widget/widgetsearch.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

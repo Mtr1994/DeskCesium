@@ -41,7 +41,9 @@ DESTDIR = ../output
 
 SOURCES += \
     Channel/jscontext.cpp \
+    Control/Message/messagewidget.cpp \
     Dialog/dialogabout.cpp \
+    Dialog/dialogsearch.cpp \
     Dialog/dialogsetting.cpp \
     Dialog/dialoguploaddata.cpp \
     EntityTreeWidget/entitytreewidget.cpp \
@@ -50,15 +52,20 @@ SOURCES += \
     Net/basesocket.cpp \
     Net/tcpsocket.cpp \
     Proto/sidescansource.pb.cc \
+    Protocol/protocolhelper.cpp \
     Public/appsignal.cpp \
     Public/softconfig.cpp \
+    Widget/widgetsearch.cpp \
+    Widget/widgetselectparameter.cpp \
     main.cpp \
     mainwindow.cpp
 
 HEADERS += \
     Channel/jscontext.h \
     Common/common.h \
+    Control/Message/messagewidget.h \
     Dialog/dialogabout.h \
+    Dialog/dialogsearch.h \
     Dialog/dialogsetting.h \
     Dialog/dialoguploaddata.h \
     EntityTreeWidget/entitytreewidget.h \
@@ -67,15 +74,21 @@ HEADERS += \
     Net/basesocket.h \
     Net/tcpsocket.h \
     Proto/sidescansource.pb.h \
+    Protocol/protocolhelper.h \
     Public/appsignal.h \
     Public/softconfig.h \
     Public/treeitemdelegate.h \
+    Widget/widgetsearch.h \
+    Widget/widgetselectparameter.h \
     mainwindow.h
 
 FORMS += \
     Dialog/dialogabout.ui \
+    Dialog/dialogsearch.ui \
     Dialog/dialogsetting.ui \
     Dialog/dialoguploaddata.ui \
+    Widget/widgetsearch.ui \
+    Widget/widgetselectparameter.ui \
     mainwindow.ui
 
 TRANSLATIONS += \

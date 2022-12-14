@@ -21,6 +21,10 @@ function init() {
 					addTifEntity(path)
 				} else if (type === "grd") {
 					addGrdEntity(path)
+				} else if (type === "remote point") {
+					addRemotePointEntity(path)
+				} else if (type === "remote tif") {
+					addRemoteTiffEntity(path)
 				}
 			});
 			context.sgl_change_entity_visible.connect(function(type, id, visible, parentId) {
@@ -165,10 +169,90 @@ function init() {
 			}
 		} else {
 			if (undefined !== entityDescription) {
-				console.log("pick.id._description", pick.id._description)
-				if (undefined === pick.id._description) {
+				console.log("pick.id.remoteDescription", pick.id.remoteDescription)
+				let remoteObject = pick.id.remoteDescription;
+				if (undefined === remoteObject) {
+					entityDescription.style.visibility = "hidden";
+				} else {
+					
+					let elementTextPriority = document.getElementById("text-priority");
+					elementTextPriority.innerHTML = remoteObject.priority
+					
+					let elementTextId = document.getElementById("text-id");
+					elementTextId.innerHTML = remoteObject.id
+					
+					let elementTextDtTime = document.getElementById("text-dt-time");
+					elementTextDtTime.innerHTML = remoteObject.dt_time
+					
+					let elementTextLongitude = document.getElementById("text-longitude");
+					elementTextLongitude.innerHTML = remoteObject.longitude
+					
+					let elementTextLatitude = document.getElementById("text-latitude");
+					elementTextLatitude.innerHTML = remoteObject.latitude
+					
+					let elementTextDtSpeed = document.getElementById("text-dt-speed");
+					elementTextDtSpeed.innerHTML = remoteObject.dt_speed
+					
+					let elementTextHorizontalRangeValue = document.getElementById("text-horizontal-range-value");
+					elementTextHorizontalRangeValue.innerHTML = remoteObject.horizontal_range_direction + "/" + remoteObject.horizontal_range_value
+					
+					let elementTextHeightFromBottom = document.getElementById("text-height-from-bottom");
+					elementTextHeightFromBottom.innerHTML = remoteObject.height_from_bottom
+					
+					let elementTextRTheta = document.getElementById("text-r-theta");
+					elementTextRTheta.innerHTML = remoteObject.r_theta
+					
+					let elementTextAlongTrack = document.getElementById("text-along-track");
+					elementTextAlongTrack.innerHTML = remoteObject.along_track
+					
+					let elementTextAcrossTrack = document.getElementById("text-across-track");
+					elementTextAcrossTrack.innerHTML = remoteObject.across_track
+					
+					let elementTextRemarks = document.getElementById("text-remarks");
+					elementTextRemarks.innerHTML = remoteObject.remarks
+					
+					let elementTextSupposeSize = document.getElementById("text-suppose-size");
+					elementTextSupposeSize.innerHTML = remoteObject.suppose_size
+					
+					// 查证信息
+					let elementTextTargetLongitude = document.getElementById("text-target-longitude");
+					elementTextTargetLongitude.innerHTML = remoteObject.target_longitude
+					
+					let elementTextTargetLatitude = document.getElementById("text-target-latitude");
+					elementTextTargetLatitude.innerHTML = remoteObject.target_latitude
+					
+					let elementTextPositionError = document.getElementById("text-position-error");
+					elementTextPositionError.innerHTML = remoteObject.position_error
+					
+					let elementTextCruiseNumber = document.getElementById("text-cruise-number");
+					elementTextCruiseNumber.innerHTML = remoteObject.verify_cruise_number
+					
+					let elementTextDiveNumber = document.getElementById("text-dive-number");
+					elementTextDiveNumber.innerHTML = remoteObject.verify_dive_number
+					
+					let elementTextImageDescription = document.getElementById("text-image-description");
+					elementTextImageDescription.innerHTML = remoteObject.image_description
+					
+					let elementDivVerifyImage = document.getElementById("div-verify-image");
+					
+					let verifyImagePath = "";
+					let verifyAuvPictureNumber = remoteObject.verify_auv_sss_image_paths.length
+					console.log("verifyAuvPictureNumber", verifyAuvPictureNumber)
+					for (let i = 0; i < verifyAuvPictureNumber; i++) {
+						verifyImagePath += "<img src=\"" + remoteObject.verify_auv_sss_image_paths[i] + "\" style=\"width: 100%; margin-bottom: 1em; border-radius: 6px; border: 2px solid #4169E1;\""
+					}
+					
+					let verifyPictureNumber = remoteObject.verify_image_paths.length
+					console.log("verifyPictureNumber", verifyPictureNumber)
+					for (let i = 0; i < verifyPictureNumber;i++) {
+						verifyImagePath += "<img src=\"" + remoteObject.verify_image_paths[i] + "\" style=\"width: 100%; margin-bottom: 1em; border-radius: 6px; border: 2px solid #4169E1;\""
+					}
+					
+					console.log("verifyImagePath", verifyImagePath)
+					
+					elementDivVerifyImage.innerHTML = verifyImagePath
+					
 					entityDescription.style.visibility = "visible";
-					// entityDescription.innerHTML = "啊哈哈哈哈"; //pick.id._description._value
 				}
 			}
 		}
@@ -270,6 +354,57 @@ function addGrdEntity(arg) {
 		})
 		
 		context.recvMsg("add", "grd", true, array[4]);
+	}
+}
+
+// 添加 remote point 实体
+function addRemotePointEntity(arg) {
+	console.log("remoteObject", arg)
+	let remoteObject = eval("(" + arg + ")")
+	if ((remoteObject.longitude == undefined) || (remoteObject.latitude === undefined)) return;
+	cesiumViewer.entities.add({
+		id: remoteObject.id,
+		position: Cesium.Cartesian3.fromDegrees(remoteObject.longitude, remoteObject.latitude),
+		point: {
+		  color:  Cesium.Color.LIME ,
+		  pixelSize: 8
+		},
+		remoteDescription: remoteObject
+	})
+	
+	context.recvMsg("add", "remote point", true, remoteObject.id);
+}
+
+// 添加 remote tif 实体
+function addRemoteTiffEntity(arg) {
+	let array = arg.split(";")
+	if (array.length !== 7) {
+		context.recvMsg("add", "remote tif",false, arg);
+	} else {
+		let strDescription = array[6]
+		let remoteObject = eval("(" + strDescription + ")")
+		console.log("remoteObject", remoteObject)
+		let xhr = new XMLHttpRequest();
+		xhr.open('GET', array[4]);
+		xhr.responseType = 'arraybuffer';
+		xhr.onload = function (e) {
+			Tiff.initialize({TOTAL_MEMORY: parseInt(array[5]) * 2})
+			let tiff = new Tiff({buffer: xhr.response});
+			let canvas = tiff.toCanvas();
+			let size = cesiumViewer.entities.values.length;
+			cesiumViewer.entities.add({
+			  id: remoteObject.id,
+			  rectangle: {
+				coordinates: Cesium.Rectangle.fromDegrees(parseFloat(array[0]), parseFloat(array[1]), parseFloat(array[2]), parseFloat(array[3])),
+				material: canvas,
+				zIndex: size,
+			  },
+			  remoteDescription: remoteObject
+			});
+			
+			context.recvMsg("add", "remote tif", true, remoteObject.id);
+		};
+		xhr.send();
 	}
 }
 

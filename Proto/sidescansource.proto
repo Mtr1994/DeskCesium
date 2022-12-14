@@ -3,30 +3,34 @@ syntax = "proto3";
 message SideScanSource 
 {
 	string id = 1;
-	string dt_time = 2;
-	double longitude = 3;
-	double latitude = 4;
-	float dt_speed = 5;
-	string horizontal_range_direction = 6;
-	string horizontal_range_value = 7;
-	float height_from_bottom = 8;
-	float r_theta = 9;
-	string side_scan_image_name = 10;
-	float along_track = 11;
-	float across_track = 12;
-	string remarks = 13;
-	string suppose_size = 14;
-	uint32 priority = 15;
-	string verify_auv_sss_image_paths = 16;
-	string verify_image_paths = 17;
-	string image_description = 18;
-	string target_longitude = 19;
-	string target_latitude = 20;
-	string position_error = 21;
-	string cruise_number = 22;
-	string dive_number = 23;
-	string verify_time = 24;
-	uint32 status = 25;
+	string cruise_number = 2;
+	string dive_number = 3;
+	string scan_line = 4;
+	string cruise_year = 5;
+	string dt_time = 6;
+	double longitude = 7;
+	double latitude = 8;
+	float dt_speed = 9;
+	string horizontal_range_direction = 10;
+	string horizontal_range_value = 11;
+	float height_from_bottom = 12;
+	float r_theta = 13;
+	string side_scan_image_name = 14;
+	float along_track = 15;
+	float across_track = 16;
+	string remarks = 17;
+	string suppose_size = 18;
+	uint32 priority = 19;
+	string verify_auv_sss_image_paths = 20;
+	string verify_image_paths = 21;
+	string image_description = 22;
+	string target_longitude = 23;
+	string target_latitude = 24;
+	string position_error = 25;
+	string verify_cruise_number = 26;
+	string verify_dive_number = 27;
+	string verify_time = 28;
+	uint32 status_flag = 29;
 }
 
 message SideScanSourceList 
@@ -45,9 +49,34 @@ message CruiseRouteSource
 	string cruise = 1;
 	string type = 2;
 	string name = 3;
+	uint32 status_flag = 29;
 }
 
 message CruiseRouteSourceList
 {
 	repeated CruiseRouteSource list = 1;
+}
+
+// 数据筛选
+message SearchFilterParamter
+{
+	string cruise_year = 1;
+	string cruise_number = 2;
+	string dive_number = 3;
+	string verify_dive_number = 4;
+}
+
+// 数据筛选回复
+message SearchFilterParamterList 
+{
+	repeated SearchFilterParamter list = 1;
+}
+
+// 数据检索条件 
+message SearchParameter
+{
+	string cruise_year = 1;
+	string cruise_number = 2;
+	string dive_number = 3;
+	string verify_dive_number = 4;
 }
