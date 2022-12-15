@@ -28,7 +28,6 @@ void WidgetSearch::init()
 void WidgetSearch::slot_btn_search_click()
 {
     qDebug() << "slot_btn_search_click " << "这里需要判断参数是否合法";
-
     DialogSearch dialog("year:2021", this);
     dialog.exec();
 }

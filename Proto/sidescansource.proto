@@ -16,21 +16,27 @@ message SideScanSource
 	float height_from_bottom = 12;
 	float r_theta = 13;
 	string side_scan_image_name = 14;
-	float along_track = 15;
-	float across_track = 16;
-	string remarks = 17;
-	string suppose_size = 18;
-	uint32 priority = 19;
-	string verify_auv_sss_image_paths = 20;
-	string verify_image_paths = 21;
-	string image_description = 22;
-	string target_longitude = 23;
-	string target_latitude = 24;
-	string position_error = 25;
-	string verify_cruise_number = 26;
-	string verify_dive_number = 27;
-	string verify_time = 28;
-	uint32 status_flag = 29;
+	double image_top_left_longitude = 15;
+	double image_top_left_latitude = 16;
+	double image_bottom_right_longitude = 17;
+	double image_bottom_right_latitude = 18;
+	uint32 image_total_byte = 19;
+	float along_track = 20;
+	float across_track = 21;
+	string remarks = 22;
+	string suppose_size = 23;
+	uint32 priority = 24;
+	string verify_auv_sss_image_paths = 25;
+	string verify_image_paths = 26;
+	string image_description = 27;
+	string target_longitude = 28;
+	string target_latitude = 29;
+	string position_error = 30;
+	string verify_cruise_number = 31;
+	string verify_dive_number = 32;
+	string verify_time = 33;
+	bool   verify_flag = 34;
+	uint32 status_flag = 35;
 }
 
 message SideScanSourceList 
@@ -78,5 +84,7 @@ message SearchParameter
 	string cruise_year = 1;
 	string cruise_number = 2;
 	string dive_number = 3;
-	string verify_dive_number = 4;
+	repeated string verify_dive_number = 4;
+	string priority = 5;
+	string verify_flag = 6;
 }

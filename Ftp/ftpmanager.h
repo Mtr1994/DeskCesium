@@ -13,7 +13,6 @@
 #include <QHostAddress>
 #include <QStringList>
 #include <QDir>
-#include <mutex>
 #include <QThread>
 
 //////
@@ -38,35 +37,41 @@ signals:
     void sgl_file_download_process(const QString &file, float percent);
     void sgl_file_upload_process(const QString &file, float percent);
     void sgl_ftp_task_response(const QString &file, bool status, const QString &msg);
-    void sgl_ftp_upload_task_finish(const QString &file, bool status);
 
-    // 文件服务登录成功
-    void sgl_connect_to_ftp_server_status_change(bool status);
+    // 文件传输结束
+    void sgl_ftp_upload_task_finish(const QString &file, bool status, const QString &message);
+
+    // 文件服务登录状态改变
+    void sgl_ftp_connect_status_change(bool status);
 
 public slots:
     // 连接文件服务器
     void slot_start_connect_ftp_server();
 
-    void slot_start_file_download();
-
     // 开始上传文件
-    void slot_start_upload_file(const QString &file, const QString &remotePath);
+    void slot_ftp_start_upload_file(const QString &file, const QString &remotepath, bool breakpointresume);
+
+    // 开始下载文件
+    void slot_ftp_start_download_file(const QString &file, const QString &remotepath, bool breakpointresume);
 
 private slots:
+    // 数据通道数据处理
+    void slot_socket_file_data_recv();
 
-    void slot_data_socket_recv_data();
+    // 数据通道关闭
+    void slot_socket_file_data_close();
 
-    void slot_data_socket_closed();
+    // 文件服务连接
+    void slot_socket_command_connect();
 
-    void slot_command_socket_connect();
+    // 文件服务关闭
+    void slot_socket_command_close();
 
-    void slot_command_socket_closed();
-
-    // 命令通道数据解析
-    void slot_recv_command_socket_data();
+    // 命令通道数据处理
+    void slot_socket_command_data_recv();
 
 private:
-    void clear();
+    void close();
 
     void sendNextCommannd();
 
@@ -89,9 +94,9 @@ private:
     // 服务地址
     QString mFtpHost;
     // 用户名 (默认匿名)
-    QString mFtpUserName;
+    QString mFtpUserName = "anonymous";
     // 密码
-    QString mFtpUserPass;
+    QString mFtpUserPass = "@";
     // 服务端文件路径
     QString mRemoteFilePath;
     // 待操作的文件名称
@@ -128,8 +133,8 @@ private:
     bool mDownloadFileFlag = false;
     // 是否是上传任务
     bool mUploadFileFlag = false;
-    // 下载路径
-    QString mDownloadPath;
+    // 下载路径 (默认当前目录)
+    QString mDownloadPath = ".";
     // 状态码描述
     QJsonObject mStatusObject;
 };
@@ -139,6 +144,9 @@ class FtpManager : public QObject
     Q_OBJECT
 public:
     explicit FtpManager(const QString &host, const QString &user, const QString &pass, QObject *parent = nullptr);
+    ~FtpManager();
+
+    void init();
 
     void downloadFile(const QString &file, const QString &remotePath = "");
     void uploadFile(const QString &file, const QString &remotePath = "");
@@ -146,47 +154,49 @@ public:
     const QString &getDownloadPath() const;
     void setDownloadPath(const QString &newDownloadPath);
 
-    void init();
+    bool getOpenBreakPointResume() const;
+    void setOpenBreakPointResume(bool newOpenBreakPointResume);
 
 signals:
     void sgl_file_download_process(const QString &file, float percent);
     void sgl_file_upload_process(const QString &file, float percent);
-    void sgl_ftp_task_response(const QString &file, bool status, const QString &msg);
-    void sgl_ftp_upload_task_finish(const QString &file, bool status);
 
     // 发送信号，连接文件服务器
     void sgl_start_connect_ftp_server();
 
-    // 发送信号，开始上传文件
-    void sgl_start_upload_file(const QString &file, const QString &remotePath);
+    // 文件传输结束
+    void sgl_ftp_upload_task_finish(const QString &file, bool status, const QString &msg);
 
-    // 文件服务登录成功
-    void sgl_connect_to_ftp_server_status_change(bool status);
+    // 文件服务登录状态改变
+    void sgl_ftp_connect_status_change(bool status);
+
+    // 开始上传文件
+    void sgl_ftp_start_upload_file(const QString &file, const QString &remotepath, bool breakpointresume);
+
+    // 开始下载文件
+    void sgl_ftp_start_download_file(const QString &file, const QString &remotepath, bool breakpointresume);
+
+    // 内部消息
+    void sgl_ftp_work_status_message(const QString& message);
 
 private slots:
-    void slot_ftp_task_response(const QString &file, bool status, const QString &msg);
+    // 文件服务登录状态改变
+    void slot_ftp_connect_status_change(bool status);
 
 private:
-    QMap<QString, QThread*> mMapThread;
-
-    QString mFtpHost;
-
-    QString mCurrentTaskType;
-    QString mUploadFilePath;
-    QString mUploadFileRemotePath;
-
     QString mDownloadPath = "./";
 
-    // 登录用户名
-    QString mFtpUserName = "anonymous";
-    // 登录密码
-    QString mFtpUserPass = "@";
-
-    // 文件服务
+    // 传输协议实现
     FtpProtocol mFtpProtocol;
 
-    // 文件服务线程
-    QThread mWorkerThread;
+    // 工作线程
+    QThread mFtpWorkThread;
+
+    // 文件服务连接状态
+    bool mFtpConnected = false;
+
+    // 是否开启断点续传
+    bool mOpenBreakPointResume = false;
 };
 
 #endif // FTPMANAGER_H

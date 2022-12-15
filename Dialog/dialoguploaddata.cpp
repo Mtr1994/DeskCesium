@@ -6,6 +6,7 @@
 #include "Net/tcpsocket.h"
 #include "Common/common.h"
 #include "Protocol/protocolhelper.h"
+#include "gdal_priv.h"
 
 #include <QDateTime>
 #include <thread>
@@ -144,9 +145,10 @@ void DialogUploadData::checkData()
         }
 
         // 列数小于 25 列，提示数据模板可能不正确
-        if (columnCount < 25)
+        qDebug() << "columnCount " << columnCount;
+        if (columnCount < 28)
         {
-            emit sgl_thread_report_check_status(STATUS_ERROR, QString("数据表 【%1】 模板可能不正确，列数 %2，小于 25 列").arg(listSheetName.at(0), QString::number(columnCount)));
+            emit sgl_thread_report_check_status(STATUS_ERROR, QString("数据表 【%1】 模板可能不正确，列数 %2，小于 2 列").arg(listSheetName.at(0), QString::number(columnCount)));
             return;
         }
     }
@@ -170,7 +172,6 @@ void DialogUploadData::checkData()
         {
             if (info.fileName() == fileName) return info;
         }
-
         return QFileInfo();
     };
 
@@ -278,6 +279,28 @@ void DialogUploadData::checkData()
                 return;
             }
 
+            // 此处解析 ID 来获取分解后的信息
+            auto listID = QString::fromStdString(source->id()).split("-");
+            int idSize = listID.size();
+            if (idSize < 5)
+            {
+                emit sgl_thread_report_check_status(STATUS_ERROR, QString("编号 【%1】 的 ID 格式异常").arg(source->id().data()));
+                return;
+            }
+            source->set_cruise_number(listID.mid(0, (idSize > 5) ? 3 : 2).join("-").toStdString());
+            source->set_dive_number(listID.at((idSize > 5) ? 3 : 2).toStdString());
+            source->set_scan_line(listID.at((idSize > 5) ? 4 : 3).toStdString());
+
+            // 年份
+            cell = xlsxDocument.cellAt(i, CELL_CRUISE_YEAR);
+            source->set_cruise_year(getCellValue(cell).toString().remove('\n').trimmed().toStdString());
+
+            if (source->cruise_year().size() >= 16)
+            {
+                emit sgl_thread_report_check_status(STATUS_ERROR, QString("编号 【%1】 的航次年份长度【%2】超过最大阈值 【16】").arg(source->id().data(), QString::number(source->dt_time().size())));
+                return;
+            }
+
             //拖体记录时间
             cell = xlsxDocument.cellAt(i, CELL_DT_TIME);
             source->set_dt_time(getCellValue(cell).toString().trimmed().toStdString());
@@ -349,6 +372,11 @@ void DialogUploadData::checkData()
             {
                 // 如果侧扫图片不存在，查询的时候给个点，点的位置由上面的经纬度确定
                 source->set_side_scan_image_name("");
+                source->set_image_top_left_longitude(0);
+                source->set_image_top_left_latitude(0);
+                source->set_image_bottom_right_longitude(0);
+                source->set_image_bottom_right_latitude(0);
+                source->set_image_total_byte(0);
             }
             else
             {
@@ -359,7 +387,63 @@ void DialogUploadData::checkData()
                     return;
                 }
 
-                //qDebug() << "upload file " << sideScanImageInfo.absoluteFilePath();
+                // 此处计算图片的经纬度范围，防止查询的时候再计算耗时
+                GDALDataset *poDataset;
+                poDataset = (GDALDataset *)GDALOpen(sideScanImageInfo.absoluteFilePath().toStdString().data(), GA_ReadOnly);
+                if(poDataset == nullptr)
+                {
+                    emit sgl_thread_report_check_status(STATUS_ERROR, QString("编号 【%1】 的侧扫图片打开失败").arg(source->id().data()));
+                    return;
+                }
+                int xLength = 0, yLength = 0;
+                xLength = poDataset->GetRasterXSize();
+                yLength = poDataset->GetRasterYSize();
+
+                double adfGeoTransform[6];
+                if(poDataset->GetGeoTransform(adfGeoTransform) != CE_None )
+                {
+                    emit sgl_thread_report_check_status(STATUS_ERROR, QString("编号 【%1】 的侧扫图片获取经纬度信息失败").arg(source->id().data()));
+                    GDALClose((GDALDatasetH)poDataset);
+                    return;
+                }
+
+                double topLeftLongitude = adfGeoTransform[0];
+                double bottomRightLongitude = adfGeoTransform[0] + xLength * adfGeoTransform[1] + yLength * adfGeoTransform[2];
+                double topLeftLatitude = adfGeoTransform[3] + xLength * adfGeoTransform[4] + yLength * adfGeoTransform[5];
+                double bottomRightLatitude = adfGeoTransform[3];
+
+                // 此处可能需要进行一次转换，因为存在 墨卡托坐标系 的坐标
+
+                qDebug() << "位置信息 获取A " << topLeftLongitude << " " << topLeftLatitude << " " << bottomRightLongitude << " " << bottomRightLatitude;
+                // 投影坐标
+                OGRSpatialReference spatialReference;
+                OGRErr error = spatialReference.importFromWkt(poDataset->GetProjectionRef());
+
+                if (OGRERR_NONE == error)
+                {
+                    spatialReference.SetAxisMappingStrategy(OAMS_TRADITIONAL_GIS_ORDER);
+                    // 地理坐标
+                    OGRSpatialReference *pLonLat = spatialReference.CloneGeogCS();
+                    OGRCoordinateTransformation *mLonLat2XY = OGRCreateCoordinateTransformation(&spatialReference, pLonLat);
+
+                    if (!mLonLat2XY->Transform(1, &topLeftLongitude, &topLeftLatitude) || !mLonLat2XY->Transform(1, &bottomRightLongitude, &bottomRightLatitude))
+                    {
+                        emit sgl_thread_report_check_status(STATUS_ERROR, QString("编号 【%1】 的侧扫图片经纬度信息无法转换").arg(source->id().data()));
+                        GDALClose((GDALDatasetH)poDataset);
+                        return;
+                    }
+
+                    qDebug() << "file transfor" << sideScanImageInfo.absoluteFilePath();
+                }
+
+                source->set_image_top_left_longitude(topLeftLongitude);
+                source->set_image_top_left_latitude(topLeftLatitude);
+                source->set_image_bottom_right_longitude(bottomRightLongitude);
+                source->set_image_bottom_right_latitude(bottomRightLatitude);
+                source->set_image_total_byte(sideScanImageInfo.size());
+
+
+                qDebug() << "位置信息 获取B " << topLeftLongitude << " " << topLeftLatitude << " " << bottomRightLongitude << " " << bottomRightLatitude;
                 DataUploadTask task = {"upload", QString("upload/%1/image").arg(cruiseNumber).toStdString(), sideScanImageInfo.absoluteFilePath().toStdString()};
                 mTaskQueue.append(task);
             }
@@ -443,14 +527,14 @@ void DialogUploadData::checkData()
                 return;
             }
 
-            // 航次号
-            cell = xlsxDocument.cellAt(i, CELL_CRUISE_NUMBER);
-            source->set_cruise_number(getCellValue(cell).toString().trimmed().toStdString());
+            // 查证航次号
+            cell = xlsxDocument.cellAt(i, CELL_VERIFY_CRUISE_NUMBER);
+            source->set_verify_cruise_number(getCellValue(cell).toString().trimmed().toStdString());
 
             // 航次号要用于文件夹查询，不能突破命名规则
-            if (source->cruise_number().size() > 0)
+            if (source->verify_cruise_number().size() > 0)
             {
-                auto cruiseList = QString::fromStdString(source->cruise_number()).split("/", Qt::SkipEmptyParts);
+                auto cruiseList = QString::fromStdString(source->verify_cruise_number()).split("/", Qt::SkipEmptyParts);
                 for (auto &cruiseNumber : cruiseList)
                 {
                     if (std::regex_match(cruiseNumber.toStdString(), regexFileName))
@@ -473,10 +557,10 @@ void DialogUploadData::checkData()
                 }
             }
 
-            // 潜次号
-            cell = xlsxDocument.cellAt(i, CELL_DIVE_NUMBER);
-            source->set_dive_number(getCellValue(cell).toString().trimmed().toStdString());
-            if (source->dive_number().size() >= 64)
+            // 查证潜次号
+            cell = xlsxDocument.cellAt(i, CELL_VERIFY_DIVE_NUMBER);
+            source->set_verify_dive_number(getCellValue(cell).toString().trimmed().toStdString());
+            if (source->verify_dive_number().size() >= 64)
             {
                 emit sgl_thread_report_check_status(STATUS_ERROR, QString("编号 【%1】 的查证潜次长度【%2】超过最大阈值 【64】").arg(source->id().data(), QString::number(source->dive_number().size())));
                 return;
@@ -487,9 +571,9 @@ void DialogUploadData::checkData()
             // 查证 AUV 图片路径 需要根据 反斜杠 分类检索
             QString auvImagePaths;
             QString imagePaths;
-            if (source->dive_number().size() > 0)
+            if (source->verify_dive_number().size() > 0)
             {
-                auto listDiveNumber = QString::fromStdString(source->dive_number()).split("/", Qt::SkipEmptyParts);
+                auto listDiveNumber = QString::fromStdString(source->verify_dive_number()).split("/", Qt::SkipEmptyParts);
                 for (auto &diveNumber : listDiveNumber)
                 {
                     // 潜次号要用于文件夹查询，不能突破命名规则
@@ -567,6 +651,9 @@ void DialogUploadData::checkData()
                 emit sgl_thread_report_check_status(STATUS_ERROR, QString("编号 【%1】 的查证时间长度【%2】超过最大阈值 【128】").arg(source->id().data(), QString::number(source->verify_time().size())));
                 return;
             }
+
+            // 是否查证标志
+            source->set_verify_flag(source->verify_time().size() > 0);
 
             // 数据状态
             source->set_status_flag(0);
@@ -857,11 +944,11 @@ void DialogUploadData::slot_recv_socket_data(uint64_t dwconnid, const std::strin
         {
             if (nullptr != mFtpManager) return;
             mFtpManager = new FtpManager("101.34.253.220", "idsse", "123456");
-            connect(mFtpManager, &FtpManager::sgl_connect_to_ftp_server_status_change, this, [this](bool status)
+            connect(mFtpManager, &FtpManager::sgl_ftp_connect_status_change, this, [this](bool status)
             {
                 emit sgl_thread_report_check_status(status ? STATUS_SUCCESS : STATUS_ERROR, status ? "文件服务连接成功" : QString("文件服务连接失败"), false);
             });
-            connect(mFtpManager, &FtpManager::sgl_ftp_upload_task_finish, this, [this](const QString &file, bool status)
+            connect(mFtpManager, &FtpManager::sgl_ftp_upload_task_finish, this, [this](const QString &file, bool status, const QString &message)
             {
                 if (status)
                 {

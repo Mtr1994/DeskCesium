@@ -58,6 +58,12 @@ void DialogSearch::init()
 
     mModelSideScanSource.setHorizontalHeaderItem(FIELD_R_THETA, new QStandardItem(tr("航迹向分辨率")));
     mModelSideScanSource.setHorizontalHeaderItem(FIELD_SIDE_SCAN_IMAGE_NAME, new QStandardItem(tr("侧扫图片名称")));
+    mModelSideScanSource.setHorizontalHeaderItem(FIELD_IMAGE_TOP_LEFT_LONGITUDE, new QStandardItem(tr("左上角经度")));
+    mModelSideScanSource.setHorizontalHeaderItem(FIELD_IMAGE_TOP_LEFT_LATITUDE, new QStandardItem(tr("左上角纬度")));
+    mModelSideScanSource.setHorizontalHeaderItem(FIELD_IMAGE_BOTTOM_RIGHT_LONGITUDE, new QStandardItem(tr("右下角经度")));
+    mModelSideScanSource.setHorizontalHeaderItem(FIELD_IMAGE_BOTTOM_RIGHT_LATITUDE, new QStandardItem(tr("右下角纬度")));
+    mModelSideScanSource.setHorizontalHeaderItem(FILD_IMAGE_TOTAL_BYTE, new QStandardItem(tr("图片字节大小")));
+
     mModelSideScanSource.setHorizontalHeaderItem(FIELD_ALONG_TRACK, new QStandardItem(tr("长")));
     mModelSideScanSource.setHorizontalHeaderItem(FIELD_ACROSS_TRACK, new QStandardItem(tr("宽")));
     mModelSideScanSource.setHorizontalHeaderItem(FIELD_REMARKS, new QStandardItem(tr("备注说明")));
@@ -73,14 +79,49 @@ void DialogSearch::init()
     mModelSideScanSource.setHorizontalHeaderItem(FIELD_VERIFY_CRUISE_NUMBER, new QStandardItem(tr("查证航次号")));
     mModelSideScanSource.setHorizontalHeaderItem(FIELD_VERIFY_DIVE_NUMBER, new QStandardItem(tr("查证潜次号")));
     mModelSideScanSource.setHorizontalHeaderItem(FIELD_VERIFY_TIME, new QStandardItem(tr("查证时间")));
+    mModelSideScanSource.setHorizontalHeaderItem(FIELD_VERIFY_FLAG, new QStandardItem(tr("查证标志")));
     mModelSideScanSource.setHorizontalHeaderItem(FIELD_STATUS, new QStandardItem(tr("数据状态")));
-
-    // 隐藏数据项
-    ui->tblvSideScanSource->setColumnHidden(FIELD_STATUS, true);
 
     // 设置表头格式
     ui->tblvSideScanSource->horizontalHeader()->setDefaultAlignment(Qt::AlignLeft | Qt::AlignVCenter);
     ui->tblvSideScanSource->setModel(&mModelSideScanSource);
+
+    // 隐藏数据项
+    ui->tblvSideScanSource->setColumnHidden(FIELD_ID, true);
+    ui->tblvSideScanSource->setColumnHidden(FIELD_CRUISE_NUMBER, false);
+    ui->tblvSideScanSource->setColumnHidden(FIELD_DIVE_NUMBER, false);
+    ui->tblvSideScanSource->setColumnHidden(FIELD_SCAN_LINE, true);
+    ui->tblvSideScanSource->setColumnHidden(FIELD_CRUISE_YEAR, true);
+    ui->tblvSideScanSource->setColumnHidden(FIELD_DT_TIME, true);
+    ui->tblvSideScanSource->setColumnHidden(FIELD_LONGITUDE, false);
+    ui->tblvSideScanSource->setColumnHidden(FIELD_LATITUDE, false);
+    ui->tblvSideScanSource->setColumnHidden(FIELD_DT_SPEED, true);
+    ui->tblvSideScanSource->setColumnHidden(FIELD_HORIZONTAL_RANGE_DIRECTION, true);
+    ui->tblvSideScanSource->setColumnHidden(FIELD_FIELD_HORIZONTAL_RANGE_VALUE, true);
+    ui->tblvSideScanSource->setColumnHidden(FIELD_HEIGHT_FROM_BOTTOM, true);
+    ui->tblvSideScanSource->setColumnHidden(FIELD_R_THETA, true);
+    ui->tblvSideScanSource->setColumnHidden(FIELD_SIDE_SCAN_IMAGE_NAME, true);
+    ui->tblvSideScanSource->setColumnHidden(FIELD_IMAGE_TOP_LEFT_LONGITUDE, true);
+    ui->tblvSideScanSource->setColumnHidden(FIELD_IMAGE_TOP_LEFT_LATITUDE, true);
+    ui->tblvSideScanSource->setColumnHidden(FIELD_IMAGE_BOTTOM_RIGHT_LONGITUDE, true);
+    ui->tblvSideScanSource->setColumnHidden(FIELD_IMAGE_BOTTOM_RIGHT_LATITUDE, true);
+    ui->tblvSideScanSource->setColumnHidden(FILD_IMAGE_TOTAL_BYTE, false);
+    ui->tblvSideScanSource->setColumnHidden(FIELD_ALONG_TRACK, true);
+    ui->tblvSideScanSource->setColumnHidden(FIELD_ACROSS_TRACK, true);
+    ui->tblvSideScanSource->setColumnHidden(FIELD_REMARKS, true);
+    ui->tblvSideScanSource->setColumnHidden(FIELD_SUPPOSE_SIZE, true);
+    ui->tblvSideScanSource->setColumnHidden(FIELD_PRIORITY, false);
+    ui->tblvSideScanSource->setColumnHidden(FIELD_VERIFY_AUV_SSS_IMAGE_PATHS, true);
+    ui->tblvSideScanSource->setColumnHidden(FIELD_VERIFY_IMAGE_PATHS, true);
+    ui->tblvSideScanSource->setColumnHidden(FIELD_IMAGE_DESCRIPTION, true);
+    ui->tblvSideScanSource->setColumnHidden(FIELD_TARGET_LONGITUDE, true);
+    ui->tblvSideScanSource->setColumnHidden(FIELD_TARGET_LATITUDE, true);
+    ui->tblvSideScanSource->setColumnHidden(FIELD_POSITION_ERROR, true);
+    ui->tblvSideScanSource->setColumnHidden(FIELD_VERIFY_CRUISE_NUMBER, true);
+    ui->tblvSideScanSource->setColumnHidden(FIELD_VERIFY_DIVE_NUMBER, false);
+    ui->tblvSideScanSource->setColumnHidden(FIELD_VERIFY_TIME, true);
+    ui->tblvSideScanSource->setColumnHidden(FIELD_VERIFY_FLAG, false);
+    ui->tblvSideScanSource->setColumnHidden(FIELD_STATUS, true);
 }
 
 void DialogSearch::slot_tcp_socket_connect(uint64_t dwconnid)
@@ -145,6 +186,11 @@ void DialogSearch::slot_recv_socket_data(uint64_t dwconnid, const std::string &d
             listItem.append(new QStandardItem(QString::number(response.list().at(i).height_from_bottom(), 'f', 6)));
             listItem.append(new QStandardItem(QString::number(response.list().at(i).r_theta(), 'f', 6)));
             listItem.append(new QStandardItem(response.list().at(i).side_scan_image_name().data()));
+            listItem.append(new QStandardItem(QString::number(response.list().at(i).image_top_left_longitude(), 'f', 6)));
+            listItem.append(new QStandardItem(QString::number(response.list().at(i).image_top_left_latitude(), 'f', 6)));
+            listItem.append(new QStandardItem(QString::number(response.list().at(i).image_bottom_right_longitude(), 'f', 6)));
+            listItem.append(new QStandardItem(QString::number(response.list().at(i).image_bottom_right_latitude(), 'f', 6)));
+            listItem.append(new QStandardItem(QString::number(response.list().at(i).image_total_byte())));
             listItem.append(new QStandardItem(QString::number(response.list().at(i).along_track(), 'f', 6)));
             listItem.append(new QStandardItem(QString::number(response.list().at(i).across_track(), 'f', 6)));
             listItem.append(new QStandardItem(response.list().at(i).remarks().data()));
@@ -159,6 +205,7 @@ void DialogSearch::slot_recv_socket_data(uint64_t dwconnid, const std::string &d
             listItem.append(new QStandardItem(response.list().at(i).verify_cruise_number().data()));
             listItem.append(new QStandardItem(response.list().at(i).verify_dive_number().data()));
             listItem.append(new QStandardItem(response.list().at(i).verify_time().data()));
+            listItem.append(new QStandardItem(response.list().at(i).verify_flag() ? "已查证" : "未查证"));
             listItem.append(new QStandardItem(QString::number(response.list().at(i).status_flag())));
 
             mModelSideScanSource.appendRow(listItem);
@@ -188,7 +235,13 @@ void DialogSearch::slot_btn_search_side_scan_click()
     searchParameter.set_cruise_year(QString("\"%1\"").arg(mListCruiseYear.join("\",\"")).toStdString());
     searchParameter.set_cruise_number(QString("\"%1\"").arg(mListCruiseNumber.join("\",\"")).toStdString());
     searchParameter.set_dive_number(QString("\"%1\"").arg(mListDiveNumber.join("\",\"")).toStdString());
-    searchParameter.set_verify_dive_number(QString("\"%1\"").arg(mListVerifyDiveNumber.join("\",\"")).toStdString());
+
+    for (auto &item : mListVerifyDiveNumber)
+    {
+        searchParameter.add_verify_dive_number(item.toStdString());
+    }
+    searchParameter.set_priority(mListPriority.join(",").toStdString());
+    searchParameter.set_verify_flag(mListVerifyFlag.join(",").toStdString());
 
     if (nullptr == mTcpSocket) return;
 
@@ -257,17 +310,51 @@ void DialogSearch::slot_modify_search_parameter(const QString &target, const QSt
             mListVerifyDiveNumber.removeOne(value);
         }
     }
+    else if (target == "priority")
+    {
+        if (append)
+        {
+            if (!mListPriority.contains(value))
+            {
+                mListPriority.append(value);
+            }
+        }
+        else
+        {
+            mListPriority.removeOne(value);
+        }
+    }
+    else if (target == "verify_flag")
+    {
+        if (append)
+        {
+            if (!mListVerifyFlag.contains(value))
+            {
+                mListVerifyFlag.append(value);
+            }
+        }
+        else
+        {
+            mListVerifyFlag.removeOne(value);
+        }
+    }
+
+
     // 更新检索条件
     QString arg1 = QString("cruise_year:%1").arg(mListCruiseYear.join(","));
     QString arg2 = QString("cruise_number:%1").arg(mListCruiseNumber.join(","));
     QString arg3 = QString("dive_number:%1").arg(mListDiveNumber.join(","));
     QString arg4 = QString("verify_dive_number:%1").arg(mListVerifyDiveNumber.join(","));
+    QString arg5 = QString("priority:%1").arg(mListPriority.join(","));
+    QString arg6 = QString("verify_flag:%1").arg(mListVerifyFlag.join(","));
 
     QStringList searchParameterList;
     searchParameterList.append(mListCruiseYear.isEmpty() ? "" : arg1);
     searchParameterList.append(mListCruiseNumber.isEmpty() ? "" : arg2);
     searchParameterList.append(mListDiveNumber.isEmpty() ? "" : arg3);
     searchParameterList.append(mListVerifyDiveNumber.isEmpty() ? "" : arg4);
+    searchParameterList.append(mListPriority.isEmpty() ? "" : arg5);
+    searchParameterList.append(mListVerifyFlag.isEmpty() ? "" : arg6);
     searchParameterList.removeAll("");
 
     ui->tbParameter->setText(searchParameterList.join(";"));
@@ -282,40 +369,12 @@ void DialogSearch::slot_btn_extract_clicked()
 
     QModelIndex index = ui->tblvSideScanSource->currentIndex();
 
-//    id = 1;
-//    cruise_number = 2;
-//    dive_number = 3;
-//    scan_line = 4;
-//    cruise_year = 5;
-//    dt_time = 6;
-//    longitude = 7;
-//    latitude = 8;
-//    dt_speed = 9;
-//    horizontal_range_direction = 10;
-//    horizontal_range_value = 11;
-//    height_from_bottom = 12;
-//    r_theta = 13;
-//    side_scan_image_name = 14;
-//    along_track = 15;
-//    across_track = 16;
-//    remarks = 17;
-//    suppose_size = 18;
-//    priority = 19;
-//    verify_auv_sss_image_paths = 20;
-//    verify_image_paths = 21;
-//    image_description = 22;
-//    target_longitude = 23;
-//    target_latitude = 24;
-//    position_error = 25;
-//    verify_cruise_number = 26;
-//    verify_dive_number = 27;
-//    verify_time = 28;
-
-    QStringList listItemName = {"id", "cruise_number", "dive_number", "scan_line", "cruise_year", "dt_time", "longitude", "latitude", "dt_speed", "horizontal_range_direction", "horizontal_range_value", "height_from_bottom", "r_theta", "side_scan_image_name", "along_track", "across_track", "remarks", "suppose_size", "priority", "verify_auv_sss_image_paths", "verify_image_paths", "image_description", "target_longitude", "target_latitude", "position_error", "verify_cruise_number", "verify_dive_number", "verify_time"};
+    QStringList listItemName = {"id", "cruise_number", "dive_number", "scan_line", "cruise_year", "dt_time", "longitude", "latitude", "dt_speed", "horizontal_range_direction", "horizontal_range_value", "height_from_bottom", "r_theta", "side_scan_image_name", "image_top_left_longitude", "image_top_left_latitude", "image_bottom_right_longitude", "image_bottom_right_latitude", "image_total_byte", "along_track", "across_track", "remarks", "suppose_size", "priority", "verify_auv_sss_image_paths", "verify_image_paths", "image_description", "target_longitude", "target_latitude", "position_error", "verify_cruise_number", "verify_dive_number", "verify_time", "verify_flag"};
     QStringList listValues;
     QString cruiseNumber;
     QString remotePath;
-    for (int i = 0; i < 28; i++)
+    uint16_t itemSize = listItemName.size();
+    for (int i = 0; i < itemSize; i++)
     {
         QStandardItem *item = mModelSideScanSource.item(index.row(), i);
         if (nullptr == item) return;
@@ -324,9 +383,9 @@ void DialogSearch::slot_btn_extract_clicked()
         if (i == FIELD_SIDE_SCAN_IMAGE_NAME)
         {
             if (!item->text().trimmed().isEmpty()) remotePath = QString("http://101.34.253.220/image/upload/%1/image/%2").arg(cruiseNumber, item->text().trimmed());
+            listValues.append(listItemName.at(i) + ": \"" + remotePath + "\"");
         }
-
-        if (i == FIELD_VERIFY_AUV_SSS_IMAGE_PATHS)
+        else if (i == FIELD_VERIFY_AUV_SSS_IMAGE_PATHS)
         {
             QStringList listResult;
             auto list = item->text().split(";", Qt::SkipEmptyParts);
@@ -356,3 +415,4 @@ void DialogSearch::slot_btn_extract_clicked()
 
     emit AppSignal::getInstance()->sgl_add_remote_tiff_entity(remotePath, QString("{%1}").arg(listValues.join(",").remove("\n")));
 }
+

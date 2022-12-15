@@ -23,6 +23,27 @@ WidgetSelectParameter::~WidgetSelectParameter()
 
 void WidgetSelectParameter::init()
 {
+    connect(ui->btnPriority_1, &QPushButton::toggled, this, [this](bool checked)
+    {
+        emit sgl_modify_search_parameter("priority", ((QPushButton*)sender())->text(), checked);
+    });
+    connect(ui->btnPriority_2, &QPushButton::toggled, this, [this](bool checked)
+    {
+        emit sgl_modify_search_parameter("priority", ((QPushButton*)sender())->text(), checked);
+    });
+    connect(ui->btnPriority_3, &QPushButton::toggled, this, [this](bool checked)
+    {
+        emit sgl_modify_search_parameter("priority", ((QPushButton*)sender())->text(), checked);
+    });
+    connect(ui->btnVerify_1, &QPushButton::toggled, this, [this](bool checked)
+    {
+        emit sgl_modify_search_parameter("verify_flag", "1", checked);
+    });
+    connect(ui->btnVerify_0, &QPushButton::toggled, this, [this](bool checked)
+    {
+        emit sgl_modify_search_parameter("verify_flag", "0", checked);
+    });
+
     // 准备执行 SQL 任务
     mTcpSocket = new TcpSocket;
     connect(mTcpSocket, &TcpSocket::sgl_recv_socket_data, this, &WidgetSelectParameter::slot_recv_socket_data);
@@ -84,7 +105,12 @@ void WidgetSelectParameter::slot_recv_socket_data(uint64_t dwconnid, const std::
             if(!listDiveNumber.contains(diveNumber)) listDiveNumber.append(diveNumber);
 
             QString verifyDiveNumber = response.list().at(i).verify_dive_number().data();
-            if(!listVerifyDiveNumber.contains(verifyDiveNumber)) listVerifyDiveNumber.append(verifyDiveNumber);
+            auto list = verifyDiveNumber.split("/", Qt::SkipEmptyParts);
+            for (auto &diveNumber : list)
+            {
+                if(!listVerifyDiveNumber.contains(diveNumber)) listVerifyDiveNumber.append(diveNumber);
+            }
+            qDebug() << "verifyDiveNumber " << verifyDiveNumber;
         }
 
         qDebug() << "listCruiseYear " << listCruiseYear.size();
@@ -128,23 +154,16 @@ void WidgetSelectParameter::slot_recv_socket_data(uint64_t dwconnid, const std::
             ((QGridLayout*)ui->widgetDiveNumber->layout())->addWidget(button, i / 3, i % 3);
         }
 
-        int verifyDiveNumberSize = 0;
         for (int i = 0; i < listVerifyDiveNumber.size(); i++)
         {
-            QString verifyDiveNumber = listVerifyDiveNumber.at(i);
-            auto list = verifyDiveNumber.split("/", Qt::SkipEmptyParts);
-            for (auto &diveNumber : list)
+            QPushButton *button = new QPushButton(listVerifyDiveNumber.at(i));
+            button->setCheckable(true);
+            button->setProperty("SelectSearchParameter", true);
+            connect(button, &QPushButton::toggled, this, [this](bool checked)
             {
-                QPushButton *button = new QPushButton(diveNumber);
-                button->setCheckable(true);
-                button->setProperty("SelectSearchParameter", true);
-                connect(button, &QPushButton::toggled, this, [this](bool checked)
-                {
-                    emit sgl_modify_search_parameter("verify_dive_number", ((QPushButton*)sender())->text(), checked);
-                });
-                ((QGridLayout*)ui->widgetVerifyDiveNumber->layout())->addWidget(button, verifyDiveNumberSize / 3, verifyDiveNumberSize % 3);
-                verifyDiveNumberSize++;
-            }
+                emit sgl_modify_search_parameter("verify_dive_number", ((QPushButton*)sender())->text(), checked);
+            });
+            ((QGridLayout*)ui->widgetVerifyDiveNumber->layout())->addWidget(button, i / 3, i % 3);
         }
 
 

@@ -82,10 +82,10 @@ void MainWindow::init()
     ui->widgetCesium->setVisible(false);
 
     ////// 网页调试部分，发布时请注释此段代码 S
-    QWebEngineView *debugPage = new QWebEngineView;
-    ui->widgetCesium->page()->setDevToolsPage(debugPage->page());
-    ui->widgetCesium->page()->triggerAction(QWebEnginePage::WebAction::InspectElement);
-    debugPage->show();
+//    QWebEngineView *debugPage = new QWebEngineView;
+//    ui->widgetCesium->page()->setDevToolsPage(debugPage->page());
+//    ui->widgetCesium->page()->triggerAction(QWebEnginePage::WebAction::InspectElement);
+//    debugPage->show();
     ////// 网页调试部分，发布时请注释此段代码 E
 
     // 菜单
@@ -184,65 +184,7 @@ void MainWindow::slot_add_remote_tiff_entity(const QString &path, const QString 
     }
     else
     {
-        auto func = [path, remoteobject, this]
-        {
-            GDALDataset *poDataset;
-            poDataset = (GDALDataset *)GDALOpen(path.toStdString().data(), GA_ReadOnly);
-            if(poDataset == nullptr)
-            {
-                emit AppSignal::getInstance()->sgl_thread_report_system_error("打开图片失败");
-                return;
-            }
-            int xLength = 0, yLength = 0;
-            xLength = poDataset->GetRasterXSize();
-            yLength = poDataset->GetRasterYSize();
-
-            double adfGeoTransform[6];
-            if(poDataset->GetGeoTransform(adfGeoTransform) != CE_None )
-            {
-                emit AppSignal::getInstance()->sgl_thread_report_system_error("获取地理位置失败");
-                GDALClose((GDALDatasetH)poDataset);
-                return;
-            }
-
-            double longitudeFrom = adfGeoTransform[0];
-            double longitudeEnd = adfGeoTransform[0] + xLength * adfGeoTransform[1] + yLength * adfGeoTransform[2];
-            double latitudeFrom = adfGeoTransform[3] + xLength * adfGeoTransform[4] + yLength * adfGeoTransform[5];
-            double latitudeEnd = adfGeoTransform[3];
-
-            // 投影坐标
-            OGRSpatialReference spatialReference;
-            OGRErr error = spatialReference.importFromWkt(poDataset->GetProjectionRef());
-
-            if (OGRERR_NONE == error)
-            {
-                spatialReference.SetAxisMappingStrategy(OAMS_TRADITIONAL_GIS_ORDER);
-                // 地理坐标
-                OGRSpatialReference *pLonLat = spatialReference.CloneGeogCS();
-                OGRCoordinateTransformation *mLonLat2XY = OGRCreateCoordinateTransformation(&spatialReference, pLonLat);
-
-                if (!mLonLat2XY->Transform(1, &longitudeFrom, &latitudeFrom) || !mLonLat2XY->Transform(1, &longitudeEnd, &latitudeEnd))
-                {
-                    emit AppSignal::getInstance()->sgl_thread_report_system_error("无法解析的经纬度信息");
-                    GDALClose((GDALDatasetH)poDataset);
-                    return;
-                }
-            }
-
-            QFileInfo info(path);
-            QString args = QString("%1;%2;%3;%4;%5;%6;%7").arg(QString::number(longitudeFrom, 'f', 6),
-                                                               QString::number(latitudeFrom, 'f', 6),
-                                                               QString::number(longitudeEnd, 'f', 6),
-                                                               QString::number(latitudeEnd, 'f', 6),
-                                                               QString("%1").arg(path),
-                                                               QString::number(info.size()),
-                                                               remoteobject);
-            emit mJsContext->sgl_add_entity("remote tif", args);
-            GDALClose((GDALDatasetH)poDataset);
-        };
-
-        std::thread th(func);
-        th.detach();
+        emit mJsContext->sgl_add_entity("remote tif", remoteobject);
     }
 }
 

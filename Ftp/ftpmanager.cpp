@@ -4,9 +4,9 @@
 
 // test
 #include <QDebug>
+#include <QThread>
 
-FtpProtocol::FtpProtocol(const QString &host, const QString &user, const QString &pass)
-    : mFtpHost(host), mFtpUserName(user), mFtpUserPass(pass)
+FtpProtocol::FtpProtocol(const QString &host, const QString &user, const QString &pass) : mFtpHost(host), mFtpUserName(user), mFtpUserPass(pass)
 {
     // 填充状态码
     mStatusObject = QJsonDocument::fromJson("{"
@@ -45,6 +45,8 @@ FtpProtocol::FtpProtocol(const QString &host, const QString &user, const QString
                                             "\"PASS\": {\"1\": \"E\", \"2\": \"S\", \"3\": \"V\", \"4\": \"F\", \"5\": \"F\"},"
                                             "\"ACCT\": {\"1\": \"E\", \"2\": \"S\", \"3\": \"E\", \"4\": \"F\", \"5\": \"F\"}"
                                             "}").object();
+    //Connection Establishment
+    mListCommand.append("CONE");
 }
 
 void FtpProtocol::slot_start_connect_ftp_server()
@@ -57,30 +59,26 @@ void FtpProtocol::slot_start_connect_ftp_server()
     mListCommand.append("CONE");
 
     mSocketCommand = new QTcpSocket(this);
-    connect(mSocketCommand, &QTcpSocket::disconnected, this, &FtpProtocol::slot_command_socket_closed);
-    connect(mSocketCommand, &QTcpSocket::readyRead, this, &FtpProtocol::slot_recv_command_socket_data);
+    connect(mSocketCommand, &QTcpSocket::disconnected, this, &FtpProtocol::slot_socket_command_close);
+    connect(mSocketCommand, &QTcpSocket::readyRead, this, &FtpProtocol::slot_socket_command_data_recv);
+    connect(mSocketCommand, &QTcpSocket::connected, this, &FtpProtocol::slot_socket_command_connect);
     mSocketCommand->connectToHost(QHostAddress(mFtpHost), 21);
 }
 
-void FtpProtocol::slot_start_file_download()
-{
-    mDownloadFileFlag = true;
-    mLocalFileInfo = QFileInfo(QString("%1/%2").arg(mDownloadPath, mFileName));
-}
-
-void FtpProtocol::slot_start_upload_file(const QString &file, const QString &remotePath)
+void FtpProtocol::slot_ftp_start_upload_file(const QString &file, const QString &remotepath, bool breakpointresume)
 {
     mUploadFileFlag = true;
     mFileName = file;
-    mRemoteFilePath = remotePath;
+    mRemoteFilePath = remotepath;
     mLocalFileInfo = QFileInfo(file);
+
     // 重置上传的文件大小
+    mTotalFileSize = 0;
     mTotalUploadLength = 0;
+    mTaskStatus = false;
+    mServerFileInfo.clear();
 
-    mListCommand.append(QString("PASV\r\n").toUtf8());
-    mListCommand.append(QString("TYPE A\r\n").toUtf8());
-
-    // 返回到顶层文件夹
+    // 返回到顶层文件夹( 在使用时，根据实际情况更改根目录位置 )
     mListCommand.append(QString("CWD /home/ftp_root\r\n").toUtf8());
 
     // 切换路径 (目录只能一层层进入，因为碰到最内部文件夹不存在，没办法一次创建多层文件夹)
@@ -90,13 +88,74 @@ void FtpProtocol::slot_start_upload_file(const QString &file, const QString &rem
         mListCommand.append(QString("CWD %1\r\n").arg(name).toUtf8());
     }
 
-    mListCommand.append(QString("TYPE I\r\n").toUtf8());
-    mListCommand.append(QString("STOR %1\r\n").arg(mLocalFileInfo.fileName()).toUtf8());
+    if (breakpointresume)
+    {
+        // 需要断点续传，此处发送 NLST
+        mListCommand.append(QString("TYPE A\r\n").toUtf8());
+        mListCommand.append(QString("PASV\r\n").toUtf8());
+        mListCommand.append(QString("NLST\r\n").toUtf8());
+    }
+    else
+    {
+        // 不要断点续传，直接发送 STOR
+        mListCommand.append(QString("TYPE I\r\n").toUtf8());
+        mListCommand.append(QString("PASV\r\n").toUtf8());
+        mListCommand.append(QString("STOR %1\r\n").arg(mLocalFileInfo.fileName()).toUtf8());
+    }
 
     sendNextCommannd();
 }
 
-void FtpProtocol::slot_data_socket_recv_data()
+void FtpProtocol::slot_ftp_start_download_file(const QString &file, const QString &remotepath, bool breakpointresume)
+{
+    Q_UNUSED(breakpointresume);
+    mDownloadFileFlag = true;
+    mFileName = file;
+    mLocalFileInfo = QFileInfo(QString("%1/%2").arg(mDownloadPath, mFileName));
+    mRemoteFilePath = remotepath;
+    mTotalDownloadLength = 0;
+    mServerFileInfo.clear();
+
+    // 返回到顶层文件夹( 在使用时，根据实际情况更改根目录位置 )
+    mListCommand.append(QString("CWD /home/ftp_root\r\n").toUtf8());
+
+    // 切换路径
+    auto listDirName = QDir(mRemoteFilePath).path().split('/');
+    for (auto &name : listDirName)
+    {
+        mListCommand.append(QString("CWD %1\r\n").arg(name).toUtf8());
+    }
+
+    if (breakpointresume)
+    {
+        mFileStream.open(mLocalFileInfo.absoluteFilePath().toLocal8Bit().toStdString(), ios::binary | ios::out | ios::app);
+        if (!mFileStream.is_open())
+        {
+            mResultMessage = "无法创建本地文件";
+            return;
+        }
+
+        mListCommand.append(QString("TYPE A\r\n").toUtf8());
+        mListCommand.append(QString("PASV\r\n").toUtf8());
+        mListCommand.append(QString("NLST\r\n").toUtf8());
+    }
+    else
+    {
+        mFileStream.open(mLocalFileInfo.absoluteFilePath().toLocal8Bit().toStdString(), ios::binary | ios::out | ios::trunc);
+        if (!mFileStream.is_open())
+        {
+            mResultMessage = "无法创建本地文件";
+            return;
+        }
+        mListCommand.append(QString("PASV\r\n").toUtf8());
+        mListCommand.append(QString("TYPE I\r\n").toUtf8());
+        mListCommand.append(QString("RETR %1\r\n").arg(mLocalFileInfo.fileName()).toUtf8());
+    }
+
+    sendNextCommannd();
+}
+
+void FtpProtocol::slot_socket_file_data_recv()
 {
     QByteArray array = mSocketData->readAll();
     if (mListCommand.size() > 0)
@@ -121,9 +180,9 @@ void FtpProtocol::slot_data_socket_recv_data()
     }
 }
 
-void FtpProtocol::slot_data_socket_closed()
+void FtpProtocol::slot_socket_file_data_close()
 {
-    // qDebug() << "slot_data_socket_closed " << mListCommand;
+    qDebug() << "FtpProtocol::slot_socket_file_data_close " << mListCommand;
     mDataRecvFlag = true;
     if (!mCommandRecvFlag) return;
     if (mListCommand.size() == 0) return;
@@ -143,32 +202,25 @@ void FtpProtocol::slot_data_socket_closed()
     else
     {
         mResultMessage = "数据传输功能异常";
-        return clear();
+        return close();
     }
 }
 
-void FtpProtocol::slot_command_socket_connect()
+void FtpProtocol::slot_socket_command_connect()
 {
-    qDebug() << "want server ";
-    mListCommand.clear();
-
-    // 准备登录
-    mListCommand.append(QString("USER %1\r\n").arg(mFtpUserName).toUtf8());
-    mListCommand.append(QString("PASS %1\r\n").arg(mFtpUserPass).toUtf8());
-
-    sendNextCommannd();
+    emit sgl_ftp_connect_status_change(true);
 }
 
-void FtpProtocol::slot_command_socket_closed()
+void FtpProtocol::slot_socket_command_close()
 {
-    //qDebug() << "slot_command_socket_closed ";
+    emit sgl_ftp_connect_status_change(false);
+
     if (mTaskStatus) return;
-    // 服务连接失败
     mResultMessage = "服务器连接断开";
-    clear();
+    close();
 }
 
-void FtpProtocol::slot_recv_command_socket_data()
+void FtpProtocol::slot_socket_command_data_recv()
 {
     if (mListCommand.size() == 0) return;
     QByteArray datagram = mSocketCommand->readAll();
@@ -176,7 +228,7 @@ void FtpProtocol::slot_recv_command_socket_data()
     QString cmd = mListCommand.first().left(4).trimmed();
     QString status = mStatusObject.value(cmd).toObject().value(str.at(0)).toString();
 
-    //qDebug() << "mResultMessage " << str << " " << status << " " << mListCommand << " " << cmd;
+    qDebug() << "mResultMessage " << str << " " << status << " " << mListCommand << " " << cmd;
     if (cmd != "QUIT") mResultMessage = str;
 
     // 如果命令失败，立即返回
@@ -193,8 +245,7 @@ void FtpProtocol::slot_recv_command_socket_data()
         else
         {
             qDebug() << "文件传输异常";
-            clear();
-            return;
+            return close();
         }
     }
 
@@ -209,7 +260,7 @@ void FtpProtocol::slot_recv_command_socket_data()
     else if (cmd == "PASS")
     {
         mListCommand.removeFirst();
-        emit sgl_connect_to_ftp_server_status_change(status == "S");
+        emit sgl_ftp_connect_status_change(status == "S");
 
         // 不存在其他命令，不用继续执行
         return;
@@ -223,11 +274,16 @@ void FtpProtocol::slot_recv_command_socket_data()
         if (nullptr == mSocketData)
         {
             mSocketData = new QTcpSocket;
-            connect(mSocketData, &QTcpSocket::readyRead, this, &FtpProtocol::slot_data_socket_recv_data);
-            connect(mSocketData, &QTcpSocket::disconnected, this, &FtpProtocol::slot_data_socket_closed);
+            connect(mSocketData, &QTcpSocket::readyRead, this, &FtpProtocol::slot_socket_file_data_recv);
+            connect(mSocketData, &QTcpSocket::disconnected, this, &FtpProtocol::slot_socket_file_data_close);
         }
-        mSocketData->close();
+        if (mSocketData->state() == QTcpSocket::ConnectedState) mSocketData->close();
         mSocketData->connectToHost(QHostAddress(mFtpHost), p1 + p2);
+    }
+    else if ((cmd == "NLST") && (status == "W"))
+    {
+        // 此处需要继续等待
+        return;
     }
     else if ((cmd == "NLST") && (status == "S"))
     {
@@ -243,25 +299,33 @@ void FtpProtocol::slot_recv_command_socket_data()
     }
     else if (((cmd == "APPE") || (cmd == "STOR")) && (status == "W"))
     {
-        //mListCommand.removeFirst();
         mFileStream.open(mFileName.toLocal8Bit().toStdString(), ios::binary | ios::in);
         if (!mFileStream.is_open())
         {
+            mListCommand.clear();
+            mSocketData->close();
             mResultMessage = "本地文件打开失败";
-            mListCommand.append(QString("QUIT\r\n").toUtf8());
+            return;
         }
 
         mTotalFileSize = mLocalFileInfo.size();
         if (mTotalUploadLength > mTotalFileSize)
         {
+            mListCommand.clear();
+            mFileStream.close();
+            mSocketData->close();
             mResultMessage = "服务器文件大小异常";
-            mListCommand.append(QString("QUIT\r\n").toUtf8());
+            return;
         }
         else if (mTotalUploadLength == mTotalFileSize)
         {
-            emit sgl_file_upload_process(mFileName, 100);
+            mListCommand.clear();
+            emit sgl_ftp_upload_task_finish(mFileName, true, "文件已经存在，不再继续上传");
             mResultMessage = "文件上传完成";
             mTaskStatus = true;
+            mFileStream.close();
+            mSocketData->close();
+            return;
         }
 
         // 检查网络状态
@@ -272,14 +336,13 @@ void FtpProtocol::slot_recv_command_socket_data()
             if(tryCount > 5 * 15)
             {
                 mResultMessage = "无法连接到服务器";
-                return clear();
+                return close();
             }
             std::this_thread::sleep_for(std::chrono::milliseconds(200));
         }
 
         // 定位本地文件读取位置
-        mFileStream.seekg(mTotalUploadLength);
-        //qDebug() << "mTotalUploadLength " << mTotalUploadLength;
+        if (mTotalUploadLength > 0) mFileStream.seekg(mTotalUploadLength);
         while (mFileStream.peek() != EOF)
         {
             uint64_t subSize = 0;
@@ -300,27 +363,39 @@ void FtpProtocol::slot_recv_command_socket_data()
             emit sgl_file_upload_process(mFileName, percent * 100);
         }
 
+        mFileStream.close();
         mSocketData->close();
         // 等待上传完成的信号就好，不用继续执行后续逻辑
         return;
     }
-    else if ((cmd == "STOR") && (status == "S"))
+    else if (((cmd == "APPE") || (cmd == "STOR")) && (status == "S"))
     {
         mListCommand.removeFirst();
 
-        mResultMessage = "文件上传完成，退出登录";
+        mResultMessage = "文件上传完成";
         mTaskStatus = true;
 
         // 发送结果消息
         emit sgl_ftp_task_response(mFileName, mTaskStatus, mResultMessage);
 
         // 发送任务结束信号
-        emit sgl_ftp_upload_task_finish(mFileName, mTaskStatus);
+        emit sgl_ftp_upload_task_finish(mFileName, mTaskStatus, mResultMessage);
+    }
+    else if ((cmd == "RETR") && (status == "W"))
+    {
+        // 等待就好
+        return;
+    }
+    else if ((cmd == "RETR") && (status == "S"))
+    {
+        mCommandRecvFlag = true;
+        if (!mDataRecvFlag) return;
+        return parse_retr_data_pack();
     }
     else if ((cmd == "QUIT") && (status == "S"))
     {
         mListCommand.removeFirst();
-        clear();
+        close();
     }
     else if ((cmd == "MKD") && (status == "S"))
     {
@@ -335,9 +410,9 @@ void FtpProtocol::slot_recv_command_socket_data()
     sendNextCommannd();
 }
 
-void FtpProtocol::clear()
+void FtpProtocol::close()
 {
-    //qDebug() << "stop ftp protocol";
+    qDebug() << "FtpProtocol::close";
     // 文件流关闭
     if (mFileStream.is_open())
     {
@@ -346,14 +421,15 @@ void FtpProtocol::clear()
     // 数据通道关闭
     if (nullptr != mSocketData)
     {
-        disconnect(mSocketData, &QTcpSocket::readyRead, this, &FtpProtocol::slot_data_socket_recv_data);
-        disconnect(mSocketData, &QTcpSocket::disconnected, this, &FtpProtocol::slot_data_socket_closed);
+        disconnect(mSocketData, &QTcpSocket::readyRead, this, &FtpProtocol::slot_socket_file_data_recv);
+        disconnect(mSocketData, &QTcpSocket::disconnected, this, &FtpProtocol::slot_socket_file_data_close);
         mSocketData->close();
         mSocketData->deleteLater();
     }
     // 命令通道关闭
     if (nullptr != mSocketCommand)
     {
+        disconnect(mSocketCommand, &QTcpSocket::readyRead, this, &FtpProtocol::slot_socket_command_data_recv);
         mSocketCommand->close();
         mSocketCommand->deleteLater();
     }
@@ -362,34 +438,28 @@ void FtpProtocol::clear()
 
     // 发送结果消息
     emit sgl_ftp_task_response(mFileName, mTaskStatus, mResultMessage);
-
-    // 发送任务结束信号
-    emit sgl_ftp_upload_task_finish(mFileName, mTaskStatus);
-    this->deleteLater();
 }
 
 void FtpProtocol::sendNextCommannd()
 {
-    if (mListCommand.length() > 0)
-    {
-        QString cmd = mListCommand.first();
-        //qDebug() << "send " << cmd << " size " << mListCommand;
-        mSocketCommand->write(cmd.toStdString().data());
-        mSocketCommand->flush();
-    }
+    if (mListCommand.length() == 0) return;
+
+    QString cmd = mListCommand.first();
+    qDebug() << "FtpProtocol::sendNextCommannd " << cmd << " size " << mListCommand;
+    mSocketCommand->write(cmd.toStdString().data());
+    mSocketCommand->flush();
 }
 
 int64_t FtpProtocol::parseFileSize()
 {
     auto list =  mServerFileInfo.split(' ', Qt::SkipEmptyParts);
-    //qDebug() << "mServerFileInfo " << mServerFileInfo;
+    qDebug() << "FtpProtocol::parseFileSize " << mServerFileInfo;
     if (mServerFileInfo.startsWith('-')) // linux 下的文件标志
     {
-        // 文件名称可能有空格存在，导致数量大于 9
-        if (list.size() < 9)
+        if (list.size() != 9)
         {
             mResultMessage = "Linux 系统文件大小解析失败";
-            clear();
+            close();
             return -1;
         }
         else
@@ -402,7 +472,7 @@ int64_t FtpProtocol::parseFileSize()
         if (list.size() != 4)
         {
             mResultMessage = "Windows 系统文件大小解析失败";
-            clear();
+            close();
             return -1 ;
         }
         else
@@ -414,16 +484,10 @@ int64_t FtpProtocol::parseFileSize()
 
 void FtpProtocol::downloadFile()
 {
-    QString filePath = QString("%1/%2").arg(mDownloadPath, mFileName);
     uint64_t length = mLocalFileInfo.size();
-    mTotalDownloadLength = length; // 默认已下载大小
 
-    mFileStream.open(filePath.toLocal8Bit().toStdString(), ios::binary | ios::out | ((length > 0) ? ios::app : ios::trunc));
-    if (!mFileStream.is_open())
-    {
-        mResultMessage = "无法创建本地文件";
-        return clear();
-    }
+    // 默认已下载大小
+    mTotalDownloadLength = length;
 
     mListCommand.append(QString("PASV\r\n").toUtf8());
     mListCommand.append(QString("TYPE I\r\n").toUtf8());
@@ -439,17 +503,23 @@ void FtpProtocol::downloadFile()
 
 void FtpProtocol::uploadFile()
 {
-
     mListCommand.append(QString("PASV\r\n").toUtf8());
     mListCommand.append(QString("TYPE I\r\n").toUtf8());
-    mListCommand.append(QString("STOR %1\r\n").arg(mLocalFileInfo.fileName()).toUtf8());
+    if (mTotalUploadLength > 0)
+    {
+        mListCommand.append(QString("APPE %1\r\n").arg(mLocalFileInfo.fileName()).toUtf8());
+    }
+    else
+    {
+        mListCommand.append(QString("STOR %1\r\n").arg(mLocalFileInfo.fileName()).toUtf8());
+    }
 
     sendNextCommannd();
 }
 
 void FtpProtocol::parse_nlst_data_pack()
 {
-    //qDebug() << "parse nlst " << mServerDirInfo << " " << mFileName;
+    qDebug() << "FtpProtocol::parse_nlst_data_pack " << mServerDirInfo << " " << mFileName;
     mCommandRecvFlag = false;
     mDataRecvFlag = false;
     mListCommand.removeFirst();
@@ -462,8 +532,7 @@ void FtpProtocol::parse_nlst_data_pack()
             mResultMessage = "文件不存在";
 
             // 退出登录
-            mListCommand.append(QString("QUIT\r\n").toUtf8());
-            sendNextCommannd();
+            return;
         }
         else if (mUploadFileFlag)
         {
@@ -513,14 +582,14 @@ void FtpProtocol::parse_retr_data_pack()
     {
         emit sgl_file_download_process(mFileName, 100.00);
 
-        mResultMessage = "文件下载完成，退出登录";
+        mResultMessage = "文件下载完成";
         mTaskStatus = true;
     }
 
-    // 退出登录
-    mListCommand.append(QString("QUIT\r\n").toUtf8());
     sendNextCommannd();
 }
+
+///////////////////////////////////////////////////////////////////////////////////// 分割 /////////////////////////////////////////////////////////////////////////////////////////////
 
 FtpManager::FtpManager(const QString &host, const QString &user, const QString &pass, QObject *parent)
     : QObject{parent}, mFtpProtocol(host, user, pass)
@@ -528,53 +597,67 @@ FtpManager::FtpManager(const QString &host, const QString &user, const QString &
 
 }
 
+FtpManager::~FtpManager()
+{
+    mFtpWorkThread.exit(0);
+    mFtpWorkThread.deleteLater();
+}
+
+void FtpManager::init()
+{
+    mFtpProtocol.moveToThread(&mFtpWorkThread);
+    connect(&mFtpProtocol, &FtpProtocol::sgl_file_upload_process, this, &FtpManager::sgl_file_upload_process, Qt::QueuedConnection);
+    connect(&mFtpProtocol, &FtpProtocol::sgl_file_download_process, this, &FtpManager::sgl_file_download_process, Qt::QueuedConnection);
+    connect(&mFtpProtocol, &FtpProtocol::sgl_ftp_upload_task_finish, this, &FtpManager::sgl_ftp_upload_task_finish, Qt::QueuedConnection);
+
+    connect(&mFtpProtocol, &FtpProtocol::sgl_ftp_connect_status_change, this, &FtpManager::slot_ftp_connect_status_change, Qt::QueuedConnection);
+    connect(this, &FtpManager::sgl_start_connect_ftp_server, &mFtpProtocol, &FtpProtocol::slot_start_connect_ftp_server, Qt::QueuedConnection);
+    connect(this, &FtpManager::sgl_ftp_start_upload_file, &mFtpProtocol, &FtpProtocol::slot_ftp_start_upload_file, Qt::QueuedConnection);
+    connect(this, &FtpManager::sgl_ftp_start_download_file, &mFtpProtocol, &FtpProtocol::slot_ftp_start_download_file, Qt::QueuedConnection);
+
+    mFtpWorkThread.start();
+
+    // 连接文件服务器
+    emit sgl_start_connect_ftp_server();
+}
+
 void FtpManager::downloadFile(const QString &file, const QString &remotePath)
 {
-    if (mFtpHost.isEmpty())
-    {
-        emit sgl_ftp_task_response(file, false, "未指定文件服务器地址");
-        return;
-    }
+    emit sgl_ftp_start_download_file(file, remotePath, mOpenBreakPointResume);
 }
 
 void FtpManager::uploadFile(const QString &file, const QString &remotePath)
 {
     if (!QFile::exists(file))
     {
-        emit sgl_ftp_task_response(file, false, "文件不存在");
+        emit sgl_ftp_work_status_message("文件不存在，请检查文件位置");
         return;
     }
-    qDebug() << "FtpManager::uploadFile " << file;
-    emit sgl_start_upload_file(file, remotePath);
+
+    if (!mFtpConnected)
+    {
+        emit sgl_ftp_work_status_message("未能连接到文件服务，请重新连接");
+        return;
+    }
+
+    emit sgl_ftp_start_upload_file(file, remotePath, mOpenBreakPointResume);
 }
 
-void FtpManager::slot_ftp_task_response(const QString &file, bool status, const QString &msg)
+void FtpManager::slot_ftp_connect_status_change(bool status)
 {
-    Q_UNUSED(status);
-    if (!mMapThread.contains(file)) return;
-    auto thread = mMapThread.take(file);
-    connect(thread, &QThread::finished, this, [thread](){ thread->deleteLater();});
-    thread->exit(0);
-
-    // 发送消息给前端，判定任务状态
-    emit sgl_ftp_task_response(file, status, msg);
+    // 记录文件服务状态
+    mFtpConnected = status;
+    emit sgl_ftp_connect_status_change(status);
 }
 
-void FtpManager::init()
+bool FtpManager::getOpenBreakPointResume() const
 {
-    mFtpProtocol.moveToThread(&mWorkerThread);
-    connect(&mFtpProtocol, &FtpProtocol::sgl_file_upload_process, this, &FtpManager::sgl_file_upload_process, Qt::QueuedConnection);
-    connect(&mFtpProtocol, &FtpProtocol::sgl_ftp_task_response, this, &FtpManager::slot_ftp_task_response, Qt::QueuedConnection);
-    connect(&mFtpProtocol, &FtpProtocol::sgl_ftp_upload_task_finish, this, &FtpManager::sgl_ftp_upload_task_finish, Qt::QueuedConnection);
+    return mOpenBreakPointResume;
+}
 
-    connect(&mFtpProtocol, &FtpProtocol::sgl_connect_to_ftp_server_status_change, this, &FtpManager::sgl_connect_to_ftp_server_status_change, Qt::QueuedConnection);
-    connect(this, &FtpManager::sgl_start_connect_ftp_server, &mFtpProtocol, &FtpProtocol::slot_start_connect_ftp_server, Qt::QueuedConnection);
-    connect(this, &FtpManager::sgl_start_upload_file, &mFtpProtocol, &FtpProtocol::slot_start_upload_file, Qt::QueuedConnection);
-
-    mWorkerThread.start();
-
-    // 连接文件服务器
-    emit sgl_start_connect_ftp_server();
+void FtpManager::setOpenBreakPointResume(bool newOpenBreakPointResume)
+{
+    mOpenBreakPointResume = newOpenBreakPointResume;
 }
 
 const QString &FtpManager::getDownloadPath() const

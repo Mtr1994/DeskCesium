@@ -166,10 +166,11 @@ function init() {
 		if (undefined === pick) {
 			if (undefined !== entityDescription) {
 				entityDescription.style.visibility = "hidden";
+				let elementDivEmptyImage = document.getElementById("div-empty-image");
+				elementDivEmptyImage.style.visibility = "hidden" 
 			}
 		} else {
 			if (undefined !== entityDescription) {
-				console.log("pick.id.remoteDescription", pick.id.remoteDescription)
 				let remoteObject = pick.id.remoteDescription;
 				if (undefined === remoteObject) {
 					entityDescription.style.visibility = "hidden";
@@ -237,22 +238,20 @@ function init() {
 					
 					let verifyImagePath = "";
 					let verifyAuvPictureNumber = remoteObject.verify_auv_sss_image_paths.length
-					console.log("verifyAuvPictureNumber", verifyAuvPictureNumber)
 					for (let i = 0; i < verifyAuvPictureNumber; i++) {
-						verifyImagePath += "<img src=\"" + remoteObject.verify_auv_sss_image_paths[i] + "\" style=\"width: 100%; margin-bottom: 1em; border-radius: 6px; border: 2px solid #4169E1;\""
+						verifyImagePath += '<img src="' + remoteObject.verify_auv_sss_image_paths[i] + '" style="width: 100%; height: 14em; margin-bottom: 1em; border-radius: 6px; border: 2px solid #4169E1; object-fit: contain;">'
 					}
 					
 					let verifyPictureNumber = remoteObject.verify_image_paths.length
-					console.log("verifyPictureNumber", verifyPictureNumber)
 					for (let i = 0; i < verifyPictureNumber;i++) {
-						verifyImagePath += "<img src=\"" + remoteObject.verify_image_paths[i] + "\" style=\"width: 100%; margin-bottom: 1em; border-radius: 6px; border: 2px solid #4169E1;\""
+						verifyImagePath += '<img src="' + remoteObject.verify_image_paths[i] + '" style="width: 100%; height: 14em; margin-bottom: 1em; border-radius: 6px; border: 2px solid #4169E1; object-fit: contain;">'
 					}
 					
-					console.log("verifyImagePath", verifyImagePath)
-					
 					elementDivVerifyImage.innerHTML = verifyImagePath
-					
 					entityDescription.style.visibility = "visible";
+					
+					let elementDivEmptyImage = document.getElementById("div-empty-image");
+					elementDivEmptyImage.style.visibility = verifyImagePath.length > 0 ? "hidden" : "visible";
 				}
 			}
 		}
@@ -359,7 +358,6 @@ function addGrdEntity(arg) {
 
 // 添加 remote point 实体
 function addRemotePointEntity(arg) {
-	console.log("remoteObject", arg)
 	let remoteObject = eval("(" + arg + ")")
 	if ((remoteObject.longitude == undefined) || (remoteObject.latitude === undefined)) return;
 	cesiumViewer.entities.add({
@@ -377,35 +375,33 @@ function addRemotePointEntity(arg) {
 
 // 添加 remote tif 实体
 function addRemoteTiffEntity(arg) {
-	let array = arg.split(";")
-	if (array.length !== 7) {
-		context.recvMsg("add", "remote tif",false, arg);
-	} else {
-		let strDescription = array[6]
-		let remoteObject = eval("(" + strDescription + ")")
-		console.log("remoteObject", remoteObject)
-		let xhr = new XMLHttpRequest();
-		xhr.open('GET', array[4]);
-		xhr.responseType = 'arraybuffer';
-		xhr.onload = function (e) {
-			Tiff.initialize({TOTAL_MEMORY: parseInt(array[5]) * 2})
-			let tiff = new Tiff({buffer: xhr.response});
-			let canvas = tiff.toCanvas();
-			let size = cesiumViewer.entities.values.length;
-			cesiumViewer.entities.add({
-			  id: remoteObject.id,
-			  rectangle: {
-				coordinates: Cesium.Rectangle.fromDegrees(parseFloat(array[0]), parseFloat(array[1]), parseFloat(array[2]), parseFloat(array[3])),
-				material: canvas,
-				zIndex: size,
-			  },
-			  remoteDescription: remoteObject
-			});
-			
-			context.recvMsg("add", "remote tif", true, remoteObject.id);
-		};
-		xhr.send();
+	let remoteObject = eval("(" + arg + ")")
+	if (undefined == remoteObject) {
+		context.recvMsg("add", "remote tif", false, "元数据对象异常");
+		return;
 	}
+	
+	let xhr = new XMLHttpRequest();
+	xhr.open('GET', remoteObject.side_scan_image_name);
+	xhr.responseType = 'arraybuffer';
+	xhr.onload = function (e) {
+		Tiff.initialize({TOTAL_MEMORY: parseInt(remoteObject.image_total_byte) * 1.1})
+		let tiff = new Tiff({buffer: xhr.response});
+		let canvas = tiff.toCanvas();
+		let size = cesiumViewer.entities.values.length;
+		cesiumViewer.entities.add({
+		  id: remoteObject.id,
+		  rectangle: {
+			coordinates: Cesium.Rectangle.fromDegrees(parseFloat(remoteObject.image_top_left_longitude), parseFloat(remoteObject.image_top_left_latitude), parseFloat(remoteObject.image_bottom_right_longitude), parseFloat(remoteObject.image_bottom_right_latitude)),
+			material: canvas,
+			zIndex: size,
+		  },
+		  remoteDescription: remoteObject
+		});
+		
+		context.recvMsg("add", "remote tif", true, remoteObject.id);
+	};
+	xhr.send();
 }
 
 

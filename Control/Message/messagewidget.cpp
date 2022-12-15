@@ -79,11 +79,11 @@ void MessageWidget::init()
     QLabel *lbImage = new QLabel(widgetBase);
     lbImage->setSizePolicy(QSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred));
     lbImage->setMinimumWidth(lbImage->height() * 0.64);
-    QString url = (mMessageType == M_Success) ? ":/Resourse/Image/success.svg" : (mMessageType == M_Error) ? ":/Resourse/Image/error.svg" : ":/Resourse/Image/info.svg";
+    QString url = (mMessageType == M_Success) ? ":/Resource/image/success.svg" : (mMessageType == M_Error) ? ":/Resource/image/error.svg" : ":/Resource/image/info.svg";
     lbImage->setStyleSheet(QString("QLabel{image: url(%1);}").arg(url));
 
     mLabelMessage = new QLabel(widgetBase);
-    mLabelMessage->setAlignment(Qt::AlignCenter);
+    mLabelMessage->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
     mLabelMessage->setStyleSheet("color: #666666;");
     mLabelMessage->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred));
 

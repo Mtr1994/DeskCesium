@@ -211,26 +211,32 @@ class SideScanSource final :
     kHorizontalRangeDirectionFieldNumber = 10,
     kHorizontalRangeValueFieldNumber = 11,
     kSideScanImageNameFieldNumber = 14,
-    kRemarksFieldNumber = 17,
-    kSupposeSizeFieldNumber = 18,
-    kVerifyAuvSssImagePathsFieldNumber = 20,
-    kVerifyImagePathsFieldNumber = 21,
-    kImageDescriptionFieldNumber = 22,
-    kTargetLongitudeFieldNumber = 23,
-    kTargetLatitudeFieldNumber = 24,
-    kPositionErrorFieldNumber = 25,
-    kVerifyCruiseNumberFieldNumber = 26,
-    kVerifyDiveNumberFieldNumber = 27,
-    kVerifyTimeFieldNumber = 28,
+    kRemarksFieldNumber = 22,
+    kSupposeSizeFieldNumber = 23,
+    kVerifyAuvSssImagePathsFieldNumber = 25,
+    kVerifyImagePathsFieldNumber = 26,
+    kImageDescriptionFieldNumber = 27,
+    kTargetLongitudeFieldNumber = 28,
+    kTargetLatitudeFieldNumber = 29,
+    kPositionErrorFieldNumber = 30,
+    kVerifyCruiseNumberFieldNumber = 31,
+    kVerifyDiveNumberFieldNumber = 32,
+    kVerifyTimeFieldNumber = 33,
     kLongitudeFieldNumber = 7,
     kLatitudeFieldNumber = 8,
     kDtSpeedFieldNumber = 9,
     kHeightFromBottomFieldNumber = 12,
+    kImageTopLeftLongitudeFieldNumber = 15,
+    kImageTopLeftLatitudeFieldNumber = 16,
     kRThetaFieldNumber = 13,
-    kAlongTrackFieldNumber = 15,
-    kAcrossTrackFieldNumber = 16,
-    kPriorityFieldNumber = 19,
-    kStatusFlagFieldNumber = 29,
+    kImageTotalByteFieldNumber = 19,
+    kImageBottomRightLongitudeFieldNumber = 17,
+    kImageBottomRightLatitudeFieldNumber = 18,
+    kAlongTrackFieldNumber = 20,
+    kAcrossTrackFieldNumber = 21,
+    kPriorityFieldNumber = 24,
+    kVerifyFlagFieldNumber = 34,
+    kStatusFlagFieldNumber = 35,
   };
   // string id = 1;
   void clear_id();
@@ -358,7 +364,7 @@ class SideScanSource final :
   std::string* _internal_mutable_side_scan_image_name();
   public:
 
-  // string remarks = 17;
+  // string remarks = 22;
   void clear_remarks();
   const std::string& remarks() const;
   template <typename ArgT0 = const std::string&, typename... ArgT>
@@ -372,7 +378,7 @@ class SideScanSource final :
   std::string* _internal_mutable_remarks();
   public:
 
-  // string suppose_size = 18;
+  // string suppose_size = 23;
   void clear_suppose_size();
   const std::string& suppose_size() const;
   template <typename ArgT0 = const std::string&, typename... ArgT>
@@ -386,7 +392,7 @@ class SideScanSource final :
   std::string* _internal_mutable_suppose_size();
   public:
 
-  // string verify_auv_sss_image_paths = 20;
+  // string verify_auv_sss_image_paths = 25;
   void clear_verify_auv_sss_image_paths();
   const std::string& verify_auv_sss_image_paths() const;
   template <typename ArgT0 = const std::string&, typename... ArgT>
@@ -400,7 +406,7 @@ class SideScanSource final :
   std::string* _internal_mutable_verify_auv_sss_image_paths();
   public:
 
-  // string verify_image_paths = 21;
+  // string verify_image_paths = 26;
   void clear_verify_image_paths();
   const std::string& verify_image_paths() const;
   template <typename ArgT0 = const std::string&, typename... ArgT>
@@ -414,7 +420,7 @@ class SideScanSource final :
   std::string* _internal_mutable_verify_image_paths();
   public:
 
-  // string image_description = 22;
+  // string image_description = 27;
   void clear_image_description();
   const std::string& image_description() const;
   template <typename ArgT0 = const std::string&, typename... ArgT>
@@ -428,7 +434,7 @@ class SideScanSource final :
   std::string* _internal_mutable_image_description();
   public:
 
-  // string target_longitude = 23;
+  // string target_longitude = 28;
   void clear_target_longitude();
   const std::string& target_longitude() const;
   template <typename ArgT0 = const std::string&, typename... ArgT>
@@ -442,7 +448,7 @@ class SideScanSource final :
   std::string* _internal_mutable_target_longitude();
   public:
 
-  // string target_latitude = 24;
+  // string target_latitude = 29;
   void clear_target_latitude();
   const std::string& target_latitude() const;
   template <typename ArgT0 = const std::string&, typename... ArgT>
@@ -456,7 +462,7 @@ class SideScanSource final :
   std::string* _internal_mutable_target_latitude();
   public:
 
-  // string position_error = 25;
+  // string position_error = 30;
   void clear_position_error();
   const std::string& position_error() const;
   template <typename ArgT0 = const std::string&, typename... ArgT>
@@ -470,7 +476,7 @@ class SideScanSource final :
   std::string* _internal_mutable_position_error();
   public:
 
-  // string verify_cruise_number = 26;
+  // string verify_cruise_number = 31;
   void clear_verify_cruise_number();
   const std::string& verify_cruise_number() const;
   template <typename ArgT0 = const std::string&, typename... ArgT>
@@ -484,7 +490,7 @@ class SideScanSource final :
   std::string* _internal_mutable_verify_cruise_number();
   public:
 
-  // string verify_dive_number = 27;
+  // string verify_dive_number = 32;
   void clear_verify_dive_number();
   const std::string& verify_dive_number() const;
   template <typename ArgT0 = const std::string&, typename... ArgT>
@@ -498,7 +504,7 @@ class SideScanSource final :
   std::string* _internal_mutable_verify_dive_number();
   public:
 
-  // string verify_time = 28;
+  // string verify_time = 33;
   void clear_verify_time();
   const std::string& verify_time() const;
   template <typename ArgT0 = const std::string&, typename... ArgT>
@@ -548,6 +554,24 @@ class SideScanSource final :
   void _internal_set_height_from_bottom(float value);
   public:
 
+  // double image_top_left_longitude = 15;
+  void clear_image_top_left_longitude();
+  double image_top_left_longitude() const;
+  void set_image_top_left_longitude(double value);
+  private:
+  double _internal_image_top_left_longitude() const;
+  void _internal_set_image_top_left_longitude(double value);
+  public:
+
+  // double image_top_left_latitude = 16;
+  void clear_image_top_left_latitude();
+  double image_top_left_latitude() const;
+  void set_image_top_left_latitude(double value);
+  private:
+  double _internal_image_top_left_latitude() const;
+  void _internal_set_image_top_left_latitude(double value);
+  public:
+
   // float r_theta = 13;
   void clear_r_theta();
   float r_theta() const;
@@ -557,7 +581,34 @@ class SideScanSource final :
   void _internal_set_r_theta(float value);
   public:
 
-  // float along_track = 15;
+  // uint32 image_total_byte = 19;
+  void clear_image_total_byte();
+  uint32_t image_total_byte() const;
+  void set_image_total_byte(uint32_t value);
+  private:
+  uint32_t _internal_image_total_byte() const;
+  void _internal_set_image_total_byte(uint32_t value);
+  public:
+
+  // double image_bottom_right_longitude = 17;
+  void clear_image_bottom_right_longitude();
+  double image_bottom_right_longitude() const;
+  void set_image_bottom_right_longitude(double value);
+  private:
+  double _internal_image_bottom_right_longitude() const;
+  void _internal_set_image_bottom_right_longitude(double value);
+  public:
+
+  // double image_bottom_right_latitude = 18;
+  void clear_image_bottom_right_latitude();
+  double image_bottom_right_latitude() const;
+  void set_image_bottom_right_latitude(double value);
+  private:
+  double _internal_image_bottom_right_latitude() const;
+  void _internal_set_image_bottom_right_latitude(double value);
+  public:
+
+  // float along_track = 20;
   void clear_along_track();
   float along_track() const;
   void set_along_track(float value);
@@ -566,7 +617,7 @@ class SideScanSource final :
   void _internal_set_along_track(float value);
   public:
 
-  // float across_track = 16;
+  // float across_track = 21;
   void clear_across_track();
   float across_track() const;
   void set_across_track(float value);
@@ -575,7 +626,7 @@ class SideScanSource final :
   void _internal_set_across_track(float value);
   public:
 
-  // uint32 priority = 19;
+  // uint32 priority = 24;
   void clear_priority();
   uint32_t priority() const;
   void set_priority(uint32_t value);
@@ -584,7 +635,16 @@ class SideScanSource final :
   void _internal_set_priority(uint32_t value);
   public:
 
-  // uint32 status_flag = 29;
+  // bool verify_flag = 34;
+  void clear_verify_flag();
+  bool verify_flag() const;
+  void set_verify_flag(bool value);
+  private:
+  bool _internal_verify_flag() const;
+  void _internal_set_verify_flag(bool value);
+  public:
+
+  // uint32 status_flag = 35;
   void clear_status_flag();
   uint32_t status_flag() const;
   void set_status_flag(uint32_t value);
@@ -625,10 +685,16 @@ class SideScanSource final :
     double latitude_;
     float dt_speed_;
     float height_from_bottom_;
+    double image_top_left_longitude_;
+    double image_top_left_latitude_;
     float r_theta_;
+    uint32_t image_total_byte_;
+    double image_bottom_right_longitude_;
+    double image_bottom_right_latitude_;
     float along_track_;
     float across_track_;
     uint32_t priority_;
+    bool verify_flag_;
     uint32_t status_flag_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   };
@@ -1790,11 +1856,37 @@ class SearchParameter final :
   // accessors -------------------------------------------------------
 
   enum : int {
+    kVerifyDiveNumberFieldNumber = 4,
     kCruiseYearFieldNumber = 1,
     kCruiseNumberFieldNumber = 2,
     kDiveNumberFieldNumber = 3,
-    kVerifyDiveNumberFieldNumber = 4,
+    kPriorityFieldNumber = 5,
+    kVerifyFlagFieldNumber = 6,
   };
+  // repeated string verify_dive_number = 4;
+  int verify_dive_number_size() const;
+  private:
+  int _internal_verify_dive_number_size() const;
+  public:
+  void clear_verify_dive_number();
+  const std::string& verify_dive_number(int index) const;
+  std::string* mutable_verify_dive_number(int index);
+  void set_verify_dive_number(int index, const std::string& value);
+  void set_verify_dive_number(int index, std::string&& value);
+  void set_verify_dive_number(int index, const char* value);
+  void set_verify_dive_number(int index, const char* value, size_t size);
+  std::string* add_verify_dive_number();
+  void add_verify_dive_number(const std::string& value);
+  void add_verify_dive_number(std::string&& value);
+  void add_verify_dive_number(const char* value);
+  void add_verify_dive_number(const char* value, size_t size);
+  const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<std::string>& verify_dive_number() const;
+  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<std::string>* mutable_verify_dive_number();
+  private:
+  const std::string& _internal_verify_dive_number(int index) const;
+  std::string* _internal_add_verify_dive_number();
+  public:
+
   // string cruise_year = 1;
   void clear_cruise_year();
   const std::string& cruise_year() const;
@@ -1837,18 +1929,32 @@ class SearchParameter final :
   std::string* _internal_mutable_dive_number();
   public:
 
-  // string verify_dive_number = 4;
-  void clear_verify_dive_number();
-  const std::string& verify_dive_number() const;
+  // string priority = 5;
+  void clear_priority();
+  const std::string& priority() const;
   template <typename ArgT0 = const std::string&, typename... ArgT>
-  void set_verify_dive_number(ArgT0&& arg0, ArgT... args);
-  std::string* mutable_verify_dive_number();
-  PROTOBUF_NODISCARD std::string* release_verify_dive_number();
-  void set_allocated_verify_dive_number(std::string* verify_dive_number);
+  void set_priority(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_priority();
+  PROTOBUF_NODISCARD std::string* release_priority();
+  void set_allocated_priority(std::string* priority);
   private:
-  const std::string& _internal_verify_dive_number() const;
-  inline PROTOBUF_ALWAYS_INLINE void _internal_set_verify_dive_number(const std::string& value);
-  std::string* _internal_mutable_verify_dive_number();
+  const std::string& _internal_priority() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_priority(const std::string& value);
+  std::string* _internal_mutable_priority();
+  public:
+
+  // string verify_flag = 6;
+  void clear_verify_flag();
+  const std::string& verify_flag() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_verify_flag(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_verify_flag();
+  PROTOBUF_NODISCARD std::string* release_verify_flag();
+  void set_allocated_verify_flag(std::string* verify_flag);
+  private:
+  const std::string& _internal_verify_flag() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_verify_flag(const std::string& value);
+  std::string* _internal_mutable_verify_flag();
   public:
 
   // @@protoc_insertion_point(class_scope:SearchParameter)
@@ -1859,10 +1965,12 @@ class SearchParameter final :
   typedef void InternalArenaConstructable_;
   typedef void DestructorSkippable_;
   struct Impl_ {
+    ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<std::string> verify_dive_number_;
     ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr cruise_year_;
     ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr cruise_number_;
     ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr dive_number_;
-    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr verify_dive_number_;
+    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr priority_;
+    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr verify_flag_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   };
   union { Impl_ _impl_; };
@@ -2429,7 +2537,107 @@ inline void SideScanSource::set_allocated_side_scan_image_name(std::string* side
   // @@protoc_insertion_point(field_set_allocated:SideScanSource.side_scan_image_name)
 }
 
-// float along_track = 15;
+// double image_top_left_longitude = 15;
+inline void SideScanSource::clear_image_top_left_longitude() {
+  _impl_.image_top_left_longitude_ = 0;
+}
+inline double SideScanSource::_internal_image_top_left_longitude() const {
+  return _impl_.image_top_left_longitude_;
+}
+inline double SideScanSource::image_top_left_longitude() const {
+  // @@protoc_insertion_point(field_get:SideScanSource.image_top_left_longitude)
+  return _internal_image_top_left_longitude();
+}
+inline void SideScanSource::_internal_set_image_top_left_longitude(double value) {
+  
+  _impl_.image_top_left_longitude_ = value;
+}
+inline void SideScanSource::set_image_top_left_longitude(double value) {
+  _internal_set_image_top_left_longitude(value);
+  // @@protoc_insertion_point(field_set:SideScanSource.image_top_left_longitude)
+}
+
+// double image_top_left_latitude = 16;
+inline void SideScanSource::clear_image_top_left_latitude() {
+  _impl_.image_top_left_latitude_ = 0;
+}
+inline double SideScanSource::_internal_image_top_left_latitude() const {
+  return _impl_.image_top_left_latitude_;
+}
+inline double SideScanSource::image_top_left_latitude() const {
+  // @@protoc_insertion_point(field_get:SideScanSource.image_top_left_latitude)
+  return _internal_image_top_left_latitude();
+}
+inline void SideScanSource::_internal_set_image_top_left_latitude(double value) {
+  
+  _impl_.image_top_left_latitude_ = value;
+}
+inline void SideScanSource::set_image_top_left_latitude(double value) {
+  _internal_set_image_top_left_latitude(value);
+  // @@protoc_insertion_point(field_set:SideScanSource.image_top_left_latitude)
+}
+
+// double image_bottom_right_longitude = 17;
+inline void SideScanSource::clear_image_bottom_right_longitude() {
+  _impl_.image_bottom_right_longitude_ = 0;
+}
+inline double SideScanSource::_internal_image_bottom_right_longitude() const {
+  return _impl_.image_bottom_right_longitude_;
+}
+inline double SideScanSource::image_bottom_right_longitude() const {
+  // @@protoc_insertion_point(field_get:SideScanSource.image_bottom_right_longitude)
+  return _internal_image_bottom_right_longitude();
+}
+inline void SideScanSource::_internal_set_image_bottom_right_longitude(double value) {
+  
+  _impl_.image_bottom_right_longitude_ = value;
+}
+inline void SideScanSource::set_image_bottom_right_longitude(double value) {
+  _internal_set_image_bottom_right_longitude(value);
+  // @@protoc_insertion_point(field_set:SideScanSource.image_bottom_right_longitude)
+}
+
+// double image_bottom_right_latitude = 18;
+inline void SideScanSource::clear_image_bottom_right_latitude() {
+  _impl_.image_bottom_right_latitude_ = 0;
+}
+inline double SideScanSource::_internal_image_bottom_right_latitude() const {
+  return _impl_.image_bottom_right_latitude_;
+}
+inline double SideScanSource::image_bottom_right_latitude() const {
+  // @@protoc_insertion_point(field_get:SideScanSource.image_bottom_right_latitude)
+  return _internal_image_bottom_right_latitude();
+}
+inline void SideScanSource::_internal_set_image_bottom_right_latitude(double value) {
+  
+  _impl_.image_bottom_right_latitude_ = value;
+}
+inline void SideScanSource::set_image_bottom_right_latitude(double value) {
+  _internal_set_image_bottom_right_latitude(value);
+  // @@protoc_insertion_point(field_set:SideScanSource.image_bottom_right_latitude)
+}
+
+// uint32 image_total_byte = 19;
+inline void SideScanSource::clear_image_total_byte() {
+  _impl_.image_total_byte_ = 0u;
+}
+inline uint32_t SideScanSource::_internal_image_total_byte() const {
+  return _impl_.image_total_byte_;
+}
+inline uint32_t SideScanSource::image_total_byte() const {
+  // @@protoc_insertion_point(field_get:SideScanSource.image_total_byte)
+  return _internal_image_total_byte();
+}
+inline void SideScanSource::_internal_set_image_total_byte(uint32_t value) {
+  
+  _impl_.image_total_byte_ = value;
+}
+inline void SideScanSource::set_image_total_byte(uint32_t value) {
+  _internal_set_image_total_byte(value);
+  // @@protoc_insertion_point(field_set:SideScanSource.image_total_byte)
+}
+
+// float along_track = 20;
 inline void SideScanSource::clear_along_track() {
   _impl_.along_track_ = 0;
 }
@@ -2449,7 +2657,7 @@ inline void SideScanSource::set_along_track(float value) {
   // @@protoc_insertion_point(field_set:SideScanSource.along_track)
 }
 
-// float across_track = 16;
+// float across_track = 21;
 inline void SideScanSource::clear_across_track() {
   _impl_.across_track_ = 0;
 }
@@ -2469,7 +2677,7 @@ inline void SideScanSource::set_across_track(float value) {
   // @@protoc_insertion_point(field_set:SideScanSource.across_track)
 }
 
-// string remarks = 17;
+// string remarks = 22;
 inline void SideScanSource::clear_remarks() {
   _impl_.remarks_.ClearToEmpty();
 }
@@ -2519,7 +2727,7 @@ inline void SideScanSource::set_allocated_remarks(std::string* remarks) {
   // @@protoc_insertion_point(field_set_allocated:SideScanSource.remarks)
 }
 
-// string suppose_size = 18;
+// string suppose_size = 23;
 inline void SideScanSource::clear_suppose_size() {
   _impl_.suppose_size_.ClearToEmpty();
 }
@@ -2569,7 +2777,7 @@ inline void SideScanSource::set_allocated_suppose_size(std::string* suppose_size
   // @@protoc_insertion_point(field_set_allocated:SideScanSource.suppose_size)
 }
 
-// uint32 priority = 19;
+// uint32 priority = 24;
 inline void SideScanSource::clear_priority() {
   _impl_.priority_ = 0u;
 }
@@ -2589,7 +2797,7 @@ inline void SideScanSource::set_priority(uint32_t value) {
   // @@protoc_insertion_point(field_set:SideScanSource.priority)
 }
 
-// string verify_auv_sss_image_paths = 20;
+// string verify_auv_sss_image_paths = 25;
 inline void SideScanSource::clear_verify_auv_sss_image_paths() {
   _impl_.verify_auv_sss_image_paths_.ClearToEmpty();
 }
@@ -2639,7 +2847,7 @@ inline void SideScanSource::set_allocated_verify_auv_sss_image_paths(std::string
   // @@protoc_insertion_point(field_set_allocated:SideScanSource.verify_auv_sss_image_paths)
 }
 
-// string verify_image_paths = 21;
+// string verify_image_paths = 26;
 inline void SideScanSource::clear_verify_image_paths() {
   _impl_.verify_image_paths_.ClearToEmpty();
 }
@@ -2689,7 +2897,7 @@ inline void SideScanSource::set_allocated_verify_image_paths(std::string* verify
   // @@protoc_insertion_point(field_set_allocated:SideScanSource.verify_image_paths)
 }
 
-// string image_description = 22;
+// string image_description = 27;
 inline void SideScanSource::clear_image_description() {
   _impl_.image_description_.ClearToEmpty();
 }
@@ -2739,7 +2947,7 @@ inline void SideScanSource::set_allocated_image_description(std::string* image_d
   // @@protoc_insertion_point(field_set_allocated:SideScanSource.image_description)
 }
 
-// string target_longitude = 23;
+// string target_longitude = 28;
 inline void SideScanSource::clear_target_longitude() {
   _impl_.target_longitude_.ClearToEmpty();
 }
@@ -2789,7 +2997,7 @@ inline void SideScanSource::set_allocated_target_longitude(std::string* target_l
   // @@protoc_insertion_point(field_set_allocated:SideScanSource.target_longitude)
 }
 
-// string target_latitude = 24;
+// string target_latitude = 29;
 inline void SideScanSource::clear_target_latitude() {
   _impl_.target_latitude_.ClearToEmpty();
 }
@@ -2839,7 +3047,7 @@ inline void SideScanSource::set_allocated_target_latitude(std::string* target_la
   // @@protoc_insertion_point(field_set_allocated:SideScanSource.target_latitude)
 }
 
-// string position_error = 25;
+// string position_error = 30;
 inline void SideScanSource::clear_position_error() {
   _impl_.position_error_.ClearToEmpty();
 }
@@ -2889,7 +3097,7 @@ inline void SideScanSource::set_allocated_position_error(std::string* position_e
   // @@protoc_insertion_point(field_set_allocated:SideScanSource.position_error)
 }
 
-// string verify_cruise_number = 26;
+// string verify_cruise_number = 31;
 inline void SideScanSource::clear_verify_cruise_number() {
   _impl_.verify_cruise_number_.ClearToEmpty();
 }
@@ -2939,7 +3147,7 @@ inline void SideScanSource::set_allocated_verify_cruise_number(std::string* veri
   // @@protoc_insertion_point(field_set_allocated:SideScanSource.verify_cruise_number)
 }
 
-// string verify_dive_number = 27;
+// string verify_dive_number = 32;
 inline void SideScanSource::clear_verify_dive_number() {
   _impl_.verify_dive_number_.ClearToEmpty();
 }
@@ -2989,7 +3197,7 @@ inline void SideScanSource::set_allocated_verify_dive_number(std::string* verify
   // @@protoc_insertion_point(field_set_allocated:SideScanSource.verify_dive_number)
 }
 
-// string verify_time = 28;
+// string verify_time = 33;
 inline void SideScanSource::clear_verify_time() {
   _impl_.verify_time_.ClearToEmpty();
 }
@@ -3039,7 +3247,27 @@ inline void SideScanSource::set_allocated_verify_time(std::string* verify_time) 
   // @@protoc_insertion_point(field_set_allocated:SideScanSource.verify_time)
 }
 
-// uint32 status_flag = 29;
+// bool verify_flag = 34;
+inline void SideScanSource::clear_verify_flag() {
+  _impl_.verify_flag_ = false;
+}
+inline bool SideScanSource::_internal_verify_flag() const {
+  return _impl_.verify_flag_;
+}
+inline bool SideScanSource::verify_flag() const {
+  // @@protoc_insertion_point(field_get:SideScanSource.verify_flag)
+  return _internal_verify_flag();
+}
+inline void SideScanSource::_internal_set_verify_flag(bool value) {
+  
+  _impl_.verify_flag_ = value;
+}
+inline void SideScanSource::set_verify_flag(bool value) {
+  _internal_set_verify_flag(value);
+  // @@protoc_insertion_point(field_set:SideScanSource.verify_flag)
+}
+
+// uint32 status_flag = 35;
 inline void SideScanSource::clear_status_flag() {
   _impl_.status_flag_ = 0u;
 }
@@ -3797,54 +4025,179 @@ inline void SearchParameter::set_allocated_dive_number(std::string* dive_number)
   // @@protoc_insertion_point(field_set_allocated:SearchParameter.dive_number)
 }
 
-// string verify_dive_number = 4;
-inline void SearchParameter::clear_verify_dive_number() {
-  _impl_.verify_dive_number_.ClearToEmpty();
+// repeated string verify_dive_number = 4;
+inline int SearchParameter::_internal_verify_dive_number_size() const {
+  return _impl_.verify_dive_number_.size();
 }
-inline const std::string& SearchParameter::verify_dive_number() const {
+inline int SearchParameter::verify_dive_number_size() const {
+  return _internal_verify_dive_number_size();
+}
+inline void SearchParameter::clear_verify_dive_number() {
+  _impl_.verify_dive_number_.Clear();
+}
+inline std::string* SearchParameter::add_verify_dive_number() {
+  std::string* _s = _internal_add_verify_dive_number();
+  // @@protoc_insertion_point(field_add_mutable:SearchParameter.verify_dive_number)
+  return _s;
+}
+inline const std::string& SearchParameter::_internal_verify_dive_number(int index) const {
+  return _impl_.verify_dive_number_.Get(index);
+}
+inline const std::string& SearchParameter::verify_dive_number(int index) const {
   // @@protoc_insertion_point(field_get:SearchParameter.verify_dive_number)
-  return _internal_verify_dive_number();
+  return _internal_verify_dive_number(index);
+}
+inline std::string* SearchParameter::mutable_verify_dive_number(int index) {
+  // @@protoc_insertion_point(field_mutable:SearchParameter.verify_dive_number)
+  return _impl_.verify_dive_number_.Mutable(index);
+}
+inline void SearchParameter::set_verify_dive_number(int index, const std::string& value) {
+  _impl_.verify_dive_number_.Mutable(index)->assign(value);
+  // @@protoc_insertion_point(field_set:SearchParameter.verify_dive_number)
+}
+inline void SearchParameter::set_verify_dive_number(int index, std::string&& value) {
+  _impl_.verify_dive_number_.Mutable(index)->assign(std::move(value));
+  // @@protoc_insertion_point(field_set:SearchParameter.verify_dive_number)
+}
+inline void SearchParameter::set_verify_dive_number(int index, const char* value) {
+  GOOGLE_DCHECK(value != nullptr);
+  _impl_.verify_dive_number_.Mutable(index)->assign(value);
+  // @@protoc_insertion_point(field_set_char:SearchParameter.verify_dive_number)
+}
+inline void SearchParameter::set_verify_dive_number(int index, const char* value, size_t size) {
+  _impl_.verify_dive_number_.Mutable(index)->assign(
+    reinterpret_cast<const char*>(value), size);
+  // @@protoc_insertion_point(field_set_pointer:SearchParameter.verify_dive_number)
+}
+inline std::string* SearchParameter::_internal_add_verify_dive_number() {
+  return _impl_.verify_dive_number_.Add();
+}
+inline void SearchParameter::add_verify_dive_number(const std::string& value) {
+  _impl_.verify_dive_number_.Add()->assign(value);
+  // @@protoc_insertion_point(field_add:SearchParameter.verify_dive_number)
+}
+inline void SearchParameter::add_verify_dive_number(std::string&& value) {
+  _impl_.verify_dive_number_.Add(std::move(value));
+  // @@protoc_insertion_point(field_add:SearchParameter.verify_dive_number)
+}
+inline void SearchParameter::add_verify_dive_number(const char* value) {
+  GOOGLE_DCHECK(value != nullptr);
+  _impl_.verify_dive_number_.Add()->assign(value);
+  // @@protoc_insertion_point(field_add_char:SearchParameter.verify_dive_number)
+}
+inline void SearchParameter::add_verify_dive_number(const char* value, size_t size) {
+  _impl_.verify_dive_number_.Add()->assign(reinterpret_cast<const char*>(value), size);
+  // @@protoc_insertion_point(field_add_pointer:SearchParameter.verify_dive_number)
+}
+inline const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<std::string>&
+SearchParameter::verify_dive_number() const {
+  // @@protoc_insertion_point(field_list:SearchParameter.verify_dive_number)
+  return _impl_.verify_dive_number_;
+}
+inline ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<std::string>*
+SearchParameter::mutable_verify_dive_number() {
+  // @@protoc_insertion_point(field_mutable_list:SearchParameter.verify_dive_number)
+  return &_impl_.verify_dive_number_;
+}
+
+// string priority = 5;
+inline void SearchParameter::clear_priority() {
+  _impl_.priority_.ClearToEmpty();
+}
+inline const std::string& SearchParameter::priority() const {
+  // @@protoc_insertion_point(field_get:SearchParameter.priority)
+  return _internal_priority();
 }
 template <typename ArgT0, typename... ArgT>
 inline PROTOBUF_ALWAYS_INLINE
-void SearchParameter::set_verify_dive_number(ArgT0&& arg0, ArgT... args) {
+void SearchParameter::set_priority(ArgT0&& arg0, ArgT... args) {
  
- _impl_.verify_dive_number_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
-  // @@protoc_insertion_point(field_set:SearchParameter.verify_dive_number)
+ _impl_.priority_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:SearchParameter.priority)
 }
-inline std::string* SearchParameter::mutable_verify_dive_number() {
-  std::string* _s = _internal_mutable_verify_dive_number();
-  // @@protoc_insertion_point(field_mutable:SearchParameter.verify_dive_number)
+inline std::string* SearchParameter::mutable_priority() {
+  std::string* _s = _internal_mutable_priority();
+  // @@protoc_insertion_point(field_mutable:SearchParameter.priority)
   return _s;
 }
-inline const std::string& SearchParameter::_internal_verify_dive_number() const {
-  return _impl_.verify_dive_number_.Get();
+inline const std::string& SearchParameter::_internal_priority() const {
+  return _impl_.priority_.Get();
 }
-inline void SearchParameter::_internal_set_verify_dive_number(const std::string& value) {
+inline void SearchParameter::_internal_set_priority(const std::string& value) {
   
-  _impl_.verify_dive_number_.Set(value, GetArenaForAllocation());
+  _impl_.priority_.Set(value, GetArenaForAllocation());
 }
-inline std::string* SearchParameter::_internal_mutable_verify_dive_number() {
+inline std::string* SearchParameter::_internal_mutable_priority() {
   
-  return _impl_.verify_dive_number_.Mutable(GetArenaForAllocation());
+  return _impl_.priority_.Mutable(GetArenaForAllocation());
 }
-inline std::string* SearchParameter::release_verify_dive_number() {
-  // @@protoc_insertion_point(field_release:SearchParameter.verify_dive_number)
-  return _impl_.verify_dive_number_.Release();
+inline std::string* SearchParameter::release_priority() {
+  // @@protoc_insertion_point(field_release:SearchParameter.priority)
+  return _impl_.priority_.Release();
 }
-inline void SearchParameter::set_allocated_verify_dive_number(std::string* verify_dive_number) {
-  if (verify_dive_number != nullptr) {
+inline void SearchParameter::set_allocated_priority(std::string* priority) {
+  if (priority != nullptr) {
     
   } else {
     
   }
-  _impl_.verify_dive_number_.SetAllocated(verify_dive_number, GetArenaForAllocation());
+  _impl_.priority_.SetAllocated(priority, GetArenaForAllocation());
 #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  if (_impl_.verify_dive_number_.IsDefault()) {
-    _impl_.verify_dive_number_.Set("", GetArenaForAllocation());
+  if (_impl_.priority_.IsDefault()) {
+    _impl_.priority_.Set("", GetArenaForAllocation());
   }
 #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  // @@protoc_insertion_point(field_set_allocated:SearchParameter.verify_dive_number)
+  // @@protoc_insertion_point(field_set_allocated:SearchParameter.priority)
+}
+
+// string verify_flag = 6;
+inline void SearchParameter::clear_verify_flag() {
+  _impl_.verify_flag_.ClearToEmpty();
+}
+inline const std::string& SearchParameter::verify_flag() const {
+  // @@protoc_insertion_point(field_get:SearchParameter.verify_flag)
+  return _internal_verify_flag();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void SearchParameter::set_verify_flag(ArgT0&& arg0, ArgT... args) {
+ 
+ _impl_.verify_flag_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:SearchParameter.verify_flag)
+}
+inline std::string* SearchParameter::mutable_verify_flag() {
+  std::string* _s = _internal_mutable_verify_flag();
+  // @@protoc_insertion_point(field_mutable:SearchParameter.verify_flag)
+  return _s;
+}
+inline const std::string& SearchParameter::_internal_verify_flag() const {
+  return _impl_.verify_flag_.Get();
+}
+inline void SearchParameter::_internal_set_verify_flag(const std::string& value) {
+  
+  _impl_.verify_flag_.Set(value, GetArenaForAllocation());
+}
+inline std::string* SearchParameter::_internal_mutable_verify_flag() {
+  
+  return _impl_.verify_flag_.Mutable(GetArenaForAllocation());
+}
+inline std::string* SearchParameter::release_verify_flag() {
+  // @@protoc_insertion_point(field_release:SearchParameter.verify_flag)
+  return _impl_.verify_flag_.Release();
+}
+inline void SearchParameter::set_allocated_verify_flag(std::string* verify_flag) {
+  if (verify_flag != nullptr) {
+    
+  } else {
+    
+  }
+  _impl_.verify_flag_.SetAllocated(verify_flag, GetArenaForAllocation());
+#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (_impl_.verify_flag_.IsDefault()) {
+    _impl_.verify_flag_.Set("", GetArenaForAllocation());
+  }
+#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:SearchParameter.verify_flag)
 }
 
 #ifdef __GNUC__

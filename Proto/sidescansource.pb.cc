@@ -46,10 +46,16 @@ PROTOBUF_CONSTEXPR SideScanSource::SideScanSource(
   , /*decltype(_impl_.latitude_)*/0
   , /*decltype(_impl_.dt_speed_)*/0
   , /*decltype(_impl_.height_from_bottom_)*/0
+  , /*decltype(_impl_.image_top_left_longitude_)*/0
+  , /*decltype(_impl_.image_top_left_latitude_)*/0
   , /*decltype(_impl_.r_theta_)*/0
+  , /*decltype(_impl_.image_total_byte_)*/0u
+  , /*decltype(_impl_.image_bottom_right_longitude_)*/0
+  , /*decltype(_impl_.image_bottom_right_latitude_)*/0
   , /*decltype(_impl_.along_track_)*/0
   , /*decltype(_impl_.across_track_)*/0
   , /*decltype(_impl_.priority_)*/0u
+  , /*decltype(_impl_.verify_flag_)*/false
   , /*decltype(_impl_.status_flag_)*/0u
   , /*decltype(_impl_._cached_size_)*/{}} {}
 struct SideScanSourceDefaultTypeInternal {
@@ -148,10 +154,12 @@ struct SearchFilterParamterListDefaultTypeInternal {
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 SearchFilterParamterListDefaultTypeInternal _SearchFilterParamterList_default_instance_;
 PROTOBUF_CONSTEXPR SearchParameter::SearchParameter(
     ::_pbi::ConstantInitialized): _impl_{
-    /*decltype(_impl_.cruise_year_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
+    /*decltype(_impl_.verify_dive_number_)*/{}
+  , /*decltype(_impl_.cruise_year_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
   , /*decltype(_impl_.cruise_number_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
   , /*decltype(_impl_.dive_number_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
-  , /*decltype(_impl_.verify_dive_number_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
+  , /*decltype(_impl_.priority_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
+  , /*decltype(_impl_.verify_flag_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
   , /*decltype(_impl_._cached_size_)*/{}} {}
 struct SearchParameterDefaultTypeInternal {
   PROTOBUF_CONSTEXPR SearchParameterDefaultTypeInternal()
@@ -187,6 +195,11 @@ const uint32_t TableStruct_sidescansource_2eproto::offsets[] PROTOBUF_SECTION_VA
   PROTOBUF_FIELD_OFFSET(::SideScanSource, _impl_.height_from_bottom_),
   PROTOBUF_FIELD_OFFSET(::SideScanSource, _impl_.r_theta_),
   PROTOBUF_FIELD_OFFSET(::SideScanSource, _impl_.side_scan_image_name_),
+  PROTOBUF_FIELD_OFFSET(::SideScanSource, _impl_.image_top_left_longitude_),
+  PROTOBUF_FIELD_OFFSET(::SideScanSource, _impl_.image_top_left_latitude_),
+  PROTOBUF_FIELD_OFFSET(::SideScanSource, _impl_.image_bottom_right_longitude_),
+  PROTOBUF_FIELD_OFFSET(::SideScanSource, _impl_.image_bottom_right_latitude_),
+  PROTOBUF_FIELD_OFFSET(::SideScanSource, _impl_.image_total_byte_),
   PROTOBUF_FIELD_OFFSET(::SideScanSource, _impl_.along_track_),
   PROTOBUF_FIELD_OFFSET(::SideScanSource, _impl_.across_track_),
   PROTOBUF_FIELD_OFFSET(::SideScanSource, _impl_.remarks_),
@@ -201,6 +214,7 @@ const uint32_t TableStruct_sidescansource_2eproto::offsets[] PROTOBUF_SECTION_VA
   PROTOBUF_FIELD_OFFSET(::SideScanSource, _impl_.verify_cruise_number_),
   PROTOBUF_FIELD_OFFSET(::SideScanSource, _impl_.verify_dive_number_),
   PROTOBUF_FIELD_OFFSET(::SideScanSource, _impl_.verify_time_),
+  PROTOBUF_FIELD_OFFSET(::SideScanSource, _impl_.verify_flag_),
   PROTOBUF_FIELD_OFFSET(::SideScanSource, _impl_.status_flag_),
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::SideScanSourceList, _internal_metadata_),
@@ -261,16 +275,18 @@ const uint32_t TableStruct_sidescansource_2eproto::offsets[] PROTOBUF_SECTION_VA
   PROTOBUF_FIELD_OFFSET(::SearchParameter, _impl_.cruise_number_),
   PROTOBUF_FIELD_OFFSET(::SearchParameter, _impl_.dive_number_),
   PROTOBUF_FIELD_OFFSET(::SearchParameter, _impl_.verify_dive_number_),
+  PROTOBUF_FIELD_OFFSET(::SearchParameter, _impl_.priority_),
+  PROTOBUF_FIELD_OFFSET(::SearchParameter, _impl_.verify_flag_),
 };
 static const ::_pbi::MigrationSchema schemas[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
   { 0, -1, -1, sizeof(::SideScanSource)},
-  { 35, -1, -1, sizeof(::SideScanSourceList)},
-  { 42, -1, -1, sizeof(::StatusResponse)},
-  { 50, -1, -1, sizeof(::CruiseRouteSource)},
-  { 60, -1, -1, sizeof(::CruiseRouteSourceList)},
-  { 67, -1, -1, sizeof(::SearchFilterParamter)},
-  { 77, -1, -1, sizeof(::SearchFilterParamterList)},
-  { 84, -1, -1, sizeof(::SearchParameter)},
+  { 41, -1, -1, sizeof(::SideScanSourceList)},
+  { 48, -1, -1, sizeof(::StatusResponse)},
+  { 56, -1, -1, sizeof(::CruiseRouteSource)},
+  { 66, -1, -1, sizeof(::CruiseRouteSourceList)},
+  { 73, -1, -1, sizeof(::SearchFilterParamter)},
+  { 83, -1, -1, sizeof(::SearchFilterParamterList)},
+  { 90, -1, -1, sizeof(::SearchParameter)},
 };
 
 static const ::_pb::Message* const file_default_instances[] = {
@@ -285,7 +301,7 @@ static const ::_pb::Message* const file_default_instances[] = {
 };
 
 const char descriptor_table_protodef_sidescansource_2eproto[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) =
-  "\n\024sidescansource.proto\"\265\005\n\016SideScanSourc"
+  "\n\024sidescansource.proto\"\362\006\n\016SideScanSourc"
   "e\022\n\n\002id\030\001 \001(\t\022\025\n\rcruise_number\030\002 \001(\t\022\023\n\013"
   "dive_number\030\003 \001(\t\022\021\n\tscan_line\030\004 \001(\t\022\023\n\013"
   "cruise_year\030\005 \001(\t\022\017\n\007dt_time\030\006 \001(\t\022\021\n\tlo"
@@ -293,34 +309,40 @@ const char descriptor_table_protodef_sidescansource_2eproto[] PROTOBUF_SECTION_V
   "eed\030\t \001(\002\022\"\n\032horizontal_range_direction\030"
   "\n \001(\t\022\036\n\026horizontal_range_value\030\013 \001(\t\022\032\n"
   "\022height_from_bottom\030\014 \001(\002\022\017\n\007r_theta\030\r \001"
-  "(\002\022\034\n\024side_scan_image_name\030\016 \001(\t\022\023\n\013alon"
-  "g_track\030\017 \001(\002\022\024\n\014across_track\030\020 \001(\002\022\017\n\007r"
-  "emarks\030\021 \001(\t\022\024\n\014suppose_size\030\022 \001(\t\022\020\n\010pr"
-  "iority\030\023 \001(\r\022\"\n\032verify_auv_sss_image_pat"
-  "hs\030\024 \001(\t\022\032\n\022verify_image_paths\030\025 \001(\t\022\031\n\021"
-  "image_description\030\026 \001(\t\022\030\n\020target_longit"
-  "ude\030\027 \001(\t\022\027\n\017target_latitude\030\030 \001(\t\022\026\n\016po"
-  "sition_error\030\031 \001(\t\022\034\n\024verify_cruise_numb"
-  "er\030\032 \001(\t\022\032\n\022verify_dive_number\030\033 \001(\t\022\023\n\013"
-  "verify_time\030\034 \001(\t\022\023\n\013status_flag\030\035 \001(\r\"3"
-  "\n\022SideScanSourceList\022\035\n\004list\030\001 \003(\0132\017.Sid"
-  "eScanSource\"1\n\016StatusResponse\022\016\n\006status\030"
-  "\001 \001(\010\022\017\n\007message\030\002 \001(\t\"T\n\021CruiseRouteSou"
-  "rce\022\016\n\006cruise\030\001 \001(\t\022\014\n\004type\030\002 \001(\t\022\014\n\004nam"
-  "e\030\003 \001(\t\022\023\n\013status_flag\030\035 \001(\r\"9\n\025CruiseRo"
-  "uteSourceList\022 \n\004list\030\001 \003(\0132\022.CruiseRout"
-  "eSource\"s\n\024SearchFilterParamter\022\023\n\013cruis"
-  "e_year\030\001 \001(\t\022\025\n\rcruise_number\030\002 \001(\t\022\023\n\013d"
-  "ive_number\030\003 \001(\t\022\032\n\022verify_dive_number\030\004"
-  " \001(\t\"\?\n\030SearchFilterParamterList\022#\n\004list"
-  "\030\001 \003(\0132\025.SearchFilterParamter\"n\n\017SearchP"
-  "arameter\022\023\n\013cruise_year\030\001 \001(\t\022\025\n\rcruise_"
-  "number\030\002 \001(\t\022\023\n\013dive_number\030\003 \001(\t\022\032\n\022ver"
-  "ify_dive_number\030\004 \001(\tb\006proto3"
+  "(\002\022\034\n\024side_scan_image_name\030\016 \001(\t\022 \n\030imag"
+  "e_top_left_longitude\030\017 \001(\001\022\037\n\027image_top_"
+  "left_latitude\030\020 \001(\001\022$\n\034image_bottom_righ"
+  "t_longitude\030\021 \001(\001\022#\n\033image_bottom_right_"
+  "latitude\030\022 \001(\001\022\030\n\020image_total_byte\030\023 \001(\r"
+  "\022\023\n\013along_track\030\024 \001(\002\022\024\n\014across_track\030\025 "
+  "\001(\002\022\017\n\007remarks\030\026 \001(\t\022\024\n\014suppose_size\030\027 \001"
+  "(\t\022\020\n\010priority\030\030 \001(\r\022\"\n\032verify_auv_sss_i"
+  "mage_paths\030\031 \001(\t\022\032\n\022verify_image_paths\030\032"
+  " \001(\t\022\031\n\021image_description\030\033 \001(\t\022\030\n\020targe"
+  "t_longitude\030\034 \001(\t\022\027\n\017target_latitude\030\035 \001"
+  "(\t\022\026\n\016position_error\030\036 \001(\t\022\034\n\024verify_cru"
+  "ise_number\030\037 \001(\t\022\032\n\022verify_dive_number\030 "
+  " \001(\t\022\023\n\013verify_time\030! \001(\t\022\023\n\013verify_flag"
+  "\030\" \001(\010\022\023\n\013status_flag\030# \001(\r\"3\n\022SideScanS"
+  "ourceList\022\035\n\004list\030\001 \003(\0132\017.SideScanSource"
+  "\"1\n\016StatusResponse\022\016\n\006status\030\001 \001(\010\022\017\n\007me"
+  "ssage\030\002 \001(\t\"T\n\021CruiseRouteSource\022\016\n\006crui"
+  "se\030\001 \001(\t\022\014\n\004type\030\002 \001(\t\022\014\n\004name\030\003 \001(\t\022\023\n\013"
+  "status_flag\030\035 \001(\r\"9\n\025CruiseRouteSourceLi"
+  "st\022 \n\004list\030\001 \003(\0132\022.CruiseRouteSource\"s\n\024"
+  "SearchFilterParamter\022\023\n\013cruise_year\030\001 \001("
+  "\t\022\025\n\rcruise_number\030\002 \001(\t\022\023\n\013dive_number\030"
+  "\003 \001(\t\022\032\n\022verify_dive_number\030\004 \001(\t\"\?\n\030Sea"
+  "rchFilterParamterList\022#\n\004list\030\001 \003(\0132\025.Se"
+  "archFilterParamter\"\225\001\n\017SearchParameter\022\023"
+  "\n\013cruise_year\030\001 \001(\t\022\025\n\rcruise_number\030\002 \001"
+  "(\t\022\023\n\013dive_number\030\003 \001(\t\022\032\n\022verify_dive_n"
+  "umber\030\004 \003(\t\022\020\n\010priority\030\005 \001(\t\022\023\n\013verify_"
+  "flag\030\006 \001(\tb\006proto3"
   ;
 static ::_pbi::once_flag descriptor_table_sidescansource_2eproto_once;
 const ::_pbi::DescriptorTable descriptor_table_sidescansource_2eproto = {
-    false, false, 1269, descriptor_table_protodef_sidescansource_2eproto,
+    false, false, 1498, descriptor_table_protodef_sidescansource_2eproto,
     "sidescansource.proto",
     &descriptor_table_sidescansource_2eproto_once, nullptr, 0, 8,
     schemas, file_default_instances, TableStruct_sidescansource_2eproto::offsets,
@@ -374,10 +396,16 @@ SideScanSource::SideScanSource(const SideScanSource& from)
     , decltype(_impl_.latitude_){}
     , decltype(_impl_.dt_speed_){}
     , decltype(_impl_.height_from_bottom_){}
+    , decltype(_impl_.image_top_left_longitude_){}
+    , decltype(_impl_.image_top_left_latitude_){}
     , decltype(_impl_.r_theta_){}
+    , decltype(_impl_.image_total_byte_){}
+    , decltype(_impl_.image_bottom_right_longitude_){}
+    , decltype(_impl_.image_bottom_right_latitude_){}
     , decltype(_impl_.along_track_){}
     , decltype(_impl_.across_track_){}
     , decltype(_impl_.priority_){}
+    , decltype(_impl_.verify_flag_){}
     , decltype(_impl_.status_flag_){}
     , /*decltype(_impl_._cached_size_)*/{}};
 
@@ -577,10 +605,16 @@ inline void SideScanSource::SharedCtor(
     , decltype(_impl_.latitude_){0}
     , decltype(_impl_.dt_speed_){0}
     , decltype(_impl_.height_from_bottom_){0}
+    , decltype(_impl_.image_top_left_longitude_){0}
+    , decltype(_impl_.image_top_left_latitude_){0}
     , decltype(_impl_.r_theta_){0}
+    , decltype(_impl_.image_total_byte_){0u}
+    , decltype(_impl_.image_bottom_right_longitude_){0}
+    , decltype(_impl_.image_bottom_right_latitude_){0}
     , decltype(_impl_.along_track_){0}
     , decltype(_impl_.across_track_){0}
     , decltype(_impl_.priority_){0u}
+    , decltype(_impl_.verify_flag_){false}
     , decltype(_impl_.status_flag_){0u}
     , /*decltype(_impl_._cached_size_)*/{}
   };
@@ -871,25 +905,65 @@ const char* SideScanSource::_InternalParse(const char* ptr, ::_pbi::ParseContext
         } else
           goto handle_unusual;
         continue;
-      // float along_track = 15;
+      // double image_top_left_longitude = 15;
       case 15:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 125)) {
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 121)) {
+          _impl_.image_top_left_longitude_ = ::PROTOBUF_NAMESPACE_ID::internal::UnalignedLoad<double>(ptr);
+          ptr += sizeof(double);
+        } else
+          goto handle_unusual;
+        continue;
+      // double image_top_left_latitude = 16;
+      case 16:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 129)) {
+          _impl_.image_top_left_latitude_ = ::PROTOBUF_NAMESPACE_ID::internal::UnalignedLoad<double>(ptr);
+          ptr += sizeof(double);
+        } else
+          goto handle_unusual;
+        continue;
+      // double image_bottom_right_longitude = 17;
+      case 17:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 137)) {
+          _impl_.image_bottom_right_longitude_ = ::PROTOBUF_NAMESPACE_ID::internal::UnalignedLoad<double>(ptr);
+          ptr += sizeof(double);
+        } else
+          goto handle_unusual;
+        continue;
+      // double image_bottom_right_latitude = 18;
+      case 18:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 145)) {
+          _impl_.image_bottom_right_latitude_ = ::PROTOBUF_NAMESPACE_ID::internal::UnalignedLoad<double>(ptr);
+          ptr += sizeof(double);
+        } else
+          goto handle_unusual;
+        continue;
+      // uint32 image_total_byte = 19;
+      case 19:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 152)) {
+          _impl_.image_total_byte_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // float along_track = 20;
+      case 20:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 165)) {
           _impl_.along_track_ = ::PROTOBUF_NAMESPACE_ID::internal::UnalignedLoad<float>(ptr);
           ptr += sizeof(float);
         } else
           goto handle_unusual;
         continue;
-      // float across_track = 16;
-      case 16:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 133)) {
+      // float across_track = 21;
+      case 21:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 173)) {
           _impl_.across_track_ = ::PROTOBUF_NAMESPACE_ID::internal::UnalignedLoad<float>(ptr);
           ptr += sizeof(float);
         } else
           goto handle_unusual;
         continue;
-      // string remarks = 17;
-      case 17:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 138)) {
+      // string remarks = 22;
+      case 22:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 178)) {
           auto str = _internal_mutable_remarks();
           ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
           CHK_(ptr);
@@ -897,9 +971,9 @@ const char* SideScanSource::_InternalParse(const char* ptr, ::_pbi::ParseContext
         } else
           goto handle_unusual;
         continue;
-      // string suppose_size = 18;
-      case 18:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 146)) {
+      // string suppose_size = 23;
+      case 23:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 186)) {
           auto str = _internal_mutable_suppose_size();
           ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
           CHK_(ptr);
@@ -907,17 +981,17 @@ const char* SideScanSource::_InternalParse(const char* ptr, ::_pbi::ParseContext
         } else
           goto handle_unusual;
         continue;
-      // uint32 priority = 19;
-      case 19:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 152)) {
+      // uint32 priority = 24;
+      case 24:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 192)) {
           _impl_.priority_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
           CHK_(ptr);
         } else
           goto handle_unusual;
         continue;
-      // string verify_auv_sss_image_paths = 20;
-      case 20:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 162)) {
+      // string verify_auv_sss_image_paths = 25;
+      case 25:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 202)) {
           auto str = _internal_mutable_verify_auv_sss_image_paths();
           ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
           CHK_(ptr);
@@ -925,9 +999,9 @@ const char* SideScanSource::_InternalParse(const char* ptr, ::_pbi::ParseContext
         } else
           goto handle_unusual;
         continue;
-      // string verify_image_paths = 21;
-      case 21:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 170)) {
+      // string verify_image_paths = 26;
+      case 26:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 210)) {
           auto str = _internal_mutable_verify_image_paths();
           ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
           CHK_(ptr);
@@ -935,9 +1009,9 @@ const char* SideScanSource::_InternalParse(const char* ptr, ::_pbi::ParseContext
         } else
           goto handle_unusual;
         continue;
-      // string image_description = 22;
-      case 22:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 178)) {
+      // string image_description = 27;
+      case 27:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 218)) {
           auto str = _internal_mutable_image_description();
           ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
           CHK_(ptr);
@@ -945,9 +1019,9 @@ const char* SideScanSource::_InternalParse(const char* ptr, ::_pbi::ParseContext
         } else
           goto handle_unusual;
         continue;
-      // string target_longitude = 23;
-      case 23:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 186)) {
+      // string target_longitude = 28;
+      case 28:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 226)) {
           auto str = _internal_mutable_target_longitude();
           ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
           CHK_(ptr);
@@ -955,9 +1029,9 @@ const char* SideScanSource::_InternalParse(const char* ptr, ::_pbi::ParseContext
         } else
           goto handle_unusual;
         continue;
-      // string target_latitude = 24;
-      case 24:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 194)) {
+      // string target_latitude = 29;
+      case 29:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 234)) {
           auto str = _internal_mutable_target_latitude();
           ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
           CHK_(ptr);
@@ -965,9 +1039,9 @@ const char* SideScanSource::_InternalParse(const char* ptr, ::_pbi::ParseContext
         } else
           goto handle_unusual;
         continue;
-      // string position_error = 25;
-      case 25:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 202)) {
+      // string position_error = 30;
+      case 30:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 242)) {
           auto str = _internal_mutable_position_error();
           ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
           CHK_(ptr);
@@ -975,9 +1049,9 @@ const char* SideScanSource::_InternalParse(const char* ptr, ::_pbi::ParseContext
         } else
           goto handle_unusual;
         continue;
-      // string verify_cruise_number = 26;
-      case 26:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 210)) {
+      // string verify_cruise_number = 31;
+      case 31:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 250)) {
           auto str = _internal_mutable_verify_cruise_number();
           ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
           CHK_(ptr);
@@ -985,9 +1059,9 @@ const char* SideScanSource::_InternalParse(const char* ptr, ::_pbi::ParseContext
         } else
           goto handle_unusual;
         continue;
-      // string verify_dive_number = 27;
-      case 27:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 218)) {
+      // string verify_dive_number = 32;
+      case 32:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 2)) {
           auto str = _internal_mutable_verify_dive_number();
           ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
           CHK_(ptr);
@@ -995,9 +1069,9 @@ const char* SideScanSource::_InternalParse(const char* ptr, ::_pbi::ParseContext
         } else
           goto handle_unusual;
         continue;
-      // string verify_time = 28;
-      case 28:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 226)) {
+      // string verify_time = 33;
+      case 33:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 10)) {
           auto str = _internal_mutable_verify_time();
           ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
           CHK_(ptr);
@@ -1005,9 +1079,17 @@ const char* SideScanSource::_InternalParse(const char* ptr, ::_pbi::ParseContext
         } else
           goto handle_unusual;
         continue;
-      // uint32 status_flag = 29;
-      case 29:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 232)) {
+      // bool verify_flag = 34;
+      case 34:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 16)) {
+          _impl_.verify_flag_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // uint32 status_flag = 35;
+      case 35:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 24)) {
           _impl_.status_flag_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
           CHK_(ptr);
         } else
@@ -1182,146 +1264,198 @@ uint8_t* SideScanSource::_InternalSerialize(
         14, this->_internal_side_scan_image_name(), target);
   }
 
-  // float along_track = 15;
+  // double image_top_left_longitude = 15;
+  static_assert(sizeof(uint64_t) == sizeof(double), "Code assumes uint64_t and double are the same size.");
+  double tmp_image_top_left_longitude = this->_internal_image_top_left_longitude();
+  uint64_t raw_image_top_left_longitude;
+  memcpy(&raw_image_top_left_longitude, &tmp_image_top_left_longitude, sizeof(tmp_image_top_left_longitude));
+  if (raw_image_top_left_longitude != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteDoubleToArray(15, this->_internal_image_top_left_longitude(), target);
+  }
+
+  // double image_top_left_latitude = 16;
+  static_assert(sizeof(uint64_t) == sizeof(double), "Code assumes uint64_t and double are the same size.");
+  double tmp_image_top_left_latitude = this->_internal_image_top_left_latitude();
+  uint64_t raw_image_top_left_latitude;
+  memcpy(&raw_image_top_left_latitude, &tmp_image_top_left_latitude, sizeof(tmp_image_top_left_latitude));
+  if (raw_image_top_left_latitude != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteDoubleToArray(16, this->_internal_image_top_left_latitude(), target);
+  }
+
+  // double image_bottom_right_longitude = 17;
+  static_assert(sizeof(uint64_t) == sizeof(double), "Code assumes uint64_t and double are the same size.");
+  double tmp_image_bottom_right_longitude = this->_internal_image_bottom_right_longitude();
+  uint64_t raw_image_bottom_right_longitude;
+  memcpy(&raw_image_bottom_right_longitude, &tmp_image_bottom_right_longitude, sizeof(tmp_image_bottom_right_longitude));
+  if (raw_image_bottom_right_longitude != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteDoubleToArray(17, this->_internal_image_bottom_right_longitude(), target);
+  }
+
+  // double image_bottom_right_latitude = 18;
+  static_assert(sizeof(uint64_t) == sizeof(double), "Code assumes uint64_t and double are the same size.");
+  double tmp_image_bottom_right_latitude = this->_internal_image_bottom_right_latitude();
+  uint64_t raw_image_bottom_right_latitude;
+  memcpy(&raw_image_bottom_right_latitude, &tmp_image_bottom_right_latitude, sizeof(tmp_image_bottom_right_latitude));
+  if (raw_image_bottom_right_latitude != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteDoubleToArray(18, this->_internal_image_bottom_right_latitude(), target);
+  }
+
+  // uint32 image_total_byte = 19;
+  if (this->_internal_image_total_byte() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteUInt32ToArray(19, this->_internal_image_total_byte(), target);
+  }
+
+  // float along_track = 20;
   static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
   float tmp_along_track = this->_internal_along_track();
   uint32_t raw_along_track;
   memcpy(&raw_along_track, &tmp_along_track, sizeof(tmp_along_track));
   if (raw_along_track != 0) {
     target = stream->EnsureSpace(target);
-    target = ::_pbi::WireFormatLite::WriteFloatToArray(15, this->_internal_along_track(), target);
+    target = ::_pbi::WireFormatLite::WriteFloatToArray(20, this->_internal_along_track(), target);
   }
 
-  // float across_track = 16;
+  // float across_track = 21;
   static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
   float tmp_across_track = this->_internal_across_track();
   uint32_t raw_across_track;
   memcpy(&raw_across_track, &tmp_across_track, sizeof(tmp_across_track));
   if (raw_across_track != 0) {
     target = stream->EnsureSpace(target);
-    target = ::_pbi::WireFormatLite::WriteFloatToArray(16, this->_internal_across_track(), target);
+    target = ::_pbi::WireFormatLite::WriteFloatToArray(21, this->_internal_across_track(), target);
   }
 
-  // string remarks = 17;
+  // string remarks = 22;
   if (!this->_internal_remarks().empty()) {
     ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
       this->_internal_remarks().data(), static_cast<int>(this->_internal_remarks().length()),
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
       "SideScanSource.remarks");
     target = stream->WriteStringMaybeAliased(
-        17, this->_internal_remarks(), target);
+        22, this->_internal_remarks(), target);
   }
 
-  // string suppose_size = 18;
+  // string suppose_size = 23;
   if (!this->_internal_suppose_size().empty()) {
     ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
       this->_internal_suppose_size().data(), static_cast<int>(this->_internal_suppose_size().length()),
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
       "SideScanSource.suppose_size");
     target = stream->WriteStringMaybeAliased(
-        18, this->_internal_suppose_size(), target);
+        23, this->_internal_suppose_size(), target);
   }
 
-  // uint32 priority = 19;
+  // uint32 priority = 24;
   if (this->_internal_priority() != 0) {
     target = stream->EnsureSpace(target);
-    target = ::_pbi::WireFormatLite::WriteUInt32ToArray(19, this->_internal_priority(), target);
+    target = ::_pbi::WireFormatLite::WriteUInt32ToArray(24, this->_internal_priority(), target);
   }
 
-  // string verify_auv_sss_image_paths = 20;
+  // string verify_auv_sss_image_paths = 25;
   if (!this->_internal_verify_auv_sss_image_paths().empty()) {
     ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
       this->_internal_verify_auv_sss_image_paths().data(), static_cast<int>(this->_internal_verify_auv_sss_image_paths().length()),
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
       "SideScanSource.verify_auv_sss_image_paths");
     target = stream->WriteStringMaybeAliased(
-        20, this->_internal_verify_auv_sss_image_paths(), target);
+        25, this->_internal_verify_auv_sss_image_paths(), target);
   }
 
-  // string verify_image_paths = 21;
+  // string verify_image_paths = 26;
   if (!this->_internal_verify_image_paths().empty()) {
     ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
       this->_internal_verify_image_paths().data(), static_cast<int>(this->_internal_verify_image_paths().length()),
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
       "SideScanSource.verify_image_paths");
     target = stream->WriteStringMaybeAliased(
-        21, this->_internal_verify_image_paths(), target);
+        26, this->_internal_verify_image_paths(), target);
   }
 
-  // string image_description = 22;
+  // string image_description = 27;
   if (!this->_internal_image_description().empty()) {
     ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
       this->_internal_image_description().data(), static_cast<int>(this->_internal_image_description().length()),
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
       "SideScanSource.image_description");
     target = stream->WriteStringMaybeAliased(
-        22, this->_internal_image_description(), target);
+        27, this->_internal_image_description(), target);
   }
 
-  // string target_longitude = 23;
+  // string target_longitude = 28;
   if (!this->_internal_target_longitude().empty()) {
     ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
       this->_internal_target_longitude().data(), static_cast<int>(this->_internal_target_longitude().length()),
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
       "SideScanSource.target_longitude");
     target = stream->WriteStringMaybeAliased(
-        23, this->_internal_target_longitude(), target);
+        28, this->_internal_target_longitude(), target);
   }
 
-  // string target_latitude = 24;
+  // string target_latitude = 29;
   if (!this->_internal_target_latitude().empty()) {
     ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
       this->_internal_target_latitude().data(), static_cast<int>(this->_internal_target_latitude().length()),
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
       "SideScanSource.target_latitude");
     target = stream->WriteStringMaybeAliased(
-        24, this->_internal_target_latitude(), target);
+        29, this->_internal_target_latitude(), target);
   }
 
-  // string position_error = 25;
+  // string position_error = 30;
   if (!this->_internal_position_error().empty()) {
     ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
       this->_internal_position_error().data(), static_cast<int>(this->_internal_position_error().length()),
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
       "SideScanSource.position_error");
     target = stream->WriteStringMaybeAliased(
-        25, this->_internal_position_error(), target);
+        30, this->_internal_position_error(), target);
   }
 
-  // string verify_cruise_number = 26;
+  // string verify_cruise_number = 31;
   if (!this->_internal_verify_cruise_number().empty()) {
     ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
       this->_internal_verify_cruise_number().data(), static_cast<int>(this->_internal_verify_cruise_number().length()),
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
       "SideScanSource.verify_cruise_number");
     target = stream->WriteStringMaybeAliased(
-        26, this->_internal_verify_cruise_number(), target);
+        31, this->_internal_verify_cruise_number(), target);
   }
 
-  // string verify_dive_number = 27;
+  // string verify_dive_number = 32;
   if (!this->_internal_verify_dive_number().empty()) {
     ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
       this->_internal_verify_dive_number().data(), static_cast<int>(this->_internal_verify_dive_number().length()),
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
       "SideScanSource.verify_dive_number");
     target = stream->WriteStringMaybeAliased(
-        27, this->_internal_verify_dive_number(), target);
+        32, this->_internal_verify_dive_number(), target);
   }
 
-  // string verify_time = 28;
+  // string verify_time = 33;
   if (!this->_internal_verify_time().empty()) {
     ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
       this->_internal_verify_time().data(), static_cast<int>(this->_internal_verify_time().length()),
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
       "SideScanSource.verify_time");
     target = stream->WriteStringMaybeAliased(
-        28, this->_internal_verify_time(), target);
+        33, this->_internal_verify_time(), target);
   }
 
-  // uint32 status_flag = 29;
+  // bool verify_flag = 34;
+  if (this->_internal_verify_flag() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteBoolToArray(34, this->_internal_verify_flag(), target);
+  }
+
+  // uint32 status_flag = 35;
   if (this->_internal_status_flag() != 0) {
     target = stream->EnsureSpace(target);
-    target = ::_pbi::WireFormatLite::WriteUInt32ToArray(29, this->_internal_status_flag(), target);
+    target = ::_pbi::WireFormatLite::WriteUInt32ToArray(35, this->_internal_status_flag(), target);
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
@@ -1403,77 +1537,77 @@ size_t SideScanSource::ByteSizeLong() const {
         this->_internal_side_scan_image_name());
   }
 
-  // string remarks = 17;
+  // string remarks = 22;
   if (!this->_internal_remarks().empty()) {
     total_size += 2 +
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
         this->_internal_remarks());
   }
 
-  // string suppose_size = 18;
+  // string suppose_size = 23;
   if (!this->_internal_suppose_size().empty()) {
     total_size += 2 +
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
         this->_internal_suppose_size());
   }
 
-  // string verify_auv_sss_image_paths = 20;
+  // string verify_auv_sss_image_paths = 25;
   if (!this->_internal_verify_auv_sss_image_paths().empty()) {
     total_size += 2 +
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
         this->_internal_verify_auv_sss_image_paths());
   }
 
-  // string verify_image_paths = 21;
+  // string verify_image_paths = 26;
   if (!this->_internal_verify_image_paths().empty()) {
     total_size += 2 +
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
         this->_internal_verify_image_paths());
   }
 
-  // string image_description = 22;
+  // string image_description = 27;
   if (!this->_internal_image_description().empty()) {
     total_size += 2 +
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
         this->_internal_image_description());
   }
 
-  // string target_longitude = 23;
+  // string target_longitude = 28;
   if (!this->_internal_target_longitude().empty()) {
     total_size += 2 +
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
         this->_internal_target_longitude());
   }
 
-  // string target_latitude = 24;
+  // string target_latitude = 29;
   if (!this->_internal_target_latitude().empty()) {
     total_size += 2 +
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
         this->_internal_target_latitude());
   }
 
-  // string position_error = 25;
+  // string position_error = 30;
   if (!this->_internal_position_error().empty()) {
     total_size += 2 +
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
         this->_internal_position_error());
   }
 
-  // string verify_cruise_number = 26;
+  // string verify_cruise_number = 31;
   if (!this->_internal_verify_cruise_number().empty()) {
     total_size += 2 +
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
         this->_internal_verify_cruise_number());
   }
 
-  // string verify_dive_number = 27;
+  // string verify_dive_number = 32;
   if (!this->_internal_verify_dive_number().empty()) {
     total_size += 2 +
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
         this->_internal_verify_dive_number());
   }
 
-  // string verify_time = 28;
+  // string verify_time = 33;
   if (!this->_internal_verify_time().empty()) {
     total_size += 2 +
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
@@ -1516,6 +1650,24 @@ size_t SideScanSource::ByteSizeLong() const {
     total_size += 1 + 4;
   }
 
+  // double image_top_left_longitude = 15;
+  static_assert(sizeof(uint64_t) == sizeof(double), "Code assumes uint64_t and double are the same size.");
+  double tmp_image_top_left_longitude = this->_internal_image_top_left_longitude();
+  uint64_t raw_image_top_left_longitude;
+  memcpy(&raw_image_top_left_longitude, &tmp_image_top_left_longitude, sizeof(tmp_image_top_left_longitude));
+  if (raw_image_top_left_longitude != 0) {
+    total_size += 1 + 8;
+  }
+
+  // double image_top_left_latitude = 16;
+  static_assert(sizeof(uint64_t) == sizeof(double), "Code assumes uint64_t and double are the same size.");
+  double tmp_image_top_left_latitude = this->_internal_image_top_left_latitude();
+  uint64_t raw_image_top_left_latitude;
+  memcpy(&raw_image_top_left_latitude, &tmp_image_top_left_latitude, sizeof(tmp_image_top_left_latitude));
+  if (raw_image_top_left_latitude != 0) {
+    total_size += 2 + 8;
+  }
+
   // float r_theta = 13;
   static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
   float tmp_r_theta = this->_internal_r_theta();
@@ -1525,16 +1677,41 @@ size_t SideScanSource::ByteSizeLong() const {
     total_size += 1 + 4;
   }
 
-  // float along_track = 15;
+  // uint32 image_total_byte = 19;
+  if (this->_internal_image_total_byte() != 0) {
+    total_size += 2 +
+      ::_pbi::WireFormatLite::UInt32Size(
+        this->_internal_image_total_byte());
+  }
+
+  // double image_bottom_right_longitude = 17;
+  static_assert(sizeof(uint64_t) == sizeof(double), "Code assumes uint64_t and double are the same size.");
+  double tmp_image_bottom_right_longitude = this->_internal_image_bottom_right_longitude();
+  uint64_t raw_image_bottom_right_longitude;
+  memcpy(&raw_image_bottom_right_longitude, &tmp_image_bottom_right_longitude, sizeof(tmp_image_bottom_right_longitude));
+  if (raw_image_bottom_right_longitude != 0) {
+    total_size += 2 + 8;
+  }
+
+  // double image_bottom_right_latitude = 18;
+  static_assert(sizeof(uint64_t) == sizeof(double), "Code assumes uint64_t and double are the same size.");
+  double tmp_image_bottom_right_latitude = this->_internal_image_bottom_right_latitude();
+  uint64_t raw_image_bottom_right_latitude;
+  memcpy(&raw_image_bottom_right_latitude, &tmp_image_bottom_right_latitude, sizeof(tmp_image_bottom_right_latitude));
+  if (raw_image_bottom_right_latitude != 0) {
+    total_size += 2 + 8;
+  }
+
+  // float along_track = 20;
   static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
   float tmp_along_track = this->_internal_along_track();
   uint32_t raw_along_track;
   memcpy(&raw_along_track, &tmp_along_track, sizeof(tmp_along_track));
   if (raw_along_track != 0) {
-    total_size += 1 + 4;
+    total_size += 2 + 4;
   }
 
-  // float across_track = 16;
+  // float across_track = 21;
   static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
   float tmp_across_track = this->_internal_across_track();
   uint32_t raw_across_track;
@@ -1543,14 +1720,19 @@ size_t SideScanSource::ByteSizeLong() const {
     total_size += 2 + 4;
   }
 
-  // uint32 priority = 19;
+  // uint32 priority = 24;
   if (this->_internal_priority() != 0) {
     total_size += 2 +
       ::_pbi::WireFormatLite::UInt32Size(
         this->_internal_priority());
   }
 
-  // uint32 status_flag = 29;
+  // bool verify_flag = 34;
+  if (this->_internal_verify_flag() != 0) {
+    total_size += 2 + 1;
+  }
+
+  // uint32 status_flag = 35;
   if (this->_internal_status_flag() != 0) {
     total_size += 2 +
       ::_pbi::WireFormatLite::UInt32Size(
@@ -1663,12 +1845,43 @@ void SideScanSource::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const :
   if (raw_height_from_bottom != 0) {
     _this->_internal_set_height_from_bottom(from._internal_height_from_bottom());
   }
+  static_assert(sizeof(uint64_t) == sizeof(double), "Code assumes uint64_t and double are the same size.");
+  double tmp_image_top_left_longitude = from._internal_image_top_left_longitude();
+  uint64_t raw_image_top_left_longitude;
+  memcpy(&raw_image_top_left_longitude, &tmp_image_top_left_longitude, sizeof(tmp_image_top_left_longitude));
+  if (raw_image_top_left_longitude != 0) {
+    _this->_internal_set_image_top_left_longitude(from._internal_image_top_left_longitude());
+  }
+  static_assert(sizeof(uint64_t) == sizeof(double), "Code assumes uint64_t and double are the same size.");
+  double tmp_image_top_left_latitude = from._internal_image_top_left_latitude();
+  uint64_t raw_image_top_left_latitude;
+  memcpy(&raw_image_top_left_latitude, &tmp_image_top_left_latitude, sizeof(tmp_image_top_left_latitude));
+  if (raw_image_top_left_latitude != 0) {
+    _this->_internal_set_image_top_left_latitude(from._internal_image_top_left_latitude());
+  }
   static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
   float tmp_r_theta = from._internal_r_theta();
   uint32_t raw_r_theta;
   memcpy(&raw_r_theta, &tmp_r_theta, sizeof(tmp_r_theta));
   if (raw_r_theta != 0) {
     _this->_internal_set_r_theta(from._internal_r_theta());
+  }
+  if (from._internal_image_total_byte() != 0) {
+    _this->_internal_set_image_total_byte(from._internal_image_total_byte());
+  }
+  static_assert(sizeof(uint64_t) == sizeof(double), "Code assumes uint64_t and double are the same size.");
+  double tmp_image_bottom_right_longitude = from._internal_image_bottom_right_longitude();
+  uint64_t raw_image_bottom_right_longitude;
+  memcpy(&raw_image_bottom_right_longitude, &tmp_image_bottom_right_longitude, sizeof(tmp_image_bottom_right_longitude));
+  if (raw_image_bottom_right_longitude != 0) {
+    _this->_internal_set_image_bottom_right_longitude(from._internal_image_bottom_right_longitude());
+  }
+  static_assert(sizeof(uint64_t) == sizeof(double), "Code assumes uint64_t and double are the same size.");
+  double tmp_image_bottom_right_latitude = from._internal_image_bottom_right_latitude();
+  uint64_t raw_image_bottom_right_latitude;
+  memcpy(&raw_image_bottom_right_latitude, &tmp_image_bottom_right_latitude, sizeof(tmp_image_bottom_right_latitude));
+  if (raw_image_bottom_right_latitude != 0) {
+    _this->_internal_set_image_bottom_right_latitude(from._internal_image_bottom_right_latitude());
   }
   static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
   float tmp_along_track = from._internal_along_track();
@@ -1686,6 +1899,9 @@ void SideScanSource::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const :
   }
   if (from._internal_priority() != 0) {
     _this->_internal_set_priority(from._internal_priority());
+  }
+  if (from._internal_verify_flag() != 0) {
+    _this->_internal_set_verify_flag(from._internal_verify_flag());
   }
   if (from._internal_status_flag() != 0) {
     _this->_internal_set_status_flag(from._internal_status_flag());
@@ -3289,10 +3505,12 @@ SearchParameter::SearchParameter(const SearchParameter& from)
   : ::PROTOBUF_NAMESPACE_ID::Message() {
   SearchParameter* const _this = this; (void)_this;
   new (&_impl_) Impl_{
-      decltype(_impl_.cruise_year_){}
+      decltype(_impl_.verify_dive_number_){from._impl_.verify_dive_number_}
+    , decltype(_impl_.cruise_year_){}
     , decltype(_impl_.cruise_number_){}
     , decltype(_impl_.dive_number_){}
-    , decltype(_impl_.verify_dive_number_){}
+    , decltype(_impl_.priority_){}
+    , decltype(_impl_.verify_flag_){}
     , /*decltype(_impl_._cached_size_)*/{}};
 
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
@@ -3320,12 +3538,20 @@ SearchParameter::SearchParameter(const SearchParameter& from)
     _this->_impl_.dive_number_.Set(from._internal_dive_number(), 
       _this->GetArenaForAllocation());
   }
-  _impl_.verify_dive_number_.InitDefault();
+  _impl_.priority_.InitDefault();
   #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-    _impl_.verify_dive_number_.Set("", GetArenaForAllocation());
+    _impl_.priority_.Set("", GetArenaForAllocation());
   #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  if (!from._internal_verify_dive_number().empty()) {
-    _this->_impl_.verify_dive_number_.Set(from._internal_verify_dive_number(), 
+  if (!from._internal_priority().empty()) {
+    _this->_impl_.priority_.Set(from._internal_priority(), 
+      _this->GetArenaForAllocation());
+  }
+  _impl_.verify_flag_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.verify_flag_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (!from._internal_verify_flag().empty()) {
+    _this->_impl_.verify_flag_.Set(from._internal_verify_flag(), 
       _this->GetArenaForAllocation());
   }
   // @@protoc_insertion_point(copy_constructor:SearchParameter)
@@ -3336,10 +3562,12 @@ inline void SearchParameter::SharedCtor(
   (void)arena;
   (void)is_message_owned;
   new (&_impl_) Impl_{
-      decltype(_impl_.cruise_year_){}
+      decltype(_impl_.verify_dive_number_){arena}
+    , decltype(_impl_.cruise_year_){}
     , decltype(_impl_.cruise_number_){}
     , decltype(_impl_.dive_number_){}
-    , decltype(_impl_.verify_dive_number_){}
+    , decltype(_impl_.priority_){}
+    , decltype(_impl_.verify_flag_){}
     , /*decltype(_impl_._cached_size_)*/{}
   };
   _impl_.cruise_year_.InitDefault();
@@ -3354,9 +3582,13 @@ inline void SearchParameter::SharedCtor(
   #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
     _impl_.dive_number_.Set("", GetArenaForAllocation());
   #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  _impl_.verify_dive_number_.InitDefault();
+  _impl_.priority_.InitDefault();
   #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-    _impl_.verify_dive_number_.Set("", GetArenaForAllocation());
+    _impl_.priority_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  _impl_.verify_flag_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.verify_flag_.Set("", GetArenaForAllocation());
   #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
 }
 
@@ -3371,10 +3603,12 @@ SearchParameter::~SearchParameter() {
 
 inline void SearchParameter::SharedDtor() {
   GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
+  _impl_.verify_dive_number_.~RepeatedPtrField();
   _impl_.cruise_year_.Destroy();
   _impl_.cruise_number_.Destroy();
   _impl_.dive_number_.Destroy();
-  _impl_.verify_dive_number_.Destroy();
+  _impl_.priority_.Destroy();
+  _impl_.verify_flag_.Destroy();
 }
 
 void SearchParameter::SetCachedSize(int size) const {
@@ -3387,10 +3621,12 @@ void SearchParameter::Clear() {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
+  _impl_.verify_dive_number_.Clear();
   _impl_.cruise_year_.ClearToEmpty();
   _impl_.cruise_number_.ClearToEmpty();
   _impl_.dive_number_.ClearToEmpty();
-  _impl_.verify_dive_number_.ClearToEmpty();
+  _impl_.priority_.ClearToEmpty();
+  _impl_.verify_flag_.ClearToEmpty();
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
@@ -3430,13 +3666,38 @@ const char* SearchParameter::_InternalParse(const char* ptr, ::_pbi::ParseContex
         } else
           goto handle_unusual;
         continue;
-      // string verify_dive_number = 4;
+      // repeated string verify_dive_number = 4;
       case 4:
         if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 34)) {
-          auto str = _internal_mutable_verify_dive_number();
+          ptr -= 1;
+          do {
+            ptr += 1;
+            auto str = _internal_add_verify_dive_number();
+            ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
+            CHK_(ptr);
+            CHK_(::_pbi::VerifyUTF8(str, "SearchParameter.verify_dive_number"));
+            if (!ctx->DataAvailable(ptr)) break;
+          } while (::PROTOBUF_NAMESPACE_ID::internal::ExpectTag<34>(ptr));
+        } else
+          goto handle_unusual;
+        continue;
+      // string priority = 5;
+      case 5:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 42)) {
+          auto str = _internal_mutable_priority();
           ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
           CHK_(ptr);
-          CHK_(::_pbi::VerifyUTF8(str, "SearchParameter.verify_dive_number"));
+          CHK_(::_pbi::VerifyUTF8(str, "SearchParameter.priority"));
+        } else
+          goto handle_unusual;
+        continue;
+      // string verify_flag = 6;
+      case 6:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 50)) {
+          auto str = _internal_mutable_verify_flag();
+          ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(ptr);
+          CHK_(::_pbi::VerifyUTF8(str, "SearchParameter.verify_flag"));
         } else
           goto handle_unusual;
         continue;
@@ -3499,14 +3760,34 @@ uint8_t* SearchParameter::_InternalSerialize(
         3, this->_internal_dive_number(), target);
   }
 
-  // string verify_dive_number = 4;
-  if (!this->_internal_verify_dive_number().empty()) {
+  // repeated string verify_dive_number = 4;
+  for (int i = 0, n = this->_internal_verify_dive_number_size(); i < n; i++) {
+    const auto& s = this->_internal_verify_dive_number(i);
     ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
-      this->_internal_verify_dive_number().data(), static_cast<int>(this->_internal_verify_dive_number().length()),
+      s.data(), static_cast<int>(s.length()),
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
       "SearchParameter.verify_dive_number");
+    target = stream->WriteString(4, s, target);
+  }
+
+  // string priority = 5;
+  if (!this->_internal_priority().empty()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->_internal_priority().data(), static_cast<int>(this->_internal_priority().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "SearchParameter.priority");
     target = stream->WriteStringMaybeAliased(
-        4, this->_internal_verify_dive_number(), target);
+        5, this->_internal_priority(), target);
+  }
+
+  // string verify_flag = 6;
+  if (!this->_internal_verify_flag().empty()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->_internal_verify_flag().data(), static_cast<int>(this->_internal_verify_flag().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "SearchParameter.verify_flag");
+    target = stream->WriteStringMaybeAliased(
+        6, this->_internal_verify_flag(), target);
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
@@ -3524,6 +3805,14 @@ size_t SearchParameter::ByteSizeLong() const {
   uint32_t cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
+
+  // repeated string verify_dive_number = 4;
+  total_size += 1 *
+      ::PROTOBUF_NAMESPACE_ID::internal::FromIntSize(_impl_.verify_dive_number_.size());
+  for (int i = 0, n = _impl_.verify_dive_number_.size(); i < n; i++) {
+    total_size += ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+      _impl_.verify_dive_number_.Get(i));
+  }
 
   // string cruise_year = 1;
   if (!this->_internal_cruise_year().empty()) {
@@ -3546,11 +3835,18 @@ size_t SearchParameter::ByteSizeLong() const {
         this->_internal_dive_number());
   }
 
-  // string verify_dive_number = 4;
-  if (!this->_internal_verify_dive_number().empty()) {
+  // string priority = 5;
+  if (!this->_internal_priority().empty()) {
     total_size += 1 +
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
-        this->_internal_verify_dive_number());
+        this->_internal_priority());
+  }
+
+  // string verify_flag = 6;
+  if (!this->_internal_verify_flag().empty()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->_internal_verify_flag());
   }
 
   return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
@@ -3571,6 +3867,7 @@ void SearchParameter::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const 
   uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
+  _this->_impl_.verify_dive_number_.MergeFrom(from._impl_.verify_dive_number_);
   if (!from._internal_cruise_year().empty()) {
     _this->_internal_set_cruise_year(from._internal_cruise_year());
   }
@@ -3580,8 +3877,11 @@ void SearchParameter::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const 
   if (!from._internal_dive_number().empty()) {
     _this->_internal_set_dive_number(from._internal_dive_number());
   }
-  if (!from._internal_verify_dive_number().empty()) {
-    _this->_internal_set_verify_dive_number(from._internal_verify_dive_number());
+  if (!from._internal_priority().empty()) {
+    _this->_internal_set_priority(from._internal_priority());
+  }
+  if (!from._internal_verify_flag().empty()) {
+    _this->_internal_set_verify_flag(from._internal_verify_flag());
   }
   _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
 }
@@ -3602,6 +3902,7 @@ void SearchParameter::InternalSwap(SearchParameter* other) {
   auto* lhs_arena = GetArenaForAllocation();
   auto* rhs_arena = other->GetArenaForAllocation();
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  _impl_.verify_dive_number_.InternalSwap(&other->_impl_.verify_dive_number_);
   ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
       &_impl_.cruise_year_, lhs_arena,
       &other->_impl_.cruise_year_, rhs_arena
@@ -3615,8 +3916,12 @@ void SearchParameter::InternalSwap(SearchParameter* other) {
       &other->_impl_.dive_number_, rhs_arena
   );
   ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
-      &_impl_.verify_dive_number_, lhs_arena,
-      &other->_impl_.verify_dive_number_, rhs_arena
+      &_impl_.priority_, lhs_arena,
+      &other->_impl_.priority_, rhs_arena
+  );
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &_impl_.verify_flag_, lhs_arena,
+      &other->_impl_.verify_flag_, rhs_arena
   );
 }
 

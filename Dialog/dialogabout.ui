@@ -57,7 +57,7 @@ color: #222222;</string>
 color: gray;</string>
         </property>
         <property name="text">
-         <string>Author: Mtr</string>
+         <string>Author: Mtr1994</string>
         </property>
         <property name="alignment">
          <set>Qt::AlignCenter</set>
