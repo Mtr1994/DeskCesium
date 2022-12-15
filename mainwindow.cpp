@@ -82,10 +82,10 @@ void MainWindow::init()
     ui->widgetCesium->setVisible(false);
 
     ////// 网页调试部分，发布时请注释此段代码 S
-    QWebEngineView *debugPage = new QWebEngineView;
-    ui->widgetCesium->page()->setDevToolsPage(debugPage->page());
-    ui->widgetCesium->page()->triggerAction(QWebEnginePage::WebAction::InspectElement);
-    debugPage->show();
+//    QWebEngineView *debugPage = new QWebEngineView;
+//    ui->widgetCesium->page()->setDevToolsPage(debugPage->page());
+//    ui->widgetCesium->page()->triggerAction(QWebEnginePage::WebAction::InspectElement);
+//    debugPage->show();
     ////// 网页调试部分，发布时请注释此段代码 E
 
     // 菜单
