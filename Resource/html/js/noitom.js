@@ -384,7 +384,15 @@ function addRemoteTiffEntity(arg) {
 	let xhr = new XMLHttpRequest();
 	xhr.open('GET', remoteObject.side_scan_image_name);
 	xhr.responseType = 'arraybuffer';
+	xhr.onerror = function (error) {
+		context.recvMsg("add", "remote tif", false, "图片加载失败");
+	}
 	xhr.onload = function (e) {
+		if (e.total === 0) {
+			// 表示加载失败，或文件不存在
+			context.recvMsg("add", "remote tif", false, "目标图片不存在图片");
+			return;
+		}
 		Tiff.initialize({TOTAL_MEMORY: parseInt(remoteObject.image_total_byte) * 1.1})
 		let tiff = new Tiff({buffer: xhr.response});
 		let canvas = tiff.toCanvas();
@@ -398,9 +406,9 @@ function addRemoteTiffEntity(arg) {
 		  },
 		  remoteDescription: remoteObject
 		});
-		
 		context.recvMsg("add", "remote tif", true, remoteObject.id);
 	};
+
 	xhr.send();
 }
 

@@ -18,8 +18,11 @@ void JsContext::sendMsg()
 
 void JsContext::recvMsg(const QString &action, const QString &type, bool status, const QString &arg, const QString &list)
 {
-     qDebug() << action << " " << type << " " << status << " " << arg << " " << list.length();
-
+    qDebug() << action << " " << type << " " << status << " " << arg << " " << list.length();
+    if (!status)
+    {
+        return;
+    }
     if (action == "add")
     {
         emit AppSignal::getInstance()->sgl_add_entity_finish(type, arg, list);

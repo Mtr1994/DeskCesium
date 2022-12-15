@@ -282,7 +282,6 @@ QHeaderView
     min-height: 2.8em;
     background-color: #fefefe;
     border-bottom: 1px solid #e0e0e0;
-    border-right: 1px solid #e0e0e0;
 }
 
 QHeaderView:section
@@ -290,16 +289,9 @@ QHeaderView:section
     padding-left: 3px;
     background-color: #fefefe;
     border: none;
-    border-right:1px solid #e0e0e0;
     border-bottom:1px solid #e0e0e0;
 }
 
-QHeaderView:section:last
-{
-    border-right:1px solid #e0e0e0;
-}
-
-/* QTableView */
 /* QTableView */
 QTableView
 {
