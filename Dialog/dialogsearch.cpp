@@ -98,7 +98,7 @@ void DialogSearch::init()
     ui->tblvSideScanSource->verticalHeader()->setDefaultSectionSize(metrics.height() * 2.4);
 
     // 隐藏数据项
-    ui->tblvSideScanSource->setColumnHidden(FIELD_ID, true);
+    ui->tblvSideScanSource->setColumnHidden(FIELD_ID, false);
     ui->tblvSideScanSource->setColumnHidden(FIELD_CRUISE_NUMBER, false);
     ui->tblvSideScanSource->setColumnHidden(FIELD_DIVE_NUMBER, false);
     ui->tblvSideScanSource->setColumnHidden(FIELD_SCAN_LINE, true);
