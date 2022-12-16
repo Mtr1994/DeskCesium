@@ -26,6 +26,25 @@ const uint16_t CMD_INSERT_CRUISE_ROUTE_SOURCE_DATA = 0X7005;
 // insert cruise data response
 const uint16_t CMD_INSERT_CRUISE_ROUTE_SOURCE_DATA_RESPONSE = 0XB005;
 
+// query search parameter source
+const uint16_t CMD_QUERY_SEARCH_FILTER_PARAMETER_DATA = 0X7007;
+
+// query search parameter source response
+const uint16_t CMD_QUERY_SEARCH_FILTER_PARAMETER_DATA_RESPONSE = 0XB007;
+
+// query side scan data by filter
+const uint16_t CMD_QUERY_SIDE_SCAN_SOURCE_DATA_BY_FILTER = 0X7009;
+
+// query side scan data by filter response
+const uint16_t CMD_QUERY_SIDE_SCAN_SOURCE_DATA_BY_FILTER_RESPONSE = 0XB009;
+
+// query side scan data by keyword
+const uint16_t CMD_QUERY_SIDE_SCAN_SOURCE_DATA_BY_KEYWORD = 0X700b;
+
+// query side scan data by keyword response
+const uint16_t CMD_QUERY_SIDE_SCAN_SOURCE_DATA_BY_KEYWORD_RESPONSE = 0XB00b;
+
+class MySQLConnectionPool;
 class CBaseCommand
 {
 public:
@@ -40,6 +59,12 @@ public:
 	void logic_query_ftp_server_status(const CMessage_Source& source, std::shared_ptr<CMessage_Packet> recv_packet, std::shared_ptr<CMessage_Packet> send_packet);
 	
 	void logic_insert_cruise_route_source_data(const CMessage_Source& source, std::shared_ptr<CMessage_Packet> recv_packet, std::shared_ptr<CMessage_Packet> send_packet);
+	
+	void logic_query_search_filter_parameter_data(const CMessage_Source& source, std::shared_ptr<CMessage_Packet> recv_packet, std::shared_ptr<CMessage_Packet> send_packet);
+	
+	void logic_query_side_scan_source_data_by_filter(const CMessage_Source& source, std::shared_ptr<CMessage_Packet> recv_packet, std::shared_ptr<CMessage_Packet> send_packet);
+	
+	void logic_query_side_scan_source_data_by_keyword(const CMessage_Source& source, std::shared_ptr<CMessage_Packet> recv_packet, std::shared_ptr<CMessage_Packet> send_packet);
 
 	ISessionService* session_service_ = nullptr;
 	
@@ -48,5 +73,7 @@ private:
 
 private:
 	std::string createPackage(uint16_t cmd, const std::string &data);
+	
+	MySQLConnectionPool *mMysqlConnectionPool = nullptr;
 };
 

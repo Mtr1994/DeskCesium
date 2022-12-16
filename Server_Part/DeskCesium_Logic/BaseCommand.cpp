@@ -2,9 +2,12 @@
 #include "./Proto/sidescansource.pb.h"
 #include "mysqlconnectionpool.h"
 
+#include <string>
+
 std::string errorMessage = "消息数据异常，请联系管理员";
 std::string errorParseMessage = "消息解析失败，请联系管理员";
 std::string errorConnMySQL = "连接数据库失败，请联系管理员";
+std::string errorQueryMySQL = "数据库查询失败，请联系管理员";
 std::string errorExecMySQL = "数据库语句执行失败，自动回滚";
 std::string errorCommitMySQL = "数据库事物提交失败";
 std::string errorRollbackMySQL = "数据库事物回滚失败，请联系管理员";
@@ -35,6 +38,13 @@ void CBaseCommand::Init(ISessionService* session_service)
     }
 
     PSS_LOGGER_DEBUG("[load_module]({0})io thread count.", session_service_->get_io_work_thread_count());
+    
+    // init mysql connection pool
+    mMysqlConnectionPool = MySQLConnectionPool::getConnectPool();
+    if (nullptr == mMysqlConnectionPool) 
+    {
+		PSS_LOGGER_DEBUG("create mysql connection poll failed");
+	}
 }
 
 void CBaseCommand::logic_connect(const CMessage_Source& source, std::shared_ptr<CMessage_Packet> recv_packet, std::shared_ptr<CMessage_Packet> send_packet)
@@ -97,22 +107,11 @@ void CBaseCommand::logic_insert_side_scan_source_data(const CMessage_Source& sou
         sendAsyncPack(source.connect_id_, pack);
 		return;
     }
-    
-    MySQLConnectionPool* pool = MySQLConnectionPool::getConnectPool();
-    if (nullptr == pool) 
-    {
-		StatusResponse response;
-		response.set_status(false);
-		response.set_message(errorConnMySQL);
-		std::string pack = createPackage(CMD_INSERT_SIDE_SCAN_SOURCE_DATA_RESPONSE, response.SerializeAsString());
-        sendAsyncPack(source.connect_id_, pack);
-		return;
-	}
 
 	StatusResponse response;
 	response.set_status(false);
 
-    shared_ptr<MysqlConnection> conn = pool->getConnection();
+    shared_ptr<MysqlConnection> conn = mMysqlConnectionPool->getConnection();
     status = conn->transaction();
     if (!status)
     {
@@ -128,11 +127,12 @@ void CBaseCommand::logic_insert_side_scan_source_data(const CMessage_Source& sou
     {
         SideScanSource source = sourceDataList.list().at(i);
 
-		sprintf(sql, "REPLACE INTO t_source_data_side_scan VALUES('%s', '%s', %f, %f, %f, '%s', '%s', %f, %f, '%s', %f, %f, '%s', '%s', %d, '%s', '%s', '%s', '%s', '%s', '%s', '%s','%s', '%s', 0)", 
-				source.id().data(), source.dt_time().data(), source.longitude(), source.latitude(), source.dt_speed(), source.horizontal_range_direction().data(), 
-				source.horizontal_range_value().data(), source.height_from_bottom(), source.r_theta(), source.side_scan_image_name().data(), source.along_track(), 
-				source.across_track(), source.remarks().data(), source.suppose_size().data(), source.priority(), source.verify_auv_sss_image_paths().data(), source.verify_image_paths().data(), 
-				source.image_description().data(), source.target_longitude().data(), source.target_latitude().data(), source.position_error().data(), source.cruise_number().data(), source.dive_number().data(), source.verify_time().data());
+		sprintf(sql, "REPLACE INTO t_source_data_side_scan VALUES('%s', '%s', '%s', '%s', '%s', '%s', %f, %f, %f, '%s', '%s', %f, %f, '%s', %f, %f, %f, %f, %d, %f, %f, '%s', '%s', %d, '%s', '%s', '%s', '%s', '%s', '%s', '%s','%s', '%s', '%d', 0)", 
+				source.id().data(), source.cruise_number().data(), source.dive_number().data(), source.scan_line().data(), source.cruise_year().data(), source.dt_time().data(), source.longitude(), source.latitude(), 
+				source.dt_speed(), source.horizontal_range_direction().data(),  source.horizontal_range_value().data(), source.height_from_bottom(), source.r_theta(), source.side_scan_image_name().data(), source.image_top_left_longitude(),
+				source.image_top_left_latitude(), source.image_bottom_right_longitude(), source.image_bottom_right_latitude(), source.image_total_byte(), source.along_track(),  source.across_track(), source.remarks().data(), source.suppose_size().data(), 
+				source.priority(), source.verify_auv_sss_image_paths().data(), source.verify_image_paths().data(),  source.image_description().data(),  source.target_longitude().data(), source.target_latitude().data(), 
+				source.position_error().data(), source.verify_cruise_number().data(), source.verify_dive_number().data(), source.verify_time().data(), source.verify_flag());
 		
 		status = conn->update(sql);
 		
@@ -142,7 +142,7 @@ void CBaseCommand::logic_insert_side_scan_source_data(const CMessage_Source& sou
     if (!status)
     {
 	    std::string error = conn->lastError();
-		PSS_LOGGER_DEBUG("{0} t_source_data_side_scan {0}", errorExecMySQL, error.data());
+		PSS_LOGGER_DEBUG("{0} t_source_data_side_scan {1}", errorExecMySQL, error.data());
 		
 		// response to client
 		response.set_message(error);
@@ -236,22 +236,11 @@ void CBaseCommand::logic_insert_cruise_route_source_data(const CMessage_Source& 
         sendAsyncPack(source.connect_id_, pack);
 		return;
     }
-    
-    MySQLConnectionPool* pool = MySQLConnectionPool::getConnectPool();
-    if (nullptr == pool) 
-    {
-		StatusResponse response;
-		response.set_status(false);
-		response.set_message(errorConnMySQL);
-		std::string pack = createPackage(CMD_INSERT_CRUISE_ROUTE_SOURCE_DATA_RESPONSE, response.SerializeAsString());
-        sendAsyncPack(source.connect_id_, pack);
-		return;
-	}
-
+   
 	StatusResponse response;
 	response.set_status(false);
 
-    shared_ptr<MysqlConnection> conn = pool->getConnection();
+    shared_ptr<MysqlConnection> conn = mMysqlConnectionPool->getConnection();
     status = conn->transaction();
     if (!status)
     {
@@ -318,6 +307,277 @@ void CBaseCommand::logic_insert_cruise_route_source_data(const CMessage_Source& 
 			std::string pack = createPackage(CMD_INSERT_CRUISE_ROUTE_SOURCE_DATA_RESPONSE, response.SerializeAsString());
 		    sendAsyncPack(source.connect_id_, pack);
 		}
+	}
+}
+
+void CBaseCommand::logic_query_search_filter_parameter_data(const CMessage_Source& source, std::shared_ptr<CMessage_Packet> recv_packet, std::shared_ptr<CMessage_Packet> send_packet)
+{
+	PSS_LOGGER_DEBUG("logic_query_search_filter_parameter_data.");
+	
+	StatusResponse response;
+	response.set_status(false);
+
+	shared_ptr<MysqlConnection> conn = mMysqlConnectionPool->getConnection();
+
+    char sql[1024] = { 0 };
+    sprintf(sql, "select distinct cruise_year, cruise_number, dive_number, verify_dive_number from t_source_data_side_scan where status_flag = 0;");
+	bool status = conn->query(sql);
+    
+    if (!status)
+    {
+	    std::string error = conn->lastError();
+		PSS_LOGGER_DEBUG("{0} t_source_data_side_scan {1}", errorQueryMySQL, error.data());
+		
+		// response to client
+		response.set_message(error);
+		std::string pack = createPackage(CMD_QUERY_SEARCH_FILTER_PARAMETER_DATA_RESPONSE, response.SerializeAsString());
+        sendAsyncPack(source.connect_id_, pack);
+	}
+	else
+	{
+		SearchFilterParamterList sourceList;
+		while (conn->next())
+    	{
+			SearchFilterParamter *source = sourceList.add_list();
+			source->set_cruise_year(conn->value(0));
+			source->set_cruise_number(conn->value(1));
+			source->set_dive_number(conn->value(2));
+			source->set_verify_dive_number(conn->value(3));
+    	}
+    	
+		std::string pack = createPackage(CMD_QUERY_SEARCH_FILTER_PARAMETER_DATA_RESPONSE, sourceList.SerializeAsString());
+        sendAsyncPack(source.connect_id_, pack);
+	}
+}
+
+void CBaseCommand::logic_query_side_scan_source_data_by_filter(const CMessage_Source& source, std::shared_ptr<CMessage_Packet> recv_packet, std::shared_ptr<CMessage_Packet> send_packet)
+{
+	PSS_LOGGER_DEBUG("logic_query_side_scan_source_data_by_filter");
+	
+	std::string parameter = recv_packet->buffer_.substr(8);
+    if (parameter.empty())
+    {
+		PSS_LOGGER_DEBUG("{0}, {1}", errorMessage, recv_packet->command_id_);
+        return;
+    }
+    
+    FilterSearchParameter searchParameter;
+    bool status = searchParameter.ParseFromString(parameter);
+    
+    if (!status)
+    {
+		PSS_LOGGER_DEBUG("{0}, {1}", errorParseMessage, recv_packet->buffer_);
+		StatusResponse response;
+		response.set_status(false);
+		response.set_message(errorParseMessage);
+		std::string pack = createPackage(CMD_QUERY_SIDE_SCAN_SOURCE_DATA_BY_FILTER_RESPONSE, response.SerializeAsString());
+        sendAsyncPack(source.connect_id_, pack);
+		return;
+    }
+	
+	StatusResponse response;
+	response.set_status(false);
+
+	shared_ptr<MysqlConnection> conn = mMysqlConnectionPool->getConnection();
+
+    std::string sql = "select * from t_source_data_side_scan where ";
+    if (searchParameter.cruise_year().length() > 2) 
+    {
+		sql.append("cruise_year in (" + searchParameter.cruise_year() +")");
+	}
+	
+    if (searchParameter.cruise_number().length() > 2) 
+    {
+    	if (sql.length() > 44) sql.append(" and ");
+		sql.append("cruise_number in (" + searchParameter.cruise_number() +")");
+	}
+	
+    if (searchParameter.dive_number().length() > 2) 
+    {
+	    if (sql.length() > 44) sql.append(" and ");
+		sql.append("dive_number in (" + searchParameter.dive_number() +")");
+	}
+	
+	uint16_t verifyDiveNumberSize = searchParameter.verify_dive_number_size();
+	if (verifyDiveNumberSize > 0) if (sql.length() > 44) sql.append(" and ");
+	for (uint16_t i = 0; i < verifyDiveNumberSize; i++)
+	{
+		if ((i == 0) && (verifyDiveNumberSize > 1)) sql.append("(");
+		if (i > 0) sql.append(" or ");
+		sql.append("verify_dive_number like (\"%" + searchParameter.verify_dive_number(i) +"%\")");
+		if ((verifyDiveNumberSize > 1) && (verifyDiveNumberSize == (i + 1))) sql.append(")");
+	}
+	
+	if (searchParameter.priority().length() > 0) 
+    {
+    	if (sql.length() > 44) sql.append(" and ");
+		sql.append("priority in (" + searchParameter.priority() +")");
+	}
+	
+	if (searchParameter.verify_flag().length() > 0) 
+    {
+    	if (sql.length() > 44) sql.append(" and ");
+		sql.append("verify_flag in (" + searchParameter.verify_flag() +")");
+	}
+	sql.append(" and status_flag = 0;");
+    
+    PSS_LOGGER_DEBUG("sql {0}", sql.data());
+    
+	status = conn->query(sql);
+    
+    if (!status)
+    {
+	    std::string error = conn->lastError();
+		PSS_LOGGER_DEBUG("{0} t_source_data_side_scan {1}", errorQueryMySQL, error.data());
+		
+		// response to client
+		response.set_message(error);
+		std::string pack = createPackage(CMD_QUERY_SIDE_SCAN_SOURCE_DATA_BY_FILTER_RESPONSE, response.SerializeAsString());
+        sendAsyncPack(source.connect_id_, pack);
+	}
+	else
+	{
+		SideScanSourceList sourceList;
+		while (conn->next())
+    	{
+			SideScanSource *source = sourceList.add_list();
+			uint16 index = 0;
+			source->set_id(conn->value(index++));
+			source->set_cruise_number(conn->value(index++));
+			source->set_dive_number(conn->value(index++));
+			source->set_scan_line(conn->value(index++));
+			source->set_cruise_year(conn->value(index++));
+			source->set_dt_time(conn->value(index++));
+			source->set_longitude(stod(conn->value(index++)));
+			source->set_latitude(stod(conn->value(index++)));
+			source->set_dt_speed(stof(conn->value(index++)));
+			source->set_horizontal_range_direction(conn->value(index++));
+			source->set_horizontal_range_value(conn->value(index++));
+			source->set_height_from_bottom(stof(conn->value(index++)));
+			source->set_r_theta(stof(conn->value(index++)));
+			source->set_side_scan_image_name(conn->value(index++));
+			source->set_image_top_left_longitude(stod(conn->value(index++)));
+			source->set_image_top_left_latitude(stod(conn->value(index++)));
+			source->set_image_bottom_right_longitude(stod(conn->value(index++)));
+			source->set_image_bottom_right_latitude(stod(conn->value(index++)));
+			source->set_image_total_byte(stoi(conn->value(index++)));
+			source->set_along_track(stof(conn->value(index++)));
+			source->set_across_track(stof(conn->value(index++)));
+			source->set_remarks(conn->value(index++));
+			source->set_suppose_size(conn->value(index++));
+			source->set_priority(stoi(conn->value(index++)));
+			source->set_verify_auv_sss_image_paths(conn->value(index++));
+			source->set_verify_image_paths(conn->value(index++));
+			source->set_image_description(conn->value(index++));
+			source->set_target_longitude(conn->value(index++));
+			source->set_target_latitude(conn->value(index++));
+			source->set_position_error(conn->value(index++));
+			source->set_verify_cruise_number(conn->value(index++));
+			source->set_verify_dive_number(conn->value(index++));
+			source->set_verify_time(conn->value(index++));
+			source->set_verify_flag(stoi(conn->value(index++)));
+    	}
+    	
+		std::string pack = createPackage(CMD_QUERY_SIDE_SCAN_SOURCE_DATA_BY_FILTER_RESPONSE, sourceList.SerializeAsString());
+        sendAsyncPack(source.connect_id_, pack);
+	}
+}
+
+void CBaseCommand::logic_query_side_scan_source_data_by_keyword(const CMessage_Source& source, std::shared_ptr<CMessage_Packet> recv_packet, std::shared_ptr<CMessage_Packet> send_packet)
+{
+	PSS_LOGGER_DEBUG("logic_query_side_scan_source_data_by_keyword");
+	
+	std::string parameter = recv_packet->buffer_.substr(8);
+    if (parameter.empty())
+    {
+		PSS_LOGGER_DEBUG("{0}, {1}", errorMessage, recv_packet->command_id_);
+        return;
+    }
+    
+    KeywordSearchParameter searchParameter;
+    bool status = searchParameter.ParseFromString(parameter);
+    
+    if ((!status) || (searchParameter.keyword().length() == 0))
+    {
+		PSS_LOGGER_DEBUG("{0}, {1}", errorParseMessage, recv_packet->buffer_);
+		StatusResponse response;
+		response.set_status(false);
+		response.set_message(errorParseMessage);
+		std::string pack = createPackage(CMD_QUERY_SIDE_SCAN_SOURCE_DATA_BY_KEYWORD_RESPONSE, response.SerializeAsString());
+        sendAsyncPack(source.connect_id_, pack);
+		return;
+    }
+	
+	StatusResponse response;
+	response.set_status(false);
+
+	shared_ptr<MysqlConnection> conn = mMysqlConnectionPool->getConnection();
+
+    std::string sql = "select * from t_source_data_side_scan where ";
+    sql.append("(remarks like (\"%" + searchParameter.keyword() +"%\") or image_description like (\"%" + searchParameter.keyword() +"%\"))");
+	
+	
+	sql.append(" and status_flag = 0;");
+    
+    PSS_LOGGER_DEBUG("sql {0}", sql.data());
+    
+	status = conn->query(sql);
+    
+    if (!status)
+    {
+	    std::string error = conn->lastError();
+		PSS_LOGGER_DEBUG("{0} t_source_data_side_scan {1}", errorQueryMySQL, error.data());
+		
+		// response to client
+		response.set_message(error);
+		std::string pack = createPackage(CMD_QUERY_SIDE_SCAN_SOURCE_DATA_BY_FILTER_RESPONSE, response.SerializeAsString());
+        sendAsyncPack(source.connect_id_, pack);
+	}
+	else
+	{
+		SideScanSourceList sourceList;
+		while (conn->next())
+    	{
+			SideScanSource *source = sourceList.add_list();
+			uint16 index = 0;
+			source->set_id(conn->value(index++));
+			source->set_cruise_number(conn->value(index++));
+			source->set_dive_number(conn->value(index++));
+			source->set_scan_line(conn->value(index++));
+			source->set_cruise_year(conn->value(index++));
+			source->set_dt_time(conn->value(index++));
+			source->set_longitude(stod(conn->value(index++)));
+			source->set_latitude(stod(conn->value(index++)));
+			source->set_dt_speed(stof(conn->value(index++)));
+			source->set_horizontal_range_direction(conn->value(index++));
+			source->set_horizontal_range_value(conn->value(index++));
+			source->set_height_from_bottom(stof(conn->value(index++)));
+			source->set_r_theta(stof(conn->value(index++)));
+			source->set_side_scan_image_name(conn->value(index++));
+			source->set_image_top_left_longitude(stod(conn->value(index++)));
+			source->set_image_top_left_latitude(stod(conn->value(index++)));
+			source->set_image_bottom_right_longitude(stod(conn->value(index++)));
+			source->set_image_bottom_right_latitude(stod(conn->value(index++)));
+			source->set_image_total_byte(stoi(conn->value(index++)));
+			source->set_along_track(stof(conn->value(index++)));
+			source->set_across_track(stof(conn->value(index++)));
+			source->set_remarks(conn->value(index++));
+			source->set_suppose_size(conn->value(index++));
+			source->set_priority(stoi(conn->value(index++)));
+			source->set_verify_auv_sss_image_paths(conn->value(index++));
+			source->set_verify_image_paths(conn->value(index++));
+			source->set_image_description(conn->value(index++));
+			source->set_target_longitude(conn->value(index++));
+			source->set_target_latitude(conn->value(index++));
+			source->set_position_error(conn->value(index++));
+			source->set_verify_cruise_number(conn->value(index++));
+			source->set_verify_dive_number(conn->value(index++));
+			source->set_verify_time(conn->value(index++));
+			source->set_verify_flag(stoi(conn->value(index++)));
+    	}
+    	
+		std::string pack = createPackage(CMD_QUERY_SIDE_SCAN_SOURCE_DATA_BY_KEYWORD_RESPONSE, sourceList.SerializeAsString());
+        sendAsyncPack(source.connect_id_, pack);
 	}
 }
 
