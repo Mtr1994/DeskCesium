@@ -26,6 +26,12 @@ void JsContext::recvMsg(const QString &action, const QString &type, bool status,
     if (action == "add")
     {
         emit AppSignal::getInstance()->sgl_add_entity_finish(type, arg, list);
+
+        // 如果添加成功，检索框表格要删除该条记录，表示成功提取
+        if (type.contains("remote"))
+        {
+            emit AppSignal::getInstance()->sgl_remote_entity_add_finish(arg, true);
+        }
     }
     else if (action == "delete")
     {

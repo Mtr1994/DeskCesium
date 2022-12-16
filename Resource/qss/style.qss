@@ -135,35 +135,6 @@ QPushButton[Danger="true"]:!enabled
     background-color: #444444;
 }
 
-QPushButton#btnSearch
-{
-    min-width: 1.2em;
-    min-height: 1.2em;
-    max-width: 1.2em;
-    max-height: 1.2em;
-    padding: 0.4em;
-    image: url(:/Resource/image/search.svg);
-    border: none;
-    background: transparent;
-}
-
-QPushButton#btnSearch:hover
-{
-    image: url(:/Resource/image/search_hover.svg);
-}
-
-QPushButton#btnComplexSearch
-{
-    border: none;
-    background: transparent;
-    color: #409eff;
-}
-
-QPushButton#btnComplexSearch:hover
-{
-    color: #aa409eff;
-}
-
 QPushButton[SelectSearchParameter]
 {
     min-width: 4em;
@@ -184,6 +155,30 @@ QPushButton[SelectSearchParameter]:hover
 QPushButton[SelectSearchParameter]:checked
 {
     background-color: #f7d8d5;
+}
+
+QPushButton#btnExtract
+{
+    min-height: 1.8em;
+    min-width: 6em;
+    border: 1px solid #6bc140;
+    border-radius: 0.3em;
+    padding-left: 1em;
+    padding-right: 1em;
+    color: #fefefe;
+    background-color: #6bc140;
+}
+
+QPushButton#btnExtract:hover
+{
+    border: 1px solid #cc6bc140;
+    background-color: #cc6bc140;
+}
+
+QPushButton#btnExtract:pressed
+{
+    border: 1px solid #6bc140;
+    background-color: #6bc140;
 }
 
 /* QLineEdit */

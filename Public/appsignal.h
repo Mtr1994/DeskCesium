@@ -60,6 +60,9 @@ signals:
 
     // cesium 加载完成
     void sgl_cesium_init_finish();
+
+    // remote entity add finish
+    void sgl_remote_entity_add_finish(const QString &id, bool status);
 };
 
 #endif // APPSIGNAL_H

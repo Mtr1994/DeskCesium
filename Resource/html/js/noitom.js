@@ -210,89 +210,107 @@ function init() {
 					elementTextId.parentNode.title = remoteObject.id
 					
 					let elementTextDtTime = document.getElementById("text-dt-time");
-					elementTextDtTime.innerHTML = remoteObject.dt_time
-					elementTextDtTime.parentNode.title = remoteObject.dt_time
+					let textDtTime = remoteObject.dt_time === "" ? "---" : remoteObject.dt_time
+					elementTextDtTime.innerHTML = textDtTime
+					elementTextDtTime.parentNode.title = textDtTime
 					
 					let elementTextLongitude = document.getElementById("text-longitude");
-					elementTextLongitude.innerHTML = remoteObject.longitude
-					elementTextLongitude.parentNode.title = remoteObject.longitude
+					let textLongitude = remoteObject.longitude === "" ? "---" : remoteObject.longitude
+					elementTextLongitude.innerHTML = textLongitude
+					elementTextLongitude.parentNode.title = textLongitude
 					
 					let elementTextLatitude = document.getElementById("text-latitude");
-					elementTextLatitude.innerHTML = remoteObject.latitude
-					elementTextLatitude.parentNode.title = remoteObject.latitude
+					let textLatitude = remoteObject.latitude === "" ? "---" : remoteObject.latitude
+					elementTextLatitude.innerHTML = textLatitude
+					elementTextLatitude.parentNode.title = textLatitude
 					
 					let elementTextDepth = document.getElementById("text-altitude");
-					elementTextDepth.innerHTML = "-- 米"
-					elementTextDepth.parentNode.title = "-- 米"
+					elementTextDepth.innerHTML = "---"
+					elementTextDepth.parentNode.title = "---"
 					
 					let elementTextDtSpeed = document.getElementById("text-dt-speed");
-					elementTextDtSpeed.innerHTML = remoteObject.dt_speed + " Knot"
-					elementTextDtSpeed.parentNode.title = remoteObject.dt_speed + " Knot"
+					let textDtSpeed = remoteObject.dt_speed === "" ? "---" : remoteObject.dt_speed + " Knot"
+					elementTextDtSpeed.innerHTML = textDtSpeed
+					elementTextDtSpeed.parentNode.title = textDtSpeed
 					
 					let elementTextHorizontalRangeValue = document.getElementById("text-horizontal-range-value");
-					elementTextHorizontalRangeValue.innerHTML = remoteObject.horizontal_range_direction + " / " + remoteObject.horizontal_range_value + " 米"
-					elementTextHorizontalRangeValue.parentNode.title = remoteObject.horizontal_range_direction + " / " + remoteObject.horizontal_range_value + " 米"
+					let textHorizontalRangeValueA = remoteObject.horizontal_range_direction === "" ? "---" : remoteObject.horizontal_range_direction
+					let textHorizontalRangeValueB = remoteObject.horizontal_range_value === "" ? "---" : remoteObject.horizontal_range_value + " 米"
+					elementTextHorizontalRangeValue.innerHTML = textHorizontalRangeValueA + " / " + textHorizontalRangeValueB
+					elementTextHorizontalRangeValue.parentNode.title = textHorizontalRangeValueA + " / " + textHorizontalRangeValueB
 					
 					let elementTextHeightFromBottom = document.getElementById("text-height-from-bottom");
-					elementTextHeightFromBottom.innerHTML = remoteObject.height_from_bottom + " 米"
-					elementTextHeightFromBottom.parentNode.title = remoteObject.height_from_bottom + " 米"
+					let textHeightFromBottom = remoteObject.height_from_bottom === "" ? "---" : remoteObject.height_from_bottom + " 米"
+					elementTextHeightFromBottom.innerHTML = textHeightFromBottom
+					elementTextHeightFromBottom.parentNode.title = textHeightFromBottom
 					
 					let elementTextRTheta = document.getElementById("text-r-theta");
-					elementTextRTheta.innerHTML = remoteObject.r_theta
-					elementTextRTheta.parentNode.title = remoteObject.r_theta
+					let textRTheta  = remoteObject.r_theta === "" ? "---" : remoteObject.r_theta
+					elementTextRTheta.innerHTML = textRTheta
+					elementTextRTheta.parentNode.title = textRTheta
 					
 					let elementTextAlongTrack = document.getElementById("text-along-track");
-					elementTextAlongTrack.innerHTML = remoteObject.along_track + " 米"
-					elementTextAlongTrack.parentNode.title = remoteObject.along_track + " 米"
+					let textAlongTrack  = remoteObject.along_track === "" ? "---" : remoteObject.along_track + " 米"
+					elementTextAlongTrack.innerHTML = textAlongTrack
+					elementTextAlongTrack.parentNode.title = textAlongTrack
 					
 					let elementTextAcrossTrack = document.getElementById("text-across-track");
-					elementTextAcrossTrack.innerHTML = remoteObject.across_track + " 米"
-					elementTextAcrossTrack.parentNode.title = remoteObject.across_track + " 米"
+					let textAcrossTrack  = remoteObject.across_track === "" ? "---" : remoteObject.across_track + " 米"
+					elementTextAcrossTrack.innerHTML = textAcrossTrack
+					elementTextAcrossTrack.parentNode.title = textAcrossTrack
 					
 					let elementTextRemarks = document.getElementById("text-remarks");
-					elementTextRemarks.innerHTML = remoteObject.remarks
-					elementTextRemarks.parentNode.title = remoteObject.remarks
+					let textRemarks  = remoteObject.remarks === "" ? "---" : remoteObject.remarks
+					elementTextRemarks.innerHTML = textRemarks
+					elementTextRemarks.parentNode.title = textRemarks
 					
 					let elementTextSupposeSize = document.getElementById("text-suppose-size");
-					elementTextSupposeSize.innerHTML = remoteObject.suppose_size + " 米"
-					elementTextSupposeSize.parentNode.title = remoteObject.suppose_size + " 米"
+					let textSupposeSize  = remoteObject.suppose_size === "" ? "---" : remoteObject.suppose_size + " 米"
+					elementTextSupposeSize.innerHTML = textSupposeSize
+					elementTextSupposeSize.parentNode.title = textSupposeSize
 					
 					// 查证信息
 					let elementTextTargetLongitude = document.getElementById("text-target-longitude");
-					elementTextTargetLongitude.innerHTML = remoteObject.target_longitude
-					elementTextTargetLongitude.parentNode.title = remoteObject.target_longitude
+					let textTargetLongitude = remoteObject.target_longitude === "" ? "---" : remoteObject.target_longitude
+					elementTextTargetLongitude.innerHTML = textTargetLongitude
+					elementTextTargetLongitude.parentNode.title = textTargetLongitude
 					
 					let elementTextTargetLatitude = document.getElementById("text-target-latitude");
-					elementTextTargetLatitude.innerHTML = remoteObject.target_latitude
-					elementTextTargetLatitude.parentNode.title = remoteObject.target_latitude
+					let textTargetLatitude = remoteObject.target_latitude === "" ? "---" : remoteObject.target_latitude
+					elementTextTargetLatitude.innerHTML = textTargetLatitude
+					elementTextTargetLatitude.parentNode.title = textTargetLatitude
 					
 					let elementTextPositionError = document.getElementById("text-position-error");
-					elementTextPositionError.innerHTML = remoteObject.position_error + " 米"
-					elementTextPositionError.parentNode.title = remoteObject.position_error + " 米"
+					let textPositionError = remoteObject.position_error === "" ? "---" : remoteObject.position_error + " 米"
+					elementTextPositionError.innerHTML = textPositionError
+					elementTextPositionError.parentNode.title = textPositionError
 					
 					let elementTextCruiseNumber = document.getElementById("text-cruise-number");
-					elementTextCruiseNumber.innerHTML = remoteObject.verify_cruise_number
-					elementTextCruiseNumber.parentNode.title = remoteObject.verify_cruise_number
+					let textCruiseNumber = remoteObject.verify_cruise_number === "" ? "---" : remoteObject.verify_cruise_number
+					elementTextCruiseNumber.innerHTML = textCruiseNumber
+					elementTextCruiseNumber.parentNode.title = textCruiseNumber
 					
 					let elementTextDiveNumber = document.getElementById("text-dive-number");
-					elementTextDiveNumber.innerHTML = remoteObject.verify_dive_number
-					elementTextDiveNumber.parentNode.title = remoteObject.verify_dive_number
+					let textDiveNumber = remoteObject.verify_dive_number === "" ? "---" : remoteObject.verify_dive_number
+					elementTextDiveNumber.innerHTML = textDiveNumber
+					elementTextDiveNumber.parentNode.title = textDiveNumber
 					
 					let elementTextImageDescription = document.getElementById("text-image-description");
-					elementTextImageDescription.innerHTML = remoteObject.image_description
-					elementTextImageDescription.parentNode.title = remoteObject.image_description
+					let textImageDescription = remoteObject.image_description === "" ? "---" : remoteObject.image_description
+					elementTextImageDescription.innerHTML = textImageDescription
+					elementTextImageDescription.parentNode.title = textImageDescription
 					
 					let elementDivVerifyImage = document.getElementById("div-verify-image");
 					
 					let verifyImagePath = "";
 					let verifyAuvPictureNumber = remoteObject.verify_auv_sss_image_paths.length
 					for (let i = 0; i < verifyAuvPictureNumber; i++) {
-						verifyImagePath += '<img src="' + remoteObject.verify_auv_sss_image_paths[i] + '" style="width: 100%; height: 14em; margin-bottom: 1em; border-radius: 6px; border: 2px solid #4169E1; object-fit: contain;">'
+						verifyImagePath += '<img src="' + remoteObject.verify_auv_sss_image_paths[i] + '" style="width: 100%; height: 14em; margin-bottom: 1em; border-radius: 6px; border: 2px solid #f0f0f0; object-fit: contain;">'
 					}
 					
 					let verifyPictureNumber = remoteObject.verify_image_paths.length
 					for (let i = 0; i < verifyPictureNumber;i++) {
-						verifyImagePath += '<img src="' + remoteObject.verify_image_paths[i] + '" style="width: 100%; height: 14em; margin-bottom: 1em; border-radius: 6px; border: 2px solid #4169E1; object-fit: contain;">'
+						verifyImagePath += '<img src="' + remoteObject.verify_image_paths[i] + '" style="width: 100%; height: 14em; margin-bottom: 1em; border-radius: 6px; border: 2px solid #f0f0f0; object-fit: contain;">'
 					}
 					
 					elementDivVerifyImage.innerHTML = verifyImagePath

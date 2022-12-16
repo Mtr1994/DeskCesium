@@ -133,6 +133,9 @@ void DialogSearch::init()
     ui->tblvSideScanSource->setColumnHidden(FIELD_VERIFY_TIME, true);
     ui->tblvSideScanSource->setColumnHidden(FIELD_VERIFY_FLAG, false);
     ui->tblvSideScanSource->setColumnHidden(FIELD_STATUS, true);
+
+    // 信号
+    connect(AppSignal::getInstance(), &AppSignal::sgl_remote_entity_add_finish, this, &DialogSearch::slot_remote_entity_add_finish);
 }
 
 void DialogSearch::slot_tcp_socket_connect(uint64_t dwconnid)
@@ -395,6 +398,9 @@ void DialogSearch::slot_btn_extract_clicked()
 {
     if (!ui->tblvSideScanSource->selectionModel()->hasSelection())
     {
+        MessageWidget *msg = new MessageWidget(MessageWidget::M_Info, MessageWidget::P_Bottom_Center, this);
+        msg->showMessage("请选择要提取的数据");
+        mBufferArray.clear();
         return;
     }
 
@@ -448,5 +454,15 @@ void DialogSearch::slot_btn_extract_clicked()
 
         emit AppSignal::getInstance()->sgl_add_remote_tiff_entity(remotePath, QString("{%1}").arg(listValues.join(",").remove("\n")));
     }
+}
+
+void DialogSearch::slot_remote_entity_add_finish(const QString &id, bool status)
+{
+    if (!status) return;
+
+    QModelIndexList listIndex = mModelSideScanSource.match(mModelSideScanSource.index(0, 0), Qt::DisplayRole, id, 1, Qt::MatchExactly | Qt::MatchRecursive);
+    if (listIndex.isEmpty()) return;
+
+    mModelSideScanSource.removeRows(listIndex.first().row(), 1);
 }
 
