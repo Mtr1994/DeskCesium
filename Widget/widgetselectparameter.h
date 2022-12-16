@@ -16,6 +16,8 @@ public:
     explicit WidgetSelectParameter(QWidget *parent = nullptr);
     ~WidgetSelectParameter();
 
+    void requestSelectParameter();
+
 signals:
     // 修改检索条件
     void sgl_modify_search_parameter(const QString &target, const QString &value, bool append);

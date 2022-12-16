@@ -21,6 +21,19 @@ WidgetSelectParameter::~WidgetSelectParameter()
     delete ui;
 }
 
+void WidgetSelectParameter::requestSelectParameter()
+{
+    // 只允许请求一次
+    if (nullptr != mTcpSocket) return;
+
+    // 准备执行 SQL 任务
+    mTcpSocket = new TcpSocket;
+    connect(mTcpSocket, &TcpSocket::sgl_recv_socket_data, this, &WidgetSelectParameter::slot_recv_socket_data);
+    connect(mTcpSocket, &TcpSocket::sgl_tcp_socket_connect, this, &WidgetSelectParameter::slot_tcp_socket_connect);
+    connect(mTcpSocket, &TcpSocket::sgl_tcp_socket_disconnect, this, &WidgetSelectParameter::slot_tcp_socket_disconnect);
+    mTcpSocket->connect("101.34.253.220", 60011);
+}
+
 void WidgetSelectParameter::init()
 {
     connect(ui->btnPriority_1, &QPushButton::toggled, this, [this](bool checked)
@@ -43,13 +56,6 @@ void WidgetSelectParameter::init()
     {
         emit sgl_modify_search_parameter("verify_flag", "0", checked);
     });
-
-    // 准备执行 SQL 任务
-    mTcpSocket = new TcpSocket;
-    connect(mTcpSocket, &TcpSocket::sgl_recv_socket_data, this, &WidgetSelectParameter::slot_recv_socket_data);
-    connect(mTcpSocket, &TcpSocket::sgl_tcp_socket_connect, this, &WidgetSelectParameter::slot_tcp_socket_connect);
-    connect(mTcpSocket, &TcpSocket::sgl_tcp_socket_disconnect, this, &WidgetSelectParameter::slot_tcp_socket_disconnect);
-    mTcpSocket->connect("101.34.253.220", 60011);
 }
 
 void WidgetSelectParameter::slot_tcp_socket_connect(uint64_t dwconnid)
@@ -82,12 +88,6 @@ void WidgetSelectParameter::slot_recv_socket_data(uint64_t dwconnid, const std::
         qDebug() << "slot_recv_socket_data " << response.list_size();
 
         int size = response.list_size();
-        // 动态修改时间的按钮个数
-        auto listChildrenCruiseYear = ui->widgetCruiseYear->findChildren<QPushButton*>();
-        for (auto &button : listChildrenCruiseYear)
-        {
-
-        }
 
         QStringList listCruiseYear;
         QStringList listCruiseNumber;
@@ -110,13 +110,7 @@ void WidgetSelectParameter::slot_recv_socket_data(uint64_t dwconnid, const std::
             {
                 if(!listVerifyDiveNumber.contains(diveNumber)) listVerifyDiveNumber.append(diveNumber);
             }
-            qDebug() << "verifyDiveNumber " << verifyDiveNumber;
         }
-
-        qDebug() << "listCruiseYear " << listCruiseYear.size();
-        qDebug() << "listCruiseNumber " << listCruiseNumber.size();
-        qDebug() << "listDiveNumber " << listDiveNumber.size();
-        qDebug() << "listVerifyDiveNumber " << listVerifyDiveNumber.size();
 
         for (int i = 0; i < listCruiseYear.size(); i++)
         {

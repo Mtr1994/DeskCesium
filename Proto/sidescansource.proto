@@ -79,7 +79,7 @@ message SearchFilterParamterList
 }
 
 // 数据检索条件 
-message SearchParameter
+message FilterSearchParameter
 {
 	string cruise_year = 1;
 	string cruise_number = 2;
@@ -87,4 +87,10 @@ message SearchParameter
 	repeated string verify_dive_number = 4;
 	string priority = 5;
 	string verify_flag = 6;
+}
+
+// 关键字查询 
+message KeywordSearchParameter
+{
+	string keyword = 1;
 }

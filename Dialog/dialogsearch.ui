@@ -27,7 +27,11 @@
     <widget class="QWidget" name="widgetSearchParameterBase" native="true">
      <layout class="QHBoxLayout" name="horizontalLayout">
       <item>
-       <widget class="QLineEdit" name="tbParameter"/>
+       <widget class="QLineEdit" name="tbParameter">
+        <property name="placeholderText">
+         <string>输入或选择数据过滤条件</string>
+        </property>
+       </widget>
       </item>
       <item>
        <widget class="QPushButton" name="btnSearchSideScan">

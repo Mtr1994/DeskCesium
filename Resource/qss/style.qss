@@ -1,11 +1,4 @@
-﻿QMainWindow#MainWindow
-{
-    min-width: 72em;
-    min-height: 44.49em;
-    border-radius: 2em;
-}
-
-QWidget
+﻿QWidget
 {
     font: 9pt "Microsoft YaHei UI";
 }
@@ -299,13 +292,12 @@ QTableView
     background-color: #fefefe;
     gridline-color: rgb(247, 247, 249);
     outline: none;
-    padding-left: 2em;
 }
 
 QTableView::item
 {
     border: none;
-    padding-left: 1em;
+    padding-left: 2em;
     color: rgb(131, 138, 151);
     border-bottom: 1px solid rgb(247, 247, 249);
     background-color: transparent;
@@ -394,29 +386,47 @@ QMenu::item:pressed
 }
 
 /* QScrollBar */
-QScrollBar::vertical
+QScrollBar:vertical
 {
     background: #dddddd;
     border: 1px solid #00dddddd;
-    border-radius: 0.12em;
+    border-radius: 0.15em;
     margin:0px,0px,0px,0px;
-    width: 0.3em;
+    width: 0.36em;
+}
+
+QScrollBar:horizontal
+{
+    background: #dddddd;
+    border: 1px solid #00dddddd;
+    border-radius: 0.15em;
+    margin:0px,0px,0px,0px;
+    width: 24em;
+    height: 0.36em;
 }
 
 QScrollBar::handle:vertical {
     background-color: rgb(108, 113, 125);
     border: none;
-    border-radius: 0.1em;
+    border-radius: 0.15em;
     min-height: 1em;
-    width: 0.4em;
+    width: 0.36em;
 }
 
-QScrollBar::add-line:vertical {
+QScrollBar::handle:horizontal {
+    background-color: rgb(108, 113, 125);
+    border: none;
+    border-radius: 0.15em;
+    min-width: 1em;
+    height: 0.36em;
+}
+
+QScrollBar::add-line {
     height: 0em;
     subcontrol-origin: margin;
 }
 
-QScrollBar::sub-line:vertical {
+QScrollBar::sub-line {
     height: 0em;
     subcontrol-origin:margin;
 }

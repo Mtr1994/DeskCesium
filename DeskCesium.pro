@@ -48,14 +48,12 @@ SOURCES += \
     Dialog/dialoguploaddata.cpp \
     EntityTreeWidget/entitytreewidget.cpp \
     Ftp/ftpmanager.cpp \
-    Message/messagewidget.cpp \
     Net/basesocket.cpp \
     Net/tcpsocket.cpp \
     Proto/sidescansource.pb.cc \
     Protocol/protocolhelper.cpp \
     Public/appsignal.cpp \
     Public/softconfig.cpp \
-    Widget/widgetsearch.cpp \
     Widget/widgetselectparameter.cpp \
     main.cpp \
     mainwindow.cpp
@@ -70,7 +68,6 @@ HEADERS += \
     Dialog/dialoguploaddata.h \
     EntityTreeWidget/entitytreewidget.h \
     Ftp/ftpmanager.h \
-    Message/messagewidget.h \
     Net/basesocket.h \
     Net/tcpsocket.h \
     Proto/sidescansource.pb.h \
@@ -78,7 +75,6 @@ HEADERS += \
     Public/appsignal.h \
     Public/softconfig.h \
     Public/treeitemdelegate.h \
-    Widget/widgetsearch.h \
     Widget/widgetselectparameter.h \
     mainwindow.h
 
@@ -87,7 +83,6 @@ FORMS += \
     Dialog/dialogsearch.ui \
     Dialog/dialogsetting.ui \
     Dialog/dialoguploaddata.ui \
-    Widget/widgetsearch.ui \
     Widget/widgetselectparameter.ui \
     mainwindow.ui
 

@@ -21,7 +21,7 @@ public:
           FIELD_SUPPOSE_SIZE, FIELD_PRIORITY, FIELD_VERIFY_AUV_SSS_IMAGE_PATHS, FIELD_VERIFY_IMAGE_PATHS, FIELD_IMAGE_DESCRIPTION, FIELD_TARGET_LONGITUDE,
           FIELD_TARGET_LATITUDE, FIELD_POSITION_ERROR, FIELD_VERIFY_CRUISE_NUMBER, FIELD_VERIFY_DIVE_NUMBER, FIELD_VERIFY_TIME, FIELD_VERIFY_FLAG, FIELD_STATUS };
 
-    explicit DialogSearch(const QString &parameter, QWidget *parent = nullptr);
+    explicit DialogSearch(bool keywordflag, QWidget *parent = nullptr);
     ~DialogSearch();
 
 private:
@@ -60,6 +60,9 @@ private:
 
     // 数据通信缓存
     QByteArray mBufferArray;
+
+    // 是否是关键字检索
+    bool mKeyworkSearchFlag = false;
 };
 
 #endif // DIALOGSEARCH_H

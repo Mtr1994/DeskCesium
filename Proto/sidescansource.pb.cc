@@ -152,7 +152,7 @@ struct SearchFilterParamterListDefaultTypeInternal {
   };
 };
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 SearchFilterParamterListDefaultTypeInternal _SearchFilterParamterList_default_instance_;
-PROTOBUF_CONSTEXPR SearchParameter::SearchParameter(
+PROTOBUF_CONSTEXPR FilterSearchParameter::FilterSearchParameter(
     ::_pbi::ConstantInitialized): _impl_{
     /*decltype(_impl_.verify_dive_number_)*/{}
   , /*decltype(_impl_.cruise_year_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
@@ -161,16 +161,29 @@ PROTOBUF_CONSTEXPR SearchParameter::SearchParameter(
   , /*decltype(_impl_.priority_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
   , /*decltype(_impl_.verify_flag_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
   , /*decltype(_impl_._cached_size_)*/{}} {}
-struct SearchParameterDefaultTypeInternal {
-  PROTOBUF_CONSTEXPR SearchParameterDefaultTypeInternal()
+struct FilterSearchParameterDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR FilterSearchParameterDefaultTypeInternal()
       : _instance(::_pbi::ConstantInitialized{}) {}
-  ~SearchParameterDefaultTypeInternal() {}
+  ~FilterSearchParameterDefaultTypeInternal() {}
   union {
-    SearchParameter _instance;
+    FilterSearchParameter _instance;
   };
 };
-PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 SearchParameterDefaultTypeInternal _SearchParameter_default_instance_;
-static ::_pb::Metadata file_level_metadata_sidescansource_2eproto[8];
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 FilterSearchParameterDefaultTypeInternal _FilterSearchParameter_default_instance_;
+PROTOBUF_CONSTEXPR KeywordSearchParameter::KeywordSearchParameter(
+    ::_pbi::ConstantInitialized): _impl_{
+    /*decltype(_impl_.keyword_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
+  , /*decltype(_impl_._cached_size_)*/{}} {}
+struct KeywordSearchParameterDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR KeywordSearchParameterDefaultTypeInternal()
+      : _instance(::_pbi::ConstantInitialized{}) {}
+  ~KeywordSearchParameterDefaultTypeInternal() {}
+  union {
+    KeywordSearchParameter _instance;
+  };
+};
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 KeywordSearchParameterDefaultTypeInternal _KeywordSearchParameter_default_instance_;
+static ::_pb::Metadata file_level_metadata_sidescansource_2eproto[9];
 static constexpr ::_pb::EnumDescriptor const** file_level_enum_descriptors_sidescansource_2eproto = nullptr;
 static constexpr ::_pb::ServiceDescriptor const** file_level_service_descriptors_sidescansource_2eproto = nullptr;
 
@@ -266,17 +279,24 @@ const uint32_t TableStruct_sidescansource_2eproto::offsets[] PROTOBUF_SECTION_VA
   ~0u,  // no _inlined_string_donated_
   PROTOBUF_FIELD_OFFSET(::SearchFilterParamterList, _impl_.list_),
   ~0u,  // no _has_bits_
-  PROTOBUF_FIELD_OFFSET(::SearchParameter, _internal_metadata_),
+  PROTOBUF_FIELD_OFFSET(::FilterSearchParameter, _internal_metadata_),
   ~0u,  // no _extensions_
   ~0u,  // no _oneof_case_
   ~0u,  // no _weak_field_map_
   ~0u,  // no _inlined_string_donated_
-  PROTOBUF_FIELD_OFFSET(::SearchParameter, _impl_.cruise_year_),
-  PROTOBUF_FIELD_OFFSET(::SearchParameter, _impl_.cruise_number_),
-  PROTOBUF_FIELD_OFFSET(::SearchParameter, _impl_.dive_number_),
-  PROTOBUF_FIELD_OFFSET(::SearchParameter, _impl_.verify_dive_number_),
-  PROTOBUF_FIELD_OFFSET(::SearchParameter, _impl_.priority_),
-  PROTOBUF_FIELD_OFFSET(::SearchParameter, _impl_.verify_flag_),
+  PROTOBUF_FIELD_OFFSET(::FilterSearchParameter, _impl_.cruise_year_),
+  PROTOBUF_FIELD_OFFSET(::FilterSearchParameter, _impl_.cruise_number_),
+  PROTOBUF_FIELD_OFFSET(::FilterSearchParameter, _impl_.dive_number_),
+  PROTOBUF_FIELD_OFFSET(::FilterSearchParameter, _impl_.verify_dive_number_),
+  PROTOBUF_FIELD_OFFSET(::FilterSearchParameter, _impl_.priority_),
+  PROTOBUF_FIELD_OFFSET(::FilterSearchParameter, _impl_.verify_flag_),
+  ~0u,  // no _has_bits_
+  PROTOBUF_FIELD_OFFSET(::KeywordSearchParameter, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  ~0u,  // no _inlined_string_donated_
+  PROTOBUF_FIELD_OFFSET(::KeywordSearchParameter, _impl_.keyword_),
 };
 static const ::_pbi::MigrationSchema schemas[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
   { 0, -1, -1, sizeof(::SideScanSource)},
@@ -286,7 +306,8 @@ static const ::_pbi::MigrationSchema schemas[] PROTOBUF_SECTION_VARIABLE(protode
   { 66, -1, -1, sizeof(::CruiseRouteSourceList)},
   { 73, -1, -1, sizeof(::SearchFilterParamter)},
   { 83, -1, -1, sizeof(::SearchFilterParamterList)},
-  { 90, -1, -1, sizeof(::SearchParameter)},
+  { 90, -1, -1, sizeof(::FilterSearchParameter)},
+  { 102, -1, -1, sizeof(::KeywordSearchParameter)},
 };
 
 static const ::_pb::Message* const file_default_instances[] = {
@@ -297,7 +318,8 @@ static const ::_pb::Message* const file_default_instances[] = {
   &::_CruiseRouteSourceList_default_instance_._instance,
   &::_SearchFilterParamter_default_instance_._instance,
   &::_SearchFilterParamterList_default_instance_._instance,
-  &::_SearchParameter_default_instance_._instance,
+  &::_FilterSearchParameter_default_instance_._instance,
+  &::_KeywordSearchParameter_default_instance_._instance,
 };
 
 const char descriptor_table_protodef_sidescansource_2eproto[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) =
@@ -334,17 +356,18 @@ const char descriptor_table_protodef_sidescansource_2eproto[] PROTOBUF_SECTION_V
   "\t\022\025\n\rcruise_number\030\002 \001(\t\022\023\n\013dive_number\030"
   "\003 \001(\t\022\032\n\022verify_dive_number\030\004 \001(\t\"\?\n\030Sea"
   "rchFilterParamterList\022#\n\004list\030\001 \003(\0132\025.Se"
-  "archFilterParamter\"\225\001\n\017SearchParameter\022\023"
-  "\n\013cruise_year\030\001 \001(\t\022\025\n\rcruise_number\030\002 \001"
-  "(\t\022\023\n\013dive_number\030\003 \001(\t\022\032\n\022verify_dive_n"
-  "umber\030\004 \003(\t\022\020\n\010priority\030\005 \001(\t\022\023\n\013verify_"
-  "flag\030\006 \001(\tb\006proto3"
+  "archFilterParamter\"\233\001\n\025FilterSearchParam"
+  "eter\022\023\n\013cruise_year\030\001 \001(\t\022\025\n\rcruise_numb"
+  "er\030\002 \001(\t\022\023\n\013dive_number\030\003 \001(\t\022\032\n\022verify_"
+  "dive_number\030\004 \003(\t\022\020\n\010priority\030\005 \001(\t\022\023\n\013v"
+  "erify_flag\030\006 \001(\t\")\n\026KeywordSearchParamet"
+  "er\022\017\n\007keyword\030\001 \001(\tb\006proto3"
   ;
 static ::_pbi::once_flag descriptor_table_sidescansource_2eproto_once;
 const ::_pbi::DescriptorTable descriptor_table_sidescansource_2eproto = {
-    false, false, 1498, descriptor_table_protodef_sidescansource_2eproto,
+    false, false, 1547, descriptor_table_protodef_sidescansource_2eproto,
     "sidescansource.proto",
-    &descriptor_table_sidescansource_2eproto_once, nullptr, 0, 8,
+    &descriptor_table_sidescansource_2eproto_once, nullptr, 0, 9,
     schemas, file_default_instances, TableStruct_sidescansource_2eproto::offsets,
     file_level_metadata_sidescansource_2eproto, file_level_enum_descriptors_sidescansource_2eproto,
     file_level_service_descriptors_sidescansource_2eproto,
@@ -3491,19 +3514,19 @@ void SearchFilterParamterList::InternalSwap(SearchFilterParamterList* other) {
 
 // ===================================================================
 
-class SearchParameter::_Internal {
+class FilterSearchParameter::_Internal {
  public:
 };
 
-SearchParameter::SearchParameter(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+FilterSearchParameter::FilterSearchParameter(::PROTOBUF_NAMESPACE_ID::Arena* arena,
                          bool is_message_owned)
   : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned) {
   SharedCtor(arena, is_message_owned);
-  // @@protoc_insertion_point(arena_constructor:SearchParameter)
+  // @@protoc_insertion_point(arena_constructor:FilterSearchParameter)
 }
-SearchParameter::SearchParameter(const SearchParameter& from)
+FilterSearchParameter::FilterSearchParameter(const FilterSearchParameter& from)
   : ::PROTOBUF_NAMESPACE_ID::Message() {
-  SearchParameter* const _this = this; (void)_this;
+  FilterSearchParameter* const _this = this; (void)_this;
   new (&_impl_) Impl_{
       decltype(_impl_.verify_dive_number_){from._impl_.verify_dive_number_}
     , decltype(_impl_.cruise_year_){}
@@ -3554,10 +3577,10 @@ SearchParameter::SearchParameter(const SearchParameter& from)
     _this->_impl_.verify_flag_.Set(from._internal_verify_flag(), 
       _this->GetArenaForAllocation());
   }
-  // @@protoc_insertion_point(copy_constructor:SearchParameter)
+  // @@protoc_insertion_point(copy_constructor:FilterSearchParameter)
 }
 
-inline void SearchParameter::SharedCtor(
+inline void FilterSearchParameter::SharedCtor(
     ::_pb::Arena* arena, bool is_message_owned) {
   (void)arena;
   (void)is_message_owned;
@@ -3592,8 +3615,8 @@ inline void SearchParameter::SharedCtor(
   #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
 }
 
-SearchParameter::~SearchParameter() {
-  // @@protoc_insertion_point(destructor:SearchParameter)
+FilterSearchParameter::~FilterSearchParameter() {
+  // @@protoc_insertion_point(destructor:FilterSearchParameter)
   if (auto *arena = _internal_metadata_.DeleteReturnArena<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>()) {
   (void)arena;
     return;
@@ -3601,7 +3624,7 @@ SearchParameter::~SearchParameter() {
   SharedDtor();
 }
 
-inline void SearchParameter::SharedDtor() {
+inline void FilterSearchParameter::SharedDtor() {
   GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
   _impl_.verify_dive_number_.~RepeatedPtrField();
   _impl_.cruise_year_.Destroy();
@@ -3611,12 +3634,12 @@ inline void SearchParameter::SharedDtor() {
   _impl_.verify_flag_.Destroy();
 }
 
-void SearchParameter::SetCachedSize(int size) const {
+void FilterSearchParameter::SetCachedSize(int size) const {
   _impl_._cached_size_.Set(size);
 }
 
-void SearchParameter::Clear() {
-// @@protoc_insertion_point(message_clear_start:SearchParameter)
+void FilterSearchParameter::Clear() {
+// @@protoc_insertion_point(message_clear_start:FilterSearchParameter)
   uint32_t cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
@@ -3630,7 +3653,7 @@ void SearchParameter::Clear() {
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
-const char* SearchParameter::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
+const char* FilterSearchParameter::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
 #define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
   while (!ctx->Done(&ptr)) {
     uint32_t tag;
@@ -3642,7 +3665,7 @@ const char* SearchParameter::_InternalParse(const char* ptr, ::_pbi::ParseContex
           auto str = _internal_mutable_cruise_year();
           ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
           CHK_(ptr);
-          CHK_(::_pbi::VerifyUTF8(str, "SearchParameter.cruise_year"));
+          CHK_(::_pbi::VerifyUTF8(str, "FilterSearchParameter.cruise_year"));
         } else
           goto handle_unusual;
         continue;
@@ -3652,7 +3675,7 @@ const char* SearchParameter::_InternalParse(const char* ptr, ::_pbi::ParseContex
           auto str = _internal_mutable_cruise_number();
           ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
           CHK_(ptr);
-          CHK_(::_pbi::VerifyUTF8(str, "SearchParameter.cruise_number"));
+          CHK_(::_pbi::VerifyUTF8(str, "FilterSearchParameter.cruise_number"));
         } else
           goto handle_unusual;
         continue;
@@ -3662,7 +3685,7 @@ const char* SearchParameter::_InternalParse(const char* ptr, ::_pbi::ParseContex
           auto str = _internal_mutable_dive_number();
           ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
           CHK_(ptr);
-          CHK_(::_pbi::VerifyUTF8(str, "SearchParameter.dive_number"));
+          CHK_(::_pbi::VerifyUTF8(str, "FilterSearchParameter.dive_number"));
         } else
           goto handle_unusual;
         continue;
@@ -3675,7 +3698,7 @@ const char* SearchParameter::_InternalParse(const char* ptr, ::_pbi::ParseContex
             auto str = _internal_add_verify_dive_number();
             ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
             CHK_(ptr);
-            CHK_(::_pbi::VerifyUTF8(str, "SearchParameter.verify_dive_number"));
+            CHK_(::_pbi::VerifyUTF8(str, "FilterSearchParameter.verify_dive_number"));
             if (!ctx->DataAvailable(ptr)) break;
           } while (::PROTOBUF_NAMESPACE_ID::internal::ExpectTag<34>(ptr));
         } else
@@ -3687,7 +3710,7 @@ const char* SearchParameter::_InternalParse(const char* ptr, ::_pbi::ParseContex
           auto str = _internal_mutable_priority();
           ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
           CHK_(ptr);
-          CHK_(::_pbi::VerifyUTF8(str, "SearchParameter.priority"));
+          CHK_(::_pbi::VerifyUTF8(str, "FilterSearchParameter.priority"));
         } else
           goto handle_unusual;
         continue;
@@ -3697,7 +3720,7 @@ const char* SearchParameter::_InternalParse(const char* ptr, ::_pbi::ParseContex
           auto str = _internal_mutable_verify_flag();
           ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
           CHK_(ptr);
-          CHK_(::_pbi::VerifyUTF8(str, "SearchParameter.verify_flag"));
+          CHK_(::_pbi::VerifyUTF8(str, "FilterSearchParameter.verify_flag"));
         } else
           goto handle_unusual;
         continue;
@@ -3724,9 +3747,9 @@ failure:
 #undef CHK_
 }
 
-uint8_t* SearchParameter::_InternalSerialize(
+uint8_t* FilterSearchParameter::_InternalSerialize(
     uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
-  // @@protoc_insertion_point(serialize_to_array_start:SearchParameter)
+  // @@protoc_insertion_point(serialize_to_array_start:FilterSearchParameter)
   uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
@@ -3735,7 +3758,7 @@ uint8_t* SearchParameter::_InternalSerialize(
     ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
       this->_internal_cruise_year().data(), static_cast<int>(this->_internal_cruise_year().length()),
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
-      "SearchParameter.cruise_year");
+      "FilterSearchParameter.cruise_year");
     target = stream->WriteStringMaybeAliased(
         1, this->_internal_cruise_year(), target);
   }
@@ -3745,7 +3768,7 @@ uint8_t* SearchParameter::_InternalSerialize(
     ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
       this->_internal_cruise_number().data(), static_cast<int>(this->_internal_cruise_number().length()),
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
-      "SearchParameter.cruise_number");
+      "FilterSearchParameter.cruise_number");
     target = stream->WriteStringMaybeAliased(
         2, this->_internal_cruise_number(), target);
   }
@@ -3755,7 +3778,7 @@ uint8_t* SearchParameter::_InternalSerialize(
     ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
       this->_internal_dive_number().data(), static_cast<int>(this->_internal_dive_number().length()),
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
-      "SearchParameter.dive_number");
+      "FilterSearchParameter.dive_number");
     target = stream->WriteStringMaybeAliased(
         3, this->_internal_dive_number(), target);
   }
@@ -3766,7 +3789,7 @@ uint8_t* SearchParameter::_InternalSerialize(
     ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
       s.data(), static_cast<int>(s.length()),
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
-      "SearchParameter.verify_dive_number");
+      "FilterSearchParameter.verify_dive_number");
     target = stream->WriteString(4, s, target);
   }
 
@@ -3775,7 +3798,7 @@ uint8_t* SearchParameter::_InternalSerialize(
     ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
       this->_internal_priority().data(), static_cast<int>(this->_internal_priority().length()),
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
-      "SearchParameter.priority");
+      "FilterSearchParameter.priority");
     target = stream->WriteStringMaybeAliased(
         5, this->_internal_priority(), target);
   }
@@ -3785,7 +3808,7 @@ uint8_t* SearchParameter::_InternalSerialize(
     ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
       this->_internal_verify_flag().data(), static_cast<int>(this->_internal_verify_flag().length()),
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
-      "SearchParameter.verify_flag");
+      "FilterSearchParameter.verify_flag");
     target = stream->WriteStringMaybeAliased(
         6, this->_internal_verify_flag(), target);
   }
@@ -3794,12 +3817,12 @@ uint8_t* SearchParameter::_InternalSerialize(
     target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
   }
-  // @@protoc_insertion_point(serialize_to_array_end:SearchParameter)
+  // @@protoc_insertion_point(serialize_to_array_end:FilterSearchParameter)
   return target;
 }
 
-size_t SearchParameter::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:SearchParameter)
+size_t FilterSearchParameter::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:FilterSearchParameter)
   size_t total_size = 0;
 
   uint32_t cached_has_bits = 0;
@@ -3852,17 +3875,17 @@ size_t SearchParameter::ByteSizeLong() const {
   return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
 }
 
-const ::PROTOBUF_NAMESPACE_ID::Message::ClassData SearchParameter::_class_data_ = {
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData FilterSearchParameter::_class_data_ = {
     ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSourceCheck,
-    SearchParameter::MergeImpl
+    FilterSearchParameter::MergeImpl
 };
-const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*SearchParameter::GetClassData() const { return &_class_data_; }
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*FilterSearchParameter::GetClassData() const { return &_class_data_; }
 
 
-void SearchParameter::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg) {
-  auto* const _this = static_cast<SearchParameter*>(&to_msg);
-  auto& from = static_cast<const SearchParameter&>(from_msg);
-  // @@protoc_insertion_point(class_specific_merge_from_start:SearchParameter)
+void FilterSearchParameter::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg) {
+  auto* const _this = static_cast<FilterSearchParameter*>(&to_msg);
+  auto& from = static_cast<const FilterSearchParameter&>(from_msg);
+  // @@protoc_insertion_point(class_specific_merge_from_start:FilterSearchParameter)
   GOOGLE_DCHECK_NE(&from, _this);
   uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
@@ -3886,18 +3909,18 @@ void SearchParameter::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const 
   _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
 }
 
-void SearchParameter::CopyFrom(const SearchParameter& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:SearchParameter)
+void FilterSearchParameter::CopyFrom(const FilterSearchParameter& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:FilterSearchParameter)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
 }
 
-bool SearchParameter::IsInitialized() const {
+bool FilterSearchParameter::IsInitialized() const {
   return true;
 }
 
-void SearchParameter::InternalSwap(SearchParameter* other) {
+void FilterSearchParameter::InternalSwap(FilterSearchParameter* other) {
   using std::swap;
   auto* lhs_arena = GetArenaForAllocation();
   auto* rhs_arena = other->GetArenaForAllocation();
@@ -3925,10 +3948,213 @@ void SearchParameter::InternalSwap(SearchParameter* other) {
   );
 }
 
-::PROTOBUF_NAMESPACE_ID::Metadata SearchParameter::GetMetadata() const {
+::PROTOBUF_NAMESPACE_ID::Metadata FilterSearchParameter::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_sidescansource_2eproto_getter, &descriptor_table_sidescansource_2eproto_once,
       file_level_metadata_sidescansource_2eproto[7]);
+}
+
+// ===================================================================
+
+class KeywordSearchParameter::_Internal {
+ public:
+};
+
+KeywordSearchParameter::KeywordSearchParameter(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                         bool is_message_owned)
+  : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned) {
+  SharedCtor(arena, is_message_owned);
+  // @@protoc_insertion_point(arena_constructor:KeywordSearchParameter)
+}
+KeywordSearchParameter::KeywordSearchParameter(const KeywordSearchParameter& from)
+  : ::PROTOBUF_NAMESPACE_ID::Message() {
+  KeywordSearchParameter* const _this = this; (void)_this;
+  new (&_impl_) Impl_{
+      decltype(_impl_.keyword_){}
+    , /*decltype(_impl_._cached_size_)*/{}};
+
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  _impl_.keyword_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.keyword_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (!from._internal_keyword().empty()) {
+    _this->_impl_.keyword_.Set(from._internal_keyword(), 
+      _this->GetArenaForAllocation());
+  }
+  // @@protoc_insertion_point(copy_constructor:KeywordSearchParameter)
+}
+
+inline void KeywordSearchParameter::SharedCtor(
+    ::_pb::Arena* arena, bool is_message_owned) {
+  (void)arena;
+  (void)is_message_owned;
+  new (&_impl_) Impl_{
+      decltype(_impl_.keyword_){}
+    , /*decltype(_impl_._cached_size_)*/{}
+  };
+  _impl_.keyword_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.keyword_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+}
+
+KeywordSearchParameter::~KeywordSearchParameter() {
+  // @@protoc_insertion_point(destructor:KeywordSearchParameter)
+  if (auto *arena = _internal_metadata_.DeleteReturnArena<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>()) {
+  (void)arena;
+    return;
+  }
+  SharedDtor();
+}
+
+inline void KeywordSearchParameter::SharedDtor() {
+  GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
+  _impl_.keyword_.Destroy();
+}
+
+void KeywordSearchParameter::SetCachedSize(int size) const {
+  _impl_._cached_size_.Set(size);
+}
+
+void KeywordSearchParameter::Clear() {
+// @@protoc_insertion_point(message_clear_start:KeywordSearchParameter)
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  _impl_.keyword_.ClearToEmpty();
+  _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+const char* KeywordSearchParameter::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
+#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
+  while (!ctx->Done(&ptr)) {
+    uint32_t tag;
+    ptr = ::_pbi::ReadTag(ptr, &tag);
+    switch (tag >> 3) {
+      // string keyword = 1;
+      case 1:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 10)) {
+          auto str = _internal_mutable_keyword();
+          ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(ptr);
+          CHK_(::_pbi::VerifyUTF8(str, "KeywordSearchParameter.keyword"));
+        } else
+          goto handle_unusual;
+        continue;
+      default:
+        goto handle_unusual;
+    }  // switch
+  handle_unusual:
+    if ((tag == 0) || ((tag & 7) == 4)) {
+      CHK_(ptr);
+      ctx->SetLastTag(tag);
+      goto message_done;
+    }
+    ptr = UnknownFieldParse(
+        tag,
+        _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
+        ptr, ctx);
+    CHK_(ptr != nullptr);
+  }  // while
+message_done:
+  return ptr;
+failure:
+  ptr = nullptr;
+  goto message_done;
+#undef CHK_
+}
+
+uint8_t* KeywordSearchParameter::_InternalSerialize(
+    uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+  // @@protoc_insertion_point(serialize_to_array_start:KeywordSearchParameter)
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // string keyword = 1;
+  if (!this->_internal_keyword().empty()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->_internal_keyword().data(), static_cast<int>(this->_internal_keyword().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "KeywordSearchParameter.keyword");
+    target = stream->WriteStringMaybeAliased(
+        1, this->_internal_keyword(), target);
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
+        _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:KeywordSearchParameter)
+  return target;
+}
+
+size_t KeywordSearchParameter::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:KeywordSearchParameter)
+  size_t total_size = 0;
+
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  // string keyword = 1;
+  if (!this->_internal_keyword().empty()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->_internal_keyword());
+  }
+
+  return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
+}
+
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData KeywordSearchParameter::_class_data_ = {
+    ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSourceCheck,
+    KeywordSearchParameter::MergeImpl
+};
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*KeywordSearchParameter::GetClassData() const { return &_class_data_; }
+
+
+void KeywordSearchParameter::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg) {
+  auto* const _this = static_cast<KeywordSearchParameter*>(&to_msg);
+  auto& from = static_cast<const KeywordSearchParameter&>(from_msg);
+  // @@protoc_insertion_point(class_specific_merge_from_start:KeywordSearchParameter)
+  GOOGLE_DCHECK_NE(&from, _this);
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (!from._internal_keyword().empty()) {
+    _this->_internal_set_keyword(from._internal_keyword());
+  }
+  _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+}
+
+void KeywordSearchParameter::CopyFrom(const KeywordSearchParameter& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:KeywordSearchParameter)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool KeywordSearchParameter::IsInitialized() const {
+  return true;
+}
+
+void KeywordSearchParameter::InternalSwap(KeywordSearchParameter* other) {
+  using std::swap;
+  auto* lhs_arena = GetArenaForAllocation();
+  auto* rhs_arena = other->GetArenaForAllocation();
+  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &_impl_.keyword_, lhs_arena,
+      &other->_impl_.keyword_, rhs_arena
+  );
+}
+
+::PROTOBUF_NAMESPACE_ID::Metadata KeywordSearchParameter::GetMetadata() const {
+  return ::_pbi::AssignDescriptors(
+      &descriptor_table_sidescansource_2eproto_getter, &descriptor_table_sidescansource_2eproto_once,
+      file_level_metadata_sidescansource_2eproto[8]);
 }
 
 // @@protoc_insertion_point(namespace_scope)
@@ -3961,9 +4187,13 @@ template<> PROTOBUF_NOINLINE ::SearchFilterParamterList*
 Arena::CreateMaybeMessage< ::SearchFilterParamterList >(Arena* arena) {
   return Arena::CreateMessageInternal< ::SearchFilterParamterList >(arena);
 }
-template<> PROTOBUF_NOINLINE ::SearchParameter*
-Arena::CreateMaybeMessage< ::SearchParameter >(Arena* arena) {
-  return Arena::CreateMessageInternal< ::SearchParameter >(arena);
+template<> PROTOBUF_NOINLINE ::FilterSearchParameter*
+Arena::CreateMaybeMessage< ::FilterSearchParameter >(Arena* arena) {
+  return Arena::CreateMessageInternal< ::FilterSearchParameter >(arena);
+}
+template<> PROTOBUF_NOINLINE ::KeywordSearchParameter*
+Arena::CreateMaybeMessage< ::KeywordSearchParameter >(Arena* arena) {
+  return Arena::CreateMessageInternal< ::KeywordSearchParameter >(arena);
 }
 PROTOBUF_NAMESPACE_CLOSE
 

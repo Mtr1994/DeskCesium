@@ -83,7 +83,7 @@ void MessageWidget::init()
     lbImage->setStyleSheet(QString("QLabel{image: url(%1);}").arg(url));
 
     mLabelMessage = new QLabel(widgetBase);
-    mLabelMessage->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
+    mLabelMessage->setAlignment(Qt::AlignVCenter | Qt::AlignLeft);
     mLabelMessage->setStyleSheet("color: #666666;");
     mLabelMessage->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred));
 
@@ -131,7 +131,7 @@ void MessageWidget::animateDesign()
         setGeometry((parentWidth - width) / 2.0, this->y(), this->width(), this->height());
 
         mAnimation->setStartValue(QPoint((parentWidth - width) / 2.0, -fontRect.height() * 2.8));
-        mAnimation->setEndValue(QPoint((parentWidth - width) / 2.0, fontRect.height() * 4.2 * mSerialNumber));
+        mAnimation->setEndValue(QPoint((parentWidth - width) / 2.0, fontRect.height() * 4 + fontRect.height() * 4.2 * mSerialNumber));
     }
     else if (mMessagePosition == P_Top_Right)
     {
@@ -147,7 +147,7 @@ void MessageWidget::animateDesign()
         setGeometry((parentWidth - width) / 2.0, this->y(), this->width(), this->height());
 
         mAnimation->setStartValue(QPoint((parentWidth - width) / 2.0, parentHeight + fontRect.height() * 2.8));
-        mAnimation->setEndValue(QPoint((parentWidth - width) / 2.0, parentHeight - fontRect.height() * 4.2 * mSerialNumber));
+        mAnimation->setEndValue(QPoint((parentWidth - width) / 2.0, parentHeight - fontRect.height() * 4 - fontRect.height() * 4.2 * mSerialNumber));
     }
     else if (mMessagePosition == P_Bottom_Right)
     {

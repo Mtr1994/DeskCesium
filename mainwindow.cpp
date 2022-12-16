@@ -5,10 +5,11 @@
 #include "gdal_priv.h"
 #include "gdal_utils.h"
 #include "Dialog/dialogabout.h"
-#include "Message/messagewidget.h"
 #include "Dialog/dialogsetting.h"
 #include "Public/softconfig.h"
 #include "Dialog/dialoguploaddata.h"
+#include "Dialog/dialogsearch.h"
+#include "Control/Message/messagewidget.h"
 
 #include <QScreen>
 #include <QWebEngineSettings>
@@ -93,6 +94,10 @@ void MainWindow::init()
     connect(ui->actionImportData, &QAction::triggered, this, &MainWindow::slot_import_cruise_data);
     connect(ui->actionExit, &QAction::triggered, this, [this]{ this->close();});
 
+    // 检索
+    connect(ui->actionKeywordSearch, &QAction::triggered, this, &MainWindow::slot_menu_keyword_search_click);
+    connect(ui->actionFilterSearch, &QAction::triggered, this, &MainWindow::slot_menu_filter_search_click);
+
     connect(ui->actionSetting, &QAction::triggered, this, [this]{ DialogSetting dialog(this); dialog.exec(); });
 
     connect(ui->actionMeasureLine, &QAction::triggered, this, &MainWindow::slot_start_measure_line);
@@ -100,6 +105,8 @@ void MainWindow::init()
 
     // 版本信息
     connect(ui->actionVersion, &QAction::triggered, this, [this]{ DialogAbout dialog(this); dialog.exec(); });
+
+    showMaximized();
 }
 
 void MainWindow::slot_add_kml_entity(const QString &path)
@@ -480,6 +487,18 @@ void MainWindow::slot_import_cruise_data()
 {
     // 生成一个 Dialog，所有的操作均在该窗体中完成
     DialogUploadData dialog(this);
+    dialog.exec();
+}
+
+void MainWindow::slot_menu_keyword_search_click()
+{
+    DialogSearch dialog(true, this);
+    dialog.exec();
+}
+
+void MainWindow::slot_menu_filter_search_click()
+{
+    DialogSearch dialog(false, this);
     dialog.exec();
 }
 

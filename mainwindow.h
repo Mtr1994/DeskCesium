@@ -62,6 +62,10 @@ private slots:
 
     void slot_import_cruise_data();
 
+    void slot_menu_keyword_search_click();
+
+    void slot_menu_filter_search_click();
+
 private:
     bool removeFolderContent(const QString &folderDir);
 

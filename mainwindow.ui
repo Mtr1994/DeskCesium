@@ -91,15 +91,12 @@
            <property name="horizontalSpacing">
             <number>0</number>
            </property>
-           <item row="1" column="0">
+           <item row="0" column="0">
             <widget class="EntityTreeWidget" name="widgetEntityView" native="true">
              <property name="contextMenuPolicy">
               <enum>Qt::CustomContextMenu</enum>
              </property>
             </widget>
-           </item>
-           <item row="0" column="0">
-            <widget class="WidgetSearch" name="widgetSearchContent" native="true"/>
            </item>
           </layout>
          </widget>
@@ -178,7 +175,22 @@
     </property>
     <addaction name="actionVersion"/>
    </widget>
+   <widget class="QMenu" name="menu_5">
+    <property name="title">
+     <string>查询</string>
+    </property>
+    <addaction name="actionKeywordSearch"/>
+    <addaction name="actionFilterSearch"/>
+   </widget>
+   <widget class="QMenu" name="menu_6">
+    <property name="title">
+     <string>统计</string>
+    </property>
+    <addaction name="actionDataStatistics"/>
+   </widget>
    <addaction name="menu"/>
+   <addaction name="menu_5"/>
+   <addaction name="menu_6"/>
    <addaction name="menu_2"/>
    <addaction name="menu_3"/>
    <addaction name="menu_4"/>
@@ -242,6 +254,36 @@
     <string>Ctrl+I</string>
    </property>
   </action>
+  <action name="actionKeywordSearch">
+   <property name="text">
+    <string>关键字检索</string>
+   </property>
+   <property name="toolTip">
+    <string>关键字检索</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+K</string>
+   </property>
+  </action>
+  <action name="actionFilterSearch">
+   <property name="text">
+    <string>条件检索</string>
+   </property>
+   <property name="toolTip">
+    <string>条件检索</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+F</string>
+   </property>
+  </action>
+  <action name="actionDataStatistics">
+   <property name="text">
+    <string>数据统计</string>
+   </property>
+   <property name="toolTip">
+    <string>数据统计</string>
+   </property>
+  </action>
  </widget>
  <customwidgets>
   <customwidget>
@@ -254,12 +296,6 @@
    <class>EntityTreeWidget</class>
    <extends>QWidget</extends>
    <header>./EntityTreeWidget/entitytreewidget.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>WidgetSearch</class>
-   <extends>QWidget</extends>
-   <header>./Widget/widgetsearch.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

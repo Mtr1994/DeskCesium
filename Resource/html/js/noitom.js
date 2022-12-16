@@ -5,6 +5,7 @@ let glMouseOverHandler = undefined;
 let hoverLongitude = 0.0;
 let hoverLatitude = 0.0;
 let createMeasurePoint = false
+let glSelectRemoteID = ""
 
 // 初始化
 function init() {
@@ -32,13 +33,21 @@ function init() {
 					if (parentId !== "") {
 						changeDataSourceChildVisible(id, visible, parentId)
 					} else {
-						changeDataSourceVisible(id, visible, parentId);
+						changeDataSourceVisible(id, visible, parentId)
 					}
 				} else if (type === "mla") {
-					changeMeasureLineSourceVisible(id, visible);
+					changeMeasureLineSourceVisible(id, visible)
 				} else if (type === "mpa") {
-					changeMeasurePolygnSourceVisible(id, visible);
+					changeMeasurePolygnSourceVisible(id, visible)
 				} else {
+					// 隐藏、显示详细信息
+					if (glSelectRemoteID === id) {
+						let entityDescription = document.getElementById("entityDescription")
+						entityDescription.style.visibility = visible ? "visible" : "hidden"
+						
+						let elementDivEmptyImage = document.getElementById("div-empty-image")
+						elementDivEmptyImage.style.visibility = visible ? "visible" : "hidden"
+					}
 					let entity = cesiumViewer.entities.getById(id)
 					if (undefined === entity) return;
 					entity.show = visible;
@@ -52,6 +61,14 @@ function init() {
 				} else if (type == "mpa") {
 					deleteMeasurePolygnSource(id);
 				} else {
+					// 隐藏详细信息
+					if (glSelectRemoteID === id) {
+						let entityDescription = document.getElementById("entityDescription")
+						entityDescription.style.visibility = "hidden"
+						
+						let elementDivEmptyImage = document.getElementById("div-empty-image")
+						elementDivEmptyImage.style.visibility = "hidden"
+					}
 					let entity = cesiumViewer.entities.getById(id)
 					cesiumViewer.entities.remove(entity);
 				}
@@ -127,6 +144,11 @@ function init() {
 	} else {
 		earthMap = new Cesium.TileMapServiceImageryProvider({ url: Cesium.buildModuleUrl("Assets/Textures/NaturalEarthII")});
 	}
+	
+	// 禁止右键菜单
+	document.oncontextmenu = function() {
+		event.returnValue = false
+	}
 
 	cesiumViewer = new Cesium.Viewer('cesiumContainer', {
 	  shadows: false,
@@ -164,6 +186,7 @@ function init() {
 		var pick = cesiumViewer.scene.pick(movement.position);
 		let entityDescription = document.getElementById("entityDescription");
 		if (undefined === pick) {
+			glSelectRemoteID = ""
 			if (undefined !== entityDescription) {
 				entityDescription.style.visibility = "hidden";
 				let elementDivEmptyImage = document.getElementById("div-empty-image");
@@ -173,66 +196,91 @@ function init() {
 			if (undefined !== entityDescription) {
 				let remoteObject = pick.id.remoteDescription;
 				if (undefined === remoteObject) {
+					glSelectRemoteID = ""
 					entityDescription.style.visibility = "hidden";
 				} else {
+					// 记录选中 ID
+					glSelectRemoteID = remoteObject.id
 					
 					let elementTextPriority = document.getElementById("text-priority");
 					elementTextPriority.innerHTML = remoteObject.priority
 					
 					let elementTextId = document.getElementById("text-id");
 					elementTextId.innerHTML = remoteObject.id
+					elementTextId.parentNode.title = remoteObject.id
 					
 					let elementTextDtTime = document.getElementById("text-dt-time");
 					elementTextDtTime.innerHTML = remoteObject.dt_time
+					elementTextDtTime.parentNode.title = remoteObject.dt_time
 					
 					let elementTextLongitude = document.getElementById("text-longitude");
 					elementTextLongitude.innerHTML = remoteObject.longitude
+					elementTextLongitude.parentNode.title = remoteObject.longitude
 					
 					let elementTextLatitude = document.getElementById("text-latitude");
 					elementTextLatitude.innerHTML = remoteObject.latitude
+					elementTextLatitude.parentNode.title = remoteObject.latitude
+					
+					let elementTextDepth = document.getElementById("text-altitude");
+					elementTextDepth.innerHTML = "-- 米"
+					elementTextDepth.parentNode.title = "-- 米"
 					
 					let elementTextDtSpeed = document.getElementById("text-dt-speed");
-					elementTextDtSpeed.innerHTML = remoteObject.dt_speed
+					elementTextDtSpeed.innerHTML = remoteObject.dt_speed + " Knot"
+					elementTextDtSpeed.parentNode.title = remoteObject.dt_speed + " Knot"
 					
 					let elementTextHorizontalRangeValue = document.getElementById("text-horizontal-range-value");
-					elementTextHorizontalRangeValue.innerHTML = remoteObject.horizontal_range_direction + "/" + remoteObject.horizontal_range_value
+					elementTextHorizontalRangeValue.innerHTML = remoteObject.horizontal_range_direction + " / " + remoteObject.horizontal_range_value + " 米"
+					elementTextHorizontalRangeValue.parentNode.title = remoteObject.horizontal_range_direction + " / " + remoteObject.horizontal_range_value + " 米"
 					
 					let elementTextHeightFromBottom = document.getElementById("text-height-from-bottom");
-					elementTextHeightFromBottom.innerHTML = remoteObject.height_from_bottom
+					elementTextHeightFromBottom.innerHTML = remoteObject.height_from_bottom + " 米"
+					elementTextHeightFromBottom.parentNode.title = remoteObject.height_from_bottom + " 米"
 					
 					let elementTextRTheta = document.getElementById("text-r-theta");
 					elementTextRTheta.innerHTML = remoteObject.r_theta
+					elementTextRTheta.parentNode.title = remoteObject.r_theta
 					
 					let elementTextAlongTrack = document.getElementById("text-along-track");
-					elementTextAlongTrack.innerHTML = remoteObject.along_track
+					elementTextAlongTrack.innerHTML = remoteObject.along_track + " 米"
+					elementTextAlongTrack.parentNode.title = remoteObject.along_track + " 米"
 					
 					let elementTextAcrossTrack = document.getElementById("text-across-track");
-					elementTextAcrossTrack.innerHTML = remoteObject.across_track
+					elementTextAcrossTrack.innerHTML = remoteObject.across_track + " 米"
+					elementTextAcrossTrack.parentNode.title = remoteObject.across_track + " 米"
 					
 					let elementTextRemarks = document.getElementById("text-remarks");
 					elementTextRemarks.innerHTML = remoteObject.remarks
+					elementTextRemarks.parentNode.title = remoteObject.remarks
 					
 					let elementTextSupposeSize = document.getElementById("text-suppose-size");
-					elementTextSupposeSize.innerHTML = remoteObject.suppose_size
+					elementTextSupposeSize.innerHTML = remoteObject.suppose_size + " 米"
+					elementTextSupposeSize.parentNode.title = remoteObject.suppose_size + " 米"
 					
 					// 查证信息
 					let elementTextTargetLongitude = document.getElementById("text-target-longitude");
 					elementTextTargetLongitude.innerHTML = remoteObject.target_longitude
+					elementTextTargetLongitude.parentNode.title = remoteObject.target_longitude
 					
 					let elementTextTargetLatitude = document.getElementById("text-target-latitude");
 					elementTextTargetLatitude.innerHTML = remoteObject.target_latitude
+					elementTextTargetLatitude.parentNode.title = remoteObject.target_latitude
 					
 					let elementTextPositionError = document.getElementById("text-position-error");
-					elementTextPositionError.innerHTML = remoteObject.position_error
+					elementTextPositionError.innerHTML = remoteObject.position_error + " 米"
+					elementTextPositionError.parentNode.title = remoteObject.position_error + " 米"
 					
 					let elementTextCruiseNumber = document.getElementById("text-cruise-number");
 					elementTextCruiseNumber.innerHTML = remoteObject.verify_cruise_number
+					elementTextCruiseNumber.parentNode.title = remoteObject.verify_cruise_number
 					
 					let elementTextDiveNumber = document.getElementById("text-dive-number");
 					elementTextDiveNumber.innerHTML = remoteObject.verify_dive_number
+					elementTextDiveNumber.parentNode.title = remoteObject.verify_dive_number
 					
 					let elementTextImageDescription = document.getElementById("text-image-description");
 					elementTextImageDescription.innerHTML = remoteObject.image_description
+					elementTextImageDescription.parentNode.title = remoteObject.image_description
 					
 					let elementDivVerifyImage = document.getElementById("div-verify-image");
 					
@@ -462,7 +510,6 @@ function changeDataSourceChildVisible(id, visible, name) {
 function deleteDataSource(type, name) {
 	let dataSourceArray = cesiumViewer.dataSources.getByName(name);
 	if (undefined == dataSourceArray) return;
-	
 	let len = dataSourceArray.length;
 	for (let i = 0; i < len; i++) {
 		cesiumViewer.dataSources.remove(dataSourceArray[i], true);

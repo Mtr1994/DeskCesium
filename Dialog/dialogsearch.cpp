@@ -10,9 +10,9 @@
 // test
 #include <QDebug>
 
-DialogSearch::DialogSearch(const QString &parameter, QWidget *parent) :
+DialogSearch::DialogSearch(bool keywordflag, QWidget *parent) :
     QDialog(parent),
-    ui(new Ui::DialogSearch), mParameter(parameter)
+    ui(new Ui::DialogSearch), mKeyworkSearchFlag(keywordflag)
 {
     ui->setupUi(this);
 
@@ -31,6 +31,14 @@ void DialogSearch::init()
 
     connect(ui->widgetSearchParameter, &WidgetSelectParameter::sgl_modify_search_parameter, this, &DialogSearch::slot_modify_search_parameter);
 
+    resize(parentWidget()->width() * 0.64, parentWidget()->height() * 0.6);
+
+    ui->tbParameter->setPlaceholderText(mKeyworkSearchFlag ? "输入关键字" : "输入或选择数据过滤条件");
+    ui->tbParameter->setReadOnly(!mKeyworkSearchFlag);
+    ui->widgetComplexSearchBase->setVisible(!mKeyworkSearchFlag);
+
+    if (!mKeyworkSearchFlag) ui->widgetSearchParameter->requestSelectParameter();
+
     // 准备执行 SQL 任务
     mTcpSocket = new TcpSocket;
     connect(mTcpSocket, &TcpSocket::sgl_recv_socket_data, this, &DialogSearch::slot_recv_socket_data);
@@ -42,7 +50,6 @@ void DialogSearch::init()
     connect(ui->btnExtract, &QPushButton::clicked, this, &DialogSearch::slot_btn_extract_clicked);
 
     // 设置表头
-
     mModelSideScanSource.setHorizontalHeaderItem(FIELD_ID, new QStandardItem(tr("编号")));
     mModelSideScanSource.setHorizontalHeaderItem(FIELD_CRUISE_NUMBER, new QStandardItem(tr("航次号")));
     mModelSideScanSource.setHorizontalHeaderItem(FIELD_DIVE_NUMBER, new QStandardItem(tr("潜次号")));
@@ -95,7 +102,7 @@ void DialogSearch::init()
     ui->tblvSideScanSource->setColumnHidden(FIELD_CRUISE_NUMBER, false);
     ui->tblvSideScanSource->setColumnHidden(FIELD_DIVE_NUMBER, false);
     ui->tblvSideScanSource->setColumnHidden(FIELD_SCAN_LINE, true);
-    ui->tblvSideScanSource->setColumnHidden(FIELD_CRUISE_YEAR, true);
+    ui->tblvSideScanSource->setColumnHidden(FIELD_CRUISE_YEAR, false);
     ui->tblvSideScanSource->setColumnHidden(FIELD_DT_TIME, true);
     ui->tblvSideScanSource->setColumnHidden(FIELD_LONGITUDE, false);
     ui->tblvSideScanSource->setColumnHidden(FIELD_LATITUDE, false);
@@ -112,12 +119,12 @@ void DialogSearch::init()
     ui->tblvSideScanSource->setColumnHidden(FILD_IMAGE_TOTAL_BYTE, false);
     ui->tblvSideScanSource->setColumnHidden(FIELD_ALONG_TRACK, true);
     ui->tblvSideScanSource->setColumnHidden(FIELD_ACROSS_TRACK, true);
-    ui->tblvSideScanSource->setColumnHidden(FIELD_REMARKS, true);
+    ui->tblvSideScanSource->setColumnHidden(FIELD_REMARKS, false);
     ui->tblvSideScanSource->setColumnHidden(FIELD_SUPPOSE_SIZE, true);
     ui->tblvSideScanSource->setColumnHidden(FIELD_PRIORITY, false);
     ui->tblvSideScanSource->setColumnHidden(FIELD_VERIFY_AUV_SSS_IMAGE_PATHS, true);
     ui->tblvSideScanSource->setColumnHidden(FIELD_VERIFY_IMAGE_PATHS, true);
-    ui->tblvSideScanSource->setColumnHidden(FIELD_IMAGE_DESCRIPTION, true);
+    ui->tblvSideScanSource->setColumnHidden(FIELD_IMAGE_DESCRIPTION, false);
     ui->tblvSideScanSource->setColumnHidden(FIELD_TARGET_LONGITUDE, true);
     ui->tblvSideScanSource->setColumnHidden(FIELD_TARGET_LATITUDE, true);
     ui->tblvSideScanSource->setColumnHidden(FIELD_POSITION_ERROR, true);
@@ -152,8 +159,12 @@ void DialogSearch::slot_recv_socket_data(uint64_t dwconnid, const std::string &d
     if (size >  mBufferArray.size()) return;
 
     switch (cmd) {
-    case CMD_QUERY_SIDE_SCAN_SOURCE_DATA_RESPONSE:
+    case CMD_QUERY_SIDE_SCAN_SOURCE_DATA_BY_FILTER_RESPONSE:
+    case CMD_QUERY_SIDE_SCAN_SOURCE_DATA_BY_KEYWORD_RESPONSE:
     {
+        // 顺带清理旧的数据
+        mModelSideScanSource.removeRows(0, mModelSideScanSource.rowCount());
+
         SideScanSourceList response;
         bool status = response.ParseFromString(mBufferArray.mid(8, size).toStdString());
         if (!status)
@@ -215,6 +226,9 @@ void DialogSearch::slot_recv_socket_data(uint64_t dwconnid, const std::string &d
             mModelSideScanSource.appendRow(listItem);
         }
 
+        MessageWidget *msg = new MessageWidget(MessageWidget::M_Success, MessageWidget::P_Bottom_Center, this);
+        msg->showMessage(QString("检索到 %1 条数据").arg(QString::number(size)));
+
         break;
     }
     default:
@@ -232,28 +246,41 @@ void DialogSearch::slot_tcp_socket_disconnect(uint64_t dwconnid)
 
 void DialogSearch::slot_btn_search_side_scan_click()
 {
-    //QString parameter = ui->tbParameter->text().trimmed();
+    QString parameter = ui->tbParameter->text().trimmed();
+    if (parameter.isEmpty()) return;
 
-    // 发送数据查询命令 （格式化查询命令）
-    SearchParameter searchParameter;
-    searchParameter.set_cruise_year(QString("\"%1\"").arg(mListCruiseYear.join("\",\"")).toStdString());
-    searchParameter.set_cruise_number(QString("\"%1\"").arg(mListCruiseNumber.join("\",\"")).toStdString());
-    searchParameter.set_dive_number(QString("\"%1\"").arg(mListDiveNumber.join("\",\"")).toStdString());
-
-    for (auto &item : mListVerifyDiveNumber)
+    // 发关键字查询
+    if (mKeyworkSearchFlag)
     {
-        searchParameter.add_verify_dive_number(item.toStdString());
+        KeywordSearchParameter searchParameter;
+        searchParameter.set_keyword(parameter.toStdString());
+
+        if (nullptr == mTcpSocket) return;
+
+        QByteArray pack = ProtocolHelper::getInstance()->createPackage(CMD_QUERY_SIDE_SCAN_SOURCE_DATA_BY_KEYWORD, searchParameter.SerializeAsString());
+        mTcpSocket->write(pack.toStdString());
     }
-    searchParameter.set_priority(mListPriority.join(",").toStdString());
-    searchParameter.set_verify_flag(mListVerifyFlag.join(",").toStdString());
+    else
+    {
+        // 发送数据查询命令 （格式化查询命令）
+        FilterSearchParameter searchParameter;
+        searchParameter.set_cruise_year(QString("\"%1\"").arg(mListCruiseYear.join("\",\"")).toStdString());
+        searchParameter.set_cruise_number(QString("\"%1\"").arg(mListCruiseNumber.join("\",\"")).toStdString());
+        searchParameter.set_dive_number(QString("\"%1\"").arg(mListDiveNumber.join("\",\"")).toStdString());
 
-    if (nullptr == mTcpSocket) return;
+        for (auto &item : mListVerifyDiveNumber)
+        {
+            searchParameter.add_verify_dive_number(item.toStdString());
+        }
 
-    QByteArray pack = ProtocolHelper::getInstance()->createPackage(CMD_QUERY_SIDE_SCAN_SOURCE_DATA, searchParameter.SerializeAsString());
-    mTcpSocket->write(pack.toStdString());
+        if (mListPriority.size() != 3) searchParameter.set_priority(mListPriority.join(",").toStdString());
+        if (mListVerifyFlag.size() != 2) searchParameter.set_verify_flag(mListVerifyFlag.join(",").toStdString());
 
-    // 顺带就清理旧的数据
-    mModelSideScanSource.removeRows(0, mModelSideScanSource.rowCount());
+        if (nullptr == mTcpSocket) return;
+
+        QByteArray pack = ProtocolHelper::getInstance()->createPackage(CMD_QUERY_SIDE_SCAN_SOURCE_DATA_BY_FILTER, searchParameter.SerializeAsString());
+        mTcpSocket->write(pack.toStdString());
+    }
 }
 
 void DialogSearch::slot_modify_search_parameter(const QString &target, const QString &value, bool append)
@@ -371,52 +398,55 @@ void DialogSearch::slot_btn_extract_clicked()
         return;
     }
 
-    QModelIndex index = ui->tblvSideScanSource->currentIndex();
+    QModelIndexList listIndex = ui->tblvSideScanSource->selectionModel()->selectedRows();
 
-    QStringList listItemName = {"id", "cruise_number", "dive_number", "scan_line", "cruise_year", "dt_time", "longitude", "latitude", "dt_speed", "horizontal_range_direction", "horizontal_range_value", "height_from_bottom", "r_theta", "side_scan_image_name", "image_top_left_longitude", "image_top_left_latitude", "image_bottom_right_longitude", "image_bottom_right_latitude", "image_total_byte", "along_track", "across_track", "remarks", "suppose_size", "priority", "verify_auv_sss_image_paths", "verify_image_paths", "image_description", "target_longitude", "target_latitude", "position_error", "verify_cruise_number", "verify_dive_number", "verify_time", "verify_flag"};
-    QStringList listValues;
-    QString cruiseNumber;
-    QString remotePath;
-    uint16_t itemSize = listItemName.size();
-    for (int i = 0; i < itemSize; i++)
+    for (auto &index : listIndex)
     {
-        QStandardItem *item = mModelSideScanSource.item(index.row(), i);
-        if (nullptr == item) return;
+        QStringList listItemName = {"id", "cruise_number", "dive_number", "scan_line", "cruise_year", "dt_time", "longitude", "latitude", "dt_speed", "horizontal_range_direction", "horizontal_range_value", "height_from_bottom", "r_theta", "side_scan_image_name", "image_top_left_longitude", "image_top_left_latitude", "image_bottom_right_longitude", "image_bottom_right_latitude", "image_total_byte", "along_track", "across_track", "remarks", "suppose_size", "priority", "verify_auv_sss_image_paths", "verify_image_paths", "image_description", "target_longitude", "target_latitude", "position_error", "verify_cruise_number", "verify_dive_number", "verify_time", "verify_flag"};
+        QStringList listValues;
+        QString cruiseNumber;
+        QString remotePath;
+        uint16_t itemSize = listItemName.size();
+        for (int i = 0; i < itemSize; i++)
+        {
+            QStandardItem *item = mModelSideScanSource.item(index.row(), i);
+            if (nullptr == item) return;
 
-        if (i == FIELD_CRUISE_NUMBER) cruiseNumber = item->text();
-        if (i == FIELD_SIDE_SCAN_IMAGE_NAME)
-        {
-            if (!item->text().trimmed().isEmpty()) remotePath = QString("http://101.34.253.220/image/upload/%1/image/%2").arg(cruiseNumber, item->text().trimmed());
-            listValues.append(listItemName.at(i) + ": \"" + remotePath + "\"");
-        }
-        else if (i == FIELD_VERIFY_AUV_SSS_IMAGE_PATHS)
-        {
-            QStringList listResult;
-            auto list = item->text().split(";", Qt::SkipEmptyParts);
-            for (auto &path : list)
+            if (i == FIELD_CRUISE_NUMBER) cruiseNumber = item->text();
+            if (i == FIELD_SIDE_SCAN_IMAGE_NAME)
             {
-                listResult.append(QString("http://101.34.253.220/image/upload/%1/image/%2").arg(cruiseNumber, path));
+                if (!item->text().trimmed().isEmpty()) remotePath = QString("http://101.34.253.220/image/upload/%1/image/%2").arg(cruiseNumber, item->text().trimmed());
+                listValues.append(listItemName.at(i) + ": \"" + remotePath + "\"");
             }
-            if (listResult.size() > 0) listValues.append(listItemName.at(i) + ": [\"" + listResult.join("\",\"") + "\"]");
-            else listValues.append(listItemName.at(i) + ": []");
-        }
-        else if (i == FIELD_VERIFY_IMAGE_PATHS)
-        {
-            QStringList listResult;
-            auto list = item->text().split(";", Qt::SkipEmptyParts);
-            for (auto &path : list)
+            else if (i == FIELD_VERIFY_AUV_SSS_IMAGE_PATHS)
             {
-                listResult.append(QString("http://101.34.253.220/image/upload/%1/image/%2").arg(cruiseNumber, path));
+                QStringList listResult;
+                auto list = item->text().split(";", Qt::SkipEmptyParts);
+                for (auto &path : list)
+                {
+                    listResult.append(QString("http://101.34.253.220/image/upload/%1/image/%2").arg(cruiseNumber, path));
+                }
+                if (listResult.size() > 0) listValues.append(listItemName.at(i) + ": [\"" + listResult.join("\",\"") + "\"]");
+                else listValues.append(listItemName.at(i) + ": []");
             }
-            if (listResult.size() > 0) listValues.append(listItemName.at(i) + ": [\"" + listResult.join("\",\"") + "\"]");
-            else listValues.append(listItemName.at(i) + ": []");
+            else if (i == FIELD_VERIFY_IMAGE_PATHS)
+            {
+                QStringList listResult;
+                auto list = item->text().split(";", Qt::SkipEmptyParts);
+                for (auto &path : list)
+                {
+                    listResult.append(QString("http://101.34.253.220/image/upload/%1/image/%2").arg(cruiseNumber, path));
+                }
+                if (listResult.size() > 0) listValues.append(listItemName.at(i) + ": [\"" + listResult.join("\",\"") + "\"]");
+                else listValues.append(listItemName.at(i) + ": []");
+            }
+            else
+            {
+                listValues.append(listItemName.at(i) + ": \"" + item->text() + "\"");
+            }
         }
-        else
-        {
-            listValues.append(listItemName.at(i) + ": \"" + item->text() + "\"");
-        }
+
+        emit AppSignal::getInstance()->sgl_add_remote_tiff_entity(remotePath, QString("{%1}").arg(listValues.join(",").remove("\n")));
     }
-
-    emit AppSignal::getInstance()->sgl_add_remote_tiff_entity(remotePath, QString("{%1}").arg(listValues.join(",").remove("\n")));
 }
 

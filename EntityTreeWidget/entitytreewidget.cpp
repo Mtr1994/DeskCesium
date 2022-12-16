@@ -1,7 +1,6 @@
 ﻿#include "entitytreewidget.h"
 #include "Public/appsignal.h"
 #include "Public/treeitemdelegate.h"
-#include "Message/messagewidget.h"
 
 #include <QHeaderView>
 #include <QMimeData>
@@ -98,6 +97,28 @@ void EntityTreeWidget::slot_context_menu_request(const QPoint &pos)
         menu.addAction(&actionDel);
     }
 
+    QAction actionDelAll("删除所有数据集");
+    if (nullptr == item->parent())
+    {
+        connect(&actionDelAll, &QAction::triggered, this, [this, id, type]
+        {
+            if (nullptr == mEntityModel) return;
+            uint32_t size = mEntityModel->rowCount();
+            for (uint32_t i = 0; i < size; i++)
+            {
+                QStandardItem *tempItem = mEntityModel->item(i);
+                if (nullptr == tempItem) continue;
+
+                QString tempType = tempItem->data().toString();
+                QString tempId = tempItem->data(Qt::UserRole + 2).toString();
+
+                emit AppSignal::getInstance()->sgl_delete_cesium_data_source(tempType, tempId);
+            }
+            emit AppSignal::getInstance()->sgl_delete_cesium_data_source(type, id);
+        });
+        menu.addAction(&actionDelAll);
+    }
+
     menu.setStyleSheet("border: 1px solid #d0d0d0; border-radius: 0.3em; padding: 0.6em 0em; background-color: #fefefe;");
 
     menu.setWindowFlags(menu.windowFlags() | Qt::FramelessWindowHint | Qt::NoDropShadowWindowHint);
@@ -128,8 +149,7 @@ void EntityTreeWidget::handleDropFile(const QString &path)
     }
     else
     {
-        MessageWidget *message = new MessageWidget(MessageWidget::M_Info, MessageWidget::P_Top_Center, this->parentWidget()->parentWidget()->parentWidget());
-        message->showMessage("未支持的数据类型");
+        emit AppSignal::getInstance()->sgl_thread_report_system_error("未支持的数据类型");
     }
 }
 
