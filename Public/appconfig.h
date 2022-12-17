@@ -4,24 +4,24 @@
 #include <QObject>
 #include <QSettings>
 
-class SoftConfig : public QObject
+class AppConfig : public QObject
 {
     Q_OBJECT
 public:
-    static SoftConfig *getInstance();
+    static AppConfig *getInstance();
 
-    bool init();
+    void init();
 
     QString getValue(const QString &entry, const QString &item);
 
     void setValue(const QString &pEntry, const QString &pItem, const QString &pValue);
 
 private:
-    explicit SoftConfig(QObject *parent = nullptr);
+    explicit AppConfig(QObject *parent = nullptr);
 
 
 private:
-    QSettings* mSetting;
+    QSettings *mSetting = nullptr;
 };
 
 #endif // SOFTCONFIG_H

@@ -6,7 +6,7 @@
 #include "gdal_utils.h"
 #include "Dialog/dialogabout.h"
 #include "Dialog/dialogsetting.h"
-#include "Public/softconfig.h"
+#include "Public/appconfig.h"
 #include "Dialog/dialoguploaddata.h"
 #include "Dialog/dialogsearch.h"
 #include "Control/Message/messagewidget.h"
@@ -64,6 +64,7 @@ void MainWindow::init()
     connect(AppSignal::getInstance(), &AppSignal::sgl_add_kmz_entity, this, &MainWindow::slot_add_kmz_entity);
     connect(AppSignal::getInstance(), &AppSignal::sgl_add_tiff_entity, this, &MainWindow::slot_add_tiff_entity);
     connect(AppSignal::getInstance(), &AppSignal::sgl_add_remote_tiff_entity, this, &MainWindow::slot_add_remote_tiff_entity);
+    connect(AppSignal::getInstance(), &AppSignal::sgl_add_remote_trajectory_entity, this, &MainWindow::slot_add_remote_trajectory_entity);
     connect(AppSignal::getInstance(), &AppSignal::sgl_add_grd_entity, this, &MainWindow::slot_add_grd_entity);
     connect(AppSignal::getInstance(), &AppSignal::sgl_change_entity_status, this, &MainWindow::slot_change_entity_status);
     connect(AppSignal::getInstance(), &AppSignal::sgl_delete_cesium_data_source, this, &MainWindow::slot_delete_cesium_data_source);
@@ -193,6 +194,11 @@ void MainWindow::slot_add_remote_tiff_entity(const QString &path, const QString 
     {
         emit mJsContext->sgl_add_entity("remote tif", remoteobject);
     }
+}
+
+void MainWindow::slot_add_remote_trajectory_entity(const QString &id, const QString &positionchain)
+{
+    emit mJsContext->sgl_add_entity("remote trajectory", QString("{id: \"%1\", positionchain: \"%2\"}").arg("轨迹线-" + id, positionchain));
 }
 
 void MainWindow::slot_add_grd_entity(const QString &path)
@@ -379,7 +385,7 @@ void MainWindow::slot_fly_to_entity(const QString &type, const QString &id, cons
 
 void MainWindow::slot_change_mouse_over_pick()
 {
-    bool isOpen = SoftConfig::getInstance()->getValue("Base", "openMouseOver").toUInt();
+    bool isOpen = AppConfig::getInstance()->getValue("Base", "openMouseOver").toUInt();
     emit mJsContext->sgl_change_mouse_over_status(isOpen);
 }
 

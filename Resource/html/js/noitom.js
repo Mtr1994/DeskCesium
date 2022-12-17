@@ -26,6 +26,8 @@ function init() {
 					addRemotePointEntity(path)
 				} else if (type === "remote tif") {
 					addRemoteTiffEntity(path)
+				} else if (type === "remote trajectory") {
+					addRemoteTrajectoryEntity(path)
 				}
 			});
 			context.sgl_change_entity_visible.connect(function(type, id, visible, parentId) {
@@ -54,7 +56,7 @@ function init() {
 				}
 			});
 			context.sgl_delete_entity.connect(function(type, id) {
-				if (type === "kml" || type === "kmz") {
+				if (type === "kml" || type === "kmz" || type == "remote trajectory") {
 					deleteDataSource(type, id)
 				} else if (type == "mla") {
 					deleteMeasureLineSource(id);
@@ -429,7 +431,7 @@ function addRemotePointEntity(arg) {
 	
 	// 判断是否已存在
 	if (undefined !== cesiumViewer.entities.getById(remoteObject.id)) {
-		context.recvMsg("add", "remote tif", false, remoteObject.id, "数据源已存在");
+		context.recvMsg("add", "remote point", false, remoteObject.id, "数据源已存在");
 		return;
 	}
 	
@@ -491,6 +493,44 @@ function addRemoteTiffEntity(arg) {
 	xhr.send();
 }
 
+// 添加 remote trajectory 实体
+function addRemoteTrajectoryEntity(arg) {
+	let remoteObject = eval("(" + arg + ")")
+	
+	// 判断是否已存在
+	if (undefined !== cesiumViewer.entities.getById(remoteObject.id)) {
+		context.recvMsg("add", "remote trajectory", false, remoteObject.id, "数据源已存在");
+		return;
+	}
+	
+	const options = {
+	  camera: cesiumViewer.scene.camera,
+	  canvas: cesiumViewer.scene.canvas,
+	  screenOverlayContainer: cesiumViewer.container,
+	};
+	
+	let xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Document> <name>" + remoteObject.id + "</name> <open>1</open> <Style id=\"linestyle\"> <LineStyle> <color>7f0000ff</color> <width>2</width> </LineStyle> </Style> <Placemark> <name>运动轨迹</name> <styleUrl>#linestyle</styleUrl> <LineString> <extrude>1</extrude> <tessellate>1</tessellate> <coordinates>" + remoteObject.positionchain + "</coordinates> </LineString> </Placemark> </Document>";
+
+	var parser = new DOMParser()
+	let xmlDOM = parser.parseFromString(xml, "text/xml")
+	var error = xmlDOM.getElementsByTagName("parsererror")
+	if(error.length)
+	{
+	   throw new Error("解析出错！" + error.textContent);
+	}
+
+	cesiumViewer.dataSources.add(Cesium.KmlDataSource.load(xmlDOM, options)).then(function (dataSource){
+		let entitySize = dataSource.entities.values.length;
+		let entityList = "";
+		for (let i = 0; i < entitySize; i++) {
+			let entity = dataSource.entities.values[i]
+			entity.show = true;
+			entityList = entityList + entity.name + "," + entity.id + "#";
+		}
+		
+		context.recvMsg("add", "remote trajectory", true, dataSource.name, entityList);
+	});
+}
 
 // 修改数据集可视化状态
 function changeDataSourceVisible(name, visible) {

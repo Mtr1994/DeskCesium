@@ -1,7 +1,5 @@
 ﻿#include "jscontext.h"
 #include "Public/appsignal.h"
-#include "Public/softconfig.h"
-
 // test
 #include <QDebug>
 
@@ -22,7 +20,7 @@ void JsContext::recvMsg(const QString &action, const QString &type, bool status,
     if (!status)
     {
         // 如果添加失败，提示用户
-        if (type.contains("remote"))
+        if (type.contains("remote point") || type.contains("remote tif"))
         {
             emit AppSignal::getInstance()->sgl_remote_entity_add_finish(arg, false, list);
         }
@@ -33,7 +31,7 @@ void JsContext::recvMsg(const QString &action, const QString &type, bool status,
         emit AppSignal::getInstance()->sgl_add_entity_finish(type, arg, list);
 
         // 如果添加成功，检索框表格要删除该条记录，表示成功提取
-        if (type.contains("remote"))
+        if (type.contains("remote point") || type.contains("remote tif"))
         {
             emit AppSignal::getInstance()->sgl_remote_entity_add_finish(arg, true, "成功");
         }

@@ -94,3 +94,19 @@ message KeywordSearchParameter
 {
 	string keyword = 1;
 }
+
+// 轨迹查询 参数
+message RequestTrajectory
+{
+	string cruise_number = 1;
+	string dive_number = 2;
+	string trajectory_type = 3;
+}
+
+// 轨迹查询 结果 (经纬度 + ” “ + 经纬度  循环), id 取 （cruise - dive）
+message RequestTrajectoryResponse
+{
+	string id = 1;
+	string position_chain = 2;
+	bool status = 3;
+}

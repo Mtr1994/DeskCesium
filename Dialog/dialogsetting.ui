@@ -193,6 +193,12 @@
         <family>微软雅黑</family>
        </font>
       </property>
+      <property name="styleSheet">
+       <string notr="true">QWidget#tabBase
+{
+	border: none;
+}</string>
+      </property>
       <attribute name="title">
        <string>基础</string>
       </attribute>
@@ -265,8 +271,8 @@ color: rgba(78, 110, 216, 200);</string>
            <property name="orientation">
             <enum>Qt::Horizontal</enum>
            </property>
-           <property name="Wcd" stdset="0">
-            <bool>true</bool>
+           <property name="GrayLine" stdset="0">
+            <bool>false</bool>
            </property>
           </widget>
          </item>

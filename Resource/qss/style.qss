@@ -270,6 +270,14 @@ QTreeView::branch:open:has-children:has-siblings  {
     image: url(:/Resource/image/tree_view_down.png);
 }
 
+QTreeView#treeMenuItems
+{
+    border: 1px solid #f0f0f0;
+    padding: 0.2em;
+    border-radius: 0em;
+    background-color: #fefefe;
+}
+
 QHeaderView
 {
     min-height: 2.8em;
@@ -401,7 +409,6 @@ QScrollBar:horizontal
     border: 1px solid #00dddddd;
     border-radius: 0.15em;
     margin:0px,0px,0px,0px;
-    width: 24em;
     height: 0.36em;
 }
 
@@ -459,4 +466,27 @@ QLabel[SelectTitle]
     font: 10pt "Microsoft YaHei UI";
     color: rgba(24, 24, 24, 255);
     font-weight: bold;
+}
+
+/*QTabWidget */
+QTabWidget
+{
+    border: 1px solid red;
+    border-radius: 0.3em;
+}
+
+QTabWidget::pane
+{
+    background-color: rgb(254, 254, 254);
+    border: 1px solid #f0f0f0;
+}
+
+
+/*QFrame*/
+QFrame[GrayLine]
+{
+    border: none;
+    min-height: 1px;
+    max-height: 1px;
+    background-color: #f0f0f0;
 }

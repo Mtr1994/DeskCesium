@@ -5,7 +5,7 @@
 #include <QRegExpValidator>
 
 #include "Public/treeitemdelegate.h"
-#include "Public/softconfig.h"
+#include "Public/appconfig.h"
 #include "Public/appsignal.h"
 
 DialogSetting::DialogSetting(QWidget *parent) :
@@ -19,10 +19,13 @@ DialogSetting::DialogSetting(QWidget *parent) :
     initMenuItems();
     initTabBase();
 
-    this->setWindowTitle("首选项");
+    setWindowTitle("首选项");
     setWindowFlags(Qt::Dialog | Qt::WindowCloseButtonHint);
 
-    resize(this->nativeParentWidget()->width() / 2.0, this->nativeParentWidget()->height() * 0.4);
+    QFont font("Microsoft YaHei", 9);
+    QFontMetrics metrics(font);
+
+   // resize(metrics.averageCharWidth() * 120, this->nativeParentWidget()->height() * 0.4);
 }
 
 DialogSetting::~DialogSetting()
@@ -46,7 +49,7 @@ void DialogSetting::initMenuItems()
 void DialogSetting::initTabBase()
 {
     mListInit.append(DialogSetting::Tab_Base);
-    bool isOpen = SoftConfig::getInstance()->getValue("Base", "openMouseOver").toUInt();
+    bool isOpen = AppConfig::getInstance()->getValue("Base", "openMouseOver").toUInt();
     ui->cbMouseOver->setChecked(isOpen);
 }
 
@@ -64,10 +67,10 @@ void DialogSetting::on_btnApply_clicked()
 {
     if (ui->tabSettingWidget->currentIndex() == Tab_Base)
     {
-        bool isOpen = SoftConfig::getInstance()->getValue("Base", "openMouseOver").toUInt();
+        bool isOpen = AppConfig::getInstance()->getValue("Base", "openMouseOver").toUInt();
         if (isOpen == ui->cbMouseOver->isChecked()) return;
 
-        SoftConfig::getInstance()->setValue("Base", "openMouseOver", QString::number(ui->cbMouseOver->isChecked()));
+        AppConfig::getInstance()->setValue("Base", "openMouseOver", QString::number(ui->cbMouseOver->isChecked()));
 
        emit AppSignal::getInstance()->sgl_change_mouse_over_pick(!isOpen);
     }

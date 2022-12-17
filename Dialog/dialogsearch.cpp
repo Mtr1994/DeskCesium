@@ -6,6 +6,7 @@
 #include "Common/common.h"
 #include "Control/Message/messagewidget.h"
 #include "Public/appsignal.h"
+#include "Public/appconfig.h"
 
 // test
 #include <QDebug>
@@ -31,7 +32,7 @@ void DialogSearch::init()
 
     connect(ui->widgetSearchParameter, &WidgetSelectParameter::sgl_modify_search_parameter, this, &DialogSearch::slot_modify_search_parameter);
 
-    resize(parentWidget()->width() * 0.64, parentWidget()->height() * 0.6);
+    resize(parentWidget()->width() * 0.72, parentWidget()->height() * 0.6);
 
     ui->tbParameter->setPlaceholderText(mKeyworkSearchFlag ? "输入关键字" : "输入或选择数据过滤条件");
     ui->tbParameter->setReadOnly(!mKeyworkSearchFlag);
@@ -44,7 +45,9 @@ void DialogSearch::init()
     connect(mTcpSocket, &TcpSocket::sgl_recv_socket_data, this, &DialogSearch::slot_recv_socket_data);
     connect(mTcpSocket, &TcpSocket::sgl_tcp_socket_connect, this, &DialogSearch::slot_tcp_socket_connect);
     connect(mTcpSocket, &TcpSocket::sgl_tcp_socket_disconnect, this, &DialogSearch::slot_tcp_socket_disconnect);
-    mTcpSocket->connect("192.168.44.129", 60011);
+
+    QString ip = AppConfig::getInstance()->getValue("Remote", "ip");
+    mTcpSocket->connect(ip, 60011);
 
     connect(ui->btnSearchSideScan, &QPushButton::clicked, this, &DialogSearch::slot_btn_search_side_scan_click);
     connect(ui->btnExtract, &QPushButton::clicked, this, &DialogSearch::slot_btn_extract_clicked);
@@ -133,6 +136,9 @@ void DialogSearch::init()
     ui->tblvSideScanSource->setColumnHidden(FIELD_VERIFY_TIME, true);
     ui->tblvSideScanSource->setColumnHidden(FIELD_VERIFY_FLAG, false);
     ui->tblvSideScanSource->setColumnHidden(FIELD_STATUS, true);
+
+    // 指定列宽
+    ui->tblvSideScanSource->setColumnWidth(FIELD_ID, metrics.averageCharWidth() * 36);
 
     // 信号
     connect(AppSignal::getInstance(), &AppSignal::sgl_remote_entity_add_finish, this, &DialogSearch::slot_remote_entity_add_finish);
@@ -235,6 +241,16 @@ void DialogSearch::slot_recv_socket_data(uint64_t dwconnid, const std::string &d
         ui->lbStatisticsNumber->setText(QString("总计： %1 条记录").arg(QString::number(size)));
 
         break;
+    }
+    case CMD_QUERY_TRAJECTORY_BY_CURSE_AND_DIVE_RESPONSE:
+    {
+        RequestTrajectoryResponse response;
+        bool status = response.ParseFromString(mBufferArray.mid(8, size).toStdString());
+
+        if (!status) return;
+
+        // 添加 kml 文件轨迹
+        emit AppSignal::getInstance()->sgl_add_remote_trajectory_entity(QString::fromStdString(response.id()), QString::fromStdString(response.position_chain()));
     }
     default:
         break;
@@ -408,22 +424,30 @@ void DialogSearch::slot_btn_extract_clicked()
 
     QModelIndexList listIndex = ui->tblvSideScanSource->selectionModel()->selectedRows();
 
+    // 缓存本次已经请求过的轨迹
+    QStringList listTrajectory;
+
     for (auto &index : listIndex)
     {
         QStringList listItemName = {"id", "cruise_number", "dive_number", "scan_line", "cruise_year", "dt_time", "longitude", "latitude", "dt_speed", "horizontal_range_direction", "horizontal_range_value", "height_from_bottom", "r_theta", "side_scan_image_name", "image_top_left_longitude", "image_top_left_latitude", "image_bottom_right_longitude", "image_bottom_right_latitude", "image_total_byte", "along_track", "across_track", "remarks", "suppose_size", "priority", "verify_auv_sss_image_paths", "verify_image_paths", "image_description", "target_longitude", "target_latitude", "position_error", "verify_cruise_number", "verify_dive_number", "verify_time", "verify_flag"};
         QStringList listValues;
         QString cruiseNumber;
+        QString diveNumber;
         QString remotePath;
         uint16_t itemSize = listItemName.size();
+        QString ip = AppConfig::getInstance()->getValue("Remote", "ip");
         for (int i = 0; i < itemSize; i++)
         {
             QStandardItem *item = mModelSideScanSource.item(index.row(), i);
             if (nullptr == item) return;
 
+
             if (i == FIELD_CRUISE_NUMBER) cruiseNumber = item->text();
+            if (i == FIELD_DIVE_NUMBER) diveNumber = item->text();
+
             if (i == FIELD_SIDE_SCAN_IMAGE_NAME)
             {
-                if (!item->text().trimmed().isEmpty()) remotePath = QString("http://192.168.44.129/image/upload/%1/image/%2").arg(cruiseNumber, item->text().trimmed());
+                if (!item->text().trimmed().isEmpty()) remotePath = QString("http://%1/image/upload/%2/image/%3").arg(ip, cruiseNumber, item->text().trimmed());
                 listValues.append(listItemName.at(i) + ": \"" + remotePath + "\"");
             }
             else if (i == FIELD_VERIFY_AUV_SSS_IMAGE_PATHS)
@@ -432,7 +456,7 @@ void DialogSearch::slot_btn_extract_clicked()
                 auto list = item->text().split(";", Qt::SkipEmptyParts);
                 for (auto &path : list)
                 {
-                    listResult.append(QString("http://192.168.44.129/image/upload/%1/image/%2").arg(cruiseNumber, path));
+                    listResult.append(QString("http://%1/image/upload/%2/image/%3").arg(ip, cruiseNumber, path));
                 }
                 if (listResult.size() > 0) listValues.append(listItemName.at(i) + ": [\"" + listResult.join("\",\"") + "\"]");
                 else listValues.append(listItemName.at(i) + ": []");
@@ -443,7 +467,7 @@ void DialogSearch::slot_btn_extract_clicked()
                 auto list = item->text().split(";", Qt::SkipEmptyParts);
                 for (auto &path : list)
                 {
-                    listResult.append(QString("http://192.168.44.129/image/upload/%1/image/%2").arg(cruiseNumber, path));
+                    listResult.append(QString("http://%1/image/upload/%2/image/%3").arg(ip, cruiseNumber, path));
                 }
                 if (listResult.size() > 0) listValues.append(listItemName.at(i) + ": [\"" + listResult.join("\",\"") + "\"]");
                 else listValues.append(listItemName.at(i) + ": []");
@@ -455,7 +479,40 @@ void DialogSearch::slot_btn_extract_clicked()
         }
 
         emit AppSignal::getInstance()->sgl_add_remote_tiff_entity(remotePath, QString("{%1}").arg(listValues.join(",").remove("\n")));
+
+        // 循环查询轨迹
+        QString trajectoryID = QString("%1-%2").arg(cruiseNumber, diveNumber);
+        if (listTrajectory.contains(trajectoryID)) continue;
+        listTrajectory.append(trajectoryID);
+
+        RequestTrajectory request;
+        request.set_cruise_number(cruiseNumber.toStdString());
+        request.set_dive_number(diveNumber.toStdString());
+
+        if (diveNumber.contains("DT"))
+        {
+            request.set_trajectory_type("DT");
+        }
+        else if (diveNumber.contains("FDZ") || diveNumber.contains("SY"))
+        {
+            request.set_trajectory_type("HOV");
+        }
+        else if (diveNumber.contains("HS"))
+        {
+            request.set_trajectory_type("AUV");
+        }
+        else if (diveNumber.contains("TanSuoYiHao") || diveNumber.contains("TanSuoErHao"))
+        {
+            request.set_trajectory_type("SHIP");
+        }
+
+        if (nullptr == mTcpSocket) continue;
+
+        QByteArray pack = ProtocolHelper::getInstance()->createPackage(CMD_QUERY_TRAJECTORY_BY_CURSE_AND_DIVE, request.SerializeAsString());
+        mTcpSocket->write(pack.toStdString());
     }
+
+    qDebug() << "listTrajectory " << listTrajectory;
 }
 
 void DialogSearch::slot_remote_entity_add_finish(const QString &id, bool status, const QString &message)

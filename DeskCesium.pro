@@ -52,8 +52,8 @@ SOURCES += \
     Net/tcpsocket.cpp \
     Proto/sidescansource.pb.cc \
     Protocol/protocolhelper.cpp \
+    Public/appconfig.cpp \
     Public/appsignal.cpp \
-    Public/softconfig.cpp \
     Widget/widgetselectparameter.cpp \
     main.cpp \
     mainwindow.cpp
@@ -72,8 +72,8 @@ HEADERS += \
     Net/tcpsocket.h \
     Proto/sidescansource.pb.h \
     Protocol/protocolhelper.h \
+    Public/appconfig.h \
     Public/appsignal.h \
-    Public/softconfig.h \
     Public/treeitemdelegate.h \
     Widget/widgetselectparameter.h \
     mainwindow.h

@@ -8,6 +8,9 @@
 #include <QMenu>
 #include <QGridLayout>
 
+// test
+#include <QDebug>
+
 EntityTreeView::EntityTreeView(QWidget *parent)
     : QTreeView(parent)
 {
@@ -26,6 +29,7 @@ void EntityTreeView::mouseDoubleClickEvent(QMouseEvent *event)
     QString id = item->data(Qt::UserRole + 2).toString();
     if (id.startsWith("Legend")) return;
     QString parentId = item->data(Qt::UserRole + 3).toString();
+    qDebug() << "here " << type << " " <<  id << " " << parentId;
     emit AppSignal::getInstance()->sgl_fly_to_entity(type, id, parentId);
 }
 
@@ -183,7 +187,7 @@ void EntityTreeWidget::slot_add_entity_finish(const QString &type, const QString
         QFileInfo info(text);
         text = info.baseName() + ".tif";
     }
-    if (type == "grd")
+    else if (type == "grd")
     {
         QFileInfo info(text);
         text = info.baseName() + ".grd";
@@ -226,7 +230,7 @@ void EntityTreeWidget::slot_add_entity_finish(const QString &type, const QString
 
     mEntityModel->appendRow(item);
 
-    if (type == "kml" || type == "kmz")
+    if (type == "kml" || type == "kmz" || type == "remote trajectory")
     {
         QStringList entities = list.split('#', Qt::SkipEmptyParts);
         for (auto &entity : entities)

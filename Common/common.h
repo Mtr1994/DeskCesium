@@ -7,7 +7,6 @@
 ///
 
 #include <stdint.h>
-#include <QByteArray>
 
 // 数据库写入异常点记录 （任意字节数据内容）
 const uint16_t CMD_INSERT_SIDE_SCAN_SOURCE_DATA = 0X7001;
@@ -44,3 +43,9 @@ const uint16_t CMD_QUERY_SIDE_SCAN_SOURCE_DATA_BY_KEYWORD = 0X700b;
 
 // 查询数据 回复
 const uint16_t CMD_QUERY_SIDE_SCAN_SOURCE_DATA_BY_KEYWORD_RESPONSE = 0XB00b;
+
+// 查询轨迹
+const uint16_t CMD_QUERY_TRAJECTORY_BY_CURSE_AND_DIVE = 0X700d;
+
+// 查询轨迹 回复
+const uint16_t CMD_QUERY_TRAJECTORY_BY_CURSE_AND_DIVE_RESPONSE = 0XB00d;

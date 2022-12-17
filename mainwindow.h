@@ -42,6 +42,9 @@ public slots:
     // 添加远程 tif 文件 (参数是一个 JS 对象字符串)
     void slot_add_remote_tiff_entity(const QString &path, const QString &remoteobject);
 
+    // 添加远程 轨迹 对象
+    void slot_add_remote_trajectory_entity(const QString &id, const QString &positionchain);
+
     void slot_add_grd_entity(const QString &path);
     void slot_change_entity_status(const QString &type, const QString &name, bool visible, const QString &parentid = "");
     void slot_delete_cesium_data_source(const QString &type, const QString &name);
