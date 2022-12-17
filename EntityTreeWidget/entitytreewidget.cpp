@@ -73,7 +73,10 @@ void EntityTreeWidget::dropEvent(QDropEvent *event)
 void EntityTreeWidget::slot_context_menu_request(const QPoint &pos)
 {
     QModelIndex index = mTreeView->indexAt(pos);
-    if (!index.isValid()) return;
+    if (!index.isValid())
+    {
+        return;
+    }
 
     QStandardItem *item = mEntityModel->itemFromIndex(index);
     QString type = item->data().toString();
@@ -90,17 +93,17 @@ void EntityTreeWidget::slot_context_menu_request(const QPoint &pos)
     connect(&actionHide, &QAction::triggered, [&item]() { item->setCheckState(Qt::Unchecked); });
     menu.addAction(&actionHide);
 
-    QAction actionDel("删除数据集");
+    QAction actionDel("关闭数据集");
     if (nullptr == item->parent())
     {
         connect(&actionDel, &QAction::triggered, this, [id, type] { emit AppSignal::getInstance()->sgl_delete_cesium_data_source(type, id); });
         menu.addAction(&actionDel);
     }
 
-    QAction actionDelAll("删除所有数据集");
+    QAction actionDelAll("关闭所有数据集");
     if (nullptr == item->parent())
     {
-        connect(&actionDelAll, &QAction::triggered, this, [this, id, type]
+        connect(&actionDelAll, &QAction::triggered, this, [this]
         {
             if (nullptr == mEntityModel) return;
             uint32_t size = mEntityModel->rowCount();
@@ -114,7 +117,6 @@ void EntityTreeWidget::slot_context_menu_request(const QPoint &pos)
 
                 emit AppSignal::getInstance()->sgl_delete_cesium_data_source(tempType, tempId);
             }
-            emit AppSignal::getInstance()->sgl_delete_cesium_data_source(type, id);
         });
         menu.addAction(&actionDelAll);
     }

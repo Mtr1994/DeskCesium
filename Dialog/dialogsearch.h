@@ -41,7 +41,7 @@ private slots:
     void slot_btn_extract_clicked();
 
     // remote entity add finish
-    void slot_remote_entity_add_finish(const QString &id, bool status);
+    void slot_remote_entity_add_finish(const QString &id, bool status, const QString &message);
 
 private:
     Ui::DialogSearch *ui;

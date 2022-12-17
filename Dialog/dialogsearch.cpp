@@ -44,7 +44,7 @@ void DialogSearch::init()
     connect(mTcpSocket, &TcpSocket::sgl_recv_socket_data, this, &DialogSearch::slot_recv_socket_data);
     connect(mTcpSocket, &TcpSocket::sgl_tcp_socket_connect, this, &DialogSearch::slot_tcp_socket_connect);
     connect(mTcpSocket, &TcpSocket::sgl_tcp_socket_disconnect, this, &DialogSearch::slot_tcp_socket_disconnect);
-    mTcpSocket->connect("101.34.253.220", 60011);
+    mTcpSocket->connect("192.168.44.129", 60011);
 
     connect(ui->btnSearchSideScan, &QPushButton::clicked, this, &DialogSearch::slot_btn_search_side_scan_click);
     connect(ui->btnExtract, &QPushButton::clicked, this, &DialogSearch::slot_btn_extract_clicked);
@@ -231,6 +231,8 @@ void DialogSearch::slot_recv_socket_data(uint64_t dwconnid, const std::string &d
 
         MessageWidget *msg = new MessageWidget(MessageWidget::M_Success, MessageWidget::P_Bottom_Center, this);
         msg->showMessage(QString("检索到 %1 条数据").arg(QString::number(size)));
+
+        ui->lbStatisticsNumber->setText(QString("总计： %1 条记录").arg(QString::number(size)));
 
         break;
     }
@@ -421,7 +423,7 @@ void DialogSearch::slot_btn_extract_clicked()
             if (i == FIELD_CRUISE_NUMBER) cruiseNumber = item->text();
             if (i == FIELD_SIDE_SCAN_IMAGE_NAME)
             {
-                if (!item->text().trimmed().isEmpty()) remotePath = QString("http://101.34.253.220/image/upload/%1/image/%2").arg(cruiseNumber, item->text().trimmed());
+                if (!item->text().trimmed().isEmpty()) remotePath = QString("http://192.168.44.129/image/upload/%1/image/%2").arg(cruiseNumber, item->text().trimmed());
                 listValues.append(listItemName.at(i) + ": \"" + remotePath + "\"");
             }
             else if (i == FIELD_VERIFY_AUV_SSS_IMAGE_PATHS)
@@ -430,7 +432,7 @@ void DialogSearch::slot_btn_extract_clicked()
                 auto list = item->text().split(";", Qt::SkipEmptyParts);
                 for (auto &path : list)
                 {
-                    listResult.append(QString("http://101.34.253.220/image/upload/%1/image/%2").arg(cruiseNumber, path));
+                    listResult.append(QString("http://192.168.44.129/image/upload/%1/image/%2").arg(cruiseNumber, path));
                 }
                 if (listResult.size() > 0) listValues.append(listItemName.at(i) + ": [\"" + listResult.join("\",\"") + "\"]");
                 else listValues.append(listItemName.at(i) + ": []");
@@ -441,7 +443,7 @@ void DialogSearch::slot_btn_extract_clicked()
                 auto list = item->text().split(";", Qt::SkipEmptyParts);
                 for (auto &path : list)
                 {
-                    listResult.append(QString("http://101.34.253.220/image/upload/%1/image/%2").arg(cruiseNumber, path));
+                    listResult.append(QString("http://192.168.44.129/image/upload/%1/image/%2").arg(cruiseNumber, path));
                 }
                 if (listResult.size() > 0) listValues.append(listItemName.at(i) + ": [\"" + listResult.join("\",\"") + "\"]");
                 else listValues.append(listItemName.at(i) + ": []");
@@ -456,9 +458,14 @@ void DialogSearch::slot_btn_extract_clicked()
     }
 }
 
-void DialogSearch::slot_remote_entity_add_finish(const QString &id, bool status)
+void DialogSearch::slot_remote_entity_add_finish(const QString &id, bool status, const QString &message)
 {
-    if (!status) return;
+    if (!status)
+    {
+        MessageWidget *msg = new MessageWidget(MessageWidget::M_Error, MessageWidget::P_Bottom_Center, this);
+        msg->showMessage(QString("提取数据 %1 失败，%2").arg(id, message));
+        return;
+    }
 
     QModelIndexList listIndex = mModelSideScanSource.match(mModelSideScanSource.index(0, 0), Qt::DisplayRole, id, 1, Qt::MatchExactly | Qt::MatchRecursive);
     if (listIndex.isEmpty()) return;

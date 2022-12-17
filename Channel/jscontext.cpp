@@ -21,6 +21,11 @@ void JsContext::recvMsg(const QString &action, const QString &type, bool status,
     qDebug() << action << " " << type << " " << status << " " << arg << " " << list.length();
     if (!status)
     {
+        // 如果添加失败，提示用户
+        if (type.contains("remote"))
+        {
+            emit AppSignal::getInstance()->sgl_remote_entity_add_finish(arg, false, list);
+        }
         return;
     }
     if (action == "add")
@@ -30,7 +35,7 @@ void JsContext::recvMsg(const QString &action, const QString &type, bool status,
         // 如果添加成功，检索框表格要删除该条记录，表示成功提取
         if (type.contains("remote"))
         {
-            emit AppSignal::getInstance()->sgl_remote_entity_add_finish(arg, true);
+            emit AppSignal::getInstance()->sgl_remote_entity_add_finish(arg, true, "成功");
         }
     }
     else if (action == "delete")

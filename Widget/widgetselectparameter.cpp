@@ -31,7 +31,7 @@ void WidgetSelectParameter::requestSelectParameter()
     connect(mTcpSocket, &TcpSocket::sgl_recv_socket_data, this, &WidgetSelectParameter::slot_recv_socket_data);
     connect(mTcpSocket, &TcpSocket::sgl_tcp_socket_connect, this, &WidgetSelectParameter::slot_tcp_socket_connect);
     connect(mTcpSocket, &TcpSocket::sgl_tcp_socket_disconnect, this, &WidgetSelectParameter::slot_tcp_socket_disconnect);
-    mTcpSocket->connect("101.34.253.220", 60011);
+    mTcpSocket->connect("192.168.44.129", 60011);
 }
 
 void WidgetSelectParameter::init()

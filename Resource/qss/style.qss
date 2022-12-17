@@ -53,6 +53,11 @@ QWidget#widgetComplexSearchBase
     max-width: 16em;
 }
 
+QWidget#widgetSearchStatistics
+{
+    min-height: 2.4em;
+}
+
 /* QPushButton */
 QPushButton[Ok="true"]
 {

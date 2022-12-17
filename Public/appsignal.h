@@ -62,7 +62,7 @@ signals:
     void sgl_cesium_init_finish();
 
     // remote entity add finish
-    void sgl_remote_entity_add_finish(const QString &id, bool status);
+    void sgl_remote_entity_add_finish(const QString &id, bool status, const QString &message);
 };
 
 #endif // APPSIGNAL_H

@@ -96,7 +96,7 @@ void DialogUploadData::init()
     });
 
     emit sgl_send_system_notice_message(STATUS_INFO, "尝试连接远程数据服务 ...");
-    mTcpSocket->connect("101.34.253.220", 60011);
+    mTcpSocket->connect("192.168.44.129", 60011);
 
     // test
     ui->tbRootDir->setText("C:/Users/admin/Desktop/TestExample/TS-24-4");
@@ -943,7 +943,7 @@ void DialogUploadData::slot_recv_socket_data(uint64_t dwconnid, const std::strin
         if (mFtpServerFlag)
         {
             if (nullptr != mFtpManager) return;
-            mFtpManager = new FtpManager("101.34.253.220", "idsse", "123456");
+            mFtpManager = new FtpManager("192.168.44.129", "idsse", "123456");
             connect(mFtpManager, &FtpManager::sgl_ftp_connect_status_change, this, [this](bool status)
             {
                 emit sgl_thread_report_check_status(status ? STATUS_SUCCESS : STATUS_ERROR, status ? "文件服务连接成功" : QString("文件服务连接失败"), false);

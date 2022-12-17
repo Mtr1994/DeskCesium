@@ -426,6 +426,13 @@ function addGrdEntity(arg) {
 function addRemotePointEntity(arg) {
 	let remoteObject = eval("(" + arg + ")")
 	if ((remoteObject.longitude == undefined) || (remoteObject.latitude === undefined)) return;
+	
+	// 判断是否已存在
+	if (undefined !== cesiumViewer.entities.getById(remoteObject.id)) {
+		context.recvMsg("add", "remote tif", false, remoteObject.id, "数据源已存在");
+		return;
+	}
+	
 	cesiumViewer.entities.add({
 		id: remoteObject.id,
 		position: Cesium.Cartesian3.fromDegrees(remoteObject.longitude, remoteObject.latitude),
@@ -443,7 +450,13 @@ function addRemotePointEntity(arg) {
 function addRemoteTiffEntity(arg) {
 	let remoteObject = eval("(" + arg + ")")
 	if (undefined == remoteObject) {
-		context.recvMsg("add", "remote tif", false, "元数据对象异常");
+		context.recvMsg("add", "remote tif", false, remoteObject.id, "元数据对象异常");
+		return;
+	}
+	
+	// 判断是否已存在
+	if (undefined !== cesiumViewer.entities.getById(remoteObject.id)) {
+		context.recvMsg("add", "remote tif", false, remoteObject.id, "数据源已存在");
 		return;
 	}
 	
@@ -451,12 +464,12 @@ function addRemoteTiffEntity(arg) {
 	xhr.open('GET', remoteObject.side_scan_image_name);
 	xhr.responseType = 'arraybuffer';
 	xhr.onerror = function (error) {
-		context.recvMsg("add", "remote tif", false, "图片加载失败");
+		context.recvMsg("add", "remote tif", false, remoteObject.id, "图片加载失败");
 	}
 	xhr.onload = function (e) {
 		if (e.total === 0) {
 			// 表示加载失败，或文件不存在
-			context.recvMsg("add", "remote tif", false, "目标图片不存在图片");
+			context.recvMsg("add", "remote tif", false, remoteObject.id, "目标图片不存在");
 			return;
 		}
 		Tiff.initialize({TOTAL_MEMORY: parseInt(remoteObject.image_total_byte) * 1.1})
