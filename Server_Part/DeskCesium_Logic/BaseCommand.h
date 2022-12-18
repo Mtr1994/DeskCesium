@@ -44,6 +44,12 @@ const uint16_t CMD_QUERY_SIDE_SCAN_SOURCE_DATA_BY_KEYWORD = 0X700b;
 // query side scan data by keyword response
 const uint16_t CMD_QUERY_SIDE_SCAN_SOURCE_DATA_BY_KEYWORD_RESPONSE = 0XB00b;
 
+// query trajectory by cruise and dive
+const uint16_t CMD_QUERY_TRAJECTORY_BY_CURSE_AND_DIVE = 0X700d;
+
+// query trajectory by cruise and dive response
+const uint16_t CMD_QUERY_TRAJECTORY_BY_CURSE_AND_DIVE_RESPONSE = 0XB00d;
+
 class MySQLConnectionPool;
 class CBaseCommand
 {
@@ -65,6 +71,8 @@ public:
 	void logic_query_side_scan_source_data_by_filter(const CMessage_Source& source, std::shared_ptr<CMessage_Packet> recv_packet, std::shared_ptr<CMessage_Packet> send_packet);
 	
 	void logic_query_side_scan_source_data_by_keyword(const CMessage_Source& source, std::shared_ptr<CMessage_Packet> recv_packet, std::shared_ptr<CMessage_Packet> send_packet);
+	
+	void logic_query_trajectory_by_cruise_and_dive(const CMessage_Source& source, std::shared_ptr<CMessage_Packet> recv_packet, std::shared_ptr<CMessage_Packet> send_packet);
 
 	ISessionService* session_service_ = nullptr;
 	

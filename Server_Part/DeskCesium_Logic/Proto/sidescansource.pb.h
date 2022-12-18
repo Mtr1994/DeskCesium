@@ -56,6 +56,12 @@ extern FilterSearchParameterDefaultTypeInternal _FilterSearchParameter_default_i
 class KeywordSearchParameter;
 struct KeywordSearchParameterDefaultTypeInternal;
 extern KeywordSearchParameterDefaultTypeInternal _KeywordSearchParameter_default_instance_;
+class RequestTrajectory;
+struct RequestTrajectoryDefaultTypeInternal;
+extern RequestTrajectoryDefaultTypeInternal _RequestTrajectory_default_instance_;
+class RequestTrajectoryResponse;
+struct RequestTrajectoryResponseDefaultTypeInternal;
+extern RequestTrajectoryResponseDefaultTypeInternal _RequestTrajectoryResponse_default_instance_;
 class SearchFilterParamter;
 struct SearchFilterParamterDefaultTypeInternal;
 extern SearchFilterParamterDefaultTypeInternal _SearchFilterParamter_default_instance_;
@@ -76,6 +82,8 @@ template<> ::CruiseRouteSource* Arena::CreateMaybeMessage<::CruiseRouteSource>(A
 template<> ::CruiseRouteSourceList* Arena::CreateMaybeMessage<::CruiseRouteSourceList>(Arena*);
 template<> ::FilterSearchParameter* Arena::CreateMaybeMessage<::FilterSearchParameter>(Arena*);
 template<> ::KeywordSearchParameter* Arena::CreateMaybeMessage<::KeywordSearchParameter>(Arena*);
+template<> ::RequestTrajectory* Arena::CreateMaybeMessage<::RequestTrajectory>(Arena*);
+template<> ::RequestTrajectoryResponse* Arena::CreateMaybeMessage<::RequestTrajectoryResponse>(Arena*);
 template<> ::SearchFilterParamter* Arena::CreateMaybeMessage<::SearchFilterParamter>(Arena*);
 template<> ::SearchFilterParamterList* Arena::CreateMaybeMessage<::SearchFilterParamterList>(Arena*);
 template<> ::SideScanSource* Arena::CreateMaybeMessage<::SideScanSource>(Arena*);
@@ -2128,6 +2136,371 @@ class KeywordSearchParameter final :
   typedef void DestructorSkippable_;
   struct Impl_ {
     ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr keyword_;
+    mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  };
+  union { Impl_ _impl_; };
+  friend struct ::TableStruct_sidescansource_2eproto;
+};
+// -------------------------------------------------------------------
+
+class RequestTrajectory final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:RequestTrajectory) */ {
+ public:
+  inline RequestTrajectory() : RequestTrajectory(nullptr) {}
+  ~RequestTrajectory() override;
+  explicit PROTOBUF_CONSTEXPR RequestTrajectory(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  RequestTrajectory(const RequestTrajectory& from);
+  RequestTrajectory(RequestTrajectory&& from) noexcept
+    : RequestTrajectory() {
+    *this = ::std::move(from);
+  }
+
+  inline RequestTrajectory& operator=(const RequestTrajectory& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline RequestTrajectory& operator=(RequestTrajectory&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()
+  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
+        && GetOwningArena() != nullptr
+  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
+    ) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const RequestTrajectory& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const RequestTrajectory* internal_default_instance() {
+    return reinterpret_cast<const RequestTrajectory*>(
+               &_RequestTrajectory_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    9;
+
+  friend void swap(RequestTrajectory& a, RequestTrajectory& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(RequestTrajectory* other) {
+    if (other == this) return;
+  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() != nullptr &&
+        GetOwningArena() == other->GetOwningArena()) {
+   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() == other->GetOwningArena()) {
+  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(RequestTrajectory* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  RequestTrajectory* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<RequestTrajectory>(arena);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
+  void CopyFrom(const RequestTrajectory& from);
+  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
+  void MergeFrom( const RequestTrajectory& from) {
+    RequestTrajectory::MergeImpl(*this, from);
+  }
+  private:
+  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  uint8_t* _InternalSerialize(
+      uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _impl_._cached_size_.Get(); }
+
+  private:
+  void SharedCtor(::PROTOBUF_NAMESPACE_ID::Arena* arena, bool is_message_owned);
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(RequestTrajectory* other);
+
+  private:
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "RequestTrajectory";
+  }
+  protected:
+  explicit RequestTrajectory(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                       bool is_message_owned = false);
+  public:
+
+  static const ClassData _class_data_;
+  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kCruiseNumberFieldNumber = 1,
+    kDiveNumberFieldNumber = 2,
+    kTrajectoryTypeFieldNumber = 3,
+  };
+  // string cruise_number = 1;
+  void clear_cruise_number();
+  const std::string& cruise_number() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_cruise_number(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_cruise_number();
+  PROTOBUF_NODISCARD std::string* release_cruise_number();
+  void set_allocated_cruise_number(std::string* cruise_number);
+  private:
+  const std::string& _internal_cruise_number() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_cruise_number(const std::string& value);
+  std::string* _internal_mutable_cruise_number();
+  public:
+
+  // string dive_number = 2;
+  void clear_dive_number();
+  const std::string& dive_number() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_dive_number(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_dive_number();
+  PROTOBUF_NODISCARD std::string* release_dive_number();
+  void set_allocated_dive_number(std::string* dive_number);
+  private:
+  const std::string& _internal_dive_number() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_dive_number(const std::string& value);
+  std::string* _internal_mutable_dive_number();
+  public:
+
+  // string trajectory_type = 3;
+  void clear_trajectory_type();
+  const std::string& trajectory_type() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_trajectory_type(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_trajectory_type();
+  PROTOBUF_NODISCARD std::string* release_trajectory_type();
+  void set_allocated_trajectory_type(std::string* trajectory_type);
+  private:
+  const std::string& _internal_trajectory_type() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_trajectory_type(const std::string& value);
+  std::string* _internal_mutable_trajectory_type();
+  public:
+
+  // @@protoc_insertion_point(class_scope:RequestTrajectory)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  struct Impl_ {
+    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr cruise_number_;
+    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr dive_number_;
+    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr trajectory_type_;
+    mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  };
+  union { Impl_ _impl_; };
+  friend struct ::TableStruct_sidescansource_2eproto;
+};
+// -------------------------------------------------------------------
+
+class RequestTrajectoryResponse final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:RequestTrajectoryResponse) */ {
+ public:
+  inline RequestTrajectoryResponse() : RequestTrajectoryResponse(nullptr) {}
+  ~RequestTrajectoryResponse() override;
+  explicit PROTOBUF_CONSTEXPR RequestTrajectoryResponse(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  RequestTrajectoryResponse(const RequestTrajectoryResponse& from);
+  RequestTrajectoryResponse(RequestTrajectoryResponse&& from) noexcept
+    : RequestTrajectoryResponse() {
+    *this = ::std::move(from);
+  }
+
+  inline RequestTrajectoryResponse& operator=(const RequestTrajectoryResponse& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline RequestTrajectoryResponse& operator=(RequestTrajectoryResponse&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()
+  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
+        && GetOwningArena() != nullptr
+  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
+    ) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const RequestTrajectoryResponse& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const RequestTrajectoryResponse* internal_default_instance() {
+    return reinterpret_cast<const RequestTrajectoryResponse*>(
+               &_RequestTrajectoryResponse_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    10;
+
+  friend void swap(RequestTrajectoryResponse& a, RequestTrajectoryResponse& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(RequestTrajectoryResponse* other) {
+    if (other == this) return;
+  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() != nullptr &&
+        GetOwningArena() == other->GetOwningArena()) {
+   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() == other->GetOwningArena()) {
+  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(RequestTrajectoryResponse* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  RequestTrajectoryResponse* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<RequestTrajectoryResponse>(arena);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
+  void CopyFrom(const RequestTrajectoryResponse& from);
+  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
+  void MergeFrom( const RequestTrajectoryResponse& from) {
+    RequestTrajectoryResponse::MergeImpl(*this, from);
+  }
+  private:
+  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  uint8_t* _InternalSerialize(
+      uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _impl_._cached_size_.Get(); }
+
+  private:
+  void SharedCtor(::PROTOBUF_NAMESPACE_ID::Arena* arena, bool is_message_owned);
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(RequestTrajectoryResponse* other);
+
+  private:
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "RequestTrajectoryResponse";
+  }
+  protected:
+  explicit RequestTrajectoryResponse(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                       bool is_message_owned = false);
+  public:
+
+  static const ClassData _class_data_;
+  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kIdFieldNumber = 1,
+    kPositionChainFieldNumber = 2,
+    kStatusFieldNumber = 3,
+  };
+  // string id = 1;
+  void clear_id();
+  const std::string& id() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_id(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_id();
+  PROTOBUF_NODISCARD std::string* release_id();
+  void set_allocated_id(std::string* id);
+  private:
+  const std::string& _internal_id() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_id(const std::string& value);
+  std::string* _internal_mutable_id();
+  public:
+
+  // string position_chain = 2;
+  void clear_position_chain();
+  const std::string& position_chain() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_position_chain(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_position_chain();
+  PROTOBUF_NODISCARD std::string* release_position_chain();
+  void set_allocated_position_chain(std::string* position_chain);
+  private:
+  const std::string& _internal_position_chain() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_position_chain(const std::string& value);
+  std::string* _internal_mutable_position_chain();
+  public:
+
+  // bool status = 3;
+  void clear_status();
+  bool status() const;
+  void set_status(bool value);
+  private:
+  bool _internal_status() const;
+  void _internal_set_status(bool value);
+  public:
+
+  // @@protoc_insertion_point(class_scope:RequestTrajectoryResponse)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  struct Impl_ {
+    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr id_;
+    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr position_chain_;
+    bool status_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   };
   union { Impl_ _impl_; };
@@ -4411,9 +4784,291 @@ inline void KeywordSearchParameter::set_allocated_keyword(std::string* keyword) 
   // @@protoc_insertion_point(field_set_allocated:KeywordSearchParameter.keyword)
 }
 
+// -------------------------------------------------------------------
+
+// RequestTrajectory
+
+// string cruise_number = 1;
+inline void RequestTrajectory::clear_cruise_number() {
+  _impl_.cruise_number_.ClearToEmpty();
+}
+inline const std::string& RequestTrajectory::cruise_number() const {
+  // @@protoc_insertion_point(field_get:RequestTrajectory.cruise_number)
+  return _internal_cruise_number();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void RequestTrajectory::set_cruise_number(ArgT0&& arg0, ArgT... args) {
+ 
+ _impl_.cruise_number_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:RequestTrajectory.cruise_number)
+}
+inline std::string* RequestTrajectory::mutable_cruise_number() {
+  std::string* _s = _internal_mutable_cruise_number();
+  // @@protoc_insertion_point(field_mutable:RequestTrajectory.cruise_number)
+  return _s;
+}
+inline const std::string& RequestTrajectory::_internal_cruise_number() const {
+  return _impl_.cruise_number_.Get();
+}
+inline void RequestTrajectory::_internal_set_cruise_number(const std::string& value) {
+  
+  _impl_.cruise_number_.Set(value, GetArenaForAllocation());
+}
+inline std::string* RequestTrajectory::_internal_mutable_cruise_number() {
+  
+  return _impl_.cruise_number_.Mutable(GetArenaForAllocation());
+}
+inline std::string* RequestTrajectory::release_cruise_number() {
+  // @@protoc_insertion_point(field_release:RequestTrajectory.cruise_number)
+  return _impl_.cruise_number_.Release();
+}
+inline void RequestTrajectory::set_allocated_cruise_number(std::string* cruise_number) {
+  if (cruise_number != nullptr) {
+    
+  } else {
+    
+  }
+  _impl_.cruise_number_.SetAllocated(cruise_number, GetArenaForAllocation());
+#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (_impl_.cruise_number_.IsDefault()) {
+    _impl_.cruise_number_.Set("", GetArenaForAllocation());
+  }
+#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:RequestTrajectory.cruise_number)
+}
+
+// string dive_number = 2;
+inline void RequestTrajectory::clear_dive_number() {
+  _impl_.dive_number_.ClearToEmpty();
+}
+inline const std::string& RequestTrajectory::dive_number() const {
+  // @@protoc_insertion_point(field_get:RequestTrajectory.dive_number)
+  return _internal_dive_number();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void RequestTrajectory::set_dive_number(ArgT0&& arg0, ArgT... args) {
+ 
+ _impl_.dive_number_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:RequestTrajectory.dive_number)
+}
+inline std::string* RequestTrajectory::mutable_dive_number() {
+  std::string* _s = _internal_mutable_dive_number();
+  // @@protoc_insertion_point(field_mutable:RequestTrajectory.dive_number)
+  return _s;
+}
+inline const std::string& RequestTrajectory::_internal_dive_number() const {
+  return _impl_.dive_number_.Get();
+}
+inline void RequestTrajectory::_internal_set_dive_number(const std::string& value) {
+  
+  _impl_.dive_number_.Set(value, GetArenaForAllocation());
+}
+inline std::string* RequestTrajectory::_internal_mutable_dive_number() {
+  
+  return _impl_.dive_number_.Mutable(GetArenaForAllocation());
+}
+inline std::string* RequestTrajectory::release_dive_number() {
+  // @@protoc_insertion_point(field_release:RequestTrajectory.dive_number)
+  return _impl_.dive_number_.Release();
+}
+inline void RequestTrajectory::set_allocated_dive_number(std::string* dive_number) {
+  if (dive_number != nullptr) {
+    
+  } else {
+    
+  }
+  _impl_.dive_number_.SetAllocated(dive_number, GetArenaForAllocation());
+#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (_impl_.dive_number_.IsDefault()) {
+    _impl_.dive_number_.Set("", GetArenaForAllocation());
+  }
+#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:RequestTrajectory.dive_number)
+}
+
+// string trajectory_type = 3;
+inline void RequestTrajectory::clear_trajectory_type() {
+  _impl_.trajectory_type_.ClearToEmpty();
+}
+inline const std::string& RequestTrajectory::trajectory_type() const {
+  // @@protoc_insertion_point(field_get:RequestTrajectory.trajectory_type)
+  return _internal_trajectory_type();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void RequestTrajectory::set_trajectory_type(ArgT0&& arg0, ArgT... args) {
+ 
+ _impl_.trajectory_type_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:RequestTrajectory.trajectory_type)
+}
+inline std::string* RequestTrajectory::mutable_trajectory_type() {
+  std::string* _s = _internal_mutable_trajectory_type();
+  // @@protoc_insertion_point(field_mutable:RequestTrajectory.trajectory_type)
+  return _s;
+}
+inline const std::string& RequestTrajectory::_internal_trajectory_type() const {
+  return _impl_.trajectory_type_.Get();
+}
+inline void RequestTrajectory::_internal_set_trajectory_type(const std::string& value) {
+  
+  _impl_.trajectory_type_.Set(value, GetArenaForAllocation());
+}
+inline std::string* RequestTrajectory::_internal_mutable_trajectory_type() {
+  
+  return _impl_.trajectory_type_.Mutable(GetArenaForAllocation());
+}
+inline std::string* RequestTrajectory::release_trajectory_type() {
+  // @@protoc_insertion_point(field_release:RequestTrajectory.trajectory_type)
+  return _impl_.trajectory_type_.Release();
+}
+inline void RequestTrajectory::set_allocated_trajectory_type(std::string* trajectory_type) {
+  if (trajectory_type != nullptr) {
+    
+  } else {
+    
+  }
+  _impl_.trajectory_type_.SetAllocated(trajectory_type, GetArenaForAllocation());
+#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (_impl_.trajectory_type_.IsDefault()) {
+    _impl_.trajectory_type_.Set("", GetArenaForAllocation());
+  }
+#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:RequestTrajectory.trajectory_type)
+}
+
+// -------------------------------------------------------------------
+
+// RequestTrajectoryResponse
+
+// string id = 1;
+inline void RequestTrajectoryResponse::clear_id() {
+  _impl_.id_.ClearToEmpty();
+}
+inline const std::string& RequestTrajectoryResponse::id() const {
+  // @@protoc_insertion_point(field_get:RequestTrajectoryResponse.id)
+  return _internal_id();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void RequestTrajectoryResponse::set_id(ArgT0&& arg0, ArgT... args) {
+ 
+ _impl_.id_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:RequestTrajectoryResponse.id)
+}
+inline std::string* RequestTrajectoryResponse::mutable_id() {
+  std::string* _s = _internal_mutable_id();
+  // @@protoc_insertion_point(field_mutable:RequestTrajectoryResponse.id)
+  return _s;
+}
+inline const std::string& RequestTrajectoryResponse::_internal_id() const {
+  return _impl_.id_.Get();
+}
+inline void RequestTrajectoryResponse::_internal_set_id(const std::string& value) {
+  
+  _impl_.id_.Set(value, GetArenaForAllocation());
+}
+inline std::string* RequestTrajectoryResponse::_internal_mutable_id() {
+  
+  return _impl_.id_.Mutable(GetArenaForAllocation());
+}
+inline std::string* RequestTrajectoryResponse::release_id() {
+  // @@protoc_insertion_point(field_release:RequestTrajectoryResponse.id)
+  return _impl_.id_.Release();
+}
+inline void RequestTrajectoryResponse::set_allocated_id(std::string* id) {
+  if (id != nullptr) {
+    
+  } else {
+    
+  }
+  _impl_.id_.SetAllocated(id, GetArenaForAllocation());
+#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (_impl_.id_.IsDefault()) {
+    _impl_.id_.Set("", GetArenaForAllocation());
+  }
+#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:RequestTrajectoryResponse.id)
+}
+
+// string position_chain = 2;
+inline void RequestTrajectoryResponse::clear_position_chain() {
+  _impl_.position_chain_.ClearToEmpty();
+}
+inline const std::string& RequestTrajectoryResponse::position_chain() const {
+  // @@protoc_insertion_point(field_get:RequestTrajectoryResponse.position_chain)
+  return _internal_position_chain();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void RequestTrajectoryResponse::set_position_chain(ArgT0&& arg0, ArgT... args) {
+ 
+ _impl_.position_chain_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:RequestTrajectoryResponse.position_chain)
+}
+inline std::string* RequestTrajectoryResponse::mutable_position_chain() {
+  std::string* _s = _internal_mutable_position_chain();
+  // @@protoc_insertion_point(field_mutable:RequestTrajectoryResponse.position_chain)
+  return _s;
+}
+inline const std::string& RequestTrajectoryResponse::_internal_position_chain() const {
+  return _impl_.position_chain_.Get();
+}
+inline void RequestTrajectoryResponse::_internal_set_position_chain(const std::string& value) {
+  
+  _impl_.position_chain_.Set(value, GetArenaForAllocation());
+}
+inline std::string* RequestTrajectoryResponse::_internal_mutable_position_chain() {
+  
+  return _impl_.position_chain_.Mutable(GetArenaForAllocation());
+}
+inline std::string* RequestTrajectoryResponse::release_position_chain() {
+  // @@protoc_insertion_point(field_release:RequestTrajectoryResponse.position_chain)
+  return _impl_.position_chain_.Release();
+}
+inline void RequestTrajectoryResponse::set_allocated_position_chain(std::string* position_chain) {
+  if (position_chain != nullptr) {
+    
+  } else {
+    
+  }
+  _impl_.position_chain_.SetAllocated(position_chain, GetArenaForAllocation());
+#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (_impl_.position_chain_.IsDefault()) {
+    _impl_.position_chain_.Set("", GetArenaForAllocation());
+  }
+#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:RequestTrajectoryResponse.position_chain)
+}
+
+// bool status = 3;
+inline void RequestTrajectoryResponse::clear_status() {
+  _impl_.status_ = false;
+}
+inline bool RequestTrajectoryResponse::_internal_status() const {
+  return _impl_.status_;
+}
+inline bool RequestTrajectoryResponse::status() const {
+  // @@protoc_insertion_point(field_get:RequestTrajectoryResponse.status)
+  return _internal_status();
+}
+inline void RequestTrajectoryResponse::_internal_set_status(bool value) {
+  
+  _impl_.status_ = value;
+}
+inline void RequestTrajectoryResponse::set_status(bool value) {
+  _internal_set_status(value);
+  // @@protoc_insertion_point(field_set:RequestTrajectoryResponse.status)
+}
+
 #ifdef __GNUC__
   #pragma GCC diagnostic pop
 #endif  // __GNUC__
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
 // -------------------------------------------------------------------
 
 // -------------------------------------------------------------------

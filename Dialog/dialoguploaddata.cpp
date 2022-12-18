@@ -416,7 +416,6 @@ void DialogUploadData::checkData()
 
                 // 此处可能需要进行一次转换，因为存在 墨卡托坐标系 的坐标
 
-                qDebug() << "位置信息 获取A " << topLeftLongitude << " " << topLeftLatitude << " " << bottomRightLongitude << " " << bottomRightLatitude;
                 // 投影坐标
                 OGRSpatialReference spatialReference;
                 OGRErr error = spatialReference.importFromWkt(poDataset->GetProjectionRef());
@@ -434,8 +433,6 @@ void DialogUploadData::checkData()
                         GDALClose((GDALDatasetH)poDataset);
                         return;
                     }
-
-                    qDebug() << "file transfor" << sideScanImageInfo.absoluteFilePath();
                 }
 
                 source->set_image_top_left_longitude(topLeftLongitude);
@@ -444,8 +441,6 @@ void DialogUploadData::checkData()
                 source->set_image_bottom_right_latitude(bottomRightLatitude);
                 source->set_image_total_byte(sideScanImageInfo.size());
 
-
-                qDebug() << "位置信息 获取B " << topLeftLongitude << " " << topLeftLatitude << " " << bottomRightLongitude << " " << bottomRightLatitude;
                 DataUploadTask task = {"upload", QString("upload/%1/image").arg(cruiseNumber).toStdString(), sideScanImageInfo.absoluteFilePath().toStdString()};
                 mTaskQueue.append(task);
             }

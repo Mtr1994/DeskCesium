@@ -93,7 +93,7 @@ MySQLConnectionPool::~MySQLConnectionPool()
 MySQLConnectionPool::MySQLConnectionPool()
 {
 	// config para
-	m_ip = "101.34.253.220";
+	m_ip = "127.0.0.1";
 	m_port = 3306;
 	m_user = "root";
 	m_passwd = "noitom*2022";

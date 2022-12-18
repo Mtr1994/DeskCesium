@@ -183,7 +183,37 @@ struct KeywordSearchParameterDefaultTypeInternal {
   };
 };
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 KeywordSearchParameterDefaultTypeInternal _KeywordSearchParameter_default_instance_;
-static ::_pb::Metadata file_level_metadata_sidescansource_2eproto[9];
+PROTOBUF_CONSTEXPR RequestTrajectory::RequestTrajectory(
+    ::_pbi::ConstantInitialized): _impl_{
+    /*decltype(_impl_.cruise_number_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
+  , /*decltype(_impl_.dive_number_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
+  , /*decltype(_impl_.trajectory_type_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
+  , /*decltype(_impl_._cached_size_)*/{}} {}
+struct RequestTrajectoryDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR RequestTrajectoryDefaultTypeInternal()
+      : _instance(::_pbi::ConstantInitialized{}) {}
+  ~RequestTrajectoryDefaultTypeInternal() {}
+  union {
+    RequestTrajectory _instance;
+  };
+};
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 RequestTrajectoryDefaultTypeInternal _RequestTrajectory_default_instance_;
+PROTOBUF_CONSTEXPR RequestTrajectoryResponse::RequestTrajectoryResponse(
+    ::_pbi::ConstantInitialized): _impl_{
+    /*decltype(_impl_.id_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
+  , /*decltype(_impl_.position_chain_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
+  , /*decltype(_impl_.status_)*/false
+  , /*decltype(_impl_._cached_size_)*/{}} {}
+struct RequestTrajectoryResponseDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR RequestTrajectoryResponseDefaultTypeInternal()
+      : _instance(::_pbi::ConstantInitialized{}) {}
+  ~RequestTrajectoryResponseDefaultTypeInternal() {}
+  union {
+    RequestTrajectoryResponse _instance;
+  };
+};
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 RequestTrajectoryResponseDefaultTypeInternal _RequestTrajectoryResponse_default_instance_;
+static ::_pb::Metadata file_level_metadata_sidescansource_2eproto[11];
 static constexpr ::_pb::EnumDescriptor const** file_level_enum_descriptors_sidescansource_2eproto = nullptr;
 static constexpr ::_pb::ServiceDescriptor const** file_level_service_descriptors_sidescansource_2eproto = nullptr;
 
@@ -297,6 +327,24 @@ const uint32_t TableStruct_sidescansource_2eproto::offsets[] PROTOBUF_SECTION_VA
   ~0u,  // no _weak_field_map_
   ~0u,  // no _inlined_string_donated_
   PROTOBUF_FIELD_OFFSET(::KeywordSearchParameter, _impl_.keyword_),
+  ~0u,  // no _has_bits_
+  PROTOBUF_FIELD_OFFSET(::RequestTrajectory, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  ~0u,  // no _inlined_string_donated_
+  PROTOBUF_FIELD_OFFSET(::RequestTrajectory, _impl_.cruise_number_),
+  PROTOBUF_FIELD_OFFSET(::RequestTrajectory, _impl_.dive_number_),
+  PROTOBUF_FIELD_OFFSET(::RequestTrajectory, _impl_.trajectory_type_),
+  ~0u,  // no _has_bits_
+  PROTOBUF_FIELD_OFFSET(::RequestTrajectoryResponse, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  ~0u,  // no _inlined_string_donated_
+  PROTOBUF_FIELD_OFFSET(::RequestTrajectoryResponse, _impl_.id_),
+  PROTOBUF_FIELD_OFFSET(::RequestTrajectoryResponse, _impl_.position_chain_),
+  PROTOBUF_FIELD_OFFSET(::RequestTrajectoryResponse, _impl_.status_),
 };
 static const ::_pbi::MigrationSchema schemas[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
   { 0, -1, -1, sizeof(::SideScanSource)},
@@ -308,6 +356,8 @@ static const ::_pbi::MigrationSchema schemas[] PROTOBUF_SECTION_VARIABLE(protode
   { 83, -1, -1, sizeof(::SearchFilterParamterList)},
   { 90, -1, -1, sizeof(::FilterSearchParameter)},
   { 102, -1, -1, sizeof(::KeywordSearchParameter)},
+  { 109, -1, -1, sizeof(::RequestTrajectory)},
+  { 118, -1, -1, sizeof(::RequestTrajectoryResponse)},
 };
 
 static const ::_pb::Message* const file_default_instances[] = {
@@ -320,6 +370,8 @@ static const ::_pb::Message* const file_default_instances[] = {
   &::_SearchFilterParamterList_default_instance_._instance,
   &::_FilterSearchParameter_default_instance_._instance,
   &::_KeywordSearchParameter_default_instance_._instance,
+  &::_RequestTrajectory_default_instance_._instance,
+  &::_RequestTrajectoryResponse_default_instance_._instance,
 };
 
 const char descriptor_table_protodef_sidescansource_2eproto[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) =
@@ -361,13 +413,17 @@ const char descriptor_table_protodef_sidescansource_2eproto[] PROTOBUF_SECTION_V
   "er\030\002 \001(\t\022\023\n\013dive_number\030\003 \001(\t\022\032\n\022verify_"
   "dive_number\030\004 \003(\t\022\020\n\010priority\030\005 \001(\t\022\023\n\013v"
   "erify_flag\030\006 \001(\t\")\n\026KeywordSearchParamet"
-  "er\022\017\n\007keyword\030\001 \001(\tb\006proto3"
+  "er\022\017\n\007keyword\030\001 \001(\t\"X\n\021RequestTrajectory"
+  "\022\025\n\rcruise_number\030\001 \001(\t\022\023\n\013dive_number\030\002"
+  " \001(\t\022\027\n\017trajectory_type\030\003 \001(\t\"O\n\031Request"
+  "TrajectoryResponse\022\n\n\002id\030\001 \001(\t\022\026\n\016positi"
+  "on_chain\030\002 \001(\t\022\016\n\006status\030\003 \001(\010b\006proto3"
   ;
 static ::_pbi::once_flag descriptor_table_sidescansource_2eproto_once;
 const ::_pbi::DescriptorTable descriptor_table_sidescansource_2eproto = {
-    false, false, 1547, descriptor_table_protodef_sidescansource_2eproto,
+    false, false, 1718, descriptor_table_protodef_sidescansource_2eproto,
     "sidescansource.proto",
-    &descriptor_table_sidescansource_2eproto_once, nullptr, 0, 9,
+    &descriptor_table_sidescansource_2eproto_once, nullptr, 0, 11,
     schemas, file_default_instances, TableStruct_sidescansource_2eproto::offsets,
     file_level_metadata_sidescansource_2eproto, file_level_enum_descriptors_sidescansource_2eproto,
     file_level_service_descriptors_sidescansource_2eproto,
@@ -4157,6 +4213,589 @@ void KeywordSearchParameter::InternalSwap(KeywordSearchParameter* other) {
       file_level_metadata_sidescansource_2eproto[8]);
 }
 
+// ===================================================================
+
+class RequestTrajectory::_Internal {
+ public:
+};
+
+RequestTrajectory::RequestTrajectory(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                         bool is_message_owned)
+  : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned) {
+  SharedCtor(arena, is_message_owned);
+  // @@protoc_insertion_point(arena_constructor:RequestTrajectory)
+}
+RequestTrajectory::RequestTrajectory(const RequestTrajectory& from)
+  : ::PROTOBUF_NAMESPACE_ID::Message() {
+  RequestTrajectory* const _this = this; (void)_this;
+  new (&_impl_) Impl_{
+      decltype(_impl_.cruise_number_){}
+    , decltype(_impl_.dive_number_){}
+    , decltype(_impl_.trajectory_type_){}
+    , /*decltype(_impl_._cached_size_)*/{}};
+
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  _impl_.cruise_number_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.cruise_number_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (!from._internal_cruise_number().empty()) {
+    _this->_impl_.cruise_number_.Set(from._internal_cruise_number(), 
+      _this->GetArenaForAllocation());
+  }
+  _impl_.dive_number_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.dive_number_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (!from._internal_dive_number().empty()) {
+    _this->_impl_.dive_number_.Set(from._internal_dive_number(), 
+      _this->GetArenaForAllocation());
+  }
+  _impl_.trajectory_type_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.trajectory_type_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (!from._internal_trajectory_type().empty()) {
+    _this->_impl_.trajectory_type_.Set(from._internal_trajectory_type(), 
+      _this->GetArenaForAllocation());
+  }
+  // @@protoc_insertion_point(copy_constructor:RequestTrajectory)
+}
+
+inline void RequestTrajectory::SharedCtor(
+    ::_pb::Arena* arena, bool is_message_owned) {
+  (void)arena;
+  (void)is_message_owned;
+  new (&_impl_) Impl_{
+      decltype(_impl_.cruise_number_){}
+    , decltype(_impl_.dive_number_){}
+    , decltype(_impl_.trajectory_type_){}
+    , /*decltype(_impl_._cached_size_)*/{}
+  };
+  _impl_.cruise_number_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.cruise_number_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  _impl_.dive_number_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.dive_number_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  _impl_.trajectory_type_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.trajectory_type_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+}
+
+RequestTrajectory::~RequestTrajectory() {
+  // @@protoc_insertion_point(destructor:RequestTrajectory)
+  if (auto *arena = _internal_metadata_.DeleteReturnArena<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>()) {
+  (void)arena;
+    return;
+  }
+  SharedDtor();
+}
+
+inline void RequestTrajectory::SharedDtor() {
+  GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
+  _impl_.cruise_number_.Destroy();
+  _impl_.dive_number_.Destroy();
+  _impl_.trajectory_type_.Destroy();
+}
+
+void RequestTrajectory::SetCachedSize(int size) const {
+  _impl_._cached_size_.Set(size);
+}
+
+void RequestTrajectory::Clear() {
+// @@protoc_insertion_point(message_clear_start:RequestTrajectory)
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  _impl_.cruise_number_.ClearToEmpty();
+  _impl_.dive_number_.ClearToEmpty();
+  _impl_.trajectory_type_.ClearToEmpty();
+  _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+const char* RequestTrajectory::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
+#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
+  while (!ctx->Done(&ptr)) {
+    uint32_t tag;
+    ptr = ::_pbi::ReadTag(ptr, &tag);
+    switch (tag >> 3) {
+      // string cruise_number = 1;
+      case 1:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 10)) {
+          auto str = _internal_mutable_cruise_number();
+          ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(ptr);
+          CHK_(::_pbi::VerifyUTF8(str, "RequestTrajectory.cruise_number"));
+        } else
+          goto handle_unusual;
+        continue;
+      // string dive_number = 2;
+      case 2:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 18)) {
+          auto str = _internal_mutable_dive_number();
+          ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(ptr);
+          CHK_(::_pbi::VerifyUTF8(str, "RequestTrajectory.dive_number"));
+        } else
+          goto handle_unusual;
+        continue;
+      // string trajectory_type = 3;
+      case 3:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 26)) {
+          auto str = _internal_mutable_trajectory_type();
+          ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(ptr);
+          CHK_(::_pbi::VerifyUTF8(str, "RequestTrajectory.trajectory_type"));
+        } else
+          goto handle_unusual;
+        continue;
+      default:
+        goto handle_unusual;
+    }  // switch
+  handle_unusual:
+    if ((tag == 0) || ((tag & 7) == 4)) {
+      CHK_(ptr);
+      ctx->SetLastTag(tag);
+      goto message_done;
+    }
+    ptr = UnknownFieldParse(
+        tag,
+        _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
+        ptr, ctx);
+    CHK_(ptr != nullptr);
+  }  // while
+message_done:
+  return ptr;
+failure:
+  ptr = nullptr;
+  goto message_done;
+#undef CHK_
+}
+
+uint8_t* RequestTrajectory::_InternalSerialize(
+    uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+  // @@protoc_insertion_point(serialize_to_array_start:RequestTrajectory)
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // string cruise_number = 1;
+  if (!this->_internal_cruise_number().empty()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->_internal_cruise_number().data(), static_cast<int>(this->_internal_cruise_number().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "RequestTrajectory.cruise_number");
+    target = stream->WriteStringMaybeAliased(
+        1, this->_internal_cruise_number(), target);
+  }
+
+  // string dive_number = 2;
+  if (!this->_internal_dive_number().empty()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->_internal_dive_number().data(), static_cast<int>(this->_internal_dive_number().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "RequestTrajectory.dive_number");
+    target = stream->WriteStringMaybeAliased(
+        2, this->_internal_dive_number(), target);
+  }
+
+  // string trajectory_type = 3;
+  if (!this->_internal_trajectory_type().empty()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->_internal_trajectory_type().data(), static_cast<int>(this->_internal_trajectory_type().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "RequestTrajectory.trajectory_type");
+    target = stream->WriteStringMaybeAliased(
+        3, this->_internal_trajectory_type(), target);
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
+        _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:RequestTrajectory)
+  return target;
+}
+
+size_t RequestTrajectory::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:RequestTrajectory)
+  size_t total_size = 0;
+
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  // string cruise_number = 1;
+  if (!this->_internal_cruise_number().empty()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->_internal_cruise_number());
+  }
+
+  // string dive_number = 2;
+  if (!this->_internal_dive_number().empty()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->_internal_dive_number());
+  }
+
+  // string trajectory_type = 3;
+  if (!this->_internal_trajectory_type().empty()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->_internal_trajectory_type());
+  }
+
+  return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
+}
+
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData RequestTrajectory::_class_data_ = {
+    ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSourceCheck,
+    RequestTrajectory::MergeImpl
+};
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*RequestTrajectory::GetClassData() const { return &_class_data_; }
+
+
+void RequestTrajectory::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg) {
+  auto* const _this = static_cast<RequestTrajectory*>(&to_msg);
+  auto& from = static_cast<const RequestTrajectory&>(from_msg);
+  // @@protoc_insertion_point(class_specific_merge_from_start:RequestTrajectory)
+  GOOGLE_DCHECK_NE(&from, _this);
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (!from._internal_cruise_number().empty()) {
+    _this->_internal_set_cruise_number(from._internal_cruise_number());
+  }
+  if (!from._internal_dive_number().empty()) {
+    _this->_internal_set_dive_number(from._internal_dive_number());
+  }
+  if (!from._internal_trajectory_type().empty()) {
+    _this->_internal_set_trajectory_type(from._internal_trajectory_type());
+  }
+  _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+}
+
+void RequestTrajectory::CopyFrom(const RequestTrajectory& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:RequestTrajectory)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool RequestTrajectory::IsInitialized() const {
+  return true;
+}
+
+void RequestTrajectory::InternalSwap(RequestTrajectory* other) {
+  using std::swap;
+  auto* lhs_arena = GetArenaForAllocation();
+  auto* rhs_arena = other->GetArenaForAllocation();
+  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &_impl_.cruise_number_, lhs_arena,
+      &other->_impl_.cruise_number_, rhs_arena
+  );
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &_impl_.dive_number_, lhs_arena,
+      &other->_impl_.dive_number_, rhs_arena
+  );
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &_impl_.trajectory_type_, lhs_arena,
+      &other->_impl_.trajectory_type_, rhs_arena
+  );
+}
+
+::PROTOBUF_NAMESPACE_ID::Metadata RequestTrajectory::GetMetadata() const {
+  return ::_pbi::AssignDescriptors(
+      &descriptor_table_sidescansource_2eproto_getter, &descriptor_table_sidescansource_2eproto_once,
+      file_level_metadata_sidescansource_2eproto[9]);
+}
+
+// ===================================================================
+
+class RequestTrajectoryResponse::_Internal {
+ public:
+};
+
+RequestTrajectoryResponse::RequestTrajectoryResponse(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                         bool is_message_owned)
+  : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned) {
+  SharedCtor(arena, is_message_owned);
+  // @@protoc_insertion_point(arena_constructor:RequestTrajectoryResponse)
+}
+RequestTrajectoryResponse::RequestTrajectoryResponse(const RequestTrajectoryResponse& from)
+  : ::PROTOBUF_NAMESPACE_ID::Message() {
+  RequestTrajectoryResponse* const _this = this; (void)_this;
+  new (&_impl_) Impl_{
+      decltype(_impl_.id_){}
+    , decltype(_impl_.position_chain_){}
+    , decltype(_impl_.status_){}
+    , /*decltype(_impl_._cached_size_)*/{}};
+
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  _impl_.id_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.id_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (!from._internal_id().empty()) {
+    _this->_impl_.id_.Set(from._internal_id(), 
+      _this->GetArenaForAllocation());
+  }
+  _impl_.position_chain_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.position_chain_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (!from._internal_position_chain().empty()) {
+    _this->_impl_.position_chain_.Set(from._internal_position_chain(), 
+      _this->GetArenaForAllocation());
+  }
+  _this->_impl_.status_ = from._impl_.status_;
+  // @@protoc_insertion_point(copy_constructor:RequestTrajectoryResponse)
+}
+
+inline void RequestTrajectoryResponse::SharedCtor(
+    ::_pb::Arena* arena, bool is_message_owned) {
+  (void)arena;
+  (void)is_message_owned;
+  new (&_impl_) Impl_{
+      decltype(_impl_.id_){}
+    , decltype(_impl_.position_chain_){}
+    , decltype(_impl_.status_){false}
+    , /*decltype(_impl_._cached_size_)*/{}
+  };
+  _impl_.id_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.id_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  _impl_.position_chain_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.position_chain_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+}
+
+RequestTrajectoryResponse::~RequestTrajectoryResponse() {
+  // @@protoc_insertion_point(destructor:RequestTrajectoryResponse)
+  if (auto *arena = _internal_metadata_.DeleteReturnArena<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>()) {
+  (void)arena;
+    return;
+  }
+  SharedDtor();
+}
+
+inline void RequestTrajectoryResponse::SharedDtor() {
+  GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
+  _impl_.id_.Destroy();
+  _impl_.position_chain_.Destroy();
+}
+
+void RequestTrajectoryResponse::SetCachedSize(int size) const {
+  _impl_._cached_size_.Set(size);
+}
+
+void RequestTrajectoryResponse::Clear() {
+// @@protoc_insertion_point(message_clear_start:RequestTrajectoryResponse)
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  _impl_.id_.ClearToEmpty();
+  _impl_.position_chain_.ClearToEmpty();
+  _impl_.status_ = false;
+  _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+const char* RequestTrajectoryResponse::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
+#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
+  while (!ctx->Done(&ptr)) {
+    uint32_t tag;
+    ptr = ::_pbi::ReadTag(ptr, &tag);
+    switch (tag >> 3) {
+      // string id = 1;
+      case 1:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 10)) {
+          auto str = _internal_mutable_id();
+          ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(ptr);
+          CHK_(::_pbi::VerifyUTF8(str, "RequestTrajectoryResponse.id"));
+        } else
+          goto handle_unusual;
+        continue;
+      // string position_chain = 2;
+      case 2:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 18)) {
+          auto str = _internal_mutable_position_chain();
+          ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(ptr);
+          CHK_(::_pbi::VerifyUTF8(str, "RequestTrajectoryResponse.position_chain"));
+        } else
+          goto handle_unusual;
+        continue;
+      // bool status = 3;
+      case 3:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 24)) {
+          _impl_.status_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      default:
+        goto handle_unusual;
+    }  // switch
+  handle_unusual:
+    if ((tag == 0) || ((tag & 7) == 4)) {
+      CHK_(ptr);
+      ctx->SetLastTag(tag);
+      goto message_done;
+    }
+    ptr = UnknownFieldParse(
+        tag,
+        _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
+        ptr, ctx);
+    CHK_(ptr != nullptr);
+  }  // while
+message_done:
+  return ptr;
+failure:
+  ptr = nullptr;
+  goto message_done;
+#undef CHK_
+}
+
+uint8_t* RequestTrajectoryResponse::_InternalSerialize(
+    uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+  // @@protoc_insertion_point(serialize_to_array_start:RequestTrajectoryResponse)
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // string id = 1;
+  if (!this->_internal_id().empty()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->_internal_id().data(), static_cast<int>(this->_internal_id().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "RequestTrajectoryResponse.id");
+    target = stream->WriteStringMaybeAliased(
+        1, this->_internal_id(), target);
+  }
+
+  // string position_chain = 2;
+  if (!this->_internal_position_chain().empty()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->_internal_position_chain().data(), static_cast<int>(this->_internal_position_chain().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "RequestTrajectoryResponse.position_chain");
+    target = stream->WriteStringMaybeAliased(
+        2, this->_internal_position_chain(), target);
+  }
+
+  // bool status = 3;
+  if (this->_internal_status() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteBoolToArray(3, this->_internal_status(), target);
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
+        _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:RequestTrajectoryResponse)
+  return target;
+}
+
+size_t RequestTrajectoryResponse::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:RequestTrajectoryResponse)
+  size_t total_size = 0;
+
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  // string id = 1;
+  if (!this->_internal_id().empty()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->_internal_id());
+  }
+
+  // string position_chain = 2;
+  if (!this->_internal_position_chain().empty()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->_internal_position_chain());
+  }
+
+  // bool status = 3;
+  if (this->_internal_status() != 0) {
+    total_size += 1 + 1;
+  }
+
+  return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
+}
+
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData RequestTrajectoryResponse::_class_data_ = {
+    ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSourceCheck,
+    RequestTrajectoryResponse::MergeImpl
+};
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*RequestTrajectoryResponse::GetClassData() const { return &_class_data_; }
+
+
+void RequestTrajectoryResponse::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg) {
+  auto* const _this = static_cast<RequestTrajectoryResponse*>(&to_msg);
+  auto& from = static_cast<const RequestTrajectoryResponse&>(from_msg);
+  // @@protoc_insertion_point(class_specific_merge_from_start:RequestTrajectoryResponse)
+  GOOGLE_DCHECK_NE(&from, _this);
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (!from._internal_id().empty()) {
+    _this->_internal_set_id(from._internal_id());
+  }
+  if (!from._internal_position_chain().empty()) {
+    _this->_internal_set_position_chain(from._internal_position_chain());
+  }
+  if (from._internal_status() != 0) {
+    _this->_internal_set_status(from._internal_status());
+  }
+  _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+}
+
+void RequestTrajectoryResponse::CopyFrom(const RequestTrajectoryResponse& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:RequestTrajectoryResponse)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool RequestTrajectoryResponse::IsInitialized() const {
+  return true;
+}
+
+void RequestTrajectoryResponse::InternalSwap(RequestTrajectoryResponse* other) {
+  using std::swap;
+  auto* lhs_arena = GetArenaForAllocation();
+  auto* rhs_arena = other->GetArenaForAllocation();
+  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &_impl_.id_, lhs_arena,
+      &other->_impl_.id_, rhs_arena
+  );
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &_impl_.position_chain_, lhs_arena,
+      &other->_impl_.position_chain_, rhs_arena
+  );
+  swap(_impl_.status_, other->_impl_.status_);
+}
+
+::PROTOBUF_NAMESPACE_ID::Metadata RequestTrajectoryResponse::GetMetadata() const {
+  return ::_pbi::AssignDescriptors(
+      &descriptor_table_sidescansource_2eproto_getter, &descriptor_table_sidescansource_2eproto_once,
+      file_level_metadata_sidescansource_2eproto[10]);
+}
+
 // @@protoc_insertion_point(namespace_scope)
 PROTOBUF_NAMESPACE_OPEN
 template<> PROTOBUF_NOINLINE ::SideScanSource*
@@ -4194,6 +4833,14 @@ Arena::CreateMaybeMessage< ::FilterSearchParameter >(Arena* arena) {
 template<> PROTOBUF_NOINLINE ::KeywordSearchParameter*
 Arena::CreateMaybeMessage< ::KeywordSearchParameter >(Arena* arena) {
   return Arena::CreateMessageInternal< ::KeywordSearchParameter >(arena);
+}
+template<> PROTOBUF_NOINLINE ::RequestTrajectory*
+Arena::CreateMaybeMessage< ::RequestTrajectory >(Arena* arena) {
+  return Arena::CreateMessageInternal< ::RequestTrajectory >(arena);
+}
+template<> PROTOBUF_NOINLINE ::RequestTrajectoryResponse*
+Arena::CreateMaybeMessage< ::RequestTrajectoryResponse >(Arena* arena) {
+  return Arena::CreateMessageInternal< ::RequestTrajectoryResponse >(arena);
 }
 PROTOBUF_NAMESPACE_CLOSE
 

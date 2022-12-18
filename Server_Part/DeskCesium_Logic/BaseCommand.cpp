@@ -3,6 +3,9 @@
 #include "mysqlconnectionpool.h"
 
 #include <string>
+#include <dirent.h>
+#include <fstream>
+#include <regex>
 
 std::string errorMessage = "消息数据异常，请联系管理员";
 std::string errorParseMessage = "消息解析失败，请联系管理员";
@@ -11,7 +14,6 @@ std::string errorQueryMySQL = "数据库查询失败，请联系管理员";
 std::string errorExecMySQL = "数据库语句执行失败，自动回滚";
 std::string errorCommitMySQL = "数据库事物提交失败";
 std::string errorRollbackMySQL = "数据库事物回滚失败，请联系管理员";
-
 
 void CBaseCommand::Init(ISessionService* session_service)
 {
@@ -579,6 +581,83 @@ void CBaseCommand::logic_query_side_scan_source_data_by_keyword(const CMessage_S
 		std::string pack = createPackage(CMD_QUERY_SIDE_SCAN_SOURCE_DATA_BY_KEYWORD_RESPONSE, sourceList.SerializeAsString());
         sendAsyncPack(source.connect_id_, pack);
 	}
+}
+
+void CBaseCommand::logic_query_trajectory_by_cruise_and_dive(const CMessage_Source& source, std::shared_ptr<CMessage_Packet> recv_packet, std::shared_ptr<CMessage_Packet> send_packet)
+{
+	PSS_LOGGER_DEBUG("logic_query_trajectory_by_cruise_and_dive");
+	
+	RequestTrajectoryResponse response;
+	response.set_status(false);
+	
+	std::string parameter = recv_packet->buffer_.substr(8);
+    if (parameter.empty())
+    {
+		PSS_LOGGER_DEBUG("{0}, {1}", errorMessage, recv_packet->command_id_);
+        return;
+    }
+    
+    RequestTrajectory requestTrajectory;
+    bool status = requestTrajectory.ParseFromString(parameter);
+    
+    if (!status)
+    {
+		PSS_LOGGER_DEBUG("{0}, {1}", errorParseMessage, recv_packet->buffer_);
+		response.set_id(errorParseMessage);
+		std::string pack = createPackage(CMD_QUERY_TRAJECTORY_BY_CURSE_AND_DIVE_RESPONSE, response.SerializeAsString());
+        sendAsyncPack(source.connect_id_, pack);
+		return;
+    }
+
+	std::string dive_number = requestTrajectory.dive_number();
+	std::string targetPath = "/home/ftp_root/upload/" + requestTrajectory.cruise_number() + "/Navigation/" + requestTrajectory.trajectory_type();
+
+	std::vector<string> vectorFileNames;
+
+    DIR *pDir;
+    struct dirent* ptr;
+    if(!(pDir = opendir(targetPath.c_str())))
+    {
+    	response.set_id("没有找到对应的轨迹文件");
+		std::string pack = createPackage(CMD_QUERY_TRAJECTORY_BY_CURSE_AND_DIVE_RESPONSE, response.SerializeAsString());
+        sendAsyncPack(source.connect_id_, pack);
+        return;
+    }
+    while((ptr = readdir(pDir)) != 0) 
+    {
+        if (strcmp(ptr->d_name, ".") != 0 && strcmp(ptr->d_name, "..") != 0 && std::string(ptr->d_name).find(".txt") != std::string::npos)
+        {
+            vectorFileNames.push_back(ptr->d_name);
+        }
+    }
+    closedir(pDir);
+	
+	std::string position_chain = "";
+	for (auto &name : vectorFileNames)
+	{
+		std::ifstream fileDescripter(targetPath + "/" + name);
+		std::string line;
+		while(std::getline(fileDescripter, line))
+		{
+			PSS_LOGGER_DEBUG("what");
+			std::regex reg("^([0-9]+\\.[0-9]+) ([0-9]+\\.[0-9]+) (.*)");
+			std::smatch match;
+			bool status = regex_search(line, match, reg);
+			PSS_LOGGER_DEBUG("what A {0} {1}", status, match.size());
+			if (!status) continue;
+			if (match.size() != 4) continue;
+			
+			if (position_chain.length() > 0) position_chain += " ";
+			position_chain += std::string(match[1]) + "," + std::string(match[2]) + ",0";
+		}
+		PSS_LOGGER_DEBUG("open file 1 {0}", targetPath + "/" + name);
+	}
+
+	response.set_status(true);
+	response.set_id(requestTrajectory.cruise_number() + "-" + dive_number);
+	response.set_position_chain(position_chain);
+	std::string pack = createPackage(CMD_QUERY_TRAJECTORY_BY_CURSE_AND_DIVE_RESPONSE, response.SerializeAsString());
+    sendAsyncPack(source.connect_id_, pack);
 }
 
 void CBaseCommand::sendAsyncPack(uint32_t id, const std::string& pack)
