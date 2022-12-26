@@ -146,9 +146,9 @@ void DialogUploadData::checkData()
             continue;
         }
 
-        // 列数小于 25 列，提示数据模板可能不正确
+        // 列数小于 29 列，提示数据模板可能不正确
         qDebug() << "columnCount " << columnCount;
-        if (columnCount < 28)
+        if (columnCount < 29)
         {
             emit sgl_thread_report_check_status(STATUS_ERROR, QString("数据表 【%1】 模板可能不正确，列数 %2，小于 2 列").arg(listSheetName.at(0), QString::number(columnCount)));
             return;
@@ -241,7 +241,7 @@ void DialogUploadData::checkData()
         {
             // 循环 25 列，判断是否是存粹的空行
             uint8_t emptyColumnNumber = 0;
-            for (uint16_t l = 2; l <= 25; l++)
+            for (uint16_t l = 2; l <= 27; l++)
             {
                 QXlsx::Cell *temp = xlsxDocument.cellAt(i, l);
                 if ((nullptr == temp) || (temp->value().toString().isEmpty()))
@@ -250,7 +250,7 @@ void DialogUploadData::checkData()
                 }
             }
             // 纯粹的空行不用解析
-            if (emptyColumnNumber >= 24) continue;
+            if (emptyColumnNumber >= 26) continue;
 
             SideScanSource *source = sideScanSource.add_list();
             if (nullptr == source)
@@ -333,6 +333,11 @@ void DialogUploadData::checkData()
                 emit sgl_thread_report_check_status(STATUS_ERROR, QString("编号 【%1】 的纬度转换后数值为【%2】，系统判定为异常值").arg(source->id().data(), QString::number(source->latitude())));
                 return;
             }
+
+            // 深度
+            cell = xlsxDocument.cellAt(i, CELL_DEPTH);
+            double depth = getCellValue(cell).toDouble();
+            source->set_depth(depth);
 
             // 拖体速度
             cell = xlsxDocument.cellAt(i, CELL_DT_SPEED);

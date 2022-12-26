@@ -220,35 +220,36 @@ class SideScanSource final :
     kScanLineFieldNumber = 4,
     kCruiseYearFieldNumber = 5,
     kDtTimeFieldNumber = 6,
-    kHorizontalRangeDirectionFieldNumber = 10,
-    kHorizontalRangeValueFieldNumber = 11,
-    kSideScanImageNameFieldNumber = 14,
-    kRemarksFieldNumber = 22,
-    kSupposeSizeFieldNumber = 23,
-    kVerifyAuvSssImagePathsFieldNumber = 25,
-    kVerifyImagePathsFieldNumber = 26,
-    kImageDescriptionFieldNumber = 27,
-    kTargetLongitudeFieldNumber = 28,
-    kTargetLatitudeFieldNumber = 29,
-    kPositionErrorFieldNumber = 30,
-    kVerifyCruiseNumberFieldNumber = 31,
-    kVerifyDiveNumberFieldNumber = 32,
-    kVerifyTimeFieldNumber = 33,
+    kHorizontalRangeDirectionFieldNumber = 11,
+    kHorizontalRangeValueFieldNumber = 12,
+    kSideScanImageNameFieldNumber = 15,
+    kRemarksFieldNumber = 23,
+    kSupposeSizeFieldNumber = 24,
+    kVerifyAuvSssImagePathsFieldNumber = 26,
+    kVerifyImagePathsFieldNumber = 27,
+    kImageDescriptionFieldNumber = 28,
+    kTargetLongitudeFieldNumber = 29,
+    kTargetLatitudeFieldNumber = 30,
+    kPositionErrorFieldNumber = 31,
+    kVerifyCruiseNumberFieldNumber = 32,
+    kVerifyDiveNumberFieldNumber = 33,
+    kVerifyTimeFieldNumber = 34,
     kLongitudeFieldNumber = 7,
     kLatitudeFieldNumber = 8,
-    kDtSpeedFieldNumber = 9,
-    kHeightFromBottomFieldNumber = 12,
-    kImageTopLeftLongitudeFieldNumber = 15,
-    kImageTopLeftLatitudeFieldNumber = 16,
-    kRThetaFieldNumber = 13,
-    kImageTotalByteFieldNumber = 19,
-    kImageBottomRightLongitudeFieldNumber = 17,
-    kImageBottomRightLatitudeFieldNumber = 18,
-    kAlongTrackFieldNumber = 20,
-    kAcrossTrackFieldNumber = 21,
-    kPriorityFieldNumber = 24,
-    kVerifyFlagFieldNumber = 34,
-    kStatusFlagFieldNumber = 35,
+    kDepthFieldNumber = 9,
+    kDtSpeedFieldNumber = 10,
+    kHeightFromBottomFieldNumber = 13,
+    kImageTopLeftLongitudeFieldNumber = 16,
+    kImageTopLeftLatitudeFieldNumber = 17,
+    kRThetaFieldNumber = 14,
+    kImageTotalByteFieldNumber = 20,
+    kImageBottomRightLongitudeFieldNumber = 18,
+    kImageBottomRightLatitudeFieldNumber = 19,
+    kAlongTrackFieldNumber = 21,
+    kAcrossTrackFieldNumber = 22,
+    kPriorityFieldNumber = 25,
+    kVerifyFlagFieldNumber = 35,
+    kStatusFlagFieldNumber = 36,
   };
   // string id = 1;
   void clear_id();
@@ -334,7 +335,7 @@ class SideScanSource final :
   std::string* _internal_mutable_dt_time();
   public:
 
-  // string horizontal_range_direction = 10;
+  // string horizontal_range_direction = 11;
   void clear_horizontal_range_direction();
   const std::string& horizontal_range_direction() const;
   template <typename ArgT0 = const std::string&, typename... ArgT>
@@ -348,7 +349,7 @@ class SideScanSource final :
   std::string* _internal_mutable_horizontal_range_direction();
   public:
 
-  // string horizontal_range_value = 11;
+  // string horizontal_range_value = 12;
   void clear_horizontal_range_value();
   const std::string& horizontal_range_value() const;
   template <typename ArgT0 = const std::string&, typename... ArgT>
@@ -362,7 +363,7 @@ class SideScanSource final :
   std::string* _internal_mutable_horizontal_range_value();
   public:
 
-  // string side_scan_image_name = 14;
+  // string side_scan_image_name = 15;
   void clear_side_scan_image_name();
   const std::string& side_scan_image_name() const;
   template <typename ArgT0 = const std::string&, typename... ArgT>
@@ -376,7 +377,7 @@ class SideScanSource final :
   std::string* _internal_mutable_side_scan_image_name();
   public:
 
-  // string remarks = 22;
+  // string remarks = 23;
   void clear_remarks();
   const std::string& remarks() const;
   template <typename ArgT0 = const std::string&, typename... ArgT>
@@ -390,7 +391,7 @@ class SideScanSource final :
   std::string* _internal_mutable_remarks();
   public:
 
-  // string suppose_size = 23;
+  // string suppose_size = 24;
   void clear_suppose_size();
   const std::string& suppose_size() const;
   template <typename ArgT0 = const std::string&, typename... ArgT>
@@ -404,7 +405,7 @@ class SideScanSource final :
   std::string* _internal_mutable_suppose_size();
   public:
 
-  // string verify_auv_sss_image_paths = 25;
+  // string verify_auv_sss_image_paths = 26;
   void clear_verify_auv_sss_image_paths();
   const std::string& verify_auv_sss_image_paths() const;
   template <typename ArgT0 = const std::string&, typename... ArgT>
@@ -418,7 +419,7 @@ class SideScanSource final :
   std::string* _internal_mutable_verify_auv_sss_image_paths();
   public:
 
-  // string verify_image_paths = 26;
+  // string verify_image_paths = 27;
   void clear_verify_image_paths();
   const std::string& verify_image_paths() const;
   template <typename ArgT0 = const std::string&, typename... ArgT>
@@ -432,7 +433,7 @@ class SideScanSource final :
   std::string* _internal_mutable_verify_image_paths();
   public:
 
-  // string image_description = 27;
+  // string image_description = 28;
   void clear_image_description();
   const std::string& image_description() const;
   template <typename ArgT0 = const std::string&, typename... ArgT>
@@ -446,7 +447,7 @@ class SideScanSource final :
   std::string* _internal_mutable_image_description();
   public:
 
-  // string target_longitude = 28;
+  // string target_longitude = 29;
   void clear_target_longitude();
   const std::string& target_longitude() const;
   template <typename ArgT0 = const std::string&, typename... ArgT>
@@ -460,7 +461,7 @@ class SideScanSource final :
   std::string* _internal_mutable_target_longitude();
   public:
 
-  // string target_latitude = 29;
+  // string target_latitude = 30;
   void clear_target_latitude();
   const std::string& target_latitude() const;
   template <typename ArgT0 = const std::string&, typename... ArgT>
@@ -474,7 +475,7 @@ class SideScanSource final :
   std::string* _internal_mutable_target_latitude();
   public:
 
-  // string position_error = 30;
+  // string position_error = 31;
   void clear_position_error();
   const std::string& position_error() const;
   template <typename ArgT0 = const std::string&, typename... ArgT>
@@ -488,7 +489,7 @@ class SideScanSource final :
   std::string* _internal_mutable_position_error();
   public:
 
-  // string verify_cruise_number = 31;
+  // string verify_cruise_number = 32;
   void clear_verify_cruise_number();
   const std::string& verify_cruise_number() const;
   template <typename ArgT0 = const std::string&, typename... ArgT>
@@ -502,7 +503,7 @@ class SideScanSource final :
   std::string* _internal_mutable_verify_cruise_number();
   public:
 
-  // string verify_dive_number = 32;
+  // string verify_dive_number = 33;
   void clear_verify_dive_number();
   const std::string& verify_dive_number() const;
   template <typename ArgT0 = const std::string&, typename... ArgT>
@@ -516,7 +517,7 @@ class SideScanSource final :
   std::string* _internal_mutable_verify_dive_number();
   public:
 
-  // string verify_time = 33;
+  // string verify_time = 34;
   void clear_verify_time();
   const std::string& verify_time() const;
   template <typename ArgT0 = const std::string&, typename... ArgT>
@@ -548,7 +549,16 @@ class SideScanSource final :
   void _internal_set_latitude(double value);
   public:
 
-  // float dt_speed = 9;
+  // double depth = 9;
+  void clear_depth();
+  double depth() const;
+  void set_depth(double value);
+  private:
+  double _internal_depth() const;
+  void _internal_set_depth(double value);
+  public:
+
+  // float dt_speed = 10;
   void clear_dt_speed();
   float dt_speed() const;
   void set_dt_speed(float value);
@@ -557,7 +567,7 @@ class SideScanSource final :
   void _internal_set_dt_speed(float value);
   public:
 
-  // float height_from_bottom = 12;
+  // float height_from_bottom = 13;
   void clear_height_from_bottom();
   float height_from_bottom() const;
   void set_height_from_bottom(float value);
@@ -566,7 +576,7 @@ class SideScanSource final :
   void _internal_set_height_from_bottom(float value);
   public:
 
-  // double image_top_left_longitude = 15;
+  // double image_top_left_longitude = 16;
   void clear_image_top_left_longitude();
   double image_top_left_longitude() const;
   void set_image_top_left_longitude(double value);
@@ -575,7 +585,7 @@ class SideScanSource final :
   void _internal_set_image_top_left_longitude(double value);
   public:
 
-  // double image_top_left_latitude = 16;
+  // double image_top_left_latitude = 17;
   void clear_image_top_left_latitude();
   double image_top_left_latitude() const;
   void set_image_top_left_latitude(double value);
@@ -584,7 +594,7 @@ class SideScanSource final :
   void _internal_set_image_top_left_latitude(double value);
   public:
 
-  // float r_theta = 13;
+  // float r_theta = 14;
   void clear_r_theta();
   float r_theta() const;
   void set_r_theta(float value);
@@ -593,7 +603,7 @@ class SideScanSource final :
   void _internal_set_r_theta(float value);
   public:
 
-  // uint32 image_total_byte = 19;
+  // uint32 image_total_byte = 20;
   void clear_image_total_byte();
   uint32_t image_total_byte() const;
   void set_image_total_byte(uint32_t value);
@@ -602,7 +612,7 @@ class SideScanSource final :
   void _internal_set_image_total_byte(uint32_t value);
   public:
 
-  // double image_bottom_right_longitude = 17;
+  // double image_bottom_right_longitude = 18;
   void clear_image_bottom_right_longitude();
   double image_bottom_right_longitude() const;
   void set_image_bottom_right_longitude(double value);
@@ -611,7 +621,7 @@ class SideScanSource final :
   void _internal_set_image_bottom_right_longitude(double value);
   public:
 
-  // double image_bottom_right_latitude = 18;
+  // double image_bottom_right_latitude = 19;
   void clear_image_bottom_right_latitude();
   double image_bottom_right_latitude() const;
   void set_image_bottom_right_latitude(double value);
@@ -620,7 +630,7 @@ class SideScanSource final :
   void _internal_set_image_bottom_right_latitude(double value);
   public:
 
-  // float along_track = 20;
+  // float along_track = 21;
   void clear_along_track();
   float along_track() const;
   void set_along_track(float value);
@@ -629,7 +639,7 @@ class SideScanSource final :
   void _internal_set_along_track(float value);
   public:
 
-  // float across_track = 21;
+  // float across_track = 22;
   void clear_across_track();
   float across_track() const;
   void set_across_track(float value);
@@ -638,7 +648,7 @@ class SideScanSource final :
   void _internal_set_across_track(float value);
   public:
 
-  // uint32 priority = 24;
+  // uint32 priority = 25;
   void clear_priority();
   uint32_t priority() const;
   void set_priority(uint32_t value);
@@ -647,7 +657,7 @@ class SideScanSource final :
   void _internal_set_priority(uint32_t value);
   public:
 
-  // bool verify_flag = 34;
+  // bool verify_flag = 35;
   void clear_verify_flag();
   bool verify_flag() const;
   void set_verify_flag(bool value);
@@ -656,7 +666,7 @@ class SideScanSource final :
   void _internal_set_verify_flag(bool value);
   public:
 
-  // uint32 status_flag = 35;
+  // uint32 status_flag = 36;
   void clear_status_flag();
   uint32_t status_flag() const;
   void set_status_flag(uint32_t value);
@@ -695,6 +705,7 @@ class SideScanSource final :
     ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr verify_time_;
     double longitude_;
     double latitude_;
+    double depth_;
     float dt_speed_;
     float height_from_bottom_;
     double image_top_left_longitude_;
@@ -2857,7 +2868,27 @@ inline void SideScanSource::set_latitude(double value) {
   // @@protoc_insertion_point(field_set:SideScanSource.latitude)
 }
 
-// float dt_speed = 9;
+// double depth = 9;
+inline void SideScanSource::clear_depth() {
+  _impl_.depth_ = 0;
+}
+inline double SideScanSource::_internal_depth() const {
+  return _impl_.depth_;
+}
+inline double SideScanSource::depth() const {
+  // @@protoc_insertion_point(field_get:SideScanSource.depth)
+  return _internal_depth();
+}
+inline void SideScanSource::_internal_set_depth(double value) {
+  
+  _impl_.depth_ = value;
+}
+inline void SideScanSource::set_depth(double value) {
+  _internal_set_depth(value);
+  // @@protoc_insertion_point(field_set:SideScanSource.depth)
+}
+
+// float dt_speed = 10;
 inline void SideScanSource::clear_dt_speed() {
   _impl_.dt_speed_ = 0;
 }
@@ -2877,7 +2908,7 @@ inline void SideScanSource::set_dt_speed(float value) {
   // @@protoc_insertion_point(field_set:SideScanSource.dt_speed)
 }
 
-// string horizontal_range_direction = 10;
+// string horizontal_range_direction = 11;
 inline void SideScanSource::clear_horizontal_range_direction() {
   _impl_.horizontal_range_direction_.ClearToEmpty();
 }
@@ -2927,7 +2958,7 @@ inline void SideScanSource::set_allocated_horizontal_range_direction(std::string
   // @@protoc_insertion_point(field_set_allocated:SideScanSource.horizontal_range_direction)
 }
 
-// string horizontal_range_value = 11;
+// string horizontal_range_value = 12;
 inline void SideScanSource::clear_horizontal_range_value() {
   _impl_.horizontal_range_value_.ClearToEmpty();
 }
@@ -2977,7 +3008,7 @@ inline void SideScanSource::set_allocated_horizontal_range_value(std::string* ho
   // @@protoc_insertion_point(field_set_allocated:SideScanSource.horizontal_range_value)
 }
 
-// float height_from_bottom = 12;
+// float height_from_bottom = 13;
 inline void SideScanSource::clear_height_from_bottom() {
   _impl_.height_from_bottom_ = 0;
 }
@@ -2997,7 +3028,7 @@ inline void SideScanSource::set_height_from_bottom(float value) {
   // @@protoc_insertion_point(field_set:SideScanSource.height_from_bottom)
 }
 
-// float r_theta = 13;
+// float r_theta = 14;
 inline void SideScanSource::clear_r_theta() {
   _impl_.r_theta_ = 0;
 }
@@ -3017,7 +3048,7 @@ inline void SideScanSource::set_r_theta(float value) {
   // @@protoc_insertion_point(field_set:SideScanSource.r_theta)
 }
 
-// string side_scan_image_name = 14;
+// string side_scan_image_name = 15;
 inline void SideScanSource::clear_side_scan_image_name() {
   _impl_.side_scan_image_name_.ClearToEmpty();
 }
@@ -3067,7 +3098,7 @@ inline void SideScanSource::set_allocated_side_scan_image_name(std::string* side
   // @@protoc_insertion_point(field_set_allocated:SideScanSource.side_scan_image_name)
 }
 
-// double image_top_left_longitude = 15;
+// double image_top_left_longitude = 16;
 inline void SideScanSource::clear_image_top_left_longitude() {
   _impl_.image_top_left_longitude_ = 0;
 }
@@ -3087,7 +3118,7 @@ inline void SideScanSource::set_image_top_left_longitude(double value) {
   // @@protoc_insertion_point(field_set:SideScanSource.image_top_left_longitude)
 }
 
-// double image_top_left_latitude = 16;
+// double image_top_left_latitude = 17;
 inline void SideScanSource::clear_image_top_left_latitude() {
   _impl_.image_top_left_latitude_ = 0;
 }
@@ -3107,7 +3138,7 @@ inline void SideScanSource::set_image_top_left_latitude(double value) {
   // @@protoc_insertion_point(field_set:SideScanSource.image_top_left_latitude)
 }
 
-// double image_bottom_right_longitude = 17;
+// double image_bottom_right_longitude = 18;
 inline void SideScanSource::clear_image_bottom_right_longitude() {
   _impl_.image_bottom_right_longitude_ = 0;
 }
@@ -3127,7 +3158,7 @@ inline void SideScanSource::set_image_bottom_right_longitude(double value) {
   // @@protoc_insertion_point(field_set:SideScanSource.image_bottom_right_longitude)
 }
 
-// double image_bottom_right_latitude = 18;
+// double image_bottom_right_latitude = 19;
 inline void SideScanSource::clear_image_bottom_right_latitude() {
   _impl_.image_bottom_right_latitude_ = 0;
 }
@@ -3147,7 +3178,7 @@ inline void SideScanSource::set_image_bottom_right_latitude(double value) {
   // @@protoc_insertion_point(field_set:SideScanSource.image_bottom_right_latitude)
 }
 
-// uint32 image_total_byte = 19;
+// uint32 image_total_byte = 20;
 inline void SideScanSource::clear_image_total_byte() {
   _impl_.image_total_byte_ = 0u;
 }
@@ -3167,7 +3198,7 @@ inline void SideScanSource::set_image_total_byte(uint32_t value) {
   // @@protoc_insertion_point(field_set:SideScanSource.image_total_byte)
 }
 
-// float along_track = 20;
+// float along_track = 21;
 inline void SideScanSource::clear_along_track() {
   _impl_.along_track_ = 0;
 }
@@ -3187,7 +3218,7 @@ inline void SideScanSource::set_along_track(float value) {
   // @@protoc_insertion_point(field_set:SideScanSource.along_track)
 }
 
-// float across_track = 21;
+// float across_track = 22;
 inline void SideScanSource::clear_across_track() {
   _impl_.across_track_ = 0;
 }
@@ -3207,7 +3238,7 @@ inline void SideScanSource::set_across_track(float value) {
   // @@protoc_insertion_point(field_set:SideScanSource.across_track)
 }
 
-// string remarks = 22;
+// string remarks = 23;
 inline void SideScanSource::clear_remarks() {
   _impl_.remarks_.ClearToEmpty();
 }
@@ -3257,7 +3288,7 @@ inline void SideScanSource::set_allocated_remarks(std::string* remarks) {
   // @@protoc_insertion_point(field_set_allocated:SideScanSource.remarks)
 }
 
-// string suppose_size = 23;
+// string suppose_size = 24;
 inline void SideScanSource::clear_suppose_size() {
   _impl_.suppose_size_.ClearToEmpty();
 }
@@ -3307,7 +3338,7 @@ inline void SideScanSource::set_allocated_suppose_size(std::string* suppose_size
   // @@protoc_insertion_point(field_set_allocated:SideScanSource.suppose_size)
 }
 
-// uint32 priority = 24;
+// uint32 priority = 25;
 inline void SideScanSource::clear_priority() {
   _impl_.priority_ = 0u;
 }
@@ -3327,7 +3358,7 @@ inline void SideScanSource::set_priority(uint32_t value) {
   // @@protoc_insertion_point(field_set:SideScanSource.priority)
 }
 
-// string verify_auv_sss_image_paths = 25;
+// string verify_auv_sss_image_paths = 26;
 inline void SideScanSource::clear_verify_auv_sss_image_paths() {
   _impl_.verify_auv_sss_image_paths_.ClearToEmpty();
 }
@@ -3377,7 +3408,7 @@ inline void SideScanSource::set_allocated_verify_auv_sss_image_paths(std::string
   // @@protoc_insertion_point(field_set_allocated:SideScanSource.verify_auv_sss_image_paths)
 }
 
-// string verify_image_paths = 26;
+// string verify_image_paths = 27;
 inline void SideScanSource::clear_verify_image_paths() {
   _impl_.verify_image_paths_.ClearToEmpty();
 }
@@ -3427,7 +3458,7 @@ inline void SideScanSource::set_allocated_verify_image_paths(std::string* verify
   // @@protoc_insertion_point(field_set_allocated:SideScanSource.verify_image_paths)
 }
 
-// string image_description = 27;
+// string image_description = 28;
 inline void SideScanSource::clear_image_description() {
   _impl_.image_description_.ClearToEmpty();
 }
@@ -3477,7 +3508,7 @@ inline void SideScanSource::set_allocated_image_description(std::string* image_d
   // @@protoc_insertion_point(field_set_allocated:SideScanSource.image_description)
 }
 
-// string target_longitude = 28;
+// string target_longitude = 29;
 inline void SideScanSource::clear_target_longitude() {
   _impl_.target_longitude_.ClearToEmpty();
 }
@@ -3527,7 +3558,7 @@ inline void SideScanSource::set_allocated_target_longitude(std::string* target_l
   // @@protoc_insertion_point(field_set_allocated:SideScanSource.target_longitude)
 }
 
-// string target_latitude = 29;
+// string target_latitude = 30;
 inline void SideScanSource::clear_target_latitude() {
   _impl_.target_latitude_.ClearToEmpty();
 }
@@ -3577,7 +3608,7 @@ inline void SideScanSource::set_allocated_target_latitude(std::string* target_la
   // @@protoc_insertion_point(field_set_allocated:SideScanSource.target_latitude)
 }
 
-// string position_error = 30;
+// string position_error = 31;
 inline void SideScanSource::clear_position_error() {
   _impl_.position_error_.ClearToEmpty();
 }
@@ -3627,7 +3658,7 @@ inline void SideScanSource::set_allocated_position_error(std::string* position_e
   // @@protoc_insertion_point(field_set_allocated:SideScanSource.position_error)
 }
 
-// string verify_cruise_number = 31;
+// string verify_cruise_number = 32;
 inline void SideScanSource::clear_verify_cruise_number() {
   _impl_.verify_cruise_number_.ClearToEmpty();
 }
@@ -3677,7 +3708,7 @@ inline void SideScanSource::set_allocated_verify_cruise_number(std::string* veri
   // @@protoc_insertion_point(field_set_allocated:SideScanSource.verify_cruise_number)
 }
 
-// string verify_dive_number = 32;
+// string verify_dive_number = 33;
 inline void SideScanSource::clear_verify_dive_number() {
   _impl_.verify_dive_number_.ClearToEmpty();
 }
@@ -3727,7 +3758,7 @@ inline void SideScanSource::set_allocated_verify_dive_number(std::string* verify
   // @@protoc_insertion_point(field_set_allocated:SideScanSource.verify_dive_number)
 }
 
-// string verify_time = 33;
+// string verify_time = 34;
 inline void SideScanSource::clear_verify_time() {
   _impl_.verify_time_.ClearToEmpty();
 }
@@ -3777,7 +3808,7 @@ inline void SideScanSource::set_allocated_verify_time(std::string* verify_time) 
   // @@protoc_insertion_point(field_set_allocated:SideScanSource.verify_time)
 }
 
-// bool verify_flag = 34;
+// bool verify_flag = 35;
 inline void SideScanSource::clear_verify_flag() {
   _impl_.verify_flag_ = false;
 }
@@ -3797,7 +3828,7 @@ inline void SideScanSource::set_verify_flag(bool value) {
   // @@protoc_insertion_point(field_set:SideScanSource.verify_flag)
 }
 
-// uint32 status_flag = 35;
+// uint32 status_flag = 36;
 inline void SideScanSource::clear_status_flag() {
   _impl_.status_flag_ = 0u;
 }

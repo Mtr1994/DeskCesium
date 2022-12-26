@@ -44,6 +44,7 @@ PROTOBUF_CONSTEXPR SideScanSource::SideScanSource(
   , /*decltype(_impl_.verify_time_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
   , /*decltype(_impl_.longitude_)*/0
   , /*decltype(_impl_.latitude_)*/0
+  , /*decltype(_impl_.depth_)*/0
   , /*decltype(_impl_.dt_speed_)*/0
   , /*decltype(_impl_.height_from_bottom_)*/0
   , /*decltype(_impl_.image_top_left_longitude_)*/0
@@ -232,6 +233,7 @@ const uint32_t TableStruct_sidescansource_2eproto::offsets[] PROTOBUF_SECTION_VA
   PROTOBUF_FIELD_OFFSET(::SideScanSource, _impl_.dt_time_),
   PROTOBUF_FIELD_OFFSET(::SideScanSource, _impl_.longitude_),
   PROTOBUF_FIELD_OFFSET(::SideScanSource, _impl_.latitude_),
+  PROTOBUF_FIELD_OFFSET(::SideScanSource, _impl_.depth_),
   PROTOBUF_FIELD_OFFSET(::SideScanSource, _impl_.dt_speed_),
   PROTOBUF_FIELD_OFFSET(::SideScanSource, _impl_.horizontal_range_direction_),
   PROTOBUF_FIELD_OFFSET(::SideScanSource, _impl_.horizontal_range_value_),
@@ -348,16 +350,16 @@ const uint32_t TableStruct_sidescansource_2eproto::offsets[] PROTOBUF_SECTION_VA
 };
 static const ::_pbi::MigrationSchema schemas[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
   { 0, -1, -1, sizeof(::SideScanSource)},
-  { 41, -1, -1, sizeof(::SideScanSourceList)},
-  { 48, -1, -1, sizeof(::StatusResponse)},
-  { 56, -1, -1, sizeof(::CruiseRouteSource)},
-  { 66, -1, -1, sizeof(::CruiseRouteSourceList)},
-  { 73, -1, -1, sizeof(::SearchFilterParamter)},
-  { 83, -1, -1, sizeof(::SearchFilterParamterList)},
-  { 90, -1, -1, sizeof(::FilterSearchParameter)},
-  { 102, -1, -1, sizeof(::KeywordSearchParameter)},
-  { 109, -1, -1, sizeof(::RequestTrajectory)},
-  { 118, -1, -1, sizeof(::RequestTrajectoryResponse)},
+  { 42, -1, -1, sizeof(::SideScanSourceList)},
+  { 49, -1, -1, sizeof(::StatusResponse)},
+  { 57, -1, -1, sizeof(::CruiseRouteSource)},
+  { 67, -1, -1, sizeof(::CruiseRouteSourceList)},
+  { 74, -1, -1, sizeof(::SearchFilterParamter)},
+  { 84, -1, -1, sizeof(::SearchFilterParamterList)},
+  { 91, -1, -1, sizeof(::FilterSearchParameter)},
+  { 103, -1, -1, sizeof(::KeywordSearchParameter)},
+  { 110, -1, -1, sizeof(::RequestTrajectory)},
+  { 119, -1, -1, sizeof(::RequestTrajectoryResponse)},
 };
 
 static const ::_pb::Message* const file_default_instances[] = {
@@ -375,53 +377,54 @@ static const ::_pb::Message* const file_default_instances[] = {
 };
 
 const char descriptor_table_protodef_sidescansource_2eproto[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) =
-  "\n\024sidescansource.proto\"\362\006\n\016SideScanSourc"
+  "\n\024sidescansource.proto\"\201\007\n\016SideScanSourc"
   "e\022\n\n\002id\030\001 \001(\t\022\025\n\rcruise_number\030\002 \001(\t\022\023\n\013"
   "dive_number\030\003 \001(\t\022\021\n\tscan_line\030\004 \001(\t\022\023\n\013"
   "cruise_year\030\005 \001(\t\022\017\n\007dt_time\030\006 \001(\t\022\021\n\tlo"
-  "ngitude\030\007 \001(\001\022\020\n\010latitude\030\010 \001(\001\022\020\n\010dt_sp"
-  "eed\030\t \001(\002\022\"\n\032horizontal_range_direction\030"
-  "\n \001(\t\022\036\n\026horizontal_range_value\030\013 \001(\t\022\032\n"
-  "\022height_from_bottom\030\014 \001(\002\022\017\n\007r_theta\030\r \001"
-  "(\002\022\034\n\024side_scan_image_name\030\016 \001(\t\022 \n\030imag"
-  "e_top_left_longitude\030\017 \001(\001\022\037\n\027image_top_"
-  "left_latitude\030\020 \001(\001\022$\n\034image_bottom_righ"
-  "t_longitude\030\021 \001(\001\022#\n\033image_bottom_right_"
-  "latitude\030\022 \001(\001\022\030\n\020image_total_byte\030\023 \001(\r"
-  "\022\023\n\013along_track\030\024 \001(\002\022\024\n\014across_track\030\025 "
-  "\001(\002\022\017\n\007remarks\030\026 \001(\t\022\024\n\014suppose_size\030\027 \001"
-  "(\t\022\020\n\010priority\030\030 \001(\r\022\"\n\032verify_auv_sss_i"
-  "mage_paths\030\031 \001(\t\022\032\n\022verify_image_paths\030\032"
-  " \001(\t\022\031\n\021image_description\030\033 \001(\t\022\030\n\020targe"
-  "t_longitude\030\034 \001(\t\022\027\n\017target_latitude\030\035 \001"
-  "(\t\022\026\n\016position_error\030\036 \001(\t\022\034\n\024verify_cru"
-  "ise_number\030\037 \001(\t\022\032\n\022verify_dive_number\030 "
-  " \001(\t\022\023\n\013verify_time\030! \001(\t\022\023\n\013verify_flag"
-  "\030\" \001(\010\022\023\n\013status_flag\030# \001(\r\"3\n\022SideScanS"
-  "ourceList\022\035\n\004list\030\001 \003(\0132\017.SideScanSource"
-  "\"1\n\016StatusResponse\022\016\n\006status\030\001 \001(\010\022\017\n\007me"
-  "ssage\030\002 \001(\t\"T\n\021CruiseRouteSource\022\016\n\006crui"
-  "se\030\001 \001(\t\022\014\n\004type\030\002 \001(\t\022\014\n\004name\030\003 \001(\t\022\023\n\013"
-  "status_flag\030\035 \001(\r\"9\n\025CruiseRouteSourceLi"
-  "st\022 \n\004list\030\001 \003(\0132\022.CruiseRouteSource\"s\n\024"
-  "SearchFilterParamter\022\023\n\013cruise_year\030\001 \001("
-  "\t\022\025\n\rcruise_number\030\002 \001(\t\022\023\n\013dive_number\030"
-  "\003 \001(\t\022\032\n\022verify_dive_number\030\004 \001(\t\"\?\n\030Sea"
-  "rchFilterParamterList\022#\n\004list\030\001 \003(\0132\025.Se"
-  "archFilterParamter\"\233\001\n\025FilterSearchParam"
-  "eter\022\023\n\013cruise_year\030\001 \001(\t\022\025\n\rcruise_numb"
-  "er\030\002 \001(\t\022\023\n\013dive_number\030\003 \001(\t\022\032\n\022verify_"
-  "dive_number\030\004 \003(\t\022\020\n\010priority\030\005 \001(\t\022\023\n\013v"
-  "erify_flag\030\006 \001(\t\")\n\026KeywordSearchParamet"
-  "er\022\017\n\007keyword\030\001 \001(\t\"X\n\021RequestTrajectory"
-  "\022\025\n\rcruise_number\030\001 \001(\t\022\023\n\013dive_number\030\002"
-  " \001(\t\022\027\n\017trajectory_type\030\003 \001(\t\"O\n\031Request"
-  "TrajectoryResponse\022\n\n\002id\030\001 \001(\t\022\026\n\016positi"
-  "on_chain\030\002 \001(\t\022\016\n\006status\030\003 \001(\010b\006proto3"
+  "ngitude\030\007 \001(\001\022\020\n\010latitude\030\010 \001(\001\022\r\n\005depth"
+  "\030\t \001(\001\022\020\n\010dt_speed\030\n \001(\002\022\"\n\032horizontal_r"
+  "ange_direction\030\013 \001(\t\022\036\n\026horizontal_range"
+  "_value\030\014 \001(\t\022\032\n\022height_from_bottom\030\r \001(\002"
+  "\022\017\n\007r_theta\030\016 \001(\002\022\034\n\024side_scan_image_nam"
+  "e\030\017 \001(\t\022 \n\030image_top_left_longitude\030\020 \001("
+  "\001\022\037\n\027image_top_left_latitude\030\021 \001(\001\022$\n\034im"
+  "age_bottom_right_longitude\030\022 \001(\001\022#\n\033imag"
+  "e_bottom_right_latitude\030\023 \001(\001\022\030\n\020image_t"
+  "otal_byte\030\024 \001(\r\022\023\n\013along_track\030\025 \001(\002\022\024\n\014"
+  "across_track\030\026 \001(\002\022\017\n\007remarks\030\027 \001(\t\022\024\n\014s"
+  "uppose_size\030\030 \001(\t\022\020\n\010priority\030\031 \001(\r\022\"\n\032v"
+  "erify_auv_sss_image_paths\030\032 \001(\t\022\032\n\022verif"
+  "y_image_paths\030\033 \001(\t\022\031\n\021image_description"
+  "\030\034 \001(\t\022\030\n\020target_longitude\030\035 \001(\t\022\027\n\017targ"
+  "et_latitude\030\036 \001(\t\022\026\n\016position_error\030\037 \001("
+  "\t\022\034\n\024verify_cruise_number\030  \001(\t\022\032\n\022verif"
+  "y_dive_number\030! \001(\t\022\023\n\013verify_time\030\" \001(\t"
+  "\022\023\n\013verify_flag\030# \001(\010\022\023\n\013status_flag\030$ \001"
+  "(\r\"3\n\022SideScanSourceList\022\035\n\004list\030\001 \003(\0132\017"
+  ".SideScanSource\"1\n\016StatusResponse\022\016\n\006sta"
+  "tus\030\001 \001(\010\022\017\n\007message\030\002 \001(\t\"T\n\021CruiseRout"
+  "eSource\022\016\n\006cruise\030\001 \001(\t\022\014\n\004type\030\002 \001(\t\022\014\n"
+  "\004name\030\003 \001(\t\022\023\n\013status_flag\030\035 \001(\r\"9\n\025Crui"
+  "seRouteSourceList\022 \n\004list\030\001 \003(\0132\022.Cruise"
+  "RouteSource\"s\n\024SearchFilterParamter\022\023\n\013c"
+  "ruise_year\030\001 \001(\t\022\025\n\rcruise_number\030\002 \001(\t\022"
+  "\023\n\013dive_number\030\003 \001(\t\022\032\n\022verify_dive_numb"
+  "er\030\004 \001(\t\"\?\n\030SearchFilterParamterList\022#\n\004"
+  "list\030\001 \003(\0132\025.SearchFilterParamter\"\233\001\n\025Fi"
+  "lterSearchParameter\022\023\n\013cruise_year\030\001 \001(\t"
+  "\022\025\n\rcruise_number\030\002 \001(\t\022\023\n\013dive_number\030\003"
+  " \001(\t\022\032\n\022verify_dive_number\030\004 \003(\t\022\020\n\010prio"
+  "rity\030\005 \001(\t\022\023\n\013verify_flag\030\006 \001(\t\")\n\026Keywo"
+  "rdSearchParameter\022\017\n\007keyword\030\001 \001(\t\"X\n\021Re"
+  "questTrajectory\022\025\n\rcruise_number\030\001 \001(\t\022\023"
+  "\n\013dive_number\030\002 \001(\t\022\027\n\017trajectory_type\030\003"
+  " \001(\t\"O\n\031RequestTrajectoryResponse\022\n\n\002id\030"
+  "\001 \001(\t\022\026\n\016position_chain\030\002 \001(\t\022\016\n\006status\030"
+  "\003 \001(\010b\006proto3"
   ;
 static ::_pbi::once_flag descriptor_table_sidescansource_2eproto_once;
 const ::_pbi::DescriptorTable descriptor_table_sidescansource_2eproto = {
-    false, false, 1718, descriptor_table_protodef_sidescansource_2eproto,
+    false, false, 1733, descriptor_table_protodef_sidescansource_2eproto,
     "sidescansource.proto",
     &descriptor_table_sidescansource_2eproto_once, nullptr, 0, 11,
     schemas, file_default_instances, TableStruct_sidescansource_2eproto::offsets,
@@ -473,6 +476,7 @@ SideScanSource::SideScanSource(const SideScanSource& from)
     , decltype(_impl_.verify_time_){}
     , decltype(_impl_.longitude_){}
     , decltype(_impl_.latitude_){}
+    , decltype(_impl_.depth_){}
     , decltype(_impl_.dt_speed_){}
     , decltype(_impl_.height_from_bottom_){}
     , decltype(_impl_.image_top_left_longitude_){}
@@ -682,6 +686,7 @@ inline void SideScanSource::SharedCtor(
     , decltype(_impl_.verify_time_){}
     , decltype(_impl_.longitude_){0}
     , decltype(_impl_.latitude_){0}
+    , decltype(_impl_.depth_){0}
     , decltype(_impl_.dt_speed_){0}
     , decltype(_impl_.height_from_bottom_){0}
     , decltype(_impl_.image_top_left_longitude_){0}
@@ -930,17 +935,25 @@ const char* SideScanSource::_InternalParse(const char* ptr, ::_pbi::ParseContext
         } else
           goto handle_unusual;
         continue;
-      // float dt_speed = 9;
+      // double depth = 9;
       case 9:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 77)) {
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 73)) {
+          _impl_.depth_ = ::PROTOBUF_NAMESPACE_ID::internal::UnalignedLoad<double>(ptr);
+          ptr += sizeof(double);
+        } else
+          goto handle_unusual;
+        continue;
+      // float dt_speed = 10;
+      case 10:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 85)) {
           _impl_.dt_speed_ = ::PROTOBUF_NAMESPACE_ID::internal::UnalignedLoad<float>(ptr);
           ptr += sizeof(float);
         } else
           goto handle_unusual;
         continue;
-      // string horizontal_range_direction = 10;
-      case 10:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 82)) {
+      // string horizontal_range_direction = 11;
+      case 11:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 90)) {
           auto str = _internal_mutable_horizontal_range_direction();
           ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
           CHK_(ptr);
@@ -948,9 +961,9 @@ const char* SideScanSource::_InternalParse(const char* ptr, ::_pbi::ParseContext
         } else
           goto handle_unusual;
         continue;
-      // string horizontal_range_value = 11;
-      case 11:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 90)) {
+      // string horizontal_range_value = 12;
+      case 12:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 98)) {
           auto str = _internal_mutable_horizontal_range_value();
           ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
           CHK_(ptr);
@@ -958,25 +971,25 @@ const char* SideScanSource::_InternalParse(const char* ptr, ::_pbi::ParseContext
         } else
           goto handle_unusual;
         continue;
-      // float height_from_bottom = 12;
-      case 12:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 101)) {
+      // float height_from_bottom = 13;
+      case 13:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 109)) {
           _impl_.height_from_bottom_ = ::PROTOBUF_NAMESPACE_ID::internal::UnalignedLoad<float>(ptr);
           ptr += sizeof(float);
         } else
           goto handle_unusual;
         continue;
-      // float r_theta = 13;
-      case 13:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 109)) {
+      // float r_theta = 14;
+      case 14:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 117)) {
           _impl_.r_theta_ = ::PROTOBUF_NAMESPACE_ID::internal::UnalignedLoad<float>(ptr);
           ptr += sizeof(float);
         } else
           goto handle_unusual;
         continue;
-      // string side_scan_image_name = 14;
-      case 14:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 114)) {
+      // string side_scan_image_name = 15;
+      case 15:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 122)) {
           auto str = _internal_mutable_side_scan_image_name();
           ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
           CHK_(ptr);
@@ -984,65 +997,65 @@ const char* SideScanSource::_InternalParse(const char* ptr, ::_pbi::ParseContext
         } else
           goto handle_unusual;
         continue;
-      // double image_top_left_longitude = 15;
-      case 15:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 121)) {
+      // double image_top_left_longitude = 16;
+      case 16:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 129)) {
           _impl_.image_top_left_longitude_ = ::PROTOBUF_NAMESPACE_ID::internal::UnalignedLoad<double>(ptr);
           ptr += sizeof(double);
         } else
           goto handle_unusual;
         continue;
-      // double image_top_left_latitude = 16;
-      case 16:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 129)) {
+      // double image_top_left_latitude = 17;
+      case 17:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 137)) {
           _impl_.image_top_left_latitude_ = ::PROTOBUF_NAMESPACE_ID::internal::UnalignedLoad<double>(ptr);
           ptr += sizeof(double);
         } else
           goto handle_unusual;
         continue;
-      // double image_bottom_right_longitude = 17;
-      case 17:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 137)) {
+      // double image_bottom_right_longitude = 18;
+      case 18:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 145)) {
           _impl_.image_bottom_right_longitude_ = ::PROTOBUF_NAMESPACE_ID::internal::UnalignedLoad<double>(ptr);
           ptr += sizeof(double);
         } else
           goto handle_unusual;
         continue;
-      // double image_bottom_right_latitude = 18;
-      case 18:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 145)) {
+      // double image_bottom_right_latitude = 19;
+      case 19:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 153)) {
           _impl_.image_bottom_right_latitude_ = ::PROTOBUF_NAMESPACE_ID::internal::UnalignedLoad<double>(ptr);
           ptr += sizeof(double);
         } else
           goto handle_unusual;
         continue;
-      // uint32 image_total_byte = 19;
-      case 19:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 152)) {
+      // uint32 image_total_byte = 20;
+      case 20:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 160)) {
           _impl_.image_total_byte_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
           CHK_(ptr);
         } else
           goto handle_unusual;
         continue;
-      // float along_track = 20;
-      case 20:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 165)) {
+      // float along_track = 21;
+      case 21:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 173)) {
           _impl_.along_track_ = ::PROTOBUF_NAMESPACE_ID::internal::UnalignedLoad<float>(ptr);
           ptr += sizeof(float);
         } else
           goto handle_unusual;
         continue;
-      // float across_track = 21;
-      case 21:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 173)) {
+      // float across_track = 22;
+      case 22:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 181)) {
           _impl_.across_track_ = ::PROTOBUF_NAMESPACE_ID::internal::UnalignedLoad<float>(ptr);
           ptr += sizeof(float);
         } else
           goto handle_unusual;
         continue;
-      // string remarks = 22;
-      case 22:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 178)) {
+      // string remarks = 23;
+      case 23:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 186)) {
           auto str = _internal_mutable_remarks();
           ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
           CHK_(ptr);
@@ -1050,9 +1063,9 @@ const char* SideScanSource::_InternalParse(const char* ptr, ::_pbi::ParseContext
         } else
           goto handle_unusual;
         continue;
-      // string suppose_size = 23;
-      case 23:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 186)) {
+      // string suppose_size = 24;
+      case 24:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 194)) {
           auto str = _internal_mutable_suppose_size();
           ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
           CHK_(ptr);
@@ -1060,17 +1073,17 @@ const char* SideScanSource::_InternalParse(const char* ptr, ::_pbi::ParseContext
         } else
           goto handle_unusual;
         continue;
-      // uint32 priority = 24;
-      case 24:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 192)) {
+      // uint32 priority = 25;
+      case 25:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 200)) {
           _impl_.priority_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
           CHK_(ptr);
         } else
           goto handle_unusual;
         continue;
-      // string verify_auv_sss_image_paths = 25;
-      case 25:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 202)) {
+      // string verify_auv_sss_image_paths = 26;
+      case 26:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 210)) {
           auto str = _internal_mutable_verify_auv_sss_image_paths();
           ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
           CHK_(ptr);
@@ -1078,9 +1091,9 @@ const char* SideScanSource::_InternalParse(const char* ptr, ::_pbi::ParseContext
         } else
           goto handle_unusual;
         continue;
-      // string verify_image_paths = 26;
-      case 26:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 210)) {
+      // string verify_image_paths = 27;
+      case 27:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 218)) {
           auto str = _internal_mutable_verify_image_paths();
           ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
           CHK_(ptr);
@@ -1088,9 +1101,9 @@ const char* SideScanSource::_InternalParse(const char* ptr, ::_pbi::ParseContext
         } else
           goto handle_unusual;
         continue;
-      // string image_description = 27;
-      case 27:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 218)) {
+      // string image_description = 28;
+      case 28:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 226)) {
           auto str = _internal_mutable_image_description();
           ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
           CHK_(ptr);
@@ -1098,9 +1111,9 @@ const char* SideScanSource::_InternalParse(const char* ptr, ::_pbi::ParseContext
         } else
           goto handle_unusual;
         continue;
-      // string target_longitude = 28;
-      case 28:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 226)) {
+      // string target_longitude = 29;
+      case 29:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 234)) {
           auto str = _internal_mutable_target_longitude();
           ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
           CHK_(ptr);
@@ -1108,9 +1121,9 @@ const char* SideScanSource::_InternalParse(const char* ptr, ::_pbi::ParseContext
         } else
           goto handle_unusual;
         continue;
-      // string target_latitude = 29;
-      case 29:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 234)) {
+      // string target_latitude = 30;
+      case 30:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 242)) {
           auto str = _internal_mutable_target_latitude();
           ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
           CHK_(ptr);
@@ -1118,9 +1131,9 @@ const char* SideScanSource::_InternalParse(const char* ptr, ::_pbi::ParseContext
         } else
           goto handle_unusual;
         continue;
-      // string position_error = 30;
-      case 30:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 242)) {
+      // string position_error = 31;
+      case 31:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 250)) {
           auto str = _internal_mutable_position_error();
           ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
           CHK_(ptr);
@@ -1128,9 +1141,9 @@ const char* SideScanSource::_InternalParse(const char* ptr, ::_pbi::ParseContext
         } else
           goto handle_unusual;
         continue;
-      // string verify_cruise_number = 31;
-      case 31:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 250)) {
+      // string verify_cruise_number = 32;
+      case 32:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 2)) {
           auto str = _internal_mutable_verify_cruise_number();
           ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
           CHK_(ptr);
@@ -1138,9 +1151,9 @@ const char* SideScanSource::_InternalParse(const char* ptr, ::_pbi::ParseContext
         } else
           goto handle_unusual;
         continue;
-      // string verify_dive_number = 32;
-      case 32:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 2)) {
+      // string verify_dive_number = 33;
+      case 33:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 10)) {
           auto str = _internal_mutable_verify_dive_number();
           ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
           CHK_(ptr);
@@ -1148,9 +1161,9 @@ const char* SideScanSource::_InternalParse(const char* ptr, ::_pbi::ParseContext
         } else
           goto handle_unusual;
         continue;
-      // string verify_time = 33;
-      case 33:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 10)) {
+      // string verify_time = 34;
+      case 34:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 18)) {
           auto str = _internal_mutable_verify_time();
           ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
           CHK_(ptr);
@@ -1158,17 +1171,17 @@ const char* SideScanSource::_InternalParse(const char* ptr, ::_pbi::ParseContext
         } else
           goto handle_unusual;
         continue;
-      // bool verify_flag = 34;
-      case 34:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 16)) {
+      // bool verify_flag = 35;
+      case 35:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 24)) {
           _impl_.verify_flag_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
           CHK_(ptr);
         } else
           goto handle_unusual;
         continue;
-      // uint32 status_flag = 35;
-      case 35:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 24)) {
+      // uint32 status_flag = 36;
+      case 36:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 32)) {
           _impl_.status_flag_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
           CHK_(ptr);
         } else
@@ -1283,258 +1296,268 @@ uint8_t* SideScanSource::_InternalSerialize(
     target = ::_pbi::WireFormatLite::WriteDoubleToArray(8, this->_internal_latitude(), target);
   }
 
-  // float dt_speed = 9;
+  // double depth = 9;
+  static_assert(sizeof(uint64_t) == sizeof(double), "Code assumes uint64_t and double are the same size.");
+  double tmp_depth = this->_internal_depth();
+  uint64_t raw_depth;
+  memcpy(&raw_depth, &tmp_depth, sizeof(tmp_depth));
+  if (raw_depth != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteDoubleToArray(9, this->_internal_depth(), target);
+  }
+
+  // float dt_speed = 10;
   static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
   float tmp_dt_speed = this->_internal_dt_speed();
   uint32_t raw_dt_speed;
   memcpy(&raw_dt_speed, &tmp_dt_speed, sizeof(tmp_dt_speed));
   if (raw_dt_speed != 0) {
     target = stream->EnsureSpace(target);
-    target = ::_pbi::WireFormatLite::WriteFloatToArray(9, this->_internal_dt_speed(), target);
+    target = ::_pbi::WireFormatLite::WriteFloatToArray(10, this->_internal_dt_speed(), target);
   }
 
-  // string horizontal_range_direction = 10;
+  // string horizontal_range_direction = 11;
   if (!this->_internal_horizontal_range_direction().empty()) {
     ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
       this->_internal_horizontal_range_direction().data(), static_cast<int>(this->_internal_horizontal_range_direction().length()),
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
       "SideScanSource.horizontal_range_direction");
     target = stream->WriteStringMaybeAliased(
-        10, this->_internal_horizontal_range_direction(), target);
+        11, this->_internal_horizontal_range_direction(), target);
   }
 
-  // string horizontal_range_value = 11;
+  // string horizontal_range_value = 12;
   if (!this->_internal_horizontal_range_value().empty()) {
     ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
       this->_internal_horizontal_range_value().data(), static_cast<int>(this->_internal_horizontal_range_value().length()),
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
       "SideScanSource.horizontal_range_value");
     target = stream->WriteStringMaybeAliased(
-        11, this->_internal_horizontal_range_value(), target);
+        12, this->_internal_horizontal_range_value(), target);
   }
 
-  // float height_from_bottom = 12;
+  // float height_from_bottom = 13;
   static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
   float tmp_height_from_bottom = this->_internal_height_from_bottom();
   uint32_t raw_height_from_bottom;
   memcpy(&raw_height_from_bottom, &tmp_height_from_bottom, sizeof(tmp_height_from_bottom));
   if (raw_height_from_bottom != 0) {
     target = stream->EnsureSpace(target);
-    target = ::_pbi::WireFormatLite::WriteFloatToArray(12, this->_internal_height_from_bottom(), target);
+    target = ::_pbi::WireFormatLite::WriteFloatToArray(13, this->_internal_height_from_bottom(), target);
   }
 
-  // float r_theta = 13;
+  // float r_theta = 14;
   static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
   float tmp_r_theta = this->_internal_r_theta();
   uint32_t raw_r_theta;
   memcpy(&raw_r_theta, &tmp_r_theta, sizeof(tmp_r_theta));
   if (raw_r_theta != 0) {
     target = stream->EnsureSpace(target);
-    target = ::_pbi::WireFormatLite::WriteFloatToArray(13, this->_internal_r_theta(), target);
+    target = ::_pbi::WireFormatLite::WriteFloatToArray(14, this->_internal_r_theta(), target);
   }
 
-  // string side_scan_image_name = 14;
+  // string side_scan_image_name = 15;
   if (!this->_internal_side_scan_image_name().empty()) {
     ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
       this->_internal_side_scan_image_name().data(), static_cast<int>(this->_internal_side_scan_image_name().length()),
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
       "SideScanSource.side_scan_image_name");
     target = stream->WriteStringMaybeAliased(
-        14, this->_internal_side_scan_image_name(), target);
+        15, this->_internal_side_scan_image_name(), target);
   }
 
-  // double image_top_left_longitude = 15;
+  // double image_top_left_longitude = 16;
   static_assert(sizeof(uint64_t) == sizeof(double), "Code assumes uint64_t and double are the same size.");
   double tmp_image_top_left_longitude = this->_internal_image_top_left_longitude();
   uint64_t raw_image_top_left_longitude;
   memcpy(&raw_image_top_left_longitude, &tmp_image_top_left_longitude, sizeof(tmp_image_top_left_longitude));
   if (raw_image_top_left_longitude != 0) {
     target = stream->EnsureSpace(target);
-    target = ::_pbi::WireFormatLite::WriteDoubleToArray(15, this->_internal_image_top_left_longitude(), target);
+    target = ::_pbi::WireFormatLite::WriteDoubleToArray(16, this->_internal_image_top_left_longitude(), target);
   }
 
-  // double image_top_left_latitude = 16;
+  // double image_top_left_latitude = 17;
   static_assert(sizeof(uint64_t) == sizeof(double), "Code assumes uint64_t and double are the same size.");
   double tmp_image_top_left_latitude = this->_internal_image_top_left_latitude();
   uint64_t raw_image_top_left_latitude;
   memcpy(&raw_image_top_left_latitude, &tmp_image_top_left_latitude, sizeof(tmp_image_top_left_latitude));
   if (raw_image_top_left_latitude != 0) {
     target = stream->EnsureSpace(target);
-    target = ::_pbi::WireFormatLite::WriteDoubleToArray(16, this->_internal_image_top_left_latitude(), target);
+    target = ::_pbi::WireFormatLite::WriteDoubleToArray(17, this->_internal_image_top_left_latitude(), target);
   }
 
-  // double image_bottom_right_longitude = 17;
+  // double image_bottom_right_longitude = 18;
   static_assert(sizeof(uint64_t) == sizeof(double), "Code assumes uint64_t and double are the same size.");
   double tmp_image_bottom_right_longitude = this->_internal_image_bottom_right_longitude();
   uint64_t raw_image_bottom_right_longitude;
   memcpy(&raw_image_bottom_right_longitude, &tmp_image_bottom_right_longitude, sizeof(tmp_image_bottom_right_longitude));
   if (raw_image_bottom_right_longitude != 0) {
     target = stream->EnsureSpace(target);
-    target = ::_pbi::WireFormatLite::WriteDoubleToArray(17, this->_internal_image_bottom_right_longitude(), target);
+    target = ::_pbi::WireFormatLite::WriteDoubleToArray(18, this->_internal_image_bottom_right_longitude(), target);
   }
 
-  // double image_bottom_right_latitude = 18;
+  // double image_bottom_right_latitude = 19;
   static_assert(sizeof(uint64_t) == sizeof(double), "Code assumes uint64_t and double are the same size.");
   double tmp_image_bottom_right_latitude = this->_internal_image_bottom_right_latitude();
   uint64_t raw_image_bottom_right_latitude;
   memcpy(&raw_image_bottom_right_latitude, &tmp_image_bottom_right_latitude, sizeof(tmp_image_bottom_right_latitude));
   if (raw_image_bottom_right_latitude != 0) {
     target = stream->EnsureSpace(target);
-    target = ::_pbi::WireFormatLite::WriteDoubleToArray(18, this->_internal_image_bottom_right_latitude(), target);
+    target = ::_pbi::WireFormatLite::WriteDoubleToArray(19, this->_internal_image_bottom_right_latitude(), target);
   }
 
-  // uint32 image_total_byte = 19;
+  // uint32 image_total_byte = 20;
   if (this->_internal_image_total_byte() != 0) {
     target = stream->EnsureSpace(target);
-    target = ::_pbi::WireFormatLite::WriteUInt32ToArray(19, this->_internal_image_total_byte(), target);
+    target = ::_pbi::WireFormatLite::WriteUInt32ToArray(20, this->_internal_image_total_byte(), target);
   }
 
-  // float along_track = 20;
+  // float along_track = 21;
   static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
   float tmp_along_track = this->_internal_along_track();
   uint32_t raw_along_track;
   memcpy(&raw_along_track, &tmp_along_track, sizeof(tmp_along_track));
   if (raw_along_track != 0) {
     target = stream->EnsureSpace(target);
-    target = ::_pbi::WireFormatLite::WriteFloatToArray(20, this->_internal_along_track(), target);
+    target = ::_pbi::WireFormatLite::WriteFloatToArray(21, this->_internal_along_track(), target);
   }
 
-  // float across_track = 21;
+  // float across_track = 22;
   static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
   float tmp_across_track = this->_internal_across_track();
   uint32_t raw_across_track;
   memcpy(&raw_across_track, &tmp_across_track, sizeof(tmp_across_track));
   if (raw_across_track != 0) {
     target = stream->EnsureSpace(target);
-    target = ::_pbi::WireFormatLite::WriteFloatToArray(21, this->_internal_across_track(), target);
+    target = ::_pbi::WireFormatLite::WriteFloatToArray(22, this->_internal_across_track(), target);
   }
 
-  // string remarks = 22;
+  // string remarks = 23;
   if (!this->_internal_remarks().empty()) {
     ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
       this->_internal_remarks().data(), static_cast<int>(this->_internal_remarks().length()),
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
       "SideScanSource.remarks");
     target = stream->WriteStringMaybeAliased(
-        22, this->_internal_remarks(), target);
+        23, this->_internal_remarks(), target);
   }
 
-  // string suppose_size = 23;
+  // string suppose_size = 24;
   if (!this->_internal_suppose_size().empty()) {
     ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
       this->_internal_suppose_size().data(), static_cast<int>(this->_internal_suppose_size().length()),
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
       "SideScanSource.suppose_size");
     target = stream->WriteStringMaybeAliased(
-        23, this->_internal_suppose_size(), target);
+        24, this->_internal_suppose_size(), target);
   }
 
-  // uint32 priority = 24;
+  // uint32 priority = 25;
   if (this->_internal_priority() != 0) {
     target = stream->EnsureSpace(target);
-    target = ::_pbi::WireFormatLite::WriteUInt32ToArray(24, this->_internal_priority(), target);
+    target = ::_pbi::WireFormatLite::WriteUInt32ToArray(25, this->_internal_priority(), target);
   }
 
-  // string verify_auv_sss_image_paths = 25;
+  // string verify_auv_sss_image_paths = 26;
   if (!this->_internal_verify_auv_sss_image_paths().empty()) {
     ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
       this->_internal_verify_auv_sss_image_paths().data(), static_cast<int>(this->_internal_verify_auv_sss_image_paths().length()),
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
       "SideScanSource.verify_auv_sss_image_paths");
     target = stream->WriteStringMaybeAliased(
-        25, this->_internal_verify_auv_sss_image_paths(), target);
+        26, this->_internal_verify_auv_sss_image_paths(), target);
   }
 
-  // string verify_image_paths = 26;
+  // string verify_image_paths = 27;
   if (!this->_internal_verify_image_paths().empty()) {
     ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
       this->_internal_verify_image_paths().data(), static_cast<int>(this->_internal_verify_image_paths().length()),
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
       "SideScanSource.verify_image_paths");
     target = stream->WriteStringMaybeAliased(
-        26, this->_internal_verify_image_paths(), target);
+        27, this->_internal_verify_image_paths(), target);
   }
 
-  // string image_description = 27;
+  // string image_description = 28;
   if (!this->_internal_image_description().empty()) {
     ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
       this->_internal_image_description().data(), static_cast<int>(this->_internal_image_description().length()),
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
       "SideScanSource.image_description");
     target = stream->WriteStringMaybeAliased(
-        27, this->_internal_image_description(), target);
+        28, this->_internal_image_description(), target);
   }
 
-  // string target_longitude = 28;
+  // string target_longitude = 29;
   if (!this->_internal_target_longitude().empty()) {
     ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
       this->_internal_target_longitude().data(), static_cast<int>(this->_internal_target_longitude().length()),
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
       "SideScanSource.target_longitude");
     target = stream->WriteStringMaybeAliased(
-        28, this->_internal_target_longitude(), target);
+        29, this->_internal_target_longitude(), target);
   }
 
-  // string target_latitude = 29;
+  // string target_latitude = 30;
   if (!this->_internal_target_latitude().empty()) {
     ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
       this->_internal_target_latitude().data(), static_cast<int>(this->_internal_target_latitude().length()),
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
       "SideScanSource.target_latitude");
     target = stream->WriteStringMaybeAliased(
-        29, this->_internal_target_latitude(), target);
+        30, this->_internal_target_latitude(), target);
   }
 
-  // string position_error = 30;
+  // string position_error = 31;
   if (!this->_internal_position_error().empty()) {
     ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
       this->_internal_position_error().data(), static_cast<int>(this->_internal_position_error().length()),
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
       "SideScanSource.position_error");
     target = stream->WriteStringMaybeAliased(
-        30, this->_internal_position_error(), target);
+        31, this->_internal_position_error(), target);
   }
 
-  // string verify_cruise_number = 31;
+  // string verify_cruise_number = 32;
   if (!this->_internal_verify_cruise_number().empty()) {
     ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
       this->_internal_verify_cruise_number().data(), static_cast<int>(this->_internal_verify_cruise_number().length()),
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
       "SideScanSource.verify_cruise_number");
     target = stream->WriteStringMaybeAliased(
-        31, this->_internal_verify_cruise_number(), target);
+        32, this->_internal_verify_cruise_number(), target);
   }
 
-  // string verify_dive_number = 32;
+  // string verify_dive_number = 33;
   if (!this->_internal_verify_dive_number().empty()) {
     ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
       this->_internal_verify_dive_number().data(), static_cast<int>(this->_internal_verify_dive_number().length()),
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
       "SideScanSource.verify_dive_number");
     target = stream->WriteStringMaybeAliased(
-        32, this->_internal_verify_dive_number(), target);
+        33, this->_internal_verify_dive_number(), target);
   }
 
-  // string verify_time = 33;
+  // string verify_time = 34;
   if (!this->_internal_verify_time().empty()) {
     ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
       this->_internal_verify_time().data(), static_cast<int>(this->_internal_verify_time().length()),
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
       "SideScanSource.verify_time");
     target = stream->WriteStringMaybeAliased(
-        33, this->_internal_verify_time(), target);
+        34, this->_internal_verify_time(), target);
   }
 
-  // bool verify_flag = 34;
+  // bool verify_flag = 35;
   if (this->_internal_verify_flag() != 0) {
     target = stream->EnsureSpace(target);
-    target = ::_pbi::WireFormatLite::WriteBoolToArray(34, this->_internal_verify_flag(), target);
+    target = ::_pbi::WireFormatLite::WriteBoolToArray(35, this->_internal_verify_flag(), target);
   }
 
-  // uint32 status_flag = 35;
+  // uint32 status_flag = 36;
   if (this->_internal_status_flag() != 0) {
     target = stream->EnsureSpace(target);
-    target = ::_pbi::WireFormatLite::WriteUInt32ToArray(35, this->_internal_status_flag(), target);
+    target = ::_pbi::WireFormatLite::WriteUInt32ToArray(36, this->_internal_status_flag(), target);
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
@@ -1595,98 +1618,98 @@ size_t SideScanSource::ByteSizeLong() const {
         this->_internal_dt_time());
   }
 
-  // string horizontal_range_direction = 10;
+  // string horizontal_range_direction = 11;
   if (!this->_internal_horizontal_range_direction().empty()) {
     total_size += 1 +
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
         this->_internal_horizontal_range_direction());
   }
 
-  // string horizontal_range_value = 11;
+  // string horizontal_range_value = 12;
   if (!this->_internal_horizontal_range_value().empty()) {
     total_size += 1 +
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
         this->_internal_horizontal_range_value());
   }
 
-  // string side_scan_image_name = 14;
+  // string side_scan_image_name = 15;
   if (!this->_internal_side_scan_image_name().empty()) {
     total_size += 1 +
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
         this->_internal_side_scan_image_name());
   }
 
-  // string remarks = 22;
+  // string remarks = 23;
   if (!this->_internal_remarks().empty()) {
     total_size += 2 +
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
         this->_internal_remarks());
   }
 
-  // string suppose_size = 23;
+  // string suppose_size = 24;
   if (!this->_internal_suppose_size().empty()) {
     total_size += 2 +
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
         this->_internal_suppose_size());
   }
 
-  // string verify_auv_sss_image_paths = 25;
+  // string verify_auv_sss_image_paths = 26;
   if (!this->_internal_verify_auv_sss_image_paths().empty()) {
     total_size += 2 +
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
         this->_internal_verify_auv_sss_image_paths());
   }
 
-  // string verify_image_paths = 26;
+  // string verify_image_paths = 27;
   if (!this->_internal_verify_image_paths().empty()) {
     total_size += 2 +
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
         this->_internal_verify_image_paths());
   }
 
-  // string image_description = 27;
+  // string image_description = 28;
   if (!this->_internal_image_description().empty()) {
     total_size += 2 +
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
         this->_internal_image_description());
   }
 
-  // string target_longitude = 28;
+  // string target_longitude = 29;
   if (!this->_internal_target_longitude().empty()) {
     total_size += 2 +
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
         this->_internal_target_longitude());
   }
 
-  // string target_latitude = 29;
+  // string target_latitude = 30;
   if (!this->_internal_target_latitude().empty()) {
     total_size += 2 +
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
         this->_internal_target_latitude());
   }
 
-  // string position_error = 30;
+  // string position_error = 31;
   if (!this->_internal_position_error().empty()) {
     total_size += 2 +
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
         this->_internal_position_error());
   }
 
-  // string verify_cruise_number = 31;
+  // string verify_cruise_number = 32;
   if (!this->_internal_verify_cruise_number().empty()) {
     total_size += 2 +
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
         this->_internal_verify_cruise_number());
   }
 
-  // string verify_dive_number = 32;
+  // string verify_dive_number = 33;
   if (!this->_internal_verify_dive_number().empty()) {
     total_size += 2 +
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
         this->_internal_verify_dive_number());
   }
 
-  // string verify_time = 33;
+  // string verify_time = 34;
   if (!this->_internal_verify_time().empty()) {
     total_size += 2 +
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
@@ -1711,7 +1734,16 @@ size_t SideScanSource::ByteSizeLong() const {
     total_size += 1 + 8;
   }
 
-  // float dt_speed = 9;
+  // double depth = 9;
+  static_assert(sizeof(uint64_t) == sizeof(double), "Code assumes uint64_t and double are the same size.");
+  double tmp_depth = this->_internal_depth();
+  uint64_t raw_depth;
+  memcpy(&raw_depth, &tmp_depth, sizeof(tmp_depth));
+  if (raw_depth != 0) {
+    total_size += 1 + 8;
+  }
+
+  // float dt_speed = 10;
   static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
   float tmp_dt_speed = this->_internal_dt_speed();
   uint32_t raw_dt_speed;
@@ -1720,7 +1752,7 @@ size_t SideScanSource::ByteSizeLong() const {
     total_size += 1 + 4;
   }
 
-  // float height_from_bottom = 12;
+  // float height_from_bottom = 13;
   static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
   float tmp_height_from_bottom = this->_internal_height_from_bottom();
   uint32_t raw_height_from_bottom;
@@ -1729,16 +1761,16 @@ size_t SideScanSource::ByteSizeLong() const {
     total_size += 1 + 4;
   }
 
-  // double image_top_left_longitude = 15;
+  // double image_top_left_longitude = 16;
   static_assert(sizeof(uint64_t) == sizeof(double), "Code assumes uint64_t and double are the same size.");
   double tmp_image_top_left_longitude = this->_internal_image_top_left_longitude();
   uint64_t raw_image_top_left_longitude;
   memcpy(&raw_image_top_left_longitude, &tmp_image_top_left_longitude, sizeof(tmp_image_top_left_longitude));
   if (raw_image_top_left_longitude != 0) {
-    total_size += 1 + 8;
+    total_size += 2 + 8;
   }
 
-  // double image_top_left_latitude = 16;
+  // double image_top_left_latitude = 17;
   static_assert(sizeof(uint64_t) == sizeof(double), "Code assumes uint64_t and double are the same size.");
   double tmp_image_top_left_latitude = this->_internal_image_top_left_latitude();
   uint64_t raw_image_top_left_latitude;
@@ -1747,7 +1779,7 @@ size_t SideScanSource::ByteSizeLong() const {
     total_size += 2 + 8;
   }
 
-  // float r_theta = 13;
+  // float r_theta = 14;
   static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
   float tmp_r_theta = this->_internal_r_theta();
   uint32_t raw_r_theta;
@@ -1756,14 +1788,14 @@ size_t SideScanSource::ByteSizeLong() const {
     total_size += 1 + 4;
   }
 
-  // uint32 image_total_byte = 19;
+  // uint32 image_total_byte = 20;
   if (this->_internal_image_total_byte() != 0) {
     total_size += 2 +
       ::_pbi::WireFormatLite::UInt32Size(
         this->_internal_image_total_byte());
   }
 
-  // double image_bottom_right_longitude = 17;
+  // double image_bottom_right_longitude = 18;
   static_assert(sizeof(uint64_t) == sizeof(double), "Code assumes uint64_t and double are the same size.");
   double tmp_image_bottom_right_longitude = this->_internal_image_bottom_right_longitude();
   uint64_t raw_image_bottom_right_longitude;
@@ -1772,7 +1804,7 @@ size_t SideScanSource::ByteSizeLong() const {
     total_size += 2 + 8;
   }
 
-  // double image_bottom_right_latitude = 18;
+  // double image_bottom_right_latitude = 19;
   static_assert(sizeof(uint64_t) == sizeof(double), "Code assumes uint64_t and double are the same size.");
   double tmp_image_bottom_right_latitude = this->_internal_image_bottom_right_latitude();
   uint64_t raw_image_bottom_right_latitude;
@@ -1781,7 +1813,7 @@ size_t SideScanSource::ByteSizeLong() const {
     total_size += 2 + 8;
   }
 
-  // float along_track = 20;
+  // float along_track = 21;
   static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
   float tmp_along_track = this->_internal_along_track();
   uint32_t raw_along_track;
@@ -1790,7 +1822,7 @@ size_t SideScanSource::ByteSizeLong() const {
     total_size += 2 + 4;
   }
 
-  // float across_track = 21;
+  // float across_track = 22;
   static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
   float tmp_across_track = this->_internal_across_track();
   uint32_t raw_across_track;
@@ -1799,19 +1831,19 @@ size_t SideScanSource::ByteSizeLong() const {
     total_size += 2 + 4;
   }
 
-  // uint32 priority = 24;
+  // uint32 priority = 25;
   if (this->_internal_priority() != 0) {
     total_size += 2 +
       ::_pbi::WireFormatLite::UInt32Size(
         this->_internal_priority());
   }
 
-  // bool verify_flag = 34;
+  // bool verify_flag = 35;
   if (this->_internal_verify_flag() != 0) {
     total_size += 2 + 1;
   }
 
-  // uint32 status_flag = 35;
+  // uint32 status_flag = 36;
   if (this->_internal_status_flag() != 0) {
     total_size += 2 +
       ::_pbi::WireFormatLite::UInt32Size(
@@ -1909,6 +1941,13 @@ void SideScanSource::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const :
   memcpy(&raw_latitude, &tmp_latitude, sizeof(tmp_latitude));
   if (raw_latitude != 0) {
     _this->_internal_set_latitude(from._internal_latitude());
+  }
+  static_assert(sizeof(uint64_t) == sizeof(double), "Code assumes uint64_t and double are the same size.");
+  double tmp_depth = from._internal_depth();
+  uint64_t raw_depth;
+  memcpy(&raw_depth, &tmp_depth, sizeof(tmp_depth));
+  if (raw_depth != 0) {
+    _this->_internal_set_depth(from._internal_depth());
   }
   static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
   float tmp_dt_speed = from._internal_dt_speed();

@@ -129,8 +129,8 @@ void CBaseCommand::logic_insert_side_scan_source_data(const CMessage_Source& sou
     {
         SideScanSource source = sourceDataList.list().at(i);
 
-		sprintf(sql, "REPLACE INTO t_source_data_side_scan VALUES('%s', '%s', '%s', '%s', '%s', '%s', %f, %f, %f, '%s', '%s', %f, %f, '%s', %f, %f, %f, %f, %d, %f, %f, '%s', '%s', %d, '%s', '%s', '%s', '%s', '%s', '%s', '%s','%s', '%s', '%d', 0)", 
-				source.id().data(), source.cruise_number().data(), source.dive_number().data(), source.scan_line().data(), source.cruise_year().data(), source.dt_time().data(), source.longitude(), source.latitude(), 
+		sprintf(sql, "REPLACE INTO t_source_data_side_scan VALUES('%s', '%s', '%s', '%s', '%s', '%s', %f, %f, %f, %f, '%s', '%s', %f, %f, '%s', %f, %f, %f, %f, %d, %f, %f, '%s', '%s', %d, '%s', '%s', '%s', '%s', '%s', '%s', '%s','%s', '%s', '%d', 0)", 
+				source.id().data(), source.cruise_number().data(), source.dive_number().data(), source.scan_line().data(), source.cruise_year().data(), source.dt_time().data(), source.longitude(), source.latitude(), source.depth(),
 				source.dt_speed(), source.horizontal_range_direction().data(),  source.horizontal_range_value().data(), source.height_from_bottom(), source.r_theta(), source.side_scan_image_name().data(), source.image_top_left_longitude(),
 				source.image_top_left_latitude(), source.image_bottom_right_longitude(), source.image_bottom_right_latitude(), source.image_total_byte(), source.along_track(),  source.across_track(), source.remarks().data(), source.suppose_size().data(), 
 				source.priority(), source.verify_auv_sss_image_paths().data(), source.verify_image_paths().data(),  source.image_description().data(),  source.target_longitude().data(), source.target_latitude().data(), 
