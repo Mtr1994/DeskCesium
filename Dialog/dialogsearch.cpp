@@ -61,6 +61,7 @@ void DialogSearch::init()
     mModelSideScanSource.setHorizontalHeaderItem(FIELD_DT_TIME, new QStandardItem(tr("拖体记录时间")));
     mModelSideScanSource.setHorizontalHeaderItem(FIELD_LONGITUDE, new QStandardItem(tr("经度")));
     mModelSideScanSource.setHorizontalHeaderItem(FIELD_LATITUDE, new QStandardItem(tr("纬度")));
+    mModelSideScanSource.setHorizontalHeaderItem(FIELD_DEPTH, new QStandardItem(tr("深度")));
     mModelSideScanSource.setHorizontalHeaderItem(FIELD_DT_SPEED, new QStandardItem(tr("拖体速度")));
     mModelSideScanSource.setHorizontalHeaderItem(FIELD_HORIZONTAL_RANGE_DIRECTION, new QStandardItem(tr("水平距离方向")));
     mModelSideScanSource.setHorizontalHeaderItem(FIELD_FIELD_HORIZONTAL_RANGE_VALUE, new QStandardItem(tr("水平距离值")));
@@ -72,7 +73,7 @@ void DialogSearch::init()
     mModelSideScanSource.setHorizontalHeaderItem(FIELD_IMAGE_TOP_LEFT_LATITUDE, new QStandardItem(tr("左上角纬度")));
     mModelSideScanSource.setHorizontalHeaderItem(FIELD_IMAGE_BOTTOM_RIGHT_LONGITUDE, new QStandardItem(tr("右下角经度")));
     mModelSideScanSource.setHorizontalHeaderItem(FIELD_IMAGE_BOTTOM_RIGHT_LATITUDE, new QStandardItem(tr("右下角纬度")));
-    mModelSideScanSource.setHorizontalHeaderItem(FILD_IMAGE_TOTAL_BYTE, new QStandardItem(tr("图片字节大小")));
+    mModelSideScanSource.setHorizontalHeaderItem(FIELD_IMAGE_TOTAL_BYTE, new QStandardItem(tr("图片字节大小")));
 
     mModelSideScanSource.setHorizontalHeaderItem(FIELD_ALONG_TRACK, new QStandardItem(tr("长")));
     mModelSideScanSource.setHorizontalHeaderItem(FIELD_ACROSS_TRACK, new QStandardItem(tr("宽")));
@@ -109,6 +110,7 @@ void DialogSearch::init()
     ui->tblvSideScanSource->setColumnHidden(FIELD_DT_TIME, true);
     ui->tblvSideScanSource->setColumnHidden(FIELD_LONGITUDE, false);
     ui->tblvSideScanSource->setColumnHidden(FIELD_LATITUDE, false);
+    ui->tblvSideScanSource->setColumnHidden(FIELD_DEPTH, true);
     ui->tblvSideScanSource->setColumnHidden(FIELD_DT_SPEED, true);
     ui->tblvSideScanSource->setColumnHidden(FIELD_HORIZONTAL_RANGE_DIRECTION, true);
     ui->tblvSideScanSource->setColumnHidden(FIELD_FIELD_HORIZONTAL_RANGE_VALUE, true);
@@ -119,7 +121,7 @@ void DialogSearch::init()
     ui->tblvSideScanSource->setColumnHidden(FIELD_IMAGE_TOP_LEFT_LATITUDE, true);
     ui->tblvSideScanSource->setColumnHidden(FIELD_IMAGE_BOTTOM_RIGHT_LONGITUDE, true);
     ui->tblvSideScanSource->setColumnHidden(FIELD_IMAGE_BOTTOM_RIGHT_LATITUDE, true);
-    ui->tblvSideScanSource->setColumnHidden(FILD_IMAGE_TOTAL_BYTE, false);
+    ui->tblvSideScanSource->setColumnHidden(FIELD_IMAGE_TOTAL_BYTE, false);
     ui->tblvSideScanSource->setColumnHidden(FIELD_ALONG_TRACK, true);
     ui->tblvSideScanSource->setColumnHidden(FIELD_ACROSS_TRACK, true);
     ui->tblvSideScanSource->setColumnHidden(FIELD_REMARKS, false);
@@ -204,19 +206,20 @@ void DialogSearch::slot_recv_socket_data(uint64_t dwconnid, const std::string &d
             listItem.append(new QStandardItem(response.list().at(i).dt_time().data()));
             listItem.append(new QStandardItem(QString::number(response.list().at(i).longitude(), 'f', 6)));
             listItem.append(new QStandardItem(QString::number(response.list().at(i).latitude(), 'f', 6)));
-            listItem.append(new QStandardItem(QString::number(response.list().at(i).dt_speed(), 'f', 6)));
+            listItem.append(new QStandardItem(QString::number(response.list().at(i).depth(), 'f', 2)));
+            listItem.append(new QStandardItem(QString::number(response.list().at(i).dt_speed(), 'f', 2)));
             listItem.append(new QStandardItem(response.list().at(i).horizontal_range_direction().data()));
             listItem.append(new QStandardItem(response.list().at(i).horizontal_range_value().data()));
-            listItem.append(new QStandardItem(QString::number(response.list().at(i).height_from_bottom(), 'f', 6)));
-            listItem.append(new QStandardItem(QString::number(response.list().at(i).r_theta(), 'f', 6)));
+            listItem.append(new QStandardItem(QString::number(response.list().at(i).height_from_bottom(), 'f', 2)));
+            listItem.append(new QStandardItem(QString::number(response.list().at(i).r_theta(), 'f', 2)));
             listItem.append(new QStandardItem(response.list().at(i).side_scan_image_name().data()));
             listItem.append(new QStandardItem(QString::number(response.list().at(i).image_top_left_longitude(), 'f', 6)));
             listItem.append(new QStandardItem(QString::number(response.list().at(i).image_top_left_latitude(), 'f', 6)));
             listItem.append(new QStandardItem(QString::number(response.list().at(i).image_bottom_right_longitude(), 'f', 6)));
             listItem.append(new QStandardItem(QString::number(response.list().at(i).image_bottom_right_latitude(), 'f', 6)));
             listItem.append(new QStandardItem(QString::number(response.list().at(i).image_total_byte())));
-            listItem.append(new QStandardItem(QString::number(response.list().at(i).along_track(), 'f', 6)));
-            listItem.append(new QStandardItem(QString::number(response.list().at(i).across_track(), 'f', 6)));
+            listItem.append(new QStandardItem(QString::number(response.list().at(i).along_track(), 'f', 2)));
+            listItem.append(new QStandardItem(QString::number(response.list().at(i).across_track(), 'f', 2)));
             listItem.append(new QStandardItem(response.list().at(i).remarks().data()));
             listItem.append(new QStandardItem(response.list().at(i).suppose_size().data()));
             listItem.append(new QStandardItem(QString::number(response.list().at(i).priority())));
@@ -429,7 +432,7 @@ void DialogSearch::slot_btn_extract_clicked()
 
     for (auto &index : listIndex)
     {
-        QStringList listItemName = {"id", "cruise_number", "dive_number", "scan_line", "cruise_year", "dt_time", "longitude", "latitude", "dt_speed", "horizontal_range_direction", "horizontal_range_value", "height_from_bottom", "r_theta", "side_scan_image_name", "image_top_left_longitude", "image_top_left_latitude", "image_bottom_right_longitude", "image_bottom_right_latitude", "image_total_byte", "along_track", "across_track", "remarks", "suppose_size", "priority", "verify_auv_sss_image_paths", "verify_image_paths", "image_description", "target_longitude", "target_latitude", "position_error", "verify_cruise_number", "verify_dive_number", "verify_time", "verify_flag"};
+        QStringList listItemName = {"id", "cruise_number", "dive_number", "scan_line", "cruise_year", "dt_time", "longitude", "latitude", "depth", "dt_speed", "horizontal_range_direction", "horizontal_range_value", "height_from_bottom", "r_theta", "side_scan_image_name", "image_top_left_longitude", "image_top_left_latitude", "image_bottom_right_longitude", "image_bottom_right_latitude", "image_total_byte", "along_track", "across_track", "remarks", "suppose_size", "priority", "verify_auv_sss_image_paths", "verify_image_paths", "image_description", "target_longitude", "target_latitude", "position_error", "verify_cruise_number", "verify_dive_number", "verify_time", "verify_flag"};
         QStringList listValues;
         QString cruiseNumber;
         QString diveNumber;

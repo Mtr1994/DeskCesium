@@ -438,6 +438,14 @@ QScrollBar::sub-line {
     subcontrol-origin:margin;
 }
 
+QScrollBar::sub-page {
+    background: rgba(0, 0, 0, 6);
+}
+
+QScrollBar::add-page {
+    background: rgba(0, 0, 0, 6);
+}
+
 /* QTextEdit */
 QTextEdit#textEditUploadStatus
 {

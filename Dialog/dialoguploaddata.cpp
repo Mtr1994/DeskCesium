@@ -472,7 +472,7 @@ void DialogUploadData::checkData()
             QString supposeSize = getCellValue(cell).toString();
             if (nullptr != cell && cell->hasFormula())
             {
-                supposeSize = QString::number(supposeSize.toDouble(), 'f', 6);
+                supposeSize = QString::number(supposeSize.toDouble(), 'f', 2);
             }
             source->set_suppose_size(supposeSize.toStdString());
             if (source->suppose_size().size() >= 32)

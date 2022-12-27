@@ -200,6 +200,9 @@ function init() {
 				if (undefined === remoteObject) {
 					glSelectRemoteID = ""
 					entityDescription.style.visibility = "hidden";
+					
+					let elementDivEmptyImage = document.getElementById("div-empty-image");
+					elementDivEmptyImage.style.visibility = "hidden" 
 				} else {
 					// 记录选中 ID
 					glSelectRemoteID = remoteObject.id
@@ -227,8 +230,8 @@ function init() {
 					elementTextLatitude.parentNode.title = textLatitude
 					
 					let elementTextDepth = document.getElementById("text-altitude");
-					elementTextDepth.innerHTML = "---"
-					elementTextDepth.parentNode.title = "---"
+					elementTextDepth.innerHTML = remoteObject.depth + " 米"
+					elementTextDepth.parentNode.title = remoteObject.depth + " 米"
 					
 					let elementTextDtSpeed = document.getElementById("text-dt-speed");
 					let textDtSpeed = remoteObject.dt_speed === "" ? "---" : remoteObject.dt_speed + " Knot"
