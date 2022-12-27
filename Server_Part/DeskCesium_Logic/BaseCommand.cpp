@@ -452,6 +452,7 @@ void CBaseCommand::logic_query_side_scan_source_data_by_filter(const CMessage_So
 			source->set_dt_time(conn->value(index++));
 			source->set_longitude(stod(conn->value(index++)));
 			source->set_latitude(stod(conn->value(index++)));
+			source->set_depth(stod(conn->value(index++)));
 			source->set_dt_speed(stof(conn->value(index++)));
 			source->set_horizontal_range_direction(conn->value(index++));
 			source->set_horizontal_range_value(conn->value(index++));
@@ -550,6 +551,7 @@ void CBaseCommand::logic_query_side_scan_source_data_by_keyword(const CMessage_S
 			source->set_dt_time(conn->value(index++));
 			source->set_longitude(stod(conn->value(index++)));
 			source->set_latitude(stod(conn->value(index++)));
+			source->set_depth(stod(conn->value(index++)));
 			source->set_dt_speed(stof(conn->value(index++)));
 			source->set_horizontal_range_direction(conn->value(index++));
 			source->set_horizontal_range_value(conn->value(index++));
