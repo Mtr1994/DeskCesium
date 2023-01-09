@@ -58,6 +58,17 @@ QWidget#widgetSearchStatistics
     min-height: 2.4em;
 }
 
+QWidget#widgetStatisticsBase
+{
+    min-width: 64em;
+    max-width: 64em;
+}
+
+QWidget#widgetChartBase
+{
+    min-height: 24em;
+}
+
 /* QPushButton */
 QPushButton[Ok="true"]
 {
@@ -476,6 +487,19 @@ QLabel[SelectTitle]
     font-weight: bold;
 }
 
+QLabel[TitleA]
+{
+    font: 12pt "Microsoft Yahei";
+    min-height: 3.2em;
+}
+
+QLabel[TitleIcon]
+{
+    min-width: 0.8em;
+    min-height: 3.2em;
+    image: url(:/Resource/image/vertical-line.svg);
+}
+
 /*QTabWidget */
 QTabWidget
 {
@@ -489,7 +513,6 @@ QTabWidget::pane
     border: 1px solid #f0f0f0;
 }
 
-
 /*QFrame*/
 QFrame[GrayLine]
 {
@@ -498,3 +521,19 @@ QFrame[GrayLine]
     max-height: 1px;
     background-color: #f0f0f0;
 }
+
+QFrame[TitleLine]
+{
+    background-color: #eaeaea;
+    border: none;
+    max-height: 1px;
+    margin: 0em 0em;
+}
+
+/* QTextBrowser */
+QTextBrowser#textBrowserSurvey
+{
+    border: 1px solid transparent;
+}
+
+

@@ -97,6 +97,18 @@
 			暂无查证照片
 		</div>
 	</div>
+	
+	<div id="entityTrajectoryDescription" class="div-entity-trajectory-description" ondrop="handleDrop(event)" ondragover="handleDragOver(event)">
+		<div class="div-title-container">
+			<h3>轨迹详细信息</h3>
+		</div>
+		<div class="text-div" style="width: 100%;">
+			测线名称：<span class="text-value" id="text-line-name">TS-26-DT07-LL01-073</span>
+		</div>
+		<div class="text-div" style="width: 100%;">
+			测线长度：<span class="text-value" id="text-line-length">400 米</span>
+		</div>
+	</div>
 
 <style>
 	.div-cesium-viewer {
@@ -124,7 +136,7 @@
 		line-height: 1.5;
 		font-family: '苹方-简,sans-serif'
 	}
-	.div-entity-description {
+	.div-entity-description, .div-entity-trajectory-description{
 		position:absolute;
 		z-index:12;
 		right: 8px;

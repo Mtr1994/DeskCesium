@@ -9,6 +9,7 @@
 #include "Public/appconfig.h"
 #include "Dialog/dialoguploaddata.h"
 #include "Dialog/dialogsearch.h"
+#include "Dialog/dialogstatistics.h"
 #include "Control/Message/messagewidget.h"
 
 #include <QScreen>
@@ -79,15 +80,17 @@ void MainWindow::init()
     ui->widgetCesium->settings()->setAttribute(QWebEngineSettings::WebGLEnabled, true);
     ui->widgetCesium->settings()->setAttribute(QWebEngineSettings::LocalContentCanAccessRemoteUrls, true);
 
+    //ui->widgetCesium->page()->load(QUrl(QString("%1/resource/html/index.html").arg(QApplication::applicationDirPath())).toString());
     ui->widgetCesium->page()->load(QUrl(QString("%1/../Resource/html/index.html").arg(QApplication::applicationDirPath())).toString());
+
     ui->widgetCesium->page()->setBackgroundColor(QColor(0, 0, 0));
     ui->widgetCesium->setVisible(false);
 
     ////// 网页调试部分，发布时请注释此段代码 S
-//    QWebEngineView *debugPage = new QWebEngineView;
-//    ui->widgetCesium->page()->setDevToolsPage(debugPage->page());
-//    ui->widgetCesium->page()->triggerAction(QWebEnginePage::WebAction::InspectElement);
-//    debugPage->show();
+    QWebEngineView *debugPage = new QWebEngineView;
+    ui->widgetCesium->page()->setDevToolsPage(debugPage->page());
+    ui->widgetCesium->page()->triggerAction(QWebEnginePage::WebAction::InspectElement);
+    debugPage->show();
     ////// 网页调试部分，发布时请注释此段代码 E
 
     // 菜单
@@ -99,8 +102,13 @@ void MainWindow::init()
     connect(ui->actionKeywordSearch, &QAction::triggered, this, &MainWindow::slot_menu_keyword_search_click);
     connect(ui->actionFilterSearch, &QAction::triggered, this, &MainWindow::slot_menu_filter_search_click);
 
+    // 统计
+    connect(ui->actionDataStatistics, &QAction::triggered, this, [this]{ DialogStatistics dialog(this); dialog.exec(); });
+
+    // 设置
     connect(ui->actionSetting, &QAction::triggered, this, [this]{ DialogSetting dialog(this); dialog.exec(); });
 
+    // 工具
     connect(ui->actionMeasureLine, &QAction::triggered, this, &MainWindow::slot_start_measure_line);
     connect(ui->actionMeasurePolygn, &QAction::triggered, this, &MainWindow::slot_start_measure_polygn);
 

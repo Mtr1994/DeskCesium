@@ -278,10 +278,10 @@
   </action>
   <action name="actionDataStatistics">
    <property name="text">
-    <string>数据统计</string>
+    <string>专项调查任务统计</string>
    </property>
    <property name="toolTip">
-    <string>数据统计</string>
+    <string>专项调查任务统计</string>
    </property>
   </action>
  </widget>

@@ -446,7 +446,7 @@ void DialogUploadData::checkData()
                 source->set_image_bottom_right_latitude(bottomRightLatitude);
                 source->set_image_total_byte(sideScanImageInfo.size());
 
-                DataUploadTask task = {"upload", QString("upload/%1/image").arg(cruiseNumber).toStdString(), sideScanImageInfo.absoluteFilePath().toStdString()};
+                DataUploadTask task = {"upload", QString("upload/%1/image").arg(source->cruise_number().data()).toStdString(), sideScanImageInfo.absoluteFilePath().toStdString()};
                 mTaskQueue.append(task);
             }
 
@@ -599,7 +599,7 @@ void DialogUploadData::checkData()
                         if (!auvImagePaths.isEmpty()) auvImagePaths.append(";");
                         auvImagePaths.append(auvImageInfo.fileName());
 
-                        DataUploadTask task = {"upload", QString("upload/%1/image").arg(cruiseNumber).toStdString(), auvImageInfo.absoluteFilePath().toStdString()};
+                        DataUploadTask task = {"upload", QString("upload/%1/image").arg(source->cruise_number().data()).toStdString(), auvImageInfo.absoluteFilePath().toStdString()};
                         mTaskQueue.append(task);
                     }
 
@@ -619,7 +619,7 @@ void DialogUploadData::checkData()
                         if (!imagePaths.isEmpty()) imagePaths.append(";");
                         imagePaths.append(imageInfo.fileName());
 
-                        DataUploadTask task = {"upload", QString("upload/%1/image").arg(cruiseNumber).toStdString(), imageInfo.absoluteFilePath().toStdString()};
+                        DataUploadTask task = {"upload", QString("upload/%1/image").arg(source->cruise_number().data()).toStdString(), imageInfo.absoluteFilePath().toStdString()};
                         mTaskQueue.append(task);
                     }
                 }
@@ -953,6 +953,7 @@ void DialogUploadData::slot_recv_socket_data(uint64_t dwconnid, const std::strin
             });
             connect(mFtpManager, &FtpManager::sgl_ftp_upload_task_finish, this, [this](const QString &file, bool status, const QString &message)
             {
+                Q_UNUSED(message);
                 if (status)
                 {
                     emit sgl_thread_report_check_status(STATUS_SUCCESS, QString("上传文件成功 %1").arg(file), false);

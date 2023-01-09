@@ -252,6 +252,9 @@ void DialogSearch::slot_recv_socket_data(uint64_t dwconnid, const std::string &d
 
         if (!status) return;
 
+        // 没有找到轨迹线，直接返回
+        if (!response.status()) return;
+
         // 添加 kml 文件轨迹
         emit AppSignal::getInstance()->sgl_add_remote_trajectory_entity(QString::fromStdString(response.id()), QString::fromStdString(response.position_chain()));
     }

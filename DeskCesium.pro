@@ -40,11 +40,14 @@ INCLUDEPATH += $$PWD/Sdk/hpsocket/include
 DESTDIR = ../output
 
 SOURCES += \
+    Channel/chartcontext.cpp \
     Channel/jscontext.cpp \
+    Channel/surveycontext.cpp \
     Control/Message/messagewidget.cpp \
     Dialog/dialogabout.cpp \
     Dialog/dialogsearch.cpp \
     Dialog/dialogsetting.cpp \
+    Dialog/dialogstatistics.cpp \
     Dialog/dialoguploaddata.cpp \
     EntityTreeWidget/entitytreewidget.cpp \
     Ftp/ftpmanager.cpp \
@@ -59,12 +62,15 @@ SOURCES += \
     mainwindow.cpp
 
 HEADERS += \
+    Channel/chartcontext.h \
     Channel/jscontext.h \
+    Channel/surveycontext.h \
     Common/common.h \
     Control/Message/messagewidget.h \
     Dialog/dialogabout.h \
     Dialog/dialogsearch.h \
     Dialog/dialogsetting.h \
+    Dialog/dialogstatistics.h \
     Dialog/dialoguploaddata.h \
     EntityTreeWidget/entitytreewidget.h \
     Ftp/ftpmanager.h \
@@ -82,6 +88,7 @@ FORMS += \
     Dialog/dialogabout.ui \
     Dialog/dialogsearch.ui \
     Dialog/dialogsetting.ui \
+    Dialog/dialogstatistics.ui \
     Dialog/dialoguploaddata.ui \
     Widget/widgetselectparameter.ui \
     mainwindow.ui

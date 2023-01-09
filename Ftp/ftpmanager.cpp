@@ -208,7 +208,8 @@ void FtpProtocol::slot_socket_file_data_close()
 
 void FtpProtocol::slot_socket_command_connect()
 {
-    emit sgl_ftp_connect_status_change(true);
+    // socket 连上不代表登录成功
+    //emit sgl_ftp_connect_status_change(true);
 }
 
 void FtpProtocol::slot_socket_command_close()

@@ -186,128 +186,133 @@ function init() {
 	var handler = new Cesium.ScreenSpaceEventHandler(cesiumViewer.scene.canvas);
 	handler.setInputAction(function (movement) {
 		var pick = cesiumViewer.scene.pick(movement.position);
-		let entityDescription = document.getElementById("entityDescription");
+		let entityDescription = document.getElementById("entityDescription")
+		let entityTrajectoryDescription = document.getElementById("entityTrajectoryDescription")
 		if (undefined === pick) {
 			glSelectRemoteID = ""
 			if (undefined !== entityDescription) {
-				entityDescription.style.visibility = "hidden";
-				let elementDivEmptyImage = document.getElementById("div-empty-image");
+				entityDescription.style.visibility = "hidden"
+				entityTrajectoryDescription.style.visibility = "hidden"
+				let elementDivEmptyImage = document.getElementById("div-empty-image")
 				elementDivEmptyImage.style.visibility = "hidden" 
 			}
 		} else {
 			if (undefined !== entityDescription) {
-				let remoteObject = pick.id.remoteDescription;
+				let remoteObject = pick.id.remoteDescription
 				if (undefined === remoteObject) {
 					glSelectRemoteID = ""
-					entityDescription.style.visibility = "hidden";
+					entityDescription.style.visibility = "hidden"
+					entityTrajectoryDescription.style.visibility = "hidden"
 					
-					let elementDivEmptyImage = document.getElementById("div-empty-image");
+					let elementDivEmptyImage = document.getElementById("div-empty-image")
 					elementDivEmptyImage.style.visibility = "hidden" 
-				} else {
+				} else if (pick.id.remoteType == "remote error point"){
+					// 隐藏另一个可能存在的详细页面
+					entityTrajectoryDescription.style.visibility = "hidden"
 					// 记录选中 ID
 					glSelectRemoteID = remoteObject.id
 					
-					let elementTextPriority = document.getElementById("text-priority");
+					let elementTextPriority = document.getElementById("text-priority")
 					elementTextPriority.innerHTML = remoteObject.priority
 					
-					let elementTextId = document.getElementById("text-id");
+					let elementTextId = document.getElementById("text-id")
 					elementTextId.innerHTML = remoteObject.id
 					elementTextId.parentNode.title = remoteObject.id
 					
-					let elementTextDtTime = document.getElementById("text-dt-time");
+					let elementTextDtTime = document.getElementById("text-dt-time")
 					let textDtTime = remoteObject.dt_time === "" ? "---" : remoteObject.dt_time
 					elementTextDtTime.innerHTML = textDtTime
 					elementTextDtTime.parentNode.title = textDtTime
 					
-					let elementTextLongitude = document.getElementById("text-longitude");
+					let elementTextLongitude = document.getElementById("text-longitude")
 					let textLongitude = remoteObject.longitude === "" ? "---" : remoteObject.longitude
 					elementTextLongitude.innerHTML = textLongitude
 					elementTextLongitude.parentNode.title = textLongitude
 					
-					let elementTextLatitude = document.getElementById("text-latitude");
+					let elementTextLatitude = document.getElementById("text-latitude")
 					let textLatitude = remoteObject.latitude === "" ? "---" : remoteObject.latitude
 					elementTextLatitude.innerHTML = textLatitude
 					elementTextLatitude.parentNode.title = textLatitude
 					
-					let elementTextDepth = document.getElementById("text-altitude");
+					let elementTextDepth = document.getElementById("text-altitude")
 					elementTextDepth.innerHTML = remoteObject.depth + " 米"
 					elementTextDepth.parentNode.title = remoteObject.depth + " 米"
 					
-					let elementTextDtSpeed = document.getElementById("text-dt-speed");
+					let elementTextDtSpeed = document.getElementById("text-dt-speed")
 					let textDtSpeed = remoteObject.dt_speed === "" ? "---" : remoteObject.dt_speed + " Knot"
 					elementTextDtSpeed.innerHTML = textDtSpeed
 					elementTextDtSpeed.parentNode.title = textDtSpeed
 					
-					let elementTextHorizontalRangeValue = document.getElementById("text-horizontal-range-value");
+					let elementTextHorizontalRangeValue = document.getElementById("text-horizontal-range-value")
 					let textHorizontalRangeValueA = remoteObject.horizontal_range_direction === "" ? "---" : remoteObject.horizontal_range_direction
 					let textHorizontalRangeValueB = remoteObject.horizontal_range_value === "" ? "---" : remoteObject.horizontal_range_value + " 米"
 					elementTextHorizontalRangeValue.innerHTML = textHorizontalRangeValueA + " / " + textHorizontalRangeValueB
 					elementTextHorizontalRangeValue.parentNode.title = textHorizontalRangeValueA + " / " + textHorizontalRangeValueB
 					
-					let elementTextHeightFromBottom = document.getElementById("text-height-from-bottom");
+					let elementTextHeightFromBottom = document.getElementById("text-height-from-bottom")
 					let textHeightFromBottom = remoteObject.height_from_bottom === "" ? "---" : remoteObject.height_from_bottom + " 米"
 					elementTextHeightFromBottom.innerHTML = textHeightFromBottom
 					elementTextHeightFromBottom.parentNode.title = textHeightFromBottom
 					
-					let elementTextRTheta = document.getElementById("text-r-theta");
+					let elementTextRTheta = document.getElementById("text-r-theta")
 					let textRTheta  = remoteObject.r_theta === "" ? "---" : remoteObject.r_theta
 					elementTextRTheta.innerHTML = textRTheta
 					elementTextRTheta.parentNode.title = textRTheta
 					
-					let elementTextAlongTrack = document.getElementById("text-along-track");
+					let elementTextAlongTrack = document.getElementById("text-along-track")
 					let textAlongTrack  = remoteObject.along_track === "" ? "---" : remoteObject.along_track + " 米"
 					elementTextAlongTrack.innerHTML = textAlongTrack
 					elementTextAlongTrack.parentNode.title = textAlongTrack
 					
-					let elementTextAcrossTrack = document.getElementById("text-across-track");
+					let elementTextAcrossTrack = document.getElementById("text-across-track")
 					let textAcrossTrack  = remoteObject.across_track === "" ? "---" : remoteObject.across_track + " 米"
 					elementTextAcrossTrack.innerHTML = textAcrossTrack
 					elementTextAcrossTrack.parentNode.title = textAcrossTrack
 					
-					let elementTextRemarks = document.getElementById("text-remarks");
+					let elementTextRemarks = document.getElementById("text-remarks")
 					let textRemarks  = remoteObject.remarks === "" ? "---" : remoteObject.remarks
 					elementTextRemarks.innerHTML = textRemarks
 					elementTextRemarks.parentNode.title = textRemarks
 					
-					let elementTextSupposeSize = document.getElementById("text-suppose-size");
+					let elementTextSupposeSize = document.getElementById("text-suppose-size")
 					let textSupposeSize  = remoteObject.suppose_size === "" ? "---" : remoteObject.suppose_size + " 米"
 					elementTextSupposeSize.innerHTML = textSupposeSize
 					elementTextSupposeSize.parentNode.title = textSupposeSize
 					
 					// 查证信息
-					let elementTextTargetLongitude = document.getElementById("text-target-longitude");
+					let elementTextTargetLongitude = document.getElementById("text-target-longitude")
 					let textTargetLongitude = remoteObject.target_longitude === "" ? "---" : remoteObject.target_longitude
 					elementTextTargetLongitude.innerHTML = textTargetLongitude
 					elementTextTargetLongitude.parentNode.title = textTargetLongitude
 					
-					let elementTextTargetLatitude = document.getElementById("text-target-latitude");
+					let elementTextTargetLatitude = document.getElementById("text-target-latitude")
 					let textTargetLatitude = remoteObject.target_latitude === "" ? "---" : remoteObject.target_latitude
 					elementTextTargetLatitude.innerHTML = textTargetLatitude
 					elementTextTargetLatitude.parentNode.title = textTargetLatitude
 					
-					let elementTextPositionError = document.getElementById("text-position-error");
+					let elementTextPositionError = document.getElementById("text-position-error")
 					let textPositionError = remoteObject.position_error === "" ? "---" : remoteObject.position_error + " 米"
 					elementTextPositionError.innerHTML = textPositionError
 					elementTextPositionError.parentNode.title = textPositionError
 					
-					let elementTextCruiseNumber = document.getElementById("text-cruise-number");
+					let elementTextCruiseNumber = document.getElementById("text-cruise-number")
 					let textCruiseNumber = remoteObject.verify_cruise_number === "" ? "---" : remoteObject.verify_cruise_number
 					elementTextCruiseNumber.innerHTML = textCruiseNumber
 					elementTextCruiseNumber.parentNode.title = textCruiseNumber
 					
-					let elementTextDiveNumber = document.getElementById("text-dive-number");
+					let elementTextDiveNumber = document.getElementById("text-dive-number")
 					let textDiveNumber = remoteObject.verify_dive_number === "" ? "---" : remoteObject.verify_dive_number
 					elementTextDiveNumber.innerHTML = textDiveNumber
 					elementTextDiveNumber.parentNode.title = textDiveNumber
 					
-					let elementTextImageDescription = document.getElementById("text-image-description");
+					let elementTextImageDescription = document.getElementById("text-image-description")
 					let textImageDescription = remoteObject.image_description === "" ? "---" : remoteObject.image_description
 					elementTextImageDescription.innerHTML = textImageDescription
 					elementTextImageDescription.parentNode.title = textImageDescription
 					
-					let elementDivVerifyImage = document.getElementById("div-verify-image");
+					let elementDivVerifyImage = document.getElementById("div-verify-image")
 					
-					let verifyImagePath = "";
+					let verifyImagePath = ""
 					let verifyAuvPictureNumber = remoteObject.verify_auv_sss_image_paths.length
 					for (let i = 0; i < verifyAuvPictureNumber; i++) {
 						verifyImagePath += '<img src="' + remoteObject.verify_auv_sss_image_paths[i] + '" style="width: 100%; height: 14em; margin-bottom: 1em; border-radius: 6px; border: 2px solid #f0f0f0; object-fit: contain;">'
@@ -319,10 +324,16 @@ function init() {
 					}
 					
 					elementDivVerifyImage.innerHTML = verifyImagePath
-					entityDescription.style.visibility = "visible";
+					entityDescription.style.visibility = "visible"
 					
-					let elementDivEmptyImage = document.getElementById("div-empty-image");
-					elementDivEmptyImage.style.visibility = verifyImagePath.length > 0 ? "hidden" : "visible";
+					let elementDivEmptyImage = document.getElementById("div-empty-image")
+					elementDivEmptyImage.style.visibility = verifyImagePath.length > 0 ? "hidden" : "visible"
+				} else if (pick.id.remoteType == "remote trajectory") {
+					// 隐藏另一个可能存在的详细页面
+					entityDescription.style.visibility = "hidden"
+					
+					entityTrajectoryDescription.style.visibility = "visible"
+					console.log("click remote line")
 				}
 			}
 		}
@@ -445,7 +456,8 @@ function addRemotePointEntity(arg) {
 		  color:  Cesium.Color.LIME ,
 		  pixelSize: 8
 		},
-		remoteDescription: remoteObject
+		remoteDescription: remoteObject,
+		remoteType: "remote error point"
 	})
 	
 	context.recvMsg("add", "remote point", true, remoteObject.id);
@@ -465,15 +477,28 @@ function addRemoteTiffEntity(arg) {
 		return;
 	}
 	
-	let xhr = new XMLHttpRequest();
-	xhr.open('GET', remoteObject.side_scan_image_name);
-	xhr.responseType = 'arraybuffer';
+	let xhr = new XMLHttpRequest()
+	xhr.open('GET', remoteObject.side_scan_image_name)
+	xhr.responseType = 'arraybuffer'
+	let sendErrorMessage = false
 	xhr.onerror = function (error) {
+		if (sendErrorMessage) return
+		sendErrorMessage = true
 		context.recvMsg("add", "remote tif", false, remoteObject.id, "图片加载失败");
+	}
+	xhr.onreadystatechange  = function (error) {
+		if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 404) {
+			if (sendErrorMessage) return
+			sendErrorMessage = true
+			// 404 不会触发上面的 onerror 回调
+			context.recvMsg("add", "remote tif", false, remoteObject.id, "图片加载失败");
+		}
 	}
 	xhr.onload = function (e) {
 		if (e.total === 0) {
-			// 表示加载失败，或文件不存在
+			// 表示加载失败，或文件不存在 (与上面的 404 冲突)
+			if (sendErrorMessage) return
+			sendErrorMessage = true
 			context.recvMsg("add", "remote tif", false, remoteObject.id, "目标图片不存在");
 			return;
 		}
@@ -488,7 +513,8 @@ function addRemoteTiffEntity(arg) {
 			material: canvas,
 			zIndex: size,
 		  },
-		  remoteDescription: remoteObject
+		  remoteDescription: remoteObject,
+		  remoteType: "remote error point"
 		});
 		context.recvMsg("add", "remote tif", true, remoteObject.id);
 	};
@@ -501,7 +527,7 @@ function addRemoteTrajectoryEntity(arg) {
 	let remoteObject = eval("(" + arg + ")")
 	
 	// 判断是否已存在
-	if (undefined !== cesiumViewer.entities.getById(remoteObject.id)) {
+	if (0 !== cesiumViewer.dataSources.getByName(remoteObject.id).length) {
 		context.recvMsg("add", "remote trajectory", false, remoteObject.id, "数据源已存在");
 		return;
 	}
@@ -528,9 +554,11 @@ function addRemoteTrajectoryEntity(arg) {
 		for (let i = 0; i < entitySize; i++) {
 			let entity = dataSource.entities.values[i]
 			entity.show = true;
+			entity.remoteDescription = {"value": 1},
+			entity.remoteType = "remote trajectory"
 			entityList = entityList + entity.name + "," + entity.id + "#";
 		}
-		
+
 		context.recvMsg("add", "remote trajectory", true, dataSource.name, entityList);
 	});
 }
