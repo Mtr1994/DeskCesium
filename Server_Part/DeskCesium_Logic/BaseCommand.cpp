@@ -620,7 +620,7 @@ void CBaseCommand::logic_query_trajectory_by_cruise_and_dive(const CMessage_Sour
     struct dirent* ptr;
     if(!(pDir = opendir(targetPath.c_str())))
     {
-    	response.set_id("没有找到对应的轨迹文件");
+    	response.set_id("e");
 		std::string pack = createPackage(CMD_QUERY_TRAJECTORY_BY_CURSE_AND_DIVE_RESPONSE, response.SerializeAsString());
         sendAsyncPack(source.connect_id_, pack);
         return;
@@ -634,30 +634,35 @@ void CBaseCommand::logic_query_trajectory_by_cruise_and_dive(const CMessage_Sour
     }
     closedir(pDir);
 	
-	std::string position_chain = "";
+	uint16_t cruiseCount = 0;
 	for (auto &name : vectorFileNames)
 	{
+		if (name.find(dive_number) == name.npos ) continue;
 		std::ifstream fileDescripter(targetPath + "/" + name);
+		PSS_LOGGER_DEBUG("open file {0}", targetPath + "/" + name);
+		std::string position_chain = "";
 		std::string line;
 		while(std::getline(fileDescripter, line))
 		{
-			PSS_LOGGER_DEBUG("what");
 			std::regex reg("^([0-9]+\\.[0-9]+) ([0-9]+\\.[0-9]+) (.*)");
 			std::smatch match;
 			bool status = regex_search(line, match, reg);
-			PSS_LOGGER_DEBUG("what A {0} {1}", status, match.size());
 			if (!status) continue;
 			if (match.size() != 4) continue;
 			
 			if (position_chain.length() > 0) position_chain += " ";
 			position_chain += std::string(match[1]) + "," + std::string(match[2]) + ",0";
 		}
-		PSS_LOGGER_DEBUG("open file 1 {0}", targetPath + "/" + name);
+		if (position_chain.length() > 0)
+		{	
+			response.add_position_chain(position_chain);
+			cruiseCount++;
+		}
 	}
+	
+	response.set_status(cruiseCount > 0);
 
-	response.set_status(true);
 	response.set_id(requestTrajectory.cruise_number() + "-" + dive_number);
-	response.set_position_chain(position_chain);
 	std::string pack = createPackage(CMD_QUERY_TRAJECTORY_BY_CURSE_AND_DIVE_RESPONSE, response.SerializeAsString());
     sendAsyncPack(source.connect_id_, pack);
 }
