@@ -201,8 +201,8 @@ struct RequestTrajectoryDefaultTypeInternal {
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 RequestTrajectoryDefaultTypeInternal _RequestTrajectory_default_instance_;
 PROTOBUF_CONSTEXPR RequestTrajectoryResponse::RequestTrajectoryResponse(
     ::_pbi::ConstantInitialized): _impl_{
-    /*decltype(_impl_.id_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
-  , /*decltype(_impl_.position_chain_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
+    /*decltype(_impl_.position_chain_)*/{}
+  , /*decltype(_impl_.id_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
   , /*decltype(_impl_.status_)*/false
   , /*decltype(_impl_._cached_size_)*/{}} {}
 struct RequestTrajectoryResponseDefaultTypeInternal {
@@ -419,8 +419,8 @@ const char descriptor_table_protodef_sidescansource_2eproto[] PROTOBUF_SECTION_V
   "questTrajectory\022\025\n\rcruise_number\030\001 \001(\t\022\023"
   "\n\013dive_number\030\002 \001(\t\022\027\n\017trajectory_type\030\003"
   " \001(\t\"O\n\031RequestTrajectoryResponse\022\n\n\002id\030"
-  "\001 \001(\t\022\026\n\016position_chain\030\002 \001(\t\022\016\n\006status\030"
-  "\003 \001(\010b\006proto3"
+  "\001 \001(\t\022\026\n\016position_chain\030\003 \003(\t\022\016\n\006status\030"
+  "\004 \001(\010b\006proto3"
   ;
 static ::_pbi::once_flag descriptor_table_sidescansource_2eproto_once;
 const ::_pbi::DescriptorTable descriptor_table_sidescansource_2eproto = {
@@ -4571,8 +4571,8 @@ RequestTrajectoryResponse::RequestTrajectoryResponse(const RequestTrajectoryResp
   : ::PROTOBUF_NAMESPACE_ID::Message() {
   RequestTrajectoryResponse* const _this = this; (void)_this;
   new (&_impl_) Impl_{
-      decltype(_impl_.id_){}
-    , decltype(_impl_.position_chain_){}
+      decltype(_impl_.position_chain_){from._impl_.position_chain_}
+    , decltype(_impl_.id_){}
     , decltype(_impl_.status_){}
     , /*decltype(_impl_._cached_size_)*/{}};
 
@@ -4585,14 +4585,6 @@ RequestTrajectoryResponse::RequestTrajectoryResponse(const RequestTrajectoryResp
     _this->_impl_.id_.Set(from._internal_id(), 
       _this->GetArenaForAllocation());
   }
-  _impl_.position_chain_.InitDefault();
-  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-    _impl_.position_chain_.Set("", GetArenaForAllocation());
-  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  if (!from._internal_position_chain().empty()) {
-    _this->_impl_.position_chain_.Set(from._internal_position_chain(), 
-      _this->GetArenaForAllocation());
-  }
   _this->_impl_.status_ = from._impl_.status_;
   // @@protoc_insertion_point(copy_constructor:RequestTrajectoryResponse)
 }
@@ -4602,18 +4594,14 @@ inline void RequestTrajectoryResponse::SharedCtor(
   (void)arena;
   (void)is_message_owned;
   new (&_impl_) Impl_{
-      decltype(_impl_.id_){}
-    , decltype(_impl_.position_chain_){}
+      decltype(_impl_.position_chain_){arena}
+    , decltype(_impl_.id_){}
     , decltype(_impl_.status_){false}
     , /*decltype(_impl_._cached_size_)*/{}
   };
   _impl_.id_.InitDefault();
   #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
     _impl_.id_.Set("", GetArenaForAllocation());
-  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  _impl_.position_chain_.InitDefault();
-  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-    _impl_.position_chain_.Set("", GetArenaForAllocation());
   #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
 }
 
@@ -4628,8 +4616,8 @@ RequestTrajectoryResponse::~RequestTrajectoryResponse() {
 
 inline void RequestTrajectoryResponse::SharedDtor() {
   GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
+  _impl_.position_chain_.~RepeatedPtrField();
   _impl_.id_.Destroy();
-  _impl_.position_chain_.Destroy();
 }
 
 void RequestTrajectoryResponse::SetCachedSize(int size) const {
@@ -4642,8 +4630,8 @@ void RequestTrajectoryResponse::Clear() {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
+  _impl_.position_chain_.Clear();
   _impl_.id_.ClearToEmpty();
-  _impl_.position_chain_.ClearToEmpty();
   _impl_.status_ = false;
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
@@ -4664,19 +4652,24 @@ const char* RequestTrajectoryResponse::_InternalParse(const char* ptr, ::_pbi::P
         } else
           goto handle_unusual;
         continue;
-      // string position_chain = 2;
-      case 2:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 18)) {
-          auto str = _internal_mutable_position_chain();
-          ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
-          CHK_(ptr);
-          CHK_(::_pbi::VerifyUTF8(str, "RequestTrajectoryResponse.position_chain"));
+      // repeated string position_chain = 3;
+      case 3:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 26)) {
+          ptr -= 1;
+          do {
+            ptr += 1;
+            auto str = _internal_add_position_chain();
+            ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
+            CHK_(ptr);
+            CHK_(::_pbi::VerifyUTF8(str, "RequestTrajectoryResponse.position_chain"));
+            if (!ctx->DataAvailable(ptr)) break;
+          } while (::PROTOBUF_NAMESPACE_ID::internal::ExpectTag<26>(ptr));
         } else
           goto handle_unusual;
         continue;
-      // bool status = 3;
-      case 3:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 24)) {
+      // bool status = 4;
+      case 4:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 32)) {
           _impl_.status_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
           CHK_(ptr);
         } else
@@ -4721,20 +4714,20 @@ uint8_t* RequestTrajectoryResponse::_InternalSerialize(
         1, this->_internal_id(), target);
   }
 
-  // string position_chain = 2;
-  if (!this->_internal_position_chain().empty()) {
+  // repeated string position_chain = 3;
+  for (int i = 0, n = this->_internal_position_chain_size(); i < n; i++) {
+    const auto& s = this->_internal_position_chain(i);
     ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
-      this->_internal_position_chain().data(), static_cast<int>(this->_internal_position_chain().length()),
+      s.data(), static_cast<int>(s.length()),
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
       "RequestTrajectoryResponse.position_chain");
-    target = stream->WriteStringMaybeAliased(
-        2, this->_internal_position_chain(), target);
+    target = stream->WriteString(3, s, target);
   }
 
-  // bool status = 3;
+  // bool status = 4;
   if (this->_internal_status() != 0) {
     target = stream->EnsureSpace(target);
-    target = ::_pbi::WireFormatLite::WriteBoolToArray(3, this->_internal_status(), target);
+    target = ::_pbi::WireFormatLite::WriteBoolToArray(4, this->_internal_status(), target);
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
@@ -4753,6 +4746,14 @@ size_t RequestTrajectoryResponse::ByteSizeLong() const {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
+  // repeated string position_chain = 3;
+  total_size += 1 *
+      ::PROTOBUF_NAMESPACE_ID::internal::FromIntSize(_impl_.position_chain_.size());
+  for (int i = 0, n = _impl_.position_chain_.size(); i < n; i++) {
+    total_size += ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+      _impl_.position_chain_.Get(i));
+  }
+
   // string id = 1;
   if (!this->_internal_id().empty()) {
     total_size += 1 +
@@ -4760,14 +4761,7 @@ size_t RequestTrajectoryResponse::ByteSizeLong() const {
         this->_internal_id());
   }
 
-  // string position_chain = 2;
-  if (!this->_internal_position_chain().empty()) {
-    total_size += 1 +
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
-        this->_internal_position_chain());
-  }
-
-  // bool status = 3;
+  // bool status = 4;
   if (this->_internal_status() != 0) {
     total_size += 1 + 1;
   }
@@ -4790,11 +4784,9 @@ void RequestTrajectoryResponse::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_m
   uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
+  _this->_impl_.position_chain_.MergeFrom(from._impl_.position_chain_);
   if (!from._internal_id().empty()) {
     _this->_internal_set_id(from._internal_id());
-  }
-  if (!from._internal_position_chain().empty()) {
-    _this->_internal_set_position_chain(from._internal_position_chain());
   }
   if (from._internal_status() != 0) {
     _this->_internal_set_status(from._internal_status());
@@ -4818,13 +4810,10 @@ void RequestTrajectoryResponse::InternalSwap(RequestTrajectoryResponse* other) {
   auto* lhs_arena = GetArenaForAllocation();
   auto* rhs_arena = other->GetArenaForAllocation();
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  _impl_.position_chain_.InternalSwap(&other->_impl_.position_chain_);
   ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
       &_impl_.id_, lhs_arena,
       &other->_impl_.id_, rhs_arena
-  );
-  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
-      &_impl_.position_chain_, lhs_arena,
-      &other->_impl_.position_chain_, rhs_arena
   );
   swap(_impl_.status_, other->_impl_.status_);
 }

@@ -64,9 +64,14 @@ QWidget#widgetStatisticsBase
     max-width: 64em;
 }
 
-QWidget#widgetChartBase
+QWidget#widgetChartBase,#widgetSurveyBase
 {
     min-height: 24em;
+}
+
+QWidget#widgetWebBase
+{
+    min-height: 36em;
 }
 
 /* QPushButton */

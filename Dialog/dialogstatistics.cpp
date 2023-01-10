@@ -24,8 +24,9 @@ void DialogStatistics::init()
 {
     setWindowTitle("专项调查任务统计");
 
-    setMinimumHeight(nativeParentWidget()->height());
-    setWindowFlags(Qt::Dialog | Qt::WindowCloseButtonHint | Qt::MSWindowsFixedSizeDialogHint);
+    //setMinimumHeight(nativeParentWidget()->height());
+    resize(width(), nativeParentWidget()->height());
+    setWindowFlags(Qt::Dialog | Qt::WindowCloseButtonHint);
 
     mJsContext = new JsContext(this);
     QWebChannel *channel = new QWebChannel(this);
@@ -37,9 +38,11 @@ void DialogStatistics::init()
     ui->widgetStatisticsCesium->settings()->setAttribute(QWebEngineSettings::WebGLEnabled, true);
     ui->widgetStatisticsCesium->settings()->setAttribute(QWebEngineSettings::LocalContentCanAccessRemoteUrls, true);
 
-    ui->widgetStatisticsCesium->page()->load(QUrl(QString("%1/../Resource/html/indexStatisticsCesium.html").arg(QApplication::applicationDirPath())).toString());
-    ui->widgetStatisticsCesium->page()->setBackgroundColor(QColor(0, 0, 0));
+    QString htmlRoot = QApplication::applicationDirPath() + "/../Resource/html";
+    //QString htmlRoot = QApplication::applicationDirPath() + "/resource/html";
 
+    ui->widgetStatisticsCesium->page()->load(QUrl(QString("%1/indexStatisticsCesium.html").arg(htmlRoot)));
+    ui->widgetStatisticsCesium->page()->setBackgroundColor(QColor(0, 0, 0));
 
     mJsContextChartYear = new ChartContext(this);
     QWebChannel *channelChartYear = new QWebChannel(this);
@@ -51,7 +54,7 @@ void DialogStatistics::init()
     ui->widgetChartCurveYear->settings()->setAttribute(QWebEngineSettings::LocalContentCanAccessRemoteUrls, true);
 
     ui->widgetChartCurveYear->page()->setWebChannel(channelChartYear);
-    ui->widgetChartCurveYear->page()->load(QUrl(QString("%1/../Resource/html/indexStatisticsChart.html").arg(QApplication::applicationDirPath())).toString());
+    ui->widgetChartCurveYear->page()->load(QUrl(QString("%1/indexStatisticsChart.html").arg(htmlRoot)));
     ui->widgetChartCurveYear->page()->setBackgroundColor(QColor(255, 255, 255));
 
     connect(mJsContextChartYear, &ChartContext::sgl_web_view_init_finish, this, [this]{ emit mJsContextChartYear->sgl_load_year_curve_chart("{year: ['2021', '2022'], value: [46, 78]}"); });
@@ -65,7 +68,7 @@ void DialogStatistics::init()
     ui->widgetChartPieChecked->settings()->setAttribute(QWebEngineSettings::LocalContentCanAccessRemoteUrls, true);
 
     ui->widgetChartPieChecked->page()->setWebChannel(channelChartChecked);
-    ui->widgetChartPieChecked->page()->load(QUrl(QString("%1/../Resource/html/indexStatisticsChart.html").arg(QApplication::applicationDirPath())).toString());
+    ui->widgetChartPieChecked->page()->load(QUrl(QString("%1/indexStatisticsChart.html").arg(htmlRoot)));
     ui->widgetChartPieChecked->page()->setBackgroundColor(QColor(255, 255, 255));
 
     connect(mJsContextChartChecked, &ChartContext::sgl_web_view_init_finish, this, [this]{ emit mJsContextChartChecked->sgl_load_check_pie_chart("[{value: 70, name: '已查证'}, {value: 30, name: '未查证'}]"); });
@@ -79,7 +82,7 @@ void DialogStatistics::init()
     ui->widgetChartPiePriority->settings()->setAttribute(QWebEngineSettings::LocalContentCanAccessRemoteUrls, true);
 
     ui->widgetChartPiePriority->page()->setWebChannel(channelChartPriority);
-    ui->widgetChartPiePriority->page()->load(QUrl(QString("%1/../Resource/html/indexStatisticsChart.html").arg(QApplication::applicationDirPath())).toString());
+    ui->widgetChartPiePriority->page()->load(QUrl(QString("%1/indexStatisticsChart.html").arg(htmlRoot)));
     ui->widgetChartPiePriority->page()->setBackgroundColor(QColor(255, 255, 255));
 
 //    ////// 网页调试部分，发布时请注释此段代码 S

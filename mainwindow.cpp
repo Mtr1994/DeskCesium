@@ -204,9 +204,20 @@ void MainWindow::slot_add_remote_tiff_entity(const QString &path, const QString 
     }
 }
 
-void MainWindow::slot_add_remote_trajectory_entity(const QString &id, const QString &positionchain)
+void MainWindow::slot_add_remote_trajectory_entity(const QString &id, const QStringList &positionchains)
 {
-    emit mJsContext->sgl_add_entity("remote trajectory", QString("{id: \"%1\", positionchain: \"%2\"}").arg("轨迹线-" + id, positionchain));
+    int size = positionchains.size();
+    if (size == 0) return;
+
+    QString positionChainObject = "[";
+    for (int i = 0; i < size; i++)
+    {
+        if (positionChainObject.length() > 1) positionChainObject.append(", ");
+        positionChainObject.append(QString("{id: \"%1-%2\", positionchain: \"%3\"}").arg(id, QString("%1").arg(i + 1, 2, 10, QLatin1Char('0')), positionchains.at(i)));
+    }
+
+    positionChainObject.append("]");
+    emit mJsContext->sgl_add_entity("remote trajectory", QString("{id: \"%1\", positionchains: %2}").arg("轨迹线-" + id, positionChainObject));
 }
 
 void MainWindow::slot_add_grd_entity(const QString &path)

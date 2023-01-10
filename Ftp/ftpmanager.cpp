@@ -279,6 +279,9 @@ void FtpProtocol::slot_socket_command_data_recv()
             connect(mSocketData, &QTcpSocket::disconnected, this, &FtpProtocol::slot_socket_file_data_close);
         }
         if (mSocketData->state() == QTcpSocket::ConnectedState) mSocketData->close();
+
+        qDebug() << "PASV TO SERVER " << mFtpHost << " " << p1 + p2;
+
         mSocketData->connectToHost(QHostAddress(mFtpHost), p1 + p2);
     }
     else if ((cmd == "NLST") && (status == "W"))
@@ -306,6 +309,7 @@ void FtpProtocol::slot_socket_command_data_recv()
             mListCommand.clear();
             mSocketData->close();
             mResultMessage = "本地文件打开失败";
+            emit sgl_ftp_upload_task_finish(mFileName, false, mResultMessage);
             return;
         }
 
@@ -316,6 +320,7 @@ void FtpProtocol::slot_socket_command_data_recv()
             mFileStream.close();
             mSocketData->close();
             mResultMessage = "服务器文件大小异常";
+            emit sgl_ftp_upload_task_finish(mFileName, false, mResultMessage);
             return;
         }
         else if (mTotalUploadLength == mTotalFileSize)
@@ -334,12 +339,15 @@ void FtpProtocol::slot_socket_command_data_recv()
         while (mSocketData->state() != QTcpSocket::ConnectedState)
         {
             tryCount++;
-            if(tryCount > 5 * 15)
+            if(tryCount > 5)
             {
                 mResultMessage = "无法连接到服务器";
-                return close();
+                mListCommand.clear();
+                mFileStream.close();
+                emit sgl_ftp_upload_task_finish(mFileName, false, "无法连接到文件服务器 " + QString::number(mSocketData->state()));
+                return;
             }
-            std::this_thread::sleep_for(std::chrono::milliseconds(200));
+            std::this_thread::sleep_for(std::chrono::milliseconds(1000));
         }
 
         // 定位本地文件读取位置

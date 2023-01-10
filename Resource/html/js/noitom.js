@@ -31,7 +31,7 @@ function init() {
 				}
 			});
 			context.sgl_change_entity_visible.connect(function(type, id, visible, parentId) {
-				if (type === "kml" || type === "kmz") {
+				if (type === "kml" || type === "kmz" || type === "remote trajectory") {
 					if (parentId !== "") {
 						changeDataSourceChildVisible(id, visible, parentId)
 					} else {
@@ -525,6 +525,10 @@ function addRemoteTiffEntity(arg) {
 // 添加 remote trajectory 实体
 function addRemoteTrajectoryEntity(arg) {
 	let remoteObject = eval("(" + arg + ")")
+	if (undefined == remoteObject) {
+		context.recvMsg("add", "remote trajectory", false, "", "元数据异常")
+		return
+	}
 	
 	// 判断是否已存在
 	if (0 !== cesiumViewer.dataSources.getByName(remoteObject.id).length) {
@@ -538,7 +542,13 @@ function addRemoteTrajectoryEntity(arg) {
 	  screenOverlayContainer: cesiumViewer.container,
 	};
 	
-	let xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Document> <name>" + remoteObject.id + "</name> <open>1</open> <Style id=\"linestyle\"> <LineStyle> <color>7f0000ff</color> <width>2</width> </LineStyle> </Style> <Placemark> <name>运动轨迹</name> <styleUrl>#linestyle</styleUrl> <LineString> <extrude>1</extrude> <tessellate>1</tessellate> <coordinates>" + remoteObject.positionchain + "</coordinates> </LineString> </Placemark> </Document>";
+	let lineSize = remoteObject.positionchains.length
+	let positionChainValue = ""
+	for (let i = 0; i < lineSize; i++) {
+		positionChainValue += "<Placemark> <name>" + remoteObject.positionchains[i].id + "</name> <styleUrl>#linestyle</styleUrl> <LineString> <extrude>1</extrude> <tessellate>1</tessellate> <coordinates>" + remoteObject.positionchains[i].positionchain + "</coordinates> </LineString> </Placemark>"
+	}
+	
+	let xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Document> <name>" + remoteObject.id + "</name> <open>1</open> <Style id=\"linestyle\"> <LineStyle> <color>7f0000ff</color> <width>2</width> </LineStyle> </Style>" + positionChainValue + "</Document>";
 
 	var parser = new DOMParser()
 	let xmlDOM = parser.parseFromString(xml, "text/xml")

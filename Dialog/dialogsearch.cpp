@@ -256,7 +256,15 @@ void DialogSearch::slot_recv_socket_data(uint64_t dwconnid, const std::string &d
         if (!response.status()) return;
 
         // 添加 kml 文件轨迹
-        emit AppSignal::getInstance()->sgl_add_remote_trajectory_entity(QString::fromStdString(response.id()), QString::fromStdString(response.position_chain()));
+        int cruiseCount = response.position_chain_size();
+        if (cruiseCount == 0) return;
+
+        QStringList list;
+        for (int i = 0; i < cruiseCount; i++)
+        {
+            list.append(response.position_chain(i).data());
+        }
+        emit AppSignal::getInstance()->sgl_add_remote_trajectory_entity(QString::fromStdString(response.id()), list);
     }
     default:
         break;

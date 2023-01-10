@@ -108,6 +108,6 @@ message RequestTrajectory
 message RequestTrajectoryResponse
 {
 	string id = 1;
-	string position_chain = 2;
-	bool status = 3;
+	repeated string position_chain = 3;
+	bool status = 4;
 }

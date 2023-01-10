@@ -2460,10 +2460,34 @@ class RequestTrajectoryResponse final :
   // accessors -------------------------------------------------------
 
   enum : int {
+    kPositionChainFieldNumber = 3,
     kIdFieldNumber = 1,
-    kPositionChainFieldNumber = 2,
-    kStatusFieldNumber = 3,
+    kStatusFieldNumber = 4,
   };
+  // repeated string position_chain = 3;
+  int position_chain_size() const;
+  private:
+  int _internal_position_chain_size() const;
+  public:
+  void clear_position_chain();
+  const std::string& position_chain(int index) const;
+  std::string* mutable_position_chain(int index);
+  void set_position_chain(int index, const std::string& value);
+  void set_position_chain(int index, std::string&& value);
+  void set_position_chain(int index, const char* value);
+  void set_position_chain(int index, const char* value, size_t size);
+  std::string* add_position_chain();
+  void add_position_chain(const std::string& value);
+  void add_position_chain(std::string&& value);
+  void add_position_chain(const char* value);
+  void add_position_chain(const char* value, size_t size);
+  const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<std::string>& position_chain() const;
+  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<std::string>* mutable_position_chain();
+  private:
+  const std::string& _internal_position_chain(int index) const;
+  std::string* _internal_add_position_chain();
+  public:
+
   // string id = 1;
   void clear_id();
   const std::string& id() const;
@@ -2478,21 +2502,7 @@ class RequestTrajectoryResponse final :
   std::string* _internal_mutable_id();
   public:
 
-  // string position_chain = 2;
-  void clear_position_chain();
-  const std::string& position_chain() const;
-  template <typename ArgT0 = const std::string&, typename... ArgT>
-  void set_position_chain(ArgT0&& arg0, ArgT... args);
-  std::string* mutable_position_chain();
-  PROTOBUF_NODISCARD std::string* release_position_chain();
-  void set_allocated_position_chain(std::string* position_chain);
-  private:
-  const std::string& _internal_position_chain() const;
-  inline PROTOBUF_ALWAYS_INLINE void _internal_set_position_chain(const std::string& value);
-  std::string* _internal_mutable_position_chain();
-  public:
-
-  // bool status = 3;
+  // bool status = 4;
   void clear_status();
   bool status() const;
   void set_status(bool value);
@@ -2509,8 +2519,8 @@ class RequestTrajectoryResponse final :
   typedef void InternalArenaConstructable_;
   typedef void DestructorSkippable_;
   struct Impl_ {
+    ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<std::string> position_chain_;
     ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr id_;
-    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr position_chain_;
     bool status_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   };
@@ -5023,57 +5033,82 @@ inline void RequestTrajectoryResponse::set_allocated_id(std::string* id) {
   // @@protoc_insertion_point(field_set_allocated:RequestTrajectoryResponse.id)
 }
 
-// string position_chain = 2;
+// repeated string position_chain = 3;
+inline int RequestTrajectoryResponse::_internal_position_chain_size() const {
+  return _impl_.position_chain_.size();
+}
+inline int RequestTrajectoryResponse::position_chain_size() const {
+  return _internal_position_chain_size();
+}
 inline void RequestTrajectoryResponse::clear_position_chain() {
-  _impl_.position_chain_.ClearToEmpty();
+  _impl_.position_chain_.Clear();
 }
-inline const std::string& RequestTrajectoryResponse::position_chain() const {
-  // @@protoc_insertion_point(field_get:RequestTrajectoryResponse.position_chain)
-  return _internal_position_chain();
-}
-template <typename ArgT0, typename... ArgT>
-inline PROTOBUF_ALWAYS_INLINE
-void RequestTrajectoryResponse::set_position_chain(ArgT0&& arg0, ArgT... args) {
- 
- _impl_.position_chain_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
-  // @@protoc_insertion_point(field_set:RequestTrajectoryResponse.position_chain)
-}
-inline std::string* RequestTrajectoryResponse::mutable_position_chain() {
-  std::string* _s = _internal_mutable_position_chain();
-  // @@protoc_insertion_point(field_mutable:RequestTrajectoryResponse.position_chain)
+inline std::string* RequestTrajectoryResponse::add_position_chain() {
+  std::string* _s = _internal_add_position_chain();
+  // @@protoc_insertion_point(field_add_mutable:RequestTrajectoryResponse.position_chain)
   return _s;
 }
-inline const std::string& RequestTrajectoryResponse::_internal_position_chain() const {
-  return _impl_.position_chain_.Get();
+inline const std::string& RequestTrajectoryResponse::_internal_position_chain(int index) const {
+  return _impl_.position_chain_.Get(index);
 }
-inline void RequestTrajectoryResponse::_internal_set_position_chain(const std::string& value) {
-  
-  _impl_.position_chain_.Set(value, GetArenaForAllocation());
+inline const std::string& RequestTrajectoryResponse::position_chain(int index) const {
+  // @@protoc_insertion_point(field_get:RequestTrajectoryResponse.position_chain)
+  return _internal_position_chain(index);
 }
-inline std::string* RequestTrajectoryResponse::_internal_mutable_position_chain() {
-  
-  return _impl_.position_chain_.Mutable(GetArenaForAllocation());
+inline std::string* RequestTrajectoryResponse::mutable_position_chain(int index) {
+  // @@protoc_insertion_point(field_mutable:RequestTrajectoryResponse.position_chain)
+  return _impl_.position_chain_.Mutable(index);
 }
-inline std::string* RequestTrajectoryResponse::release_position_chain() {
-  // @@protoc_insertion_point(field_release:RequestTrajectoryResponse.position_chain)
-  return _impl_.position_chain_.Release();
+inline void RequestTrajectoryResponse::set_position_chain(int index, const std::string& value) {
+  _impl_.position_chain_.Mutable(index)->assign(value);
+  // @@protoc_insertion_point(field_set:RequestTrajectoryResponse.position_chain)
 }
-inline void RequestTrajectoryResponse::set_allocated_position_chain(std::string* position_chain) {
-  if (position_chain != nullptr) {
-    
-  } else {
-    
-  }
-  _impl_.position_chain_.SetAllocated(position_chain, GetArenaForAllocation());
-#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  if (_impl_.position_chain_.IsDefault()) {
-    _impl_.position_chain_.Set("", GetArenaForAllocation());
-  }
-#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  // @@protoc_insertion_point(field_set_allocated:RequestTrajectoryResponse.position_chain)
+inline void RequestTrajectoryResponse::set_position_chain(int index, std::string&& value) {
+  _impl_.position_chain_.Mutable(index)->assign(std::move(value));
+  // @@protoc_insertion_point(field_set:RequestTrajectoryResponse.position_chain)
+}
+inline void RequestTrajectoryResponse::set_position_chain(int index, const char* value) {
+  GOOGLE_DCHECK(value != nullptr);
+  _impl_.position_chain_.Mutable(index)->assign(value);
+  // @@protoc_insertion_point(field_set_char:RequestTrajectoryResponse.position_chain)
+}
+inline void RequestTrajectoryResponse::set_position_chain(int index, const char* value, size_t size) {
+  _impl_.position_chain_.Mutable(index)->assign(
+    reinterpret_cast<const char*>(value), size);
+  // @@protoc_insertion_point(field_set_pointer:RequestTrajectoryResponse.position_chain)
+}
+inline std::string* RequestTrajectoryResponse::_internal_add_position_chain() {
+  return _impl_.position_chain_.Add();
+}
+inline void RequestTrajectoryResponse::add_position_chain(const std::string& value) {
+  _impl_.position_chain_.Add()->assign(value);
+  // @@protoc_insertion_point(field_add:RequestTrajectoryResponse.position_chain)
+}
+inline void RequestTrajectoryResponse::add_position_chain(std::string&& value) {
+  _impl_.position_chain_.Add(std::move(value));
+  // @@protoc_insertion_point(field_add:RequestTrajectoryResponse.position_chain)
+}
+inline void RequestTrajectoryResponse::add_position_chain(const char* value) {
+  GOOGLE_DCHECK(value != nullptr);
+  _impl_.position_chain_.Add()->assign(value);
+  // @@protoc_insertion_point(field_add_char:RequestTrajectoryResponse.position_chain)
+}
+inline void RequestTrajectoryResponse::add_position_chain(const char* value, size_t size) {
+  _impl_.position_chain_.Add()->assign(reinterpret_cast<const char*>(value), size);
+  // @@protoc_insertion_point(field_add_pointer:RequestTrajectoryResponse.position_chain)
+}
+inline const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<std::string>&
+RequestTrajectoryResponse::position_chain() const {
+  // @@protoc_insertion_point(field_list:RequestTrajectoryResponse.position_chain)
+  return _impl_.position_chain_;
+}
+inline ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<std::string>*
+RequestTrajectoryResponse::mutable_position_chain() {
+  // @@protoc_insertion_point(field_mutable_list:RequestTrajectoryResponse.position_chain)
+  return &_impl_.position_chain_;
 }
 
-// bool status = 3;
+// bool status = 4;
 inline void RequestTrajectoryResponse::clear_status() {
   _impl_.status_ = false;
 }

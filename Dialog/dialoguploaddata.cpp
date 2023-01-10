@@ -101,7 +101,7 @@ void DialogUploadData::init()
     mTcpSocket->connect(ip, 60011);
 
     // test
-    ui->tbRootDir->setText("C:/Users/admin/Desktop/TestExample/TS-24-4");
+    ui->tbRootDir->setText("C:/Users/admin/Desktop/TestExample/TS-24-2");
 }
 
 void DialogUploadData::checkData()
@@ -961,7 +961,7 @@ void DialogUploadData::slot_recv_socket_data(uint64_t dwconnid, const std::strin
                 }
                 else
                 {
-                    emit sgl_thread_report_check_status(STATUS_ERROR, QString("上传文件失败 %1").arg(file), false);
+                    emit sgl_thread_report_check_status(STATUS_ERROR, QString("上传文件失败 %1，%2").arg(file, message), false);
                     emit sgl_start_next_task();
                 }
             });
