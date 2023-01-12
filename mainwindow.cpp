@@ -204,16 +204,7 @@ void MainWindow::slot_add_tiff_entity(const QString &path)
 
 void MainWindow::slot_add_remote_tiff_entity(const QString &path, const QString &remoteobject)
 {
-    qDebug() << "path " << path;
-    qDebug() << "remoteobject " << remoteobject;
-    if (path.isEmpty())
-    {
-        emit mJsContext->sgl_add_entity("remote point", remoteobject);
-    }
-    else
-    {
-        emit mJsContext->sgl_add_entity("remote tif", remoteobject);
-    }
+    emit mJsContext->sgl_add_entity(path.isEmpty() ? "remote point" : "remote tif", remoteobject);
 }
 
 void MainWindow::slot_add_remote_trajectory_entity(const QString &id, const QStringList &positionchains)

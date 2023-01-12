@@ -106,6 +106,8 @@ void ProtocolHelper::parse()
         mBufferArray = mBufferArray.right(mBufferArray.size() - packLength);
         lockBuffer.unlock();
 
+        qDebug() << "Package ID " << cmd << " " << size;
+
         switch (cmd) {
         case CMD_QUERY_FTP_SERVER_STATUS_RESPONSE:
         {
@@ -257,6 +259,8 @@ void ProtocolHelper::parse()
             qDebug() << "未处理的数据包 " << cmd;
             break;
         }
+
+        mCurrentPackSize = 0;
     }
 
     qDebug() << "parse pack finish ";

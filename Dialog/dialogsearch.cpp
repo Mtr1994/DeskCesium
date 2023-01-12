@@ -406,6 +406,9 @@ void DialogSearch::slot_remote_entity_add_finish(const QString &id, bool status,
 
 void DialogSearch::slot_query_side_scan_source_data_response(const QList<QStringList> &list)
 {
+    // 清理旧的数据
+    mModelSideScanSource.removeRows(0, mModelSideScanSource.rowCount());
+
     int size = list.size();
     if (0 == size)
     {

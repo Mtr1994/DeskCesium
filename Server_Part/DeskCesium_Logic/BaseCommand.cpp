@@ -916,8 +916,10 @@ std::string CBaseCommand::generateCesiumPositionChain(const std::string &type)
 		PSS_LOGGER_DEBUG("open file {0}", path);
 		std::string position_chain = "";
 		std::string line;
+		uint64_t lineCount = 0;
 		while(std::getline(fileDescripter, line))
 		{
+			if (lineCount++ % 5 != 0) continue;
 			std::regex reg("^([0-9]+\\.[0-9]+) ([0-9]+\\.[0-9]+) (.*)");
 			std::smatch match;
 			bool status = regex_search(line, match, reg);
