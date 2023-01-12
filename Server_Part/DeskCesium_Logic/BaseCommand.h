@@ -50,6 +50,12 @@ const uint16_t CMD_QUERY_TRAJECTORY_BY_CURSE_AND_DIVE = 0X700d;
 // query trajectory by cruise and dive response
 const uint16_t CMD_QUERY_TRAJECTORY_BY_CURSE_AND_DIVE_RESPONSE = 0XB00d;
 
+// query statistics data
+const uint16_t CMD_QUERY_STATISTICS_DATA_BY_CONDITION = 0X700e;
+
+// query statistics data response
+const uint16_t CMD_QUERY_STATISTICS_DATA_BY_CONDITION_RESPONSE = 0XB00e;
+
 class MySQLConnectionPool;
 class CBaseCommand
 {
@@ -73,15 +79,19 @@ public:
 	void logic_query_side_scan_source_data_by_keyword(const CMessage_Source& source, std::shared_ptr<CMessage_Packet> recv_packet, std::shared_ptr<CMessage_Packet> send_packet);
 	
 	void logic_query_trajectory_by_cruise_and_dive(const CMessage_Source& source, std::shared_ptr<CMessage_Packet> recv_packet, std::shared_ptr<CMessage_Packet> send_packet);
+	
+	void logic_query_statistics_data_by_condition(const CMessage_Source& source, std::shared_ptr<CMessage_Packet> recv_packet, std::shared_ptr<CMessage_Packet> send_packet);
 
 	ISessionService* session_service_ = nullptr;
 	
 private:
 	void sendAsyncPack(uint32_t id, const std::string& pack);
+	
+ 	std::string generateCesiumPositionChain(const std::string &type);
+	
+	std::string createPackage(uint16_t cmd, const std::string &data);
 
 private:
-	std::string createPackage(uint16_t cmd, const std::string &data);
-	
 	MySQLConnectionPool *mMysqlConnectionPool = nullptr;
 };
 

@@ -1,12 +1,13 @@
 ﻿#include "dialogsearch.h"
 #include "ui_dialogsearch.h"
-#include "Net/tcpsocket.h"
 #include "Proto/sidescansource.pb.h"
 #include "Protocol/protocolhelper.h"
 #include "Common/common.h"
 #include "Control/Message/messagewidget.h"
 #include "Public/appsignal.h"
 #include "Public/appconfig.h"
+#include "Protocol/protocolhelper.h"
+#include "Net/usernetworker.h"
 
 // test
 #include <QDebug>
@@ -39,15 +40,6 @@ void DialogSearch::init()
     ui->widgetComplexSearchBase->setVisible(!mKeyworkSearchFlag);
 
     if (!mKeyworkSearchFlag) ui->widgetSearchParameter->requestSelectParameter();
-
-    // 准备执行 SQL 任务
-    mTcpSocket = new TcpSocket;
-    connect(mTcpSocket, &TcpSocket::sgl_recv_socket_data, this, &DialogSearch::slot_recv_socket_data);
-    connect(mTcpSocket, &TcpSocket::sgl_tcp_socket_connect, this, &DialogSearch::slot_tcp_socket_connect);
-    connect(mTcpSocket, &TcpSocket::sgl_tcp_socket_disconnect, this, &DialogSearch::slot_tcp_socket_disconnect);
-
-    QString ip = AppConfig::getInstance()->getValue("Remote", "ip");
-    mTcpSocket->connect(ip, 60011);
 
     connect(ui->btnSearchSideScan, &QPushButton::clicked, this, &DialogSearch::slot_btn_search_side_scan_click);
     connect(ui->btnExtract, &QPushButton::clicked, this, &DialogSearch::slot_btn_extract_clicked);
@@ -144,139 +136,8 @@ void DialogSearch::init()
 
     // 信号
     connect(AppSignal::getInstance(), &AppSignal::sgl_remote_entity_add_finish, this, &DialogSearch::slot_remote_entity_add_finish);
-}
-
-void DialogSearch::slot_tcp_socket_connect(uint64_t dwconnid)
-{
-    Q_UNUSED(dwconnid);
-    mTcpSocketConnected = true;
-
-    if (mParameter.isEmpty()) return;
-    if (nullptr == mTcpSocket) return;
-}
-
-void DialogSearch::slot_recv_socket_data(uint64_t dwconnid, const std::string &data)
-{
-    Q_UNUSED(dwconnid);
-
-    mBufferArray.append(QByteArray::fromStdString(data));
-
-    uint32_t cmd = 0;
-    memcpy(&cmd, mBufferArray.data() + 2, 2);
-
-    int64_t size = 0;
-    memcpy(&size, mBufferArray.data() + 4, 4);
-
-    if (size >  mBufferArray.size()) return;
-
-    switch (cmd) {
-    case CMD_QUERY_SIDE_SCAN_SOURCE_DATA_BY_FILTER_RESPONSE:
-    case CMD_QUERY_SIDE_SCAN_SOURCE_DATA_BY_KEYWORD_RESPONSE:
-    {
-        // 顺带清理旧的数据
-        mModelSideScanSource.removeRows(0, mModelSideScanSource.rowCount());
-
-        SideScanSourceList response;
-        bool status = response.ParseFromString(mBufferArray.mid(8, size).toStdString());
-        if (!status)
-        {
-            qDebug() << "数据解析错误，请联系管理员";
-            mBufferArray.clear();
-            return;
-        }
-
-        int size = response.list_size();
-
-        if (0 == size)
-        {
-            MessageWidget *msg = new MessageWidget(MessageWidget::M_Info, MessageWidget::P_Bottom_Center, this);
-            msg->showMessage("查询结果为空");
-            mBufferArray.clear();
-            return;
-        }
-
-        for(int i = 0; i < size; i++)
-        {
-            QList<QStandardItem*> listItem;
-            listItem.append(new QStandardItem(response.list().at(i).id().data()));
-            listItem.append(new QStandardItem(response.list().at(i).cruise_number().data()));
-            listItem.append(new QStandardItem(response.list().at(i).dive_number().data()));
-            listItem.append(new QStandardItem(response.list().at(i).scan_line().data()));
-            listItem.append(new QStandardItem(response.list().at(i).cruise_year().data()));
-            listItem.append(new QStandardItem(response.list().at(i).dt_time().data()));
-            listItem.append(new QStandardItem(QString::number(response.list().at(i).longitude(), 'f', 6)));
-            listItem.append(new QStandardItem(QString::number(response.list().at(i).latitude(), 'f', 6)));
-            listItem.append(new QStandardItem(QString::number(response.list().at(i).depth(), 'f', 2)));
-            listItem.append(new QStandardItem(QString::number(response.list().at(i).dt_speed(), 'f', 2)));
-            listItem.append(new QStandardItem(response.list().at(i).horizontal_range_direction().data()));
-            listItem.append(new QStandardItem(response.list().at(i).horizontal_range_value().data()));
-            listItem.append(new QStandardItem(QString::number(response.list().at(i).height_from_bottom(), 'f', 2)));
-            listItem.append(new QStandardItem(QString::number(response.list().at(i).r_theta(), 'f', 2)));
-            listItem.append(new QStandardItem(response.list().at(i).side_scan_image_name().data()));
-            listItem.append(new QStandardItem(QString::number(response.list().at(i).image_top_left_longitude(), 'f', 6)));
-            listItem.append(new QStandardItem(QString::number(response.list().at(i).image_top_left_latitude(), 'f', 6)));
-            listItem.append(new QStandardItem(QString::number(response.list().at(i).image_bottom_right_longitude(), 'f', 6)));
-            listItem.append(new QStandardItem(QString::number(response.list().at(i).image_bottom_right_latitude(), 'f', 6)));
-            listItem.append(new QStandardItem(QString::number(response.list().at(i).image_total_byte())));
-            listItem.append(new QStandardItem(QString::number(response.list().at(i).along_track(), 'f', 2)));
-            listItem.append(new QStandardItem(QString::number(response.list().at(i).across_track(), 'f', 2)));
-            listItem.append(new QStandardItem(response.list().at(i).remarks().data()));
-            listItem.append(new QStandardItem(response.list().at(i).suppose_size().data()));
-            listItem.append(new QStandardItem(QString::number(response.list().at(i).priority())));
-            listItem.append(new QStandardItem(response.list().at(i).verify_auv_sss_image_paths().data()));
-            listItem.append(new QStandardItem(response.list().at(i).verify_image_paths().data()));
-            listItem.append(new QStandardItem(response.list().at(i).image_description().data()));
-            listItem.append(new QStandardItem(response.list().at(i).target_longitude().data()));
-            listItem.append(new QStandardItem(response.list().at(i).target_latitude().data()));
-            listItem.append(new QStandardItem(response.list().at(i).position_error().data()));
-            listItem.append(new QStandardItem(response.list().at(i).verify_cruise_number().data()));
-            listItem.append(new QStandardItem(response.list().at(i).verify_dive_number().data()));
-            listItem.append(new QStandardItem(response.list().at(i).verify_time().data()));
-            listItem.append(new QStandardItem(response.list().at(i).verify_flag() ? "已查证" : "未查证"));
-            listItem.append(new QStandardItem(QString::number(response.list().at(i).status_flag())));
-
-            mModelSideScanSource.appendRow(listItem);
-        }
-
-        MessageWidget *msg = new MessageWidget(MessageWidget::M_Success, MessageWidget::P_Bottom_Center, this);
-        msg->showMessage(QString("检索到 %1 条数据").arg(QString::number(size)));
-
-        ui->lbStatisticsNumber->setText(QString("总计： %1 条记录").arg(QString::number(size)));
-
-        break;
-    }
-    case CMD_QUERY_TRAJECTORY_BY_CURSE_AND_DIVE_RESPONSE:
-    {
-        RequestTrajectoryResponse response;
-        bool status = response.ParseFromString(mBufferArray.mid(8, size).toStdString());
-
-        if (!status) return;
-
-        // 没有找到轨迹线，直接返回
-        if (!response.status()) return;
-
-        // 添加 kml 文件轨迹
-        int cruiseCount = response.position_chain_size();
-        if (cruiseCount == 0) return;
-
-        QStringList list;
-        for (int i = 0; i < cruiseCount; i++)
-        {
-            list.append(response.position_chain(i).data());
-        }
-        emit AppSignal::getInstance()->sgl_add_remote_trajectory_entity(QString::fromStdString(response.id()), list);
-    }
-    default:
-        break;
-    }
-
-    mBufferArray.clear();
-}
-
-void DialogSearch::slot_tcp_socket_disconnect(uint64_t dwconnid)
-{
-    Q_UNUSED(dwconnid);
-    mTcpSocketConnected = false;
+    connect(AppSignal::getInstance(), &AppSignal::sgl_query_side_scan_source_data_response, this, &DialogSearch::slot_query_side_scan_source_data_response);
+    connect(AppSignal::getInstance(), &AppSignal::sgl_query_trajectory_data_response, this, &DialogSearch::slot_query_trajectory_data_response);
 }
 
 void DialogSearch::slot_btn_search_side_scan_click()
@@ -290,10 +151,10 @@ void DialogSearch::slot_btn_search_side_scan_click()
         KeywordSearchParameter searchParameter;
         searchParameter.set_keyword(parameter.toStdString());
 
-        if (nullptr == mTcpSocket) return;
+        if (!UserNetWorker::getInstance()->getSocketStatus()) return;
 
         QByteArray pack = ProtocolHelper::getInstance()->createPackage(CMD_QUERY_SIDE_SCAN_SOURCE_DATA_BY_KEYWORD, searchParameter.SerializeAsString());
-        mTcpSocket->write(pack.toStdString());
+        UserNetWorker::getInstance()->sendPack(pack);
     }
     else
     {
@@ -311,10 +172,10 @@ void DialogSearch::slot_btn_search_side_scan_click()
         if (mListPriority.size() != 3) searchParameter.set_priority(mListPriority.join(",").toStdString());
         if (mListVerifyFlag.size() != 2) searchParameter.set_verify_flag(mListVerifyFlag.join(",").toStdString());
 
-        if (nullptr == mTcpSocket) return;
+        if (!UserNetWorker::getInstance()->getSocketStatus()) return;
 
         QByteArray pack = ProtocolHelper::getInstance()->createPackage(CMD_QUERY_SIDE_SCAN_SOURCE_DATA_BY_FILTER, searchParameter.SerializeAsString());
-        mTcpSocket->write(pack.toStdString());
+        UserNetWorker::getInstance()->sendPack(pack);
     }
 }
 
@@ -455,7 +316,6 @@ void DialogSearch::slot_btn_extract_clicked()
             QStandardItem *item = mModelSideScanSource.item(index.row(), i);
             if (nullptr == item) return;
 
-
             if (i == FIELD_CRUISE_NUMBER) cruiseNumber = item->text();
             if (i == FIELD_DIVE_NUMBER) diveNumber = item->text();
 
@@ -520,10 +380,10 @@ void DialogSearch::slot_btn_extract_clicked()
             request.set_trajectory_type("SHIP");
         }
 
-        if (nullptr == mTcpSocket) continue;
+        if (!UserNetWorker::getInstance()->getSocketStatus()) return;
 
         QByteArray pack = ProtocolHelper::getInstance()->createPackage(CMD_QUERY_TRAJECTORY_BY_CURSE_AND_DIVE, request.SerializeAsString());
-        mTcpSocket->write(pack.toStdString());
+        UserNetWorker::getInstance()->sendPack(pack);
     }
 
     qDebug() << "listTrajectory " << listTrajectory;
@@ -542,5 +402,39 @@ void DialogSearch::slot_remote_entity_add_finish(const QString &id, bool status,
     if (listIndex.isEmpty()) return;
 
     mModelSideScanSource.removeRows(listIndex.first().row(), 1);
+}
+
+void DialogSearch::slot_query_side_scan_source_data_response(const QList<QStringList> &list)
+{
+    int size = list.size();
+    if (0 == size)
+    {
+        MessageWidget *msg = new MessageWidget(MessageWidget::M_Info, MessageWidget::P_Bottom_Center, this);
+        msg->showMessage("查询结果为空");
+        mBufferArray.clear();
+        return;
+    }
+
+    for(int i = 0; i < size; i++)
+    {
+        QStringList listItemText = list.at(i);
+        QList<QStandardItem*> listItem;
+        for (auto &value : listItemText)
+        {
+            listItem.append(new QStandardItem(value));
+        }
+        mModelSideScanSource.appendRow(listItem);
+    }
+
+    MessageWidget *msg = new MessageWidget(MessageWidget::M_Success, MessageWidget::P_Bottom_Center, this);
+    msg->showMessage(QString("检索到 %1 条数据").arg(QString::number(size)));
+
+    ui->lbStatisticsNumber->setText(QString("总计： %1 条记录").arg(QString::number(size)));
+}
+
+void DialogSearch::slot_query_trajectory_data_response(bool status, const QString &id, const QStringList &list)
+{
+    if (!status) return;
+    emit AppSignal::getInstance()->sgl_add_remote_trajectory_entity(id, list);
 }
 

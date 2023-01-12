@@ -3,9 +3,9 @@
 #include "Public/appsignal.h"
 #include "xlsxdocument.h"
 #include "Ftp/ftpmanager.h"
-#include "Net/tcpsocket.h"
 #include "Common/common.h"
 #include "Protocol/protocolhelper.h"
+#include "Net/usernetworker.h"
 #include "gdal_priv.h"
 #include "Public/appconfig.h"
 
@@ -52,10 +52,6 @@ DialogUploadData::~DialogUploadData()
 {
     mRunThreadCheck = false;
 
-    // 关闭网络链接
-    mTcpSocket->closeSocket();
-    mTcpSocket->deleteLater();
-
     delete ui;
 }
 
@@ -76,32 +72,22 @@ void DialogUploadData::init()
     connect(this, &DialogUploadData::sgl_send_system_notice_message, this, &DialogUploadData::slot_thread_report_check_status);
     connect(this, &DialogUploadData::sgl_start_next_task, this, &DialogUploadData::slot_start_next_task);
 
-    // 准备执行 SQL 任务
-    mTcpSocket = new TcpSocket;
-    connect(mTcpSocket, &TcpSocket::sgl_recv_socket_data, this, &DialogUploadData::slot_recv_socket_data);
-    connect(mTcpSocket, &TcpSocket::sgl_tcp_socket_connect, this, [this](uint64_t dwconnid)
+    if (UserNetWorker::getInstance()->getSocketStatus())
     {
-        Q_UNUSED(dwconnid);
-        emit sgl_send_system_notice_message(STATUS_SUCCESS, QString("数据服务连接成功"));
-        mTcpServerFlag = true;
+        emit sgl_send_system_notice_message(STATUS_SUCCESS, QString("远程数据服务已连接"));
 
         // 数据服务连接后，通过数据服务查询文件服务是否开启
         QByteArray pack = ProtocolHelper::getInstance()->createPackage(CMD_QUERY_FTP_SERVER_STATUS);
-        mTcpSocket->write(pack.toStdString());
-    });
-    connect(mTcpSocket, &TcpSocket::sgl_tcp_socket_disconnect, this, [this](uint64_t dwconnid)
-    {
-        Q_UNUSED(dwconnid);
-        emit sgl_send_system_notice_message(STATUS_ERROR, QString("数据服务连接失败或断开"));
-        mTcpServerFlag = false;
-    });
+        UserNetWorker::getInstance()->sendPack(pack);
+    }
 
-    emit sgl_send_system_notice_message(STATUS_INFO, "尝试连接远程数据服务 ...");
-    QString ip = AppConfig::getInstance()->getValue("Remote", "ip");
-    mTcpSocket->connect(ip, 60011);
+    connect(AppSignal::getInstance(), &AppSignal::sgl_tcp_socket_status_change, this, &DialogUploadData::slot_tcp_socket_status_change);
+    connect(AppSignal::getInstance(), &AppSignal::sgl_ftp_server_work_status, this, &DialogUploadData::slot_ftp_server_work_status);
+    connect(AppSignal::getInstance(), &AppSignal::sgl_insert_side_scan_source_data_response, this, &DialogUploadData::slot_insert_side_scan_source_data_response);
+    connect(AppSignal::getInstance(), &AppSignal::sgl_insert_cruise_route_source_data_response, this, &DialogUploadData::slot_insert_cruise_route_source_data_response);
 
     // test
-    ui->tbRootDir->setText("C:/Users/admin/Desktop/TestExample/TS-24-2");
+    ui->tbRootDir->setText("C:/Users/admin/Desktop/TestExample/TS-24-4");
 }
 
 void DialogUploadData::checkData()
@@ -805,17 +791,13 @@ void DialogUploadData::slot_btn_upload_data_click()
         return;
     }
 
-    if (!mTcpServerFlag)
+    if (!UserNetWorker::getInstance()->getSocketStatus())
     {
-        emit sgl_send_system_notice_message(STATUS_INFO, "请检查数据服务状态");
-        if (nullptr == mTcpSocket) return;
-
-        emit sgl_send_system_notice_message(STATUS_INFO, "尝试连接远程数据服务 ...");
-        mTcpSocket->connect();
+        emit sgl_send_system_notice_message(STATUS_INFO, "请检查远程数据服务状态");
         return;
     }
 
-    if (!mFtpServerFlag)
+    if (!mFtpServerStatus)
     {
         emit sgl_send_system_notice_message(STATUS_INFO, "请检查文件服务状态");
         return;
@@ -881,99 +863,6 @@ void DialogUploadData::slot_thread_check_data_finish()
     emit sgl_start_next_task();
 }
 
-void DialogUploadData::slot_recv_socket_data(uint64_t dwconnid, const std::string &data)
-{
-    Q_UNUSED(dwconnid);
-    uint32_t cmd = 0;
-    memcpy(&cmd, data.data() + 2, 2);
-
-    switch (cmd) {
-    case CMD_INSERT_SIDE_SCAN_SOURCE_DATA_RESPONSE:
-    {
-        StatusResponse response;
-        response.ParseFromString(data.substr(8));
-
-        if (response.status())
-        {
-            slot_thread_report_check_status(STATUS_SUCCESS, QString("异常点数据录入成功 %1").arg(response.message().data()), false);
-            // 此处可以尝试开启下一个任务
-            emit sgl_start_next_task();
-        }
-        else
-        {
-            slot_thread_report_check_status(STATUS_ERROR, QString("异常点数据录入失败 %1").arg(response.message().data()), false);
-
-            std::lock_guard<std::mutex> lock(mMutexQueue);
-            mTaskQueue.clear();
-            emit sgl_thread_report_check_status(STATUS_INFO, "数据录入流程中止", false);
-            emit sgl_thread_report_check_status(STATUS_INFO, QString(72, '-'), false);
-        }
-        break;
-    }
-    case CMD_INSERT_CRUISE_ROUTE_SOURCE_DATA_RESPONSE:
-    {
-        StatusResponse response;
-        response.ParseFromString(data.substr(8));
-
-        if (response.status())
-        {
-            slot_thread_report_check_status(STATUS_SUCCESS, QString("轨迹数据录入成功 %1").arg(response.message().data()), false);
-            // 此处可以尝试开启下一个任务
-            emit sgl_start_next_task();
-        }
-        else
-        {
-            slot_thread_report_check_status(STATUS_ERROR, QString("轨迹点数据录入失败 %1").arg(response.message().data()), false);
-
-            std::lock_guard<std::mutex> lock(mMutexQueue);
-            mTaskQueue.clear();
-            emit sgl_thread_report_check_status(STATUS_INFO, "数据录入流程中止", false);
-            emit sgl_thread_report_check_status(STATUS_INFO, QString(72, '-'), false);
-        }
-        break;
-    }
-    case CMD_QUERY_FTP_SERVER_STATUS_RESPONSE:
-    {
-        StatusResponse response;
-        response.ParseFromString(data.substr(8));
-        slot_thread_report_check_status(response.status() ? STATUS_SUCCESS : STATUS_ERROR, response.message().data(), false);
-
-        // 文件服务状态
-        mFtpServerFlag = response.status();
-
-        // 开始连接文件服务
-        if (mFtpServerFlag)
-        {
-            if (nullptr != mFtpManager) return;
-            QString ip = AppConfig::getInstance()->getValue("Remote", "ip");
-            mFtpManager = new FtpManager(ip, "idsse", "123456");
-            connect(mFtpManager, &FtpManager::sgl_ftp_connect_status_change, this, [this](bool status)
-            {
-                emit sgl_thread_report_check_status(status ? STATUS_SUCCESS : STATUS_ERROR, status ? "文件服务连接成功" : QString("文件服务连接失败"), false);
-            });
-            connect(mFtpManager, &FtpManager::sgl_ftp_upload_task_finish, this, [this](const QString &file, bool status, const QString &message)
-            {
-                Q_UNUSED(message);
-                if (status)
-                {
-                    emit sgl_thread_report_check_status(STATUS_SUCCESS, QString("上传文件成功 %1").arg(file), false);
-                    emit sgl_start_next_task();
-                }
-                else
-                {
-                    emit sgl_thread_report_check_status(STATUS_ERROR, QString("上传文件失败 %1，%2").arg(file, message), false);
-                    emit sgl_start_next_task();
-                }
-            });
-            mFtpManager->init();
-        }
-        break;
-    }
-    default:
-        break;
-    }
-}
-
 void DialogUploadData::slot_start_next_task()
 {
     qDebug() << "DialogUploadData::slot_start_next_task " << mTaskQueue.size();
@@ -998,11 +887,11 @@ void DialogUploadData::slot_start_next_task()
             return;
         }
 
-        if (!mFtpServerFlag)
+        if (!mFtpServerConnected)
         {
             // 清理
             mTaskQueue.clear();
-            emit sgl_thread_report_check_status(STATUS_ERROR, QString("文件服务关闭，请联系管理员"), false);
+            emit sgl_thread_report_check_status(STATUS_ERROR, QString("文件服务未连接，请联系管理员"), false);
             return;
         }
         // 进行文件上传任务
@@ -1011,23 +900,85 @@ void DialogUploadData::slot_start_next_task()
     // 进行数据写入任务
     else if (task.type == "insert")
     {
-        if (nullptr == mTcpSocket)
-        {
-            // 清理
-            mTaskQueue.clear();
-            emit sgl_thread_report_check_status(STATUS_ERROR, QString("系统错误，请联系管理员"), false);
-            return;
-        }
-
-        if (!mTcpServerFlag)
-        {
-            // 清理
-            mTaskQueue.clear();
-            emit sgl_thread_report_check_status(STATUS_ERROR, QString("数据服务关闭，请联系管理员"), false);
-            return;
-        }
-
         QByteArray message = ProtocolHelper::getInstance()->createPackage(task.arg3, QByteArray::fromStdString(task.arg1).toStdString());
-        mTcpSocket->write(message.toStdString());
+        UserNetWorker::getInstance()->sendPack(message);
+    }
+}
+
+void DialogUploadData::slot_tcp_socket_status_change(bool status)
+{
+    emit sgl_send_system_notice_message(status ? STATUS_SUCCESS : STATUS_ERROR, status ? "数据服务连接成功" : "数据服务连接失败或断开");
+}
+
+void DialogUploadData::slot_ftp_server_work_status(bool status, const QString &message)
+{
+    mFtpServerStatus = status;
+
+    emit sgl_send_system_notice_message(status ? STATUS_SUCCESS : STATUS_ERROR, message);
+
+    // 开始连接文件服务
+    if (mFtpServerStatus)
+    {
+        if (nullptr != mFtpManager) return;
+        QString ip = AppConfig::getInstance()->getValue("Remote", "ip");
+        mFtpManager = new FtpManager(ip, "idsse", "123456");
+        connect(mFtpManager, &FtpManager::sgl_ftp_connect_status_change, this, [this](bool status)
+        {
+            mFtpServerConnected = status;
+            emit sgl_thread_report_check_status(status ? STATUS_SUCCESS : STATUS_ERROR, status ? "文件服务连接成功" : QString("文件服务连接失败"), false);
+        });
+        connect(mFtpManager, &FtpManager::sgl_ftp_upload_task_finish, this, [this](const QString &file, bool status, const QString &message)
+        {
+            Q_UNUSED(message);
+            if (status)
+            {
+                emit sgl_thread_report_check_status(STATUS_SUCCESS, QString("上传文件成功 %1").arg(file), false);
+                emit sgl_start_next_task();
+            }
+            else
+            {
+                emit sgl_thread_report_check_status(STATUS_ERROR, QString("上传文件失败 %1，%2").arg(file, message), false);
+                emit sgl_start_next_task();
+            }
+        });
+        mFtpManager->init();
+    }
+}
+
+void DialogUploadData::slot_insert_side_scan_source_data_response(bool status, const QString &message)
+{
+    if (status)
+    {
+        slot_thread_report_check_status(STATUS_SUCCESS, QString("异常点数据录入成功 %1").arg(message), false);
+        // 此处可以尝试开启下一个任务
+        emit sgl_start_next_task();
+    }
+    else
+    {
+        slot_thread_report_check_status(STATUS_ERROR, QString("异常点数据录入失败 %1").arg(message), false);
+
+        std::lock_guard<std::mutex> lock(mMutexQueue);
+        mTaskQueue.clear();
+        emit sgl_thread_report_check_status(STATUS_INFO, "数据录入流程中止", false);
+        emit sgl_thread_report_check_status(STATUS_INFO, QString(72, '-'), false);
+    }
+}
+
+void DialogUploadData::slot_insert_cruise_route_source_data_response(bool status, const QString &message)
+{
+    if (status)
+    {
+        slot_thread_report_check_status(STATUS_SUCCESS, QString("轨迹数据录入成功 %1").arg(message), false);
+        // 此处可以尝试开启下一个任务
+        emit sgl_start_next_task();
+    }
+    else
+    {
+        slot_thread_report_check_status(STATUS_ERROR, QString("轨迹点数据录入失败 %1").arg(message), false);
+
+        std::lock_guard<std::mutex> lock(mMutexQueue);
+        mTaskQueue.clear();
+        emit sgl_thread_report_check_status(STATUS_INFO, "数据录入流程中止", false);
+        emit sgl_thread_report_check_status(STATUS_INFO, QString(72, '-'), false);
     }
 }

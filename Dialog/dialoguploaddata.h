@@ -26,7 +26,6 @@ typedef struct DataUploadTask
 } DataUploadTask;
 
 class FtpManager;
-class TcpSocket;
 class DialogUploadData : public QDialog
 {
     Q_OBJECT
@@ -64,9 +63,15 @@ private slots:
 
     void slot_thread_check_data_finish();
 
-    void slot_recv_socket_data(uint64_t dwconnid, const std::string &data);
-
     void slot_start_next_task();
+
+    void slot_tcp_socket_status_change(bool status);
+
+    void slot_ftp_server_work_status(bool status, const QString &message);
+
+    void slot_insert_side_scan_source_data_response(bool status, const QString &message);
+
+    void slot_insert_cruise_route_source_data_response(bool status, const QString &message);
 
 private:
     Ui::DialogUploadData *ui;
@@ -79,11 +84,8 @@ private:
 
     // 文件服务
     FtpManager *mFtpManager = nullptr;
-    bool mFtpServerFlag = false;
-
-    // 网络通信服务
-    TcpSocket *mTcpSocket = nullptr;
-    bool mTcpServerFlag = false;
+    bool mFtpServerStatus = false;
+    bool mFtpServerConnected = false;
 
     // 任务队列
     QQueue<DataUploadTask> mTaskQueue;

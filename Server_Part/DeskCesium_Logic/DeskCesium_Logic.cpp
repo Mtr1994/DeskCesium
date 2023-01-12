@@ -58,6 +58,7 @@ int load_module(IFrame_Object* frame_object, string module_param)
     frame_object->Regedit_command(CMD_QUERY_SIDE_SCAN_SOURCE_DATA_BY_FILTER);
 	frame_object->Regedit_command(CMD_QUERY_SIDE_SCAN_SOURCE_DATA_BY_KEYWORD);
 	frame_object->Regedit_command(CMD_QUERY_TRAJECTORY_BY_CURSE_AND_DIVE);
+	frame_object->Regedit_command(CMD_QUERY_STATISTICS_DATA_BY_CONDITION);
 	
     session_service = frame_object->get_session_service();
 
@@ -91,6 +92,7 @@ int do_module_message(const CMessage_Source& source, std::shared_ptr<CMessage_Pa
     MESSAGE_FUNCTION(CMD_QUERY_SIDE_SCAN_SOURCE_DATA_BY_FILTER, base_command->logic_query_side_scan_source_data_by_filter, source, recv_packet, send_packet);
     MESSAGE_FUNCTION(CMD_QUERY_SIDE_SCAN_SOURCE_DATA_BY_KEYWORD, base_command->logic_query_side_scan_source_data_by_keyword, source, recv_packet, send_packet);
     MESSAGE_FUNCTION(CMD_QUERY_TRAJECTORY_BY_CURSE_AND_DIVE, base_command->logic_query_trajectory_by_cruise_and_dive, source, recv_packet, send_packet);
+    MESSAGE_FUNCTION(CMD_QUERY_STATISTICS_DATA_BY_CONDITION, base_command->logic_query_statistics_data_by_condition, source, recv_packet, send_packet);
 
     MESSAGE_FUNCTION_END;
 

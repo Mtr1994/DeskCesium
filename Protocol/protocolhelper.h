@@ -22,22 +22,23 @@ public:
 
     QByteArray createPackage(uint32_t cmd, const std::string &para = "");
 
-    void parsePackage(const QString &channel, const QByteArray &data);
+    void parsePackage(const QByteArray &data);
 
 private:
     void parse();
 
 private:
     QByteArray mBufferArray;
-    QString mDataChannel;
 
     std::mutex mBufferMutex;
     std::condition_variable mCvPackParse;
 
-    bool mParsePackage = true;
+    bool mParsePackage = false;
 
     // 缓存状态消息
     QString mStatusMessage;
+
+    int64_t mCurrentPackSize = 0;
 };
 
 #endif // PROTOCOLHELPER_H

@@ -11,6 +11,8 @@
 #include "Dialog/dialogsearch.h"
 #include "Dialog/dialogstatistics.h"
 #include "Control/Message/messagewidget.h"
+#include "Net/usernetworker.h"
+#include "Protocol/protocolhelper.h"
 
 #include <QScreen>
 #include <QWebEngineSettings>
@@ -54,10 +56,11 @@ MainWindow::~MainWindow()
 
 void MainWindow::init()
 {
-    mJsContext = new JsContext(this);
-    QWebChannel *channel = new QWebChannel(this);
-    channel->registerObject("context", mJsContext);
-    ui->widgetCesium->page()->setWebChannel(channel);
+    // 初始化数据解析线程
+    ProtocolHelper::getInstance()->init();
+
+    // 初始化 TCP 网络
+    UserNetWorker::getInstance()->init();
 
     GDALAllRegister();
 
@@ -72,7 +75,6 @@ void MainWindow::init()
     connect(AppSignal::getInstance(), &AppSignal::sgl_fly_to_entity, this, &MainWindow::slot_fly_to_entity);
     connect(AppSignal::getInstance(), &AppSignal::sgl_change_mouse_over_pick, this, &MainWindow::slot_change_mouse_over_pick);
     connect(AppSignal::getInstance(), &AppSignal::sgl_search_local_altitude, this, &MainWindow::slot_search_local_altitude);
-    connect(AppSignal::getInstance(), &AppSignal::sgl_cesium_init_finish, this, &MainWindow::slot_cesium_init_finish);
     connect(AppSignal::getInstance(), &AppSignal::sgl_thread_report_system_error, this, &MainWindow::slot_thread_report_system_error, Qt::QueuedConnection);
     connect(AppSignal::getInstance(), &AppSignal::sgl_report_system_error, this, &MainWindow::slot_thread_report_system_error);
 
@@ -80,17 +82,27 @@ void MainWindow::init()
     ui->widgetCesium->settings()->setAttribute(QWebEngineSettings::WebGLEnabled, true);
     ui->widgetCesium->settings()->setAttribute(QWebEngineSettings::LocalContentCanAccessRemoteUrls, true);
 
+    mJsContext = new JsContext(this);
+    QWebChannel *channel = new QWebChannel(this);
+    channel->registerObject("context", mJsContext);
+    ui->widgetCesium->page()->setWebChannel(channel);
     //ui->widgetCesium->page()->load(QUrl(QString("%1/resource/html/index.html").arg(QApplication::applicationDirPath())).toString());
     ui->widgetCesium->page()->load(QUrl(QString("%1/../Resource/html/index.html").arg(QApplication::applicationDirPath())).toString());
-
     ui->widgetCesium->page()->setBackgroundColor(QColor(0, 0, 0));
+    connect(mJsContext, &JsContext::sgl_web_view_init_finish, this, [this]
+    {
+        ui->widgetCesium->setVisible(true);
+        // 检查是否开启鼠标浮动
+        slot_change_mouse_over_pick();
+    });
+
     ui->widgetCesium->setVisible(false);
 
     ////// 网页调试部分，发布时请注释此段代码 S
-    QWebEngineView *debugPage = new QWebEngineView;
-    ui->widgetCesium->page()->setDevToolsPage(debugPage->page());
-    ui->widgetCesium->page()->triggerAction(QWebEnginePage::WebAction::InspectElement);
-    debugPage->show();
+//    QWebEngineView *debugPage = new QWebEngineView;
+//    ui->widgetCesium->page()->setDevToolsPage(debugPage->page());
+//    ui->widgetCesium->page()->triggerAction(QWebEnginePage::WebAction::InspectElement);
+//    debugPage->show();
     ////// 网页调试部分，发布时请注释此段代码 E
 
     // 菜单
@@ -473,13 +485,6 @@ void MainWindow::slot_thread_report_system_error(const QString &msg)
 {
     MessageWidget *message = new MessageWidget(MessageWidget::M_Info, MessageWidget::P_Top_Center, ui->widgetBase);
     message->showMessage(msg);
-}
-
-void MainWindow::slot_cesium_init_finish()
-{
-    ui->widgetCesium->setVisible(true);
-    // 检查是否开启鼠标浮动
-    slot_change_mouse_over_pick();
 }
 
 void MainWindow::slot_open_files()

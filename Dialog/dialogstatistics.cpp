@@ -1,10 +1,17 @@
 ﻿#include "dialogstatistics.h"
 #include "ui_dialogstatistics.h"
-#include "Channel/jscontext.h"
+#include "Channel/surveycontext.h"
 #include "Channel/chartcontext.h"
+#include "Protocol/protocolhelper.h"
+#include "Net/usernetworker.h"
+#include "Common/common.h"
+#include "Public/appsignal.h"
 
 #include <QWebEngineSettings>
 #include <QWebChannel>
+
+// test
+#include <QDebug>
 
 DialogStatistics::DialogStatistics(QWidget *parent) :
     QDialog(parent),
@@ -28,9 +35,11 @@ void DialogStatistics::init()
     resize(width(), nativeParentWidget()->height());
     setWindowFlags(Qt::Dialog | Qt::WindowCloseButtonHint);
 
-    mJsContext = new JsContext(this);
+    connect(AppSignal::getInstance(), &AppSignal::sgl_query_statistics_data_by_condition_response, this, &DialogStatistics::slot_query_statistics_data_by_condition_response);
+
+    mSurveyContext = new SurveyContext(this);
     QWebChannel *channel = new QWebChannel(this);
-    channel->registerObject("context", mJsContext);
+    channel->registerObject("context", mSurveyContext);
     ui->widgetStatisticsCesium->page()->setWebChannel(channel);
 
     // Cesium 组件
@@ -41,8 +50,11 @@ void DialogStatistics::init()
     QString htmlRoot = QApplication::applicationDirPath() + "/../Resource/html";
     //QString htmlRoot = QApplication::applicationDirPath() + "/resource/html";
 
+    ui->widgetStatisticsCesium->page()->setWebChannel(channel);
     ui->widgetStatisticsCesium->page()->load(QUrl(QString("%1/indexStatisticsCesium.html").arg(htmlRoot)));
     ui->widgetStatisticsCesium->page()->setBackgroundColor(QColor(0, 0, 0));
+
+    connect(mSurveyContext, &SurveyContext::sgl_web_view_init_finish, this, [this]{ requestStatisticsData(); });
 
     mJsContextChartYear = new ChartContext(this);
     QWebChannel *channelChartYear = new QWebChannel(this);
@@ -57,7 +69,8 @@ void DialogStatistics::init()
     ui->widgetChartCurveYear->page()->load(QUrl(QString("%1/indexStatisticsChart.html").arg(htmlRoot)));
     ui->widgetChartCurveYear->page()->setBackgroundColor(QColor(255, 255, 255));
 
-    connect(mJsContextChartYear, &ChartContext::sgl_web_view_init_finish, this, [this]{ emit mJsContextChartYear->sgl_load_year_curve_chart("{year: ['2021', '2022'], value: [46, 78]}"); });
+    connect(mJsContextChartYear, &ChartContext::sgl_web_view_init_finish, this, [this]{ requestStatisticsData(); });
+    //connect(mJsContextChartYear, &ChartContext::sgl_web_view_init_finish, this, [this]{ emit mJsContextChartYear->sgl_load_year_curve_chart("{year: ['2021', '2022'], value: [46, 78]}"); });
 
     // 饼图 查证
     mJsContextChartChecked = new ChartContext(this);
@@ -71,7 +84,8 @@ void DialogStatistics::init()
     ui->widgetChartPieChecked->page()->load(QUrl(QString("%1/indexStatisticsChart.html").arg(htmlRoot)));
     ui->widgetChartPieChecked->page()->setBackgroundColor(QColor(255, 255, 255));
 
-    connect(mJsContextChartChecked, &ChartContext::sgl_web_view_init_finish, this, [this]{ emit mJsContextChartChecked->sgl_load_check_pie_chart("[{value: 70, name: '已查证'}, {value: 30, name: '未查证'}]"); });
+    connect(mJsContextChartChecked, &ChartContext::sgl_web_view_init_finish, this, [this]{ requestStatisticsData(); });
+    //connect(mJsContextChartChecked, &ChartContext::sgl_web_view_init_finish, this, [this]{ emit mJsContextChartChecked->sgl_load_check_pie_chart("[{value: 70, name: '已查证'}, {value: 30, name: '未查证'}]"); });
 
     // 饼图 优先级
     mJsContextChartPriority = new ChartContext(this);
@@ -87,10 +101,46 @@ void DialogStatistics::init()
 
 //    ////// 网页调试部分，发布时请注释此段代码 S
 //    QWebEngineView *debugPage = new QWebEngineView;
-//    ui->widgetChartPiePriority->page()->setDevToolsPage(debugPage->page());
-//    ui->widgetChartPiePriority->page()->triggerAction(QWebEnginePage::WebAction::InspectElement);
+//    ui->widgetStatisticsCesium->page()->setDevToolsPage(debugPage->page());
+//    ui->widgetStatisticsCesium->page()->triggerAction(QWebEnginePage::WebAction::InspectElement);
 //    debugPage->show();
 //    ////// 网页调试部分，发布时请注释此段代码 E
 
-    connect(mJsContextChartPriority, &ChartContext::sgl_web_view_init_finish, this, [this]{ emit mJsContextChartPriority->sgl_load_priority_pie_chart("[{value: 24, name: '优先级1'}, {value: 46, name: '优先级2'}, {value: 30, name: '优先级3'}]"); });
+    connect(mJsContextChartPriority, &ChartContext::sgl_web_view_init_finish, this, [this]{ requestStatisticsData(); });
+    //connect(mJsContextChartPriority, &ChartContext::sgl_web_view_init_finish, this, [this]{ emit mJsContextChartPriority->sgl_load_priority_pie_chart("[{value: 24, name: '优先级1'}, {value: 46, name: '优先级2'}, {value: 30, name: '优先级3'}]"); });
+}
+
+void DialogStatistics::requestStatisticsData()
+{
+    mNumberInitWebView++;
+    if (mNumberInitWebView < 4) return;
+    qDebug() << "DialogStatistics::requestStatisticsData Start";
+
+    RequestStatistics requestStatistics;
+    requestStatistics.set_query_dt(true);
+    requestStatistics.set_query_auv(true);
+    requestStatistics.set_query_errorpoint(true);
+    requestStatistics.set_query_hov(true);
+    requestStatistics.set_query_preface(true);
+    requestStatistics.set_query_ship(true);
+    requestStatistics.set_query_chart_data(true);
+
+    QByteArray pack = ProtocolHelper::getInstance()->createPackage(CMD_QUERY_STATISTICS_DATA_BY_CONDITION, requestStatistics.SerializeAsString());
+    UserNetWorker::getInstance()->sendPack(pack);
+}
+
+void DialogStatistics::slot_query_statistics_data_by_condition_response(const RequestStatisticsResponse &response)
+{
+    if (!response.status()) return;
+
+    emit mSurveyContext->sgl_add_remote_trajectory_entitys(response.dt().data());
+    emit mSurveyContext->sgl_add_remote_trajectory_entitys(response.auv().data());
+    emit mSurveyContext->sgl_add_remote_trajectory_entitys(response.hov().data());
+    emit mSurveyContext->sgl_add_remote_trajectory_entitys(response.ship().data());
+
+    emit mSurveyContext->sgl_add_remote_point_entitys(response.errorpoint().data());
+
+    emit mJsContextChartYear->sgl_load_year_curve_chart(response.chart_data().data());
+    emit mJsContextChartChecked->sgl_load_check_pie_chart(response.chart_data().data());
+    emit mJsContextChartPriority->sgl_load_priority_pie_chart(response.chart_data().data());
 }

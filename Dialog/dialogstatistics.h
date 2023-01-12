@@ -1,13 +1,15 @@
 ﻿#ifndef DIALOGSTATISTICS_H
 #define DIALOGSTATISTICS_H
 
+#include "Proto/sidescansource.pb.h"
+
 #include <QDialog>
 
 namespace Ui {
 class DialogStatistics;
 }
 
-class JsContext;
+class SurveyContext;
 class ChartContext;
 class DialogStatistics : public QDialog
 {
@@ -21,10 +23,17 @@ private:
     void init();
 
 private:
+    void requestStatisticsData();
+
+private slots:
+    // 查询统计数据结果
+    void slot_query_statistics_data_by_condition_response(const RequestStatisticsResponse &response);
+
+private:
     Ui::DialogStatistics *ui;
 
     // 通信类
-    JsContext *mJsContext = nullptr;
+    SurveyContext *mSurveyContext = nullptr;
 
     // 图表专属通信类
     ChartContext *mJsContextChartYear = nullptr;
@@ -34,6 +43,8 @@ private:
 
     // 图表专属通信类
     ChartContext *mJsContextChartChecked = nullptr;
+
+    uint16_t mNumberInitWebView = 0;
 };
 
 #endif // DIALOGSTATISTICS_H

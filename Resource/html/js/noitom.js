@@ -280,6 +280,11 @@ function init() {
 					elementTextSupposeSize.parentNode.title = textSupposeSize
 					
 					// 查证信息
+					let elementTextVerifyTime = document.getElementById("text-verify-time")
+					let textVerifyTime = remoteObject.verify_time === "" ? "---" : remoteObject.verify_time
+					elementTextVerifyTime.innerHTML = textVerifyTime
+					elementTextVerifyTime.parentNode.title = textVerifyTime
+					
 					let elementTextTargetLongitude = document.getElementById("text-target-longitude")
 					let textTargetLongitude = remoteObject.target_longitude === "" ? "---" : remoteObject.target_longitude
 					elementTextTargetLongitude.innerHTML = textTargetLongitude

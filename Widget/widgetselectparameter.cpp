@@ -1,10 +1,10 @@
 ﻿#include "widgetselectparameter.h"
 #include "ui_widgetselectparameter.h"
-#include "Net/tcpsocket.h"
 #include "Common/common.h"
 #include "Protocol/protocolhelper.h"
-#include "Proto/sidescansource.pb.h"
 #include "Public/appconfig.h"
+#include "Net/usernetworker.h"
+#include "Public/appsignal.h"
 
 #include <QPushButton>
 
@@ -24,17 +24,8 @@ WidgetSelectParameter::~WidgetSelectParameter()
 
 void WidgetSelectParameter::requestSelectParameter()
 {
-    // 只允许请求一次
-    if (nullptr != mTcpSocket) return;
-
-    // 准备执行 SQL 任务
-    mTcpSocket = new TcpSocket;
-    connect(mTcpSocket, &TcpSocket::sgl_recv_socket_data, this, &WidgetSelectParameter::slot_recv_socket_data);
-    connect(mTcpSocket, &TcpSocket::sgl_tcp_socket_connect, this, &WidgetSelectParameter::slot_tcp_socket_connect);
-    connect(mTcpSocket, &TcpSocket::sgl_tcp_socket_disconnect, this, &WidgetSelectParameter::slot_tcp_socket_disconnect);
-
-    QString ip = AppConfig::getInstance()->getValue("Remote", "ip");
-    mTcpSocket->connect(ip, 60011);
+    QByteArray pack = ProtocolHelper::getInstance()->createPackage(CMD_QUERY_SEARCH_FILTER_PARAMETER_DATA);
+    UserNetWorker::getInstance()->sendPack(pack);
 }
 
 void WidgetSelectParameter::init()
@@ -59,120 +50,82 @@ void WidgetSelectParameter::init()
     {
         emit sgl_modify_search_parameter("verify_flag", "0", checked);
     });
+
+    connect(AppSignal::getInstance(), &AppSignal::sgl_query_search_filter_parameter_response, this, &WidgetSelectParameter::slot_query_search_filter_parameter_response);
 }
 
-void WidgetSelectParameter::slot_tcp_socket_connect(uint64_t dwconnid)
+void WidgetSelectParameter::slot_query_search_filter_parameter_response(const SearchFilterParamterList &response)
 {
-    Q_UNUSED(dwconnid);
-    mTcpSocketConnected = true;
-    if (nullptr == mTcpSocket) return;
+    int size = response.list_size();
 
-    QByteArray pack = ProtocolHelper::getInstance()->createPackage(CMD_QUERY_SEARCH_FILTER_PARAMETER_DATA);
-    mTcpSocket->write(pack.toStdString());
-}
-
-void WidgetSelectParameter::slot_recv_socket_data(uint64_t dwconnid, const std::string &data)
-{
-    Q_UNUSED(dwconnid);
-
-    uint32_t cmd = 0;
-    memcpy(&cmd, data.data() + 2, 2);
-
-    switch (cmd) {
-    case CMD_QUERY_SEARCH_FILTER_PARAMETER_DATA_RESPONSE:
+    QStringList listCruiseYear;
+    QStringList listCruiseNumber;
+    QStringList listDiveNumber;
+    QStringList listVerifyDiveNumber;
+    for (int i = 0; i < size; i++)
     {
-        SearchFilterParamterList response;
-        bool status = response.ParseFromString(data.substr(8));
-        if (!status)
+        QString year = response.list().at(i).cruise_year().data();
+        if(!listCruiseYear.contains(year)) listCruiseYear.append(year);
+
+        QString cruiseNumber = response.list().at(i).cruise_number().data();
+        if(!listCruiseNumber.contains(cruiseNumber)) listCruiseNumber.append(cruiseNumber);
+
+        QString diveNumber = response.list().at(i).dive_number().data();
+        if(!listDiveNumber.contains(diveNumber)) listDiveNumber.append(diveNumber);
+
+        QString verifyDiveNumber = response.list().at(i).verify_dive_number().data();
+        auto list = verifyDiveNumber.split("/", Qt::SkipEmptyParts);
+        for (auto &diveNumber : list)
         {
-            qDebug() << "数据解析错误，请联系管理员";
-            return;
+            if(!listVerifyDiveNumber.contains(diveNumber)) listVerifyDiveNumber.append(diveNumber);
         }
-        qDebug() << "slot_recv_socket_data " << response.list_size();
-
-        int size = response.list_size();
-
-        QStringList listCruiseYear;
-        QStringList listCruiseNumber;
-        QStringList listDiveNumber;
-        QStringList listVerifyDiveNumber;
-        for (int i = 0; i < size; i++)
-        {
-            QString year = response.list().at(i).cruise_year().data();
-            if(!listCruiseYear.contains(year)) listCruiseYear.append(year);
-
-            QString cruiseNumber = response.list().at(i).cruise_number().data();
-            if(!listCruiseNumber.contains(cruiseNumber)) listCruiseNumber.append(cruiseNumber);
-
-            QString diveNumber = response.list().at(i).dive_number().data();
-            if(!listDiveNumber.contains(diveNumber)) listDiveNumber.append(diveNumber);
-
-            QString verifyDiveNumber = response.list().at(i).verify_dive_number().data();
-            auto list = verifyDiveNumber.split("/", Qt::SkipEmptyParts);
-            for (auto &diveNumber : list)
-            {
-                if(!listVerifyDiveNumber.contains(diveNumber)) listVerifyDiveNumber.append(diveNumber);
-            }
-        }
-
-        for (int i = 0; i < listCruiseYear.size(); i++)
-        {
-            QPushButton *button = new QPushButton(listCruiseYear.at(i));
-            button->setCheckable(true);
-            connect(button, &QPushButton::toggled, this, [this](bool checked)
-            {
-                emit sgl_modify_search_parameter("cruise_year", ((QPushButton*)sender())->text(), checked);
-            });
-            button->setProperty("SelectSearchParameter", true);
-            ((QGridLayout*)ui->widgetCruiseYear->layout())->addWidget(button, i / 3, i % 3);
-        }
-
-        for (int i = 0; i < listCruiseNumber.size(); i++)
-        {
-            QPushButton *button = new QPushButton(listCruiseNumber.at(i));
-            button->setCheckable(true);
-            connect(button, &QPushButton::toggled, this, [this](bool checked)
-            {
-                emit sgl_modify_search_parameter("cruise_number", ((QPushButton*)sender())->text(), checked);
-            });
-            button->setProperty("SelectSearchParameter", true);
-            ((QGridLayout*)ui->widgetCruiseNumber->layout())->addWidget(button, i / 3, i % 3);
-        }
-
-        for (int i = 0; i < listDiveNumber.size(); i++)
-        {
-            QPushButton *button = new QPushButton(listDiveNumber.at(i));
-            button->setCheckable(true);
-            connect(button, &QPushButton::toggled, this, [this](bool checked)
-            {
-                emit sgl_modify_search_parameter("dive_number", ((QPushButton*)sender())->text(), checked);
-            });
-            button->setProperty("SelectSearchParameter", true);
-            ((QGridLayout*)ui->widgetDiveNumber->layout())->addWidget(button, i / 3, i % 3);
-        }
-
-        for (int i = 0; i < listVerifyDiveNumber.size(); i++)
-        {
-            QPushButton *button = new QPushButton(listVerifyDiveNumber.at(i));
-            button->setCheckable(true);
-            button->setProperty("SelectSearchParameter", true);
-            connect(button, &QPushButton::toggled, this, [this](bool checked)
-            {
-                emit sgl_modify_search_parameter("verify_dive_number", ((QPushButton*)sender())->text(), checked);
-            });
-            ((QGridLayout*)ui->widgetVerifyDiveNumber->layout())->addWidget(button, i / 3, i % 3);
-        }
-
-
-        break;
     }
-    default:
-        break;
-    }
-}
 
-void WidgetSelectParameter::slot_tcp_socket_disconnect(uint64_t dwconnid)
-{
-    Q_UNUSED(dwconnid);
-    mTcpSocketConnected = false;
+    for (int i = 0; i < listCruiseYear.size(); i++)
+    {
+        QPushButton *button = new QPushButton(listCruiseYear.at(i));
+        button->setCheckable(true);
+        connect(button, &QPushButton::toggled, this, [this](bool checked)
+        {
+            emit sgl_modify_search_parameter("cruise_year", ((QPushButton*)sender())->text(), checked);
+        });
+        button->setProperty("SelectSearchParameter", true);
+        ((QGridLayout*)ui->widgetCruiseYear->layout())->addWidget(button, i / 3, i % 3);
+    }
+
+    for (int i = 0; i < listCruiseNumber.size(); i++)
+    {
+        QPushButton *button = new QPushButton(listCruiseNumber.at(i));
+        button->setCheckable(true);
+        connect(button, &QPushButton::toggled, this, [this](bool checked)
+        {
+            emit sgl_modify_search_parameter("cruise_number", ((QPushButton*)sender())->text(), checked);
+        });
+        button->setProperty("SelectSearchParameter", true);
+        ((QGridLayout*)ui->widgetCruiseNumber->layout())->addWidget(button, i / 3, i % 3);
+    }
+
+    for (int i = 0; i < listDiveNumber.size(); i++)
+    {
+        QPushButton *button = new QPushButton(listDiveNumber.at(i));
+        button->setCheckable(true);
+        connect(button, &QPushButton::toggled, this, [this](bool checked)
+        {
+            emit sgl_modify_search_parameter("dive_number", ((QPushButton*)sender())->text(), checked);
+        });
+        button->setProperty("SelectSearchParameter", true);
+        ((QGridLayout*)ui->widgetDiveNumber->layout())->addWidget(button, i / 3, i % 3);
+    }
+
+    for (int i = 0; i < listVerifyDiveNumber.size(); i++)
+    {
+        QPushButton *button = new QPushButton(listVerifyDiveNumber.at(i));
+        button->setCheckable(true);
+        button->setProperty("SelectSearchParameter", true);
+        connect(button, &QPushButton::toggled, this, [this](bool checked)
+        {
+            emit sgl_modify_search_parameter("verify_dive_number", ((QPushButton*)sender())->text(), checked);
+        });
+        ((QGridLayout*)ui->widgetVerifyDiveNumber->layout())->addWidget(button, i / 3, i % 3);
+    }
 }

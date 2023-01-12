@@ -1,6 +1,8 @@
 ﻿#ifndef APPSIGNAL_H
 #define APPSIGNAL_H
 
+#include "Proto/sidescansource.pb.h"
+
 #include <QObject>
 
 class QWidget;
@@ -61,11 +63,32 @@ signals:
     // 系统错误信息报告
     void sgl_report_system_error(const QString & msg);
 
-    // cesium 加载完成
-    void sgl_cesium_init_finish();
-
     // remote entity add finish
     void sgl_remote_entity_add_finish(const QString &id, bool status, const QString &message);
+
+    // TCP 网络状态变化
+    void sgl_tcp_socket_status_change(bool status);
+
+    // 文件服务器状态查询结果
+    void sgl_ftp_server_work_status(bool status, const QString &message);
+
+    // 异常点数据录入结果
+    void sgl_insert_side_scan_source_data_response(bool status, const QString &message);
+
+    // 轨迹信息录入结果
+    void sgl_insert_cruise_route_source_data_response(bool status, const QString &message);
+
+    // 异常点数据查询结果
+    void sgl_query_side_scan_source_data_response(const QList<QStringList> &list);
+
+    // 轨迹线数据查询结果
+    void sgl_query_trajectory_data_response(bool status, const QString &id, const QStringList &list);
+
+    // 查询检索条件结果
+    void sgl_query_search_filter_parameter_response(const SearchFilterParamterList &response);
+
+    // 查询统计数据结果
+    void sgl_query_statistics_data_by_condition_response(const RequestStatisticsResponse &response);
 };
 
 #endif // APPSIGNAL_H

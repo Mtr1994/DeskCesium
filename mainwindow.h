@@ -56,9 +56,6 @@ public slots:
     // 接收系统错误信息
     void slot_thread_report_system_error(const QString & msg);
 
-    // 组件初始化完成
-    void slot_cesium_init_finish();
-
 private slots:
     void slot_open_files();
     void slot_start_measure_line();

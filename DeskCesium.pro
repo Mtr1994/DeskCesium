@@ -53,6 +53,7 @@ SOURCES += \
     Ftp/ftpmanager.cpp \
     Net/basesocket.cpp \
     Net/tcpsocket.cpp \
+    Net/usernetworker.cpp \
     Proto/sidescansource.pb.cc \
     Protocol/protocolhelper.cpp \
     Public/appconfig.cpp \
@@ -76,6 +77,7 @@ HEADERS += \
     Ftp/ftpmanager.h \
     Net/basesocket.h \
     Net/tcpsocket.h \
+    Net/usernetworker.h \
     Proto/sidescansource.pb.h \
     Protocol/protocolhelper.h \
     Public/appconfig.h \

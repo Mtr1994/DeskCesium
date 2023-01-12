@@ -519,7 +519,6 @@ void CBaseCommand::logic_query_side_scan_source_data_by_keyword(const CMessage_S
     std::string sql = "select * from t_source_data_side_scan where ";
     sql.append("(remarks like (\"%" + searchParameter.keyword() +"%\") or image_description like (\"%" + searchParameter.keyword() +"%\"))");
 	
-	
 	sql.append(" and status_flag = 0;");
     
     PSS_LOGGER_DEBUG("sql {0}", sql.data());
@@ -612,28 +611,38 @@ void CBaseCommand::logic_query_trajectory_by_cruise_and_dive(const CMessage_Sour
     }
 
 	std::string dive_number = requestTrajectory.dive_number();
-	std::string targetPath = "/home/ftp_root/upload/" + requestTrajectory.cruise_number() + "/Navigation/" + requestTrajectory.trajectory_type();
+	shared_ptr<MysqlConnection> conn = mMysqlConnectionPool->getConnection();
 
-	std::vector<string> vectorFileNames;
-
-    DIR *pDir;
-    struct dirent* ptr;
-    if(!(pDir = opendir(targetPath.c_str())))
+    std::string sql = "select name from t_source_data_cruise_route where ";
+    sql.append("cruise_number = \"" + requestTrajectory.cruise_number() + "\"");
+    sql.append(" and type = \"" + requestTrajectory.trajectory_type() + "\"");
+    sql.append(" and name like \"%" + requestTrajectory.dive_number() + "%\"");
+	sql.append(" and status_flag = 0;");
+    
+    PSS_LOGGER_DEBUG("trajectory sql {0}", sql.data());
+    
+	status = conn->query(sql);
+    
+    if (!status)
     {
-    	response.set_id("e");
+	    std::string error = conn->lastError();
+		PSS_LOGGER_DEBUG("{0} logic_query_trajectory_by_cruise_and_dive {1}", errorQueryMySQL, error.data());
+		
+		// response to client
 		std::string pack = createPackage(CMD_QUERY_TRAJECTORY_BY_CURSE_AND_DIVE_RESPONSE, response.SerializeAsString());
         sendAsyncPack(source.connect_id_, pack);
         return;
-    }
-    while((ptr = readdir(pDir)) != 0) 
-    {
-        if (strcmp(ptr->d_name, ".") != 0 && strcmp(ptr->d_name, "..") != 0 && std::string(ptr->d_name).find(".txt") != std::string::npos)
-        {
-            vectorFileNames.push_back(ptr->d_name);
-        }
-    }
-    closedir(pDir);
+	}
 	
+	std::vector<string> vectorFileNames;
+	
+	while (conn->next())
+	{
+		vectorFileNames.push_back(conn->value(0));
+	}
+	
+	std::string targetPath = "/home/ftp_root/upload/" + requestTrajectory.cruise_number() + "/Navigation/" + requestTrajectory.trajectory_type();
+
 	uint16_t cruiseCount = 0;
 	for (auto &name : vectorFileNames)
 	{
@@ -667,12 +676,264 @@ void CBaseCommand::logic_query_trajectory_by_cruise_and_dive(const CMessage_Sour
     sendAsyncPack(source.connect_id_, pack);
 }
 
+void CBaseCommand::logic_query_statistics_data_by_condition(const CMessage_Source& source, std::shared_ptr<CMessage_Packet> recv_packet, std::shared_ptr<CMessage_Packet> send_packet)
+{
+	PSS_LOGGER_DEBUG("logic_query_statistics_data_by_condition");
+	
+	RequestStatisticsResponse response;
+	response.set_status(false);
+	
+	std::string parameter = recv_packet->buffer_.substr(8);
+    if (parameter.empty())
+    {
+		PSS_LOGGER_DEBUG("{0}, {1}", errorMessage, recv_packet->command_id_);
+        return;
+    }
+    
+    RequestStatistics requestStatistics;
+    bool status = requestStatistics.ParseFromString(parameter);
+	
+	if (!status)
+    {
+		PSS_LOGGER_DEBUG("{0}, {1}", errorParseMessage, recv_packet->buffer_);
+		response.set_message(errorParseMessage);
+		std::string pack = createPackage(CMD_QUERY_STATISTICS_DATA_BY_CONDITION_RESPONSE, response.SerializeAsString());
+        sendAsyncPack(source.connect_id_, pack);
+		return;
+    }
+    
+    // 公用函数，用于查询
+    
+    // 查询深拖信息
+    if (requestStatistics.query_dt()) 
+    {
+    	std::string positionChains = generateCesiumPositionChain("DT");
+		if (positionChains.length() > 4)
+		{
+			response.set_status(true);
+			response.set_dt("{type: \"DT\", trajectory_data: " + positionChains + "}");
+		}
+    }
+    
+    // 查询AUV信息
+    if (requestStatistics.query_auv()) 
+    {
+    	std::string positionChains = generateCesiumPositionChain("AUV");
+		if (positionChains.length() > 4)
+		{
+			response.set_status(true);
+			response.set_auv("{type: \"AUV\", trajectory_data: " + positionChains + "}");
+		}
+    }
+    
+    // 查询HOV信息
+    if (requestStatistics.query_hov()) 
+    {
+    	std::string positionChains = generateCesiumPositionChain("HOV");
+		if (positionChains.length() > 4)
+		{
+			response.set_status(true);
+			response.set_hov("{type: \"HOV\", trajectory_data: " + positionChains + "}");
+		}
+    }
+    
+    // 查询船舶轨迹信息
+    if (requestStatistics.query_ship()) 
+    {
+    	std::string positionChains = generateCesiumPositionChain("SHIP");
+		if (positionChains.length() > 4)
+		{
+			response.set_status(true);
+			response.set_ship("{type: \"SHIP\", trajectory_data: " + positionChains + "}");
+		}
+    }
+    
+    // 查询异常点信息
+    if (requestStatistics.query_errorpoint()) 
+    {
+    	shared_ptr<MysqlConnection> conn = mMysqlConnectionPool->getConnection();
+
+		std::string sql = "select longitude, latitude, priority, verify_flag from t_source_data_side_scan";
+		sql.append(" where status_flag = 0;");
+		
+		PSS_LOGGER_DEBUG("query error point sql {0}", sql.data());
+		
+		status = conn->query(sql);
+		
+		if (status)
+		{
+			std::string result = "{data: [";
+			while (conn->next())
+			{
+				if (result.length() != 8) result.append(", ");
+				result.append("{priority: " + 
+										conn->value(2) + ", verify_flag: " + 
+										conn->value(3) + ", longitude: " + 
+										conn->value(0) + ", latitude: " + 
+										conn->value(1) + "}");
+			}
+			result.append("]}");
+			
+			// 有一个有效信息就算成功
+			response.set_status(true);
+			response.set_errorpoint(result);
+		}
+    }
+    
+    // 查询前言信息
+    if (requestStatistics.query_preface()) 
+    {
+    	
+    }
+    
+    // 查询分类信息
+    if (requestStatistics.query_chart_data()) 
+    {
+	    std::string result = "{";
+	    
+	    {
+			shared_ptr<MysqlConnection> conn = mMysqlConnectionPool->getConnection();
+
+			std::string sql = "select cruise_year, count(*) from t_source_data_side_scan where status_flag = 0 GROUP BY cruise_year;";
+			
+			PSS_LOGGER_DEBUG("query year book sql {0}", sql.data());
+			
+			status = conn->query(sql);
+			
+			if (status)
+			{
+				result.append("curise_year_data: [");
+				int index = 0;
+				while (conn->next())
+				{
+					if (index++ > 0) result.append(", ");
+					result.append("{year: " +  conn->value(0) + ", number: " +  conn->value(1) +  "}");
+				}
+				result.append("]");
+				
+				// 有一个有效信息就算成功
+				response.set_status(true);
+
+			}
+		}
+		
+		{
+			shared_ptr<MysqlConnection> conn = mMysqlConnectionPool->getConnection();
+
+			std::string sql = "select priority, count(*) from t_source_data_side_scan where status_flag = 0 GROUP BY priority;";
+			
+			PSS_LOGGER_DEBUG("query year book sql {0}", sql.data());
+			
+			status = conn->query(sql);
+			
+			if (status)
+			{
+				if (result.length() > 1) result.append(", ");
+				result.append("priority_data: [");
+				int index = 0;
+				while (conn->next())
+				{
+					if (index++ > 0) result.append(", ");
+					std::string name = ("\"优先级 " + conn->value(0) + "\"");
+					result.append("{name: " + name + ", value: " +  conn->value(1) +  "}");
+				}
+				result.append("]");
+				
+				// 有一个有效信息就算成功
+				response.set_status(true);
+			}
+		}
+		
+		{
+			shared_ptr<MysqlConnection> conn = mMysqlConnectionPool->getConnection();
+
+			std::string sql = "select verify_flag, count(*) from t_source_data_side_scan where status_flag = 0 GROUP BY verify_flag;";
+			
+			PSS_LOGGER_DEBUG("query year book sql {0}", sql.data());
+			
+			status = conn->query(sql);
+			
+			if (status)
+			{
+				if (result.length() > 1) result.append(", ");
+				result.append("verify_data: [");
+				int index = 0;
+				while (conn->next())
+				{
+					if (index++ > 0) result.append(", ");
+					std::string name = (conn->value(0) == "0") ? "\"未查证\"" : "\"已查证\"";
+					result.append("{name: " + name + ", value: " +  conn->value(1) +  "}");
+				}
+				result.append("]");
+				
+				// 有一个有效信息就算成功
+				response.set_status(true);
+			}
+		}
+		
+		result.append("}");
+		
+		response.set_chart_data(result);
+    }
+    
+	std::string pack = createPackage(CMD_QUERY_STATISTICS_DATA_BY_CONDITION_RESPONSE, response.SerializeAsString());
+	sendAsyncPack(source.connect_id_, pack);
+}
+
 void CBaseCommand::sendAsyncPack(uint32_t id, const std::string& pack)
 {
     if (pack.size() == 0) return;
     auto send_asyn_packet = std::make_shared<CMessage_Packet>();
     send_asyn_packet->buffer_.append(pack.c_str(), pack.size());
     session_service_->send_io_message(id, send_asyn_packet);
+}
+
+std::string CBaseCommand::generateCesiumPositionChain(const std::string &type)
+{
+	shared_ptr<MysqlConnection> conn = mMysqlConnectionPool->getConnection();
+	std::string sql = "select cruise_number, type, name from t_source_data_cruise_route where type = \"" + type + "\" and status_flag = 0;";
+	
+	PSS_LOGGER_DEBUG("dt sql {0}", sql.data());
+	
+	bool status = conn->query(sql);
+	
+	if (!status) return "";
+
+	std::vector<string> vectorCruiseNumbers;
+	std::vector<string> vectorFileNames;
+	while (conn->next())
+	{
+		vectorCruiseNumbers.push_back(conn->value(0));
+		vectorFileNames.push_back(conn->value(2));
+	}
+
+	uint16_t size = vectorFileNames.size();
+	std::string positionChains = "[[";
+	for (uint16_t i = 0; i < size; i++)
+	{
+		std::string path = "/home/ftp_root/upload/" + vectorCruiseNumbers[i] + "/Navigation/" + type + "/" + vectorFileNames[i];
+		std::ifstream fileDescripter(path);
+		PSS_LOGGER_DEBUG("open file {0}", path);
+		std::string position_chain = "";
+		std::string line;
+		while(std::getline(fileDescripter, line))
+		{
+			std::regex reg("^([0-9]+\\.[0-9]+) ([0-9]+\\.[0-9]+) (.*)");
+			std::smatch match;
+			bool status = regex_search(line, match, reg);
+			if (!status) continue;
+			if (match.size() != 4) continue;
+			
+			if (position_chain.length() > 0) position_chain += ",";
+			position_chain += std::string(match[1]) + "," + std::string(match[2]) + ",0";
+		}
+		if (position_chain.length() == 0) continue;
+		if (positionChains.length() != 2) positionChains.append("],[");
+		positionChains.append(position_chain);
+	}
+	positionChains.append("]]");
+	
+	return positionChains;
 }
 
 std::string CBaseCommand::createPackage(uint16_t cmd, const std::string& data)

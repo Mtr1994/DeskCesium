@@ -214,7 +214,46 @@ struct RequestTrajectoryResponseDefaultTypeInternal {
   };
 };
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 RequestTrajectoryResponseDefaultTypeInternal _RequestTrajectoryResponse_default_instance_;
-static ::_pb::Metadata file_level_metadata_sidescansource_2eproto[11];
+PROTOBUF_CONSTEXPR RequestStatistics::RequestStatistics(
+    ::_pbi::ConstantInitialized): _impl_{
+    /*decltype(_impl_.query_dt_)*/false
+  , /*decltype(_impl_.query_auv_)*/false
+  , /*decltype(_impl_.query_hov_)*/false
+  , /*decltype(_impl_.query_ship_)*/false
+  , /*decltype(_impl_.query_errorpoint_)*/false
+  , /*decltype(_impl_.query_preface_)*/false
+  , /*decltype(_impl_.query_chart_data_)*/false
+  , /*decltype(_impl_._cached_size_)*/{}} {}
+struct RequestStatisticsDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR RequestStatisticsDefaultTypeInternal()
+      : _instance(::_pbi::ConstantInitialized{}) {}
+  ~RequestStatisticsDefaultTypeInternal() {}
+  union {
+    RequestStatistics _instance;
+  };
+};
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 RequestStatisticsDefaultTypeInternal _RequestStatistics_default_instance_;
+PROTOBUF_CONSTEXPR RequestStatisticsResponse::RequestStatisticsResponse(
+    ::_pbi::ConstantInitialized): _impl_{
+    /*decltype(_impl_.message_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
+  , /*decltype(_impl_.errorpoint_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
+  , /*decltype(_impl_.dt_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
+  , /*decltype(_impl_.auv_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
+  , /*decltype(_impl_.hov_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
+  , /*decltype(_impl_.ship_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
+  , /*decltype(_impl_.chart_data_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
+  , /*decltype(_impl_.status_)*/false
+  , /*decltype(_impl_._cached_size_)*/{}} {}
+struct RequestStatisticsResponseDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR RequestStatisticsResponseDefaultTypeInternal()
+      : _instance(::_pbi::ConstantInitialized{}) {}
+  ~RequestStatisticsResponseDefaultTypeInternal() {}
+  union {
+    RequestStatisticsResponse _instance;
+  };
+};
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 RequestStatisticsResponseDefaultTypeInternal _RequestStatisticsResponse_default_instance_;
+static ::_pb::Metadata file_level_metadata_sidescansource_2eproto[13];
 static constexpr ::_pb::EnumDescriptor const** file_level_enum_descriptors_sidescansource_2eproto = nullptr;
 static constexpr ::_pb::ServiceDescriptor const** file_level_service_descriptors_sidescansource_2eproto = nullptr;
 
@@ -347,6 +386,33 @@ const uint32_t TableStruct_sidescansource_2eproto::offsets[] PROTOBUF_SECTION_VA
   PROTOBUF_FIELD_OFFSET(::RequestTrajectoryResponse, _impl_.id_),
   PROTOBUF_FIELD_OFFSET(::RequestTrajectoryResponse, _impl_.position_chain_),
   PROTOBUF_FIELD_OFFSET(::RequestTrajectoryResponse, _impl_.status_),
+  ~0u,  // no _has_bits_
+  PROTOBUF_FIELD_OFFSET(::RequestStatistics, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  ~0u,  // no _inlined_string_donated_
+  PROTOBUF_FIELD_OFFSET(::RequestStatistics, _impl_.query_dt_),
+  PROTOBUF_FIELD_OFFSET(::RequestStatistics, _impl_.query_auv_),
+  PROTOBUF_FIELD_OFFSET(::RequestStatistics, _impl_.query_hov_),
+  PROTOBUF_FIELD_OFFSET(::RequestStatistics, _impl_.query_ship_),
+  PROTOBUF_FIELD_OFFSET(::RequestStatistics, _impl_.query_errorpoint_),
+  PROTOBUF_FIELD_OFFSET(::RequestStatistics, _impl_.query_preface_),
+  PROTOBUF_FIELD_OFFSET(::RequestStatistics, _impl_.query_chart_data_),
+  ~0u,  // no _has_bits_
+  PROTOBUF_FIELD_OFFSET(::RequestStatisticsResponse, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  ~0u,  // no _inlined_string_donated_
+  PROTOBUF_FIELD_OFFSET(::RequestStatisticsResponse, _impl_.status_),
+  PROTOBUF_FIELD_OFFSET(::RequestStatisticsResponse, _impl_.message_),
+  PROTOBUF_FIELD_OFFSET(::RequestStatisticsResponse, _impl_.errorpoint_),
+  PROTOBUF_FIELD_OFFSET(::RequestStatisticsResponse, _impl_.dt_),
+  PROTOBUF_FIELD_OFFSET(::RequestStatisticsResponse, _impl_.auv_),
+  PROTOBUF_FIELD_OFFSET(::RequestStatisticsResponse, _impl_.hov_),
+  PROTOBUF_FIELD_OFFSET(::RequestStatisticsResponse, _impl_.ship_),
+  PROTOBUF_FIELD_OFFSET(::RequestStatisticsResponse, _impl_.chart_data_),
 };
 static const ::_pbi::MigrationSchema schemas[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
   { 0, -1, -1, sizeof(::SideScanSource)},
@@ -360,6 +426,8 @@ static const ::_pbi::MigrationSchema schemas[] PROTOBUF_SECTION_VARIABLE(protode
   { 103, -1, -1, sizeof(::KeywordSearchParameter)},
   { 110, -1, -1, sizeof(::RequestTrajectory)},
   { 119, -1, -1, sizeof(::RequestTrajectoryResponse)},
+  { 128, -1, -1, sizeof(::RequestStatistics)},
+  { 141, -1, -1, sizeof(::RequestStatisticsResponse)},
 };
 
 static const ::_pb::Message* const file_default_instances[] = {
@@ -374,6 +442,8 @@ static const ::_pb::Message* const file_default_instances[] = {
   &::_KeywordSearchParameter_default_instance_._instance,
   &::_RequestTrajectory_default_instance_._instance,
   &::_RequestTrajectoryResponse_default_instance_._instance,
+  &::_RequestStatistics_default_instance_._instance,
+  &::_RequestStatisticsResponse_default_instance_._instance,
 };
 
 const char descriptor_table_protodef_sidescansource_2eproto[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) =
@@ -420,13 +490,21 @@ const char descriptor_table_protodef_sidescansource_2eproto[] PROTOBUF_SECTION_V
   "\n\013dive_number\030\002 \001(\t\022\027\n\017trajectory_type\030\003"
   " \001(\t\"O\n\031RequestTrajectoryResponse\022\n\n\002id\030"
   "\001 \001(\t\022\026\n\016position_chain\030\003 \003(\t\022\016\n\006status\030"
-  "\004 \001(\010b\006proto3"
+  "\004 \001(\010\"\252\001\n\021RequestStatistics\022\020\n\010query_dt\030"
+  "\001 \001(\010\022\021\n\tquery_auv\030\002 \001(\010\022\021\n\tquery_hov\030\003 "
+  "\001(\010\022\022\n\nquery_ship\030\004 \001(\010\022\030\n\020query_errorpo"
+  "int\030\005 \001(\010\022\025\n\rquery_preface\030\006 \001(\010\022\030\n\020quer"
+  "y_chart_data\030\007 \001(\010\"\230\001\n\031RequestStatistics"
+  "Response\022\016\n\006status\030\001 \001(\010\022\017\n\007message\030\002 \001("
+  "\t\022\022\n\nerrorpoint\030\003 \001(\t\022\n\n\002dt\030\004 \001(\t\022\013\n\003auv"
+  "\030\005 \001(\t\022\013\n\003hov\030\006 \001(\t\022\014\n\004ship\030\007 \001(\t\022\022\n\ncha"
+  "rt_data\030\010 \001(\tb\006proto3"
   ;
 static ::_pbi::once_flag descriptor_table_sidescansource_2eproto_once;
 const ::_pbi::DescriptorTable descriptor_table_sidescansource_2eproto = {
-    false, false, 1733, descriptor_table_protodef_sidescansource_2eproto,
+    false, false, 2061, descriptor_table_protodef_sidescansource_2eproto,
     "sidescansource.proto",
-    &descriptor_table_sidescansource_2eproto_once, nullptr, 0, 11,
+    &descriptor_table_sidescansource_2eproto_once, nullptr, 0, 13,
     schemas, file_default_instances, TableStruct_sidescansource_2eproto::offsets,
     file_level_metadata_sidescansource_2eproto, file_level_enum_descriptors_sidescansource_2eproto,
     file_level_service_descriptors_sidescansource_2eproto,
@@ -4824,6 +4902,867 @@ void RequestTrajectoryResponse::InternalSwap(RequestTrajectoryResponse* other) {
       file_level_metadata_sidescansource_2eproto[10]);
 }
 
+// ===================================================================
+
+class RequestStatistics::_Internal {
+ public:
+};
+
+RequestStatistics::RequestStatistics(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                         bool is_message_owned)
+  : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned) {
+  SharedCtor(arena, is_message_owned);
+  // @@protoc_insertion_point(arena_constructor:RequestStatistics)
+}
+RequestStatistics::RequestStatistics(const RequestStatistics& from)
+  : ::PROTOBUF_NAMESPACE_ID::Message() {
+  RequestStatistics* const _this = this; (void)_this;
+  new (&_impl_) Impl_{
+      decltype(_impl_.query_dt_){}
+    , decltype(_impl_.query_auv_){}
+    , decltype(_impl_.query_hov_){}
+    , decltype(_impl_.query_ship_){}
+    , decltype(_impl_.query_errorpoint_){}
+    , decltype(_impl_.query_preface_){}
+    , decltype(_impl_.query_chart_data_){}
+    , /*decltype(_impl_._cached_size_)*/{}};
+
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  ::memcpy(&_impl_.query_dt_, &from._impl_.query_dt_,
+    static_cast<size_t>(reinterpret_cast<char*>(&_impl_.query_chart_data_) -
+    reinterpret_cast<char*>(&_impl_.query_dt_)) + sizeof(_impl_.query_chart_data_));
+  // @@protoc_insertion_point(copy_constructor:RequestStatistics)
+}
+
+inline void RequestStatistics::SharedCtor(
+    ::_pb::Arena* arena, bool is_message_owned) {
+  (void)arena;
+  (void)is_message_owned;
+  new (&_impl_) Impl_{
+      decltype(_impl_.query_dt_){false}
+    , decltype(_impl_.query_auv_){false}
+    , decltype(_impl_.query_hov_){false}
+    , decltype(_impl_.query_ship_){false}
+    , decltype(_impl_.query_errorpoint_){false}
+    , decltype(_impl_.query_preface_){false}
+    , decltype(_impl_.query_chart_data_){false}
+    , /*decltype(_impl_._cached_size_)*/{}
+  };
+}
+
+RequestStatistics::~RequestStatistics() {
+  // @@protoc_insertion_point(destructor:RequestStatistics)
+  if (auto *arena = _internal_metadata_.DeleteReturnArena<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>()) {
+  (void)arena;
+    return;
+  }
+  SharedDtor();
+}
+
+inline void RequestStatistics::SharedDtor() {
+  GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
+}
+
+void RequestStatistics::SetCachedSize(int size) const {
+  _impl_._cached_size_.Set(size);
+}
+
+void RequestStatistics::Clear() {
+// @@protoc_insertion_point(message_clear_start:RequestStatistics)
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  ::memset(&_impl_.query_dt_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&_impl_.query_chart_data_) -
+      reinterpret_cast<char*>(&_impl_.query_dt_)) + sizeof(_impl_.query_chart_data_));
+  _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+const char* RequestStatistics::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
+#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
+  while (!ctx->Done(&ptr)) {
+    uint32_t tag;
+    ptr = ::_pbi::ReadTag(ptr, &tag);
+    switch (tag >> 3) {
+      // bool query_dt = 1;
+      case 1:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 8)) {
+          _impl_.query_dt_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // bool query_auv = 2;
+      case 2:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 16)) {
+          _impl_.query_auv_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // bool query_hov = 3;
+      case 3:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 24)) {
+          _impl_.query_hov_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // bool query_ship = 4;
+      case 4:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 32)) {
+          _impl_.query_ship_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // bool query_errorpoint = 5;
+      case 5:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 40)) {
+          _impl_.query_errorpoint_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // bool query_preface = 6;
+      case 6:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 48)) {
+          _impl_.query_preface_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // bool query_chart_data = 7;
+      case 7:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 56)) {
+          _impl_.query_chart_data_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      default:
+        goto handle_unusual;
+    }  // switch
+  handle_unusual:
+    if ((tag == 0) || ((tag & 7) == 4)) {
+      CHK_(ptr);
+      ctx->SetLastTag(tag);
+      goto message_done;
+    }
+    ptr = UnknownFieldParse(
+        tag,
+        _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
+        ptr, ctx);
+    CHK_(ptr != nullptr);
+  }  // while
+message_done:
+  return ptr;
+failure:
+  ptr = nullptr;
+  goto message_done;
+#undef CHK_
+}
+
+uint8_t* RequestStatistics::_InternalSerialize(
+    uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+  // @@protoc_insertion_point(serialize_to_array_start:RequestStatistics)
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // bool query_dt = 1;
+  if (this->_internal_query_dt() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteBoolToArray(1, this->_internal_query_dt(), target);
+  }
+
+  // bool query_auv = 2;
+  if (this->_internal_query_auv() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteBoolToArray(2, this->_internal_query_auv(), target);
+  }
+
+  // bool query_hov = 3;
+  if (this->_internal_query_hov() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteBoolToArray(3, this->_internal_query_hov(), target);
+  }
+
+  // bool query_ship = 4;
+  if (this->_internal_query_ship() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteBoolToArray(4, this->_internal_query_ship(), target);
+  }
+
+  // bool query_errorpoint = 5;
+  if (this->_internal_query_errorpoint() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteBoolToArray(5, this->_internal_query_errorpoint(), target);
+  }
+
+  // bool query_preface = 6;
+  if (this->_internal_query_preface() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteBoolToArray(6, this->_internal_query_preface(), target);
+  }
+
+  // bool query_chart_data = 7;
+  if (this->_internal_query_chart_data() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteBoolToArray(7, this->_internal_query_chart_data(), target);
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
+        _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:RequestStatistics)
+  return target;
+}
+
+size_t RequestStatistics::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:RequestStatistics)
+  size_t total_size = 0;
+
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  // bool query_dt = 1;
+  if (this->_internal_query_dt() != 0) {
+    total_size += 1 + 1;
+  }
+
+  // bool query_auv = 2;
+  if (this->_internal_query_auv() != 0) {
+    total_size += 1 + 1;
+  }
+
+  // bool query_hov = 3;
+  if (this->_internal_query_hov() != 0) {
+    total_size += 1 + 1;
+  }
+
+  // bool query_ship = 4;
+  if (this->_internal_query_ship() != 0) {
+    total_size += 1 + 1;
+  }
+
+  // bool query_errorpoint = 5;
+  if (this->_internal_query_errorpoint() != 0) {
+    total_size += 1 + 1;
+  }
+
+  // bool query_preface = 6;
+  if (this->_internal_query_preface() != 0) {
+    total_size += 1 + 1;
+  }
+
+  // bool query_chart_data = 7;
+  if (this->_internal_query_chart_data() != 0) {
+    total_size += 1 + 1;
+  }
+
+  return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
+}
+
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData RequestStatistics::_class_data_ = {
+    ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSourceCheck,
+    RequestStatistics::MergeImpl
+};
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*RequestStatistics::GetClassData() const { return &_class_data_; }
+
+
+void RequestStatistics::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg) {
+  auto* const _this = static_cast<RequestStatistics*>(&to_msg);
+  auto& from = static_cast<const RequestStatistics&>(from_msg);
+  // @@protoc_insertion_point(class_specific_merge_from_start:RequestStatistics)
+  GOOGLE_DCHECK_NE(&from, _this);
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (from._internal_query_dt() != 0) {
+    _this->_internal_set_query_dt(from._internal_query_dt());
+  }
+  if (from._internal_query_auv() != 0) {
+    _this->_internal_set_query_auv(from._internal_query_auv());
+  }
+  if (from._internal_query_hov() != 0) {
+    _this->_internal_set_query_hov(from._internal_query_hov());
+  }
+  if (from._internal_query_ship() != 0) {
+    _this->_internal_set_query_ship(from._internal_query_ship());
+  }
+  if (from._internal_query_errorpoint() != 0) {
+    _this->_internal_set_query_errorpoint(from._internal_query_errorpoint());
+  }
+  if (from._internal_query_preface() != 0) {
+    _this->_internal_set_query_preface(from._internal_query_preface());
+  }
+  if (from._internal_query_chart_data() != 0) {
+    _this->_internal_set_query_chart_data(from._internal_query_chart_data());
+  }
+  _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+}
+
+void RequestStatistics::CopyFrom(const RequestStatistics& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:RequestStatistics)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool RequestStatistics::IsInitialized() const {
+  return true;
+}
+
+void RequestStatistics::InternalSwap(RequestStatistics* other) {
+  using std::swap;
+  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  ::PROTOBUF_NAMESPACE_ID::internal::memswap<
+      PROTOBUF_FIELD_OFFSET(RequestStatistics, _impl_.query_chart_data_)
+      + sizeof(RequestStatistics::_impl_.query_chart_data_)
+      - PROTOBUF_FIELD_OFFSET(RequestStatistics, _impl_.query_dt_)>(
+          reinterpret_cast<char*>(&_impl_.query_dt_),
+          reinterpret_cast<char*>(&other->_impl_.query_dt_));
+}
+
+::PROTOBUF_NAMESPACE_ID::Metadata RequestStatistics::GetMetadata() const {
+  return ::_pbi::AssignDescriptors(
+      &descriptor_table_sidescansource_2eproto_getter, &descriptor_table_sidescansource_2eproto_once,
+      file_level_metadata_sidescansource_2eproto[11]);
+}
+
+// ===================================================================
+
+class RequestStatisticsResponse::_Internal {
+ public:
+};
+
+RequestStatisticsResponse::RequestStatisticsResponse(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                         bool is_message_owned)
+  : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned) {
+  SharedCtor(arena, is_message_owned);
+  // @@protoc_insertion_point(arena_constructor:RequestStatisticsResponse)
+}
+RequestStatisticsResponse::RequestStatisticsResponse(const RequestStatisticsResponse& from)
+  : ::PROTOBUF_NAMESPACE_ID::Message() {
+  RequestStatisticsResponse* const _this = this; (void)_this;
+  new (&_impl_) Impl_{
+      decltype(_impl_.message_){}
+    , decltype(_impl_.errorpoint_){}
+    , decltype(_impl_.dt_){}
+    , decltype(_impl_.auv_){}
+    , decltype(_impl_.hov_){}
+    , decltype(_impl_.ship_){}
+    , decltype(_impl_.chart_data_){}
+    , decltype(_impl_.status_){}
+    , /*decltype(_impl_._cached_size_)*/{}};
+
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  _impl_.message_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.message_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (!from._internal_message().empty()) {
+    _this->_impl_.message_.Set(from._internal_message(), 
+      _this->GetArenaForAllocation());
+  }
+  _impl_.errorpoint_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.errorpoint_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (!from._internal_errorpoint().empty()) {
+    _this->_impl_.errorpoint_.Set(from._internal_errorpoint(), 
+      _this->GetArenaForAllocation());
+  }
+  _impl_.dt_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.dt_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (!from._internal_dt().empty()) {
+    _this->_impl_.dt_.Set(from._internal_dt(), 
+      _this->GetArenaForAllocation());
+  }
+  _impl_.auv_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.auv_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (!from._internal_auv().empty()) {
+    _this->_impl_.auv_.Set(from._internal_auv(), 
+      _this->GetArenaForAllocation());
+  }
+  _impl_.hov_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.hov_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (!from._internal_hov().empty()) {
+    _this->_impl_.hov_.Set(from._internal_hov(), 
+      _this->GetArenaForAllocation());
+  }
+  _impl_.ship_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.ship_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (!from._internal_ship().empty()) {
+    _this->_impl_.ship_.Set(from._internal_ship(), 
+      _this->GetArenaForAllocation());
+  }
+  _impl_.chart_data_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.chart_data_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (!from._internal_chart_data().empty()) {
+    _this->_impl_.chart_data_.Set(from._internal_chart_data(), 
+      _this->GetArenaForAllocation());
+  }
+  _this->_impl_.status_ = from._impl_.status_;
+  // @@protoc_insertion_point(copy_constructor:RequestStatisticsResponse)
+}
+
+inline void RequestStatisticsResponse::SharedCtor(
+    ::_pb::Arena* arena, bool is_message_owned) {
+  (void)arena;
+  (void)is_message_owned;
+  new (&_impl_) Impl_{
+      decltype(_impl_.message_){}
+    , decltype(_impl_.errorpoint_){}
+    , decltype(_impl_.dt_){}
+    , decltype(_impl_.auv_){}
+    , decltype(_impl_.hov_){}
+    , decltype(_impl_.ship_){}
+    , decltype(_impl_.chart_data_){}
+    , decltype(_impl_.status_){false}
+    , /*decltype(_impl_._cached_size_)*/{}
+  };
+  _impl_.message_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.message_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  _impl_.errorpoint_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.errorpoint_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  _impl_.dt_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.dt_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  _impl_.auv_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.auv_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  _impl_.hov_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.hov_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  _impl_.ship_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.ship_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  _impl_.chart_data_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.chart_data_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+}
+
+RequestStatisticsResponse::~RequestStatisticsResponse() {
+  // @@protoc_insertion_point(destructor:RequestStatisticsResponse)
+  if (auto *arena = _internal_metadata_.DeleteReturnArena<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>()) {
+  (void)arena;
+    return;
+  }
+  SharedDtor();
+}
+
+inline void RequestStatisticsResponse::SharedDtor() {
+  GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
+  _impl_.message_.Destroy();
+  _impl_.errorpoint_.Destroy();
+  _impl_.dt_.Destroy();
+  _impl_.auv_.Destroy();
+  _impl_.hov_.Destroy();
+  _impl_.ship_.Destroy();
+  _impl_.chart_data_.Destroy();
+}
+
+void RequestStatisticsResponse::SetCachedSize(int size) const {
+  _impl_._cached_size_.Set(size);
+}
+
+void RequestStatisticsResponse::Clear() {
+// @@protoc_insertion_point(message_clear_start:RequestStatisticsResponse)
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  _impl_.message_.ClearToEmpty();
+  _impl_.errorpoint_.ClearToEmpty();
+  _impl_.dt_.ClearToEmpty();
+  _impl_.auv_.ClearToEmpty();
+  _impl_.hov_.ClearToEmpty();
+  _impl_.ship_.ClearToEmpty();
+  _impl_.chart_data_.ClearToEmpty();
+  _impl_.status_ = false;
+  _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+const char* RequestStatisticsResponse::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
+#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
+  while (!ctx->Done(&ptr)) {
+    uint32_t tag;
+    ptr = ::_pbi::ReadTag(ptr, &tag);
+    switch (tag >> 3) {
+      // bool status = 1;
+      case 1:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 8)) {
+          _impl_.status_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // string message = 2;
+      case 2:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 18)) {
+          auto str = _internal_mutable_message();
+          ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(ptr);
+          CHK_(::_pbi::VerifyUTF8(str, "RequestStatisticsResponse.message"));
+        } else
+          goto handle_unusual;
+        continue;
+      // string errorpoint = 3;
+      case 3:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 26)) {
+          auto str = _internal_mutable_errorpoint();
+          ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(ptr);
+          CHK_(::_pbi::VerifyUTF8(str, "RequestStatisticsResponse.errorpoint"));
+        } else
+          goto handle_unusual;
+        continue;
+      // string dt = 4;
+      case 4:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 34)) {
+          auto str = _internal_mutable_dt();
+          ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(ptr);
+          CHK_(::_pbi::VerifyUTF8(str, "RequestStatisticsResponse.dt"));
+        } else
+          goto handle_unusual;
+        continue;
+      // string auv = 5;
+      case 5:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 42)) {
+          auto str = _internal_mutable_auv();
+          ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(ptr);
+          CHK_(::_pbi::VerifyUTF8(str, "RequestStatisticsResponse.auv"));
+        } else
+          goto handle_unusual;
+        continue;
+      // string hov = 6;
+      case 6:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 50)) {
+          auto str = _internal_mutable_hov();
+          ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(ptr);
+          CHK_(::_pbi::VerifyUTF8(str, "RequestStatisticsResponse.hov"));
+        } else
+          goto handle_unusual;
+        continue;
+      // string ship = 7;
+      case 7:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 58)) {
+          auto str = _internal_mutable_ship();
+          ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(ptr);
+          CHK_(::_pbi::VerifyUTF8(str, "RequestStatisticsResponse.ship"));
+        } else
+          goto handle_unusual;
+        continue;
+      // string chart_data = 8;
+      case 8:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 66)) {
+          auto str = _internal_mutable_chart_data();
+          ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(ptr);
+          CHK_(::_pbi::VerifyUTF8(str, "RequestStatisticsResponse.chart_data"));
+        } else
+          goto handle_unusual;
+        continue;
+      default:
+        goto handle_unusual;
+    }  // switch
+  handle_unusual:
+    if ((tag == 0) || ((tag & 7) == 4)) {
+      CHK_(ptr);
+      ctx->SetLastTag(tag);
+      goto message_done;
+    }
+    ptr = UnknownFieldParse(
+        tag,
+        _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
+        ptr, ctx);
+    CHK_(ptr != nullptr);
+  }  // while
+message_done:
+  return ptr;
+failure:
+  ptr = nullptr;
+  goto message_done;
+#undef CHK_
+}
+
+uint8_t* RequestStatisticsResponse::_InternalSerialize(
+    uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+  // @@protoc_insertion_point(serialize_to_array_start:RequestStatisticsResponse)
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // bool status = 1;
+  if (this->_internal_status() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteBoolToArray(1, this->_internal_status(), target);
+  }
+
+  // string message = 2;
+  if (!this->_internal_message().empty()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->_internal_message().data(), static_cast<int>(this->_internal_message().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "RequestStatisticsResponse.message");
+    target = stream->WriteStringMaybeAliased(
+        2, this->_internal_message(), target);
+  }
+
+  // string errorpoint = 3;
+  if (!this->_internal_errorpoint().empty()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->_internal_errorpoint().data(), static_cast<int>(this->_internal_errorpoint().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "RequestStatisticsResponse.errorpoint");
+    target = stream->WriteStringMaybeAliased(
+        3, this->_internal_errorpoint(), target);
+  }
+
+  // string dt = 4;
+  if (!this->_internal_dt().empty()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->_internal_dt().data(), static_cast<int>(this->_internal_dt().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "RequestStatisticsResponse.dt");
+    target = stream->WriteStringMaybeAliased(
+        4, this->_internal_dt(), target);
+  }
+
+  // string auv = 5;
+  if (!this->_internal_auv().empty()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->_internal_auv().data(), static_cast<int>(this->_internal_auv().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "RequestStatisticsResponse.auv");
+    target = stream->WriteStringMaybeAliased(
+        5, this->_internal_auv(), target);
+  }
+
+  // string hov = 6;
+  if (!this->_internal_hov().empty()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->_internal_hov().data(), static_cast<int>(this->_internal_hov().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "RequestStatisticsResponse.hov");
+    target = stream->WriteStringMaybeAliased(
+        6, this->_internal_hov(), target);
+  }
+
+  // string ship = 7;
+  if (!this->_internal_ship().empty()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->_internal_ship().data(), static_cast<int>(this->_internal_ship().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "RequestStatisticsResponse.ship");
+    target = stream->WriteStringMaybeAliased(
+        7, this->_internal_ship(), target);
+  }
+
+  // string chart_data = 8;
+  if (!this->_internal_chart_data().empty()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->_internal_chart_data().data(), static_cast<int>(this->_internal_chart_data().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "RequestStatisticsResponse.chart_data");
+    target = stream->WriteStringMaybeAliased(
+        8, this->_internal_chart_data(), target);
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
+        _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:RequestStatisticsResponse)
+  return target;
+}
+
+size_t RequestStatisticsResponse::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:RequestStatisticsResponse)
+  size_t total_size = 0;
+
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  // string message = 2;
+  if (!this->_internal_message().empty()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->_internal_message());
+  }
+
+  // string errorpoint = 3;
+  if (!this->_internal_errorpoint().empty()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->_internal_errorpoint());
+  }
+
+  // string dt = 4;
+  if (!this->_internal_dt().empty()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->_internal_dt());
+  }
+
+  // string auv = 5;
+  if (!this->_internal_auv().empty()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->_internal_auv());
+  }
+
+  // string hov = 6;
+  if (!this->_internal_hov().empty()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->_internal_hov());
+  }
+
+  // string ship = 7;
+  if (!this->_internal_ship().empty()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->_internal_ship());
+  }
+
+  // string chart_data = 8;
+  if (!this->_internal_chart_data().empty()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->_internal_chart_data());
+  }
+
+  // bool status = 1;
+  if (this->_internal_status() != 0) {
+    total_size += 1 + 1;
+  }
+
+  return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
+}
+
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData RequestStatisticsResponse::_class_data_ = {
+    ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSourceCheck,
+    RequestStatisticsResponse::MergeImpl
+};
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*RequestStatisticsResponse::GetClassData() const { return &_class_data_; }
+
+
+void RequestStatisticsResponse::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg) {
+  auto* const _this = static_cast<RequestStatisticsResponse*>(&to_msg);
+  auto& from = static_cast<const RequestStatisticsResponse&>(from_msg);
+  // @@protoc_insertion_point(class_specific_merge_from_start:RequestStatisticsResponse)
+  GOOGLE_DCHECK_NE(&from, _this);
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (!from._internal_message().empty()) {
+    _this->_internal_set_message(from._internal_message());
+  }
+  if (!from._internal_errorpoint().empty()) {
+    _this->_internal_set_errorpoint(from._internal_errorpoint());
+  }
+  if (!from._internal_dt().empty()) {
+    _this->_internal_set_dt(from._internal_dt());
+  }
+  if (!from._internal_auv().empty()) {
+    _this->_internal_set_auv(from._internal_auv());
+  }
+  if (!from._internal_hov().empty()) {
+    _this->_internal_set_hov(from._internal_hov());
+  }
+  if (!from._internal_ship().empty()) {
+    _this->_internal_set_ship(from._internal_ship());
+  }
+  if (!from._internal_chart_data().empty()) {
+    _this->_internal_set_chart_data(from._internal_chart_data());
+  }
+  if (from._internal_status() != 0) {
+    _this->_internal_set_status(from._internal_status());
+  }
+  _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+}
+
+void RequestStatisticsResponse::CopyFrom(const RequestStatisticsResponse& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:RequestStatisticsResponse)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool RequestStatisticsResponse::IsInitialized() const {
+  return true;
+}
+
+void RequestStatisticsResponse::InternalSwap(RequestStatisticsResponse* other) {
+  using std::swap;
+  auto* lhs_arena = GetArenaForAllocation();
+  auto* rhs_arena = other->GetArenaForAllocation();
+  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &_impl_.message_, lhs_arena,
+      &other->_impl_.message_, rhs_arena
+  );
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &_impl_.errorpoint_, lhs_arena,
+      &other->_impl_.errorpoint_, rhs_arena
+  );
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &_impl_.dt_, lhs_arena,
+      &other->_impl_.dt_, rhs_arena
+  );
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &_impl_.auv_, lhs_arena,
+      &other->_impl_.auv_, rhs_arena
+  );
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &_impl_.hov_, lhs_arena,
+      &other->_impl_.hov_, rhs_arena
+  );
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &_impl_.ship_, lhs_arena,
+      &other->_impl_.ship_, rhs_arena
+  );
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &_impl_.chart_data_, lhs_arena,
+      &other->_impl_.chart_data_, rhs_arena
+  );
+  swap(_impl_.status_, other->_impl_.status_);
+}
+
+::PROTOBUF_NAMESPACE_ID::Metadata RequestStatisticsResponse::GetMetadata() const {
+  return ::_pbi::AssignDescriptors(
+      &descriptor_table_sidescansource_2eproto_getter, &descriptor_table_sidescansource_2eproto_once,
+      file_level_metadata_sidescansource_2eproto[12]);
+}
+
 // @@protoc_insertion_point(namespace_scope)
 PROTOBUF_NAMESPACE_OPEN
 template<> PROTOBUF_NOINLINE ::SideScanSource*
@@ -4869,6 +5808,14 @@ Arena::CreateMaybeMessage< ::RequestTrajectory >(Arena* arena) {
 template<> PROTOBUF_NOINLINE ::RequestTrajectoryResponse*
 Arena::CreateMaybeMessage< ::RequestTrajectoryResponse >(Arena* arena) {
   return Arena::CreateMessageInternal< ::RequestTrajectoryResponse >(arena);
+}
+template<> PROTOBUF_NOINLINE ::RequestStatistics*
+Arena::CreateMaybeMessage< ::RequestStatistics >(Arena* arena) {
+  return Arena::CreateMessageInternal< ::RequestStatistics >(arena);
+}
+template<> PROTOBUF_NOINLINE ::RequestStatisticsResponse*
+Arena::CreateMaybeMessage< ::RequestStatisticsResponse >(Arena* arena) {
+  return Arena::CreateMessageInternal< ::RequestStatisticsResponse >(arena);
 }
 PROTOBUF_NAMESPACE_CLOSE
 

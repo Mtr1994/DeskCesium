@@ -111,3 +111,28 @@ message RequestTrajectoryResponse
 	repeated string position_chain = 3;
 	bool status = 4;
 }
+
+// 查询统计数据
+message RequestStatistics
+{
+	bool query_dt = 1;
+	bool query_auv = 2;
+	bool query_hov = 3;
+	bool query_ship = 4;
+	bool query_errorpoint = 5;
+	bool query_preface = 6;
+	bool query_chart_data = 7;
+}
+
+// 查询统计数据回复
+message RequestStatisticsResponse
+{
+	bool status = 1;
+	string message = 2;
+	string errorpoint = 3;
+	string dt = 4;
+	string auv = 5;
+	string hov = 6;
+	string ship = 7;
+	string chart_data = 8;
+}

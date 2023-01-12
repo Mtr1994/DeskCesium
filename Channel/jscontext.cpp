@@ -42,7 +42,7 @@ void JsContext::recvMsg(const QString &action, const QString &type, bool status,
     }
     else if (action == "init")
     {
-        emit AppSignal::getInstance()->sgl_cesium_init_finish();
+        emit sgl_web_view_init_finish();
     }
 }
 

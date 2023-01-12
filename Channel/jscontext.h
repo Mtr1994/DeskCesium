@@ -31,6 +31,9 @@ signals:
     // search mouse altitude
     void sgl_search_mouse_over_altitude(double longitude, double latitude, bool result, double altitude);
 
+    // 发送组件初始化完毕信息
+    void sgl_web_view_init_finish();
+
 public:
     // sent msg to html
     void sendMsg();

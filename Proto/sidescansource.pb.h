@@ -56,6 +56,12 @@ extern FilterSearchParameterDefaultTypeInternal _FilterSearchParameter_default_i
 class KeywordSearchParameter;
 struct KeywordSearchParameterDefaultTypeInternal;
 extern KeywordSearchParameterDefaultTypeInternal _KeywordSearchParameter_default_instance_;
+class RequestStatistics;
+struct RequestStatisticsDefaultTypeInternal;
+extern RequestStatisticsDefaultTypeInternal _RequestStatistics_default_instance_;
+class RequestStatisticsResponse;
+struct RequestStatisticsResponseDefaultTypeInternal;
+extern RequestStatisticsResponseDefaultTypeInternal _RequestStatisticsResponse_default_instance_;
 class RequestTrajectory;
 struct RequestTrajectoryDefaultTypeInternal;
 extern RequestTrajectoryDefaultTypeInternal _RequestTrajectory_default_instance_;
@@ -82,6 +88,8 @@ template<> ::CruiseRouteSource* Arena::CreateMaybeMessage<::CruiseRouteSource>(A
 template<> ::CruiseRouteSourceList* Arena::CreateMaybeMessage<::CruiseRouteSourceList>(Arena*);
 template<> ::FilterSearchParameter* Arena::CreateMaybeMessage<::FilterSearchParameter>(Arena*);
 template<> ::KeywordSearchParameter* Arena::CreateMaybeMessage<::KeywordSearchParameter>(Arena*);
+template<> ::RequestStatistics* Arena::CreateMaybeMessage<::RequestStatistics>(Arena*);
+template<> ::RequestStatisticsResponse* Arena::CreateMaybeMessage<::RequestStatisticsResponse>(Arena*);
 template<> ::RequestTrajectory* Arena::CreateMaybeMessage<::RequestTrajectory>(Arena*);
 template<> ::RequestTrajectoryResponse* Arena::CreateMaybeMessage<::RequestTrajectoryResponse>(Arena*);
 template<> ::SearchFilterParamter* Arena::CreateMaybeMessage<::SearchFilterParamter>(Arena*);
@@ -2521,6 +2529,480 @@ class RequestTrajectoryResponse final :
   struct Impl_ {
     ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<std::string> position_chain_;
     ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr id_;
+    bool status_;
+    mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  };
+  union { Impl_ _impl_; };
+  friend struct ::TableStruct_sidescansource_2eproto;
+};
+// -------------------------------------------------------------------
+
+class RequestStatistics final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:RequestStatistics) */ {
+ public:
+  inline RequestStatistics() : RequestStatistics(nullptr) {}
+  ~RequestStatistics() override;
+  explicit PROTOBUF_CONSTEXPR RequestStatistics(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  RequestStatistics(const RequestStatistics& from);
+  RequestStatistics(RequestStatistics&& from) noexcept
+    : RequestStatistics() {
+    *this = ::std::move(from);
+  }
+
+  inline RequestStatistics& operator=(const RequestStatistics& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline RequestStatistics& operator=(RequestStatistics&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()
+  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
+        && GetOwningArena() != nullptr
+  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
+    ) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const RequestStatistics& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const RequestStatistics* internal_default_instance() {
+    return reinterpret_cast<const RequestStatistics*>(
+               &_RequestStatistics_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    11;
+
+  friend void swap(RequestStatistics& a, RequestStatistics& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(RequestStatistics* other) {
+    if (other == this) return;
+  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() != nullptr &&
+        GetOwningArena() == other->GetOwningArena()) {
+   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() == other->GetOwningArena()) {
+  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(RequestStatistics* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  RequestStatistics* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<RequestStatistics>(arena);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
+  void CopyFrom(const RequestStatistics& from);
+  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
+  void MergeFrom( const RequestStatistics& from) {
+    RequestStatistics::MergeImpl(*this, from);
+  }
+  private:
+  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  uint8_t* _InternalSerialize(
+      uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _impl_._cached_size_.Get(); }
+
+  private:
+  void SharedCtor(::PROTOBUF_NAMESPACE_ID::Arena* arena, bool is_message_owned);
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(RequestStatistics* other);
+
+  private:
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "RequestStatistics";
+  }
+  protected:
+  explicit RequestStatistics(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                       bool is_message_owned = false);
+  public:
+
+  static const ClassData _class_data_;
+  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kQueryDtFieldNumber = 1,
+    kQueryAuvFieldNumber = 2,
+    kQueryHovFieldNumber = 3,
+    kQueryShipFieldNumber = 4,
+    kQueryErrorpointFieldNumber = 5,
+    kQueryPrefaceFieldNumber = 6,
+    kQueryChartDataFieldNumber = 7,
+  };
+  // bool query_dt = 1;
+  void clear_query_dt();
+  bool query_dt() const;
+  void set_query_dt(bool value);
+  private:
+  bool _internal_query_dt() const;
+  void _internal_set_query_dt(bool value);
+  public:
+
+  // bool query_auv = 2;
+  void clear_query_auv();
+  bool query_auv() const;
+  void set_query_auv(bool value);
+  private:
+  bool _internal_query_auv() const;
+  void _internal_set_query_auv(bool value);
+  public:
+
+  // bool query_hov = 3;
+  void clear_query_hov();
+  bool query_hov() const;
+  void set_query_hov(bool value);
+  private:
+  bool _internal_query_hov() const;
+  void _internal_set_query_hov(bool value);
+  public:
+
+  // bool query_ship = 4;
+  void clear_query_ship();
+  bool query_ship() const;
+  void set_query_ship(bool value);
+  private:
+  bool _internal_query_ship() const;
+  void _internal_set_query_ship(bool value);
+  public:
+
+  // bool query_errorpoint = 5;
+  void clear_query_errorpoint();
+  bool query_errorpoint() const;
+  void set_query_errorpoint(bool value);
+  private:
+  bool _internal_query_errorpoint() const;
+  void _internal_set_query_errorpoint(bool value);
+  public:
+
+  // bool query_preface = 6;
+  void clear_query_preface();
+  bool query_preface() const;
+  void set_query_preface(bool value);
+  private:
+  bool _internal_query_preface() const;
+  void _internal_set_query_preface(bool value);
+  public:
+
+  // bool query_chart_data = 7;
+  void clear_query_chart_data();
+  bool query_chart_data() const;
+  void set_query_chart_data(bool value);
+  private:
+  bool _internal_query_chart_data() const;
+  void _internal_set_query_chart_data(bool value);
+  public:
+
+  // @@protoc_insertion_point(class_scope:RequestStatistics)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  struct Impl_ {
+    bool query_dt_;
+    bool query_auv_;
+    bool query_hov_;
+    bool query_ship_;
+    bool query_errorpoint_;
+    bool query_preface_;
+    bool query_chart_data_;
+    mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  };
+  union { Impl_ _impl_; };
+  friend struct ::TableStruct_sidescansource_2eproto;
+};
+// -------------------------------------------------------------------
+
+class RequestStatisticsResponse final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:RequestStatisticsResponse) */ {
+ public:
+  inline RequestStatisticsResponse() : RequestStatisticsResponse(nullptr) {}
+  ~RequestStatisticsResponse() override;
+  explicit PROTOBUF_CONSTEXPR RequestStatisticsResponse(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  RequestStatisticsResponse(const RequestStatisticsResponse& from);
+  RequestStatisticsResponse(RequestStatisticsResponse&& from) noexcept
+    : RequestStatisticsResponse() {
+    *this = ::std::move(from);
+  }
+
+  inline RequestStatisticsResponse& operator=(const RequestStatisticsResponse& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline RequestStatisticsResponse& operator=(RequestStatisticsResponse&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()
+  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
+        && GetOwningArena() != nullptr
+  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
+    ) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const RequestStatisticsResponse& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const RequestStatisticsResponse* internal_default_instance() {
+    return reinterpret_cast<const RequestStatisticsResponse*>(
+               &_RequestStatisticsResponse_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    12;
+
+  friend void swap(RequestStatisticsResponse& a, RequestStatisticsResponse& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(RequestStatisticsResponse* other) {
+    if (other == this) return;
+  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() != nullptr &&
+        GetOwningArena() == other->GetOwningArena()) {
+   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() == other->GetOwningArena()) {
+  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(RequestStatisticsResponse* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  RequestStatisticsResponse* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<RequestStatisticsResponse>(arena);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
+  void CopyFrom(const RequestStatisticsResponse& from);
+  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
+  void MergeFrom( const RequestStatisticsResponse& from) {
+    RequestStatisticsResponse::MergeImpl(*this, from);
+  }
+  private:
+  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  uint8_t* _InternalSerialize(
+      uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _impl_._cached_size_.Get(); }
+
+  private:
+  void SharedCtor(::PROTOBUF_NAMESPACE_ID::Arena* arena, bool is_message_owned);
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(RequestStatisticsResponse* other);
+
+  private:
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "RequestStatisticsResponse";
+  }
+  protected:
+  explicit RequestStatisticsResponse(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                       bool is_message_owned = false);
+  public:
+
+  static const ClassData _class_data_;
+  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kMessageFieldNumber = 2,
+    kErrorpointFieldNumber = 3,
+    kDtFieldNumber = 4,
+    kAuvFieldNumber = 5,
+    kHovFieldNumber = 6,
+    kShipFieldNumber = 7,
+    kChartDataFieldNumber = 8,
+    kStatusFieldNumber = 1,
+  };
+  // string message = 2;
+  void clear_message();
+  const std::string& message() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_message(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_message();
+  PROTOBUF_NODISCARD std::string* release_message();
+  void set_allocated_message(std::string* message);
+  private:
+  const std::string& _internal_message() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_message(const std::string& value);
+  std::string* _internal_mutable_message();
+  public:
+
+  // string errorpoint = 3;
+  void clear_errorpoint();
+  const std::string& errorpoint() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_errorpoint(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_errorpoint();
+  PROTOBUF_NODISCARD std::string* release_errorpoint();
+  void set_allocated_errorpoint(std::string* errorpoint);
+  private:
+  const std::string& _internal_errorpoint() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_errorpoint(const std::string& value);
+  std::string* _internal_mutable_errorpoint();
+  public:
+
+  // string dt = 4;
+  void clear_dt();
+  const std::string& dt() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_dt(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_dt();
+  PROTOBUF_NODISCARD std::string* release_dt();
+  void set_allocated_dt(std::string* dt);
+  private:
+  const std::string& _internal_dt() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_dt(const std::string& value);
+  std::string* _internal_mutable_dt();
+  public:
+
+  // string auv = 5;
+  void clear_auv();
+  const std::string& auv() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_auv(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_auv();
+  PROTOBUF_NODISCARD std::string* release_auv();
+  void set_allocated_auv(std::string* auv);
+  private:
+  const std::string& _internal_auv() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_auv(const std::string& value);
+  std::string* _internal_mutable_auv();
+  public:
+
+  // string hov = 6;
+  void clear_hov();
+  const std::string& hov() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_hov(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_hov();
+  PROTOBUF_NODISCARD std::string* release_hov();
+  void set_allocated_hov(std::string* hov);
+  private:
+  const std::string& _internal_hov() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_hov(const std::string& value);
+  std::string* _internal_mutable_hov();
+  public:
+
+  // string ship = 7;
+  void clear_ship();
+  const std::string& ship() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_ship(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_ship();
+  PROTOBUF_NODISCARD std::string* release_ship();
+  void set_allocated_ship(std::string* ship);
+  private:
+  const std::string& _internal_ship() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_ship(const std::string& value);
+  std::string* _internal_mutable_ship();
+  public:
+
+  // string chart_data = 8;
+  void clear_chart_data();
+  const std::string& chart_data() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_chart_data(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_chart_data();
+  PROTOBUF_NODISCARD std::string* release_chart_data();
+  void set_allocated_chart_data(std::string* chart_data);
+  private:
+  const std::string& _internal_chart_data() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_chart_data(const std::string& value);
+  std::string* _internal_mutable_chart_data();
+  public:
+
+  // bool status = 1;
+  void clear_status();
+  bool status() const;
+  void set_status(bool value);
+  private:
+  bool _internal_status() const;
+  void _internal_set_status(bool value);
+  public:
+
+  // @@protoc_insertion_point(class_scope:RequestStatisticsResponse)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  struct Impl_ {
+    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr message_;
+    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr errorpoint_;
+    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr dt_;
+    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr auv_;
+    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr hov_;
+    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr ship_;
+    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr chart_data_;
     bool status_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   };
@@ -5128,9 +5610,531 @@ inline void RequestTrajectoryResponse::set_status(bool value) {
   // @@protoc_insertion_point(field_set:RequestTrajectoryResponse.status)
 }
 
+// -------------------------------------------------------------------
+
+// RequestStatistics
+
+// bool query_dt = 1;
+inline void RequestStatistics::clear_query_dt() {
+  _impl_.query_dt_ = false;
+}
+inline bool RequestStatistics::_internal_query_dt() const {
+  return _impl_.query_dt_;
+}
+inline bool RequestStatistics::query_dt() const {
+  // @@protoc_insertion_point(field_get:RequestStatistics.query_dt)
+  return _internal_query_dt();
+}
+inline void RequestStatistics::_internal_set_query_dt(bool value) {
+  
+  _impl_.query_dt_ = value;
+}
+inline void RequestStatistics::set_query_dt(bool value) {
+  _internal_set_query_dt(value);
+  // @@protoc_insertion_point(field_set:RequestStatistics.query_dt)
+}
+
+// bool query_auv = 2;
+inline void RequestStatistics::clear_query_auv() {
+  _impl_.query_auv_ = false;
+}
+inline bool RequestStatistics::_internal_query_auv() const {
+  return _impl_.query_auv_;
+}
+inline bool RequestStatistics::query_auv() const {
+  // @@protoc_insertion_point(field_get:RequestStatistics.query_auv)
+  return _internal_query_auv();
+}
+inline void RequestStatistics::_internal_set_query_auv(bool value) {
+  
+  _impl_.query_auv_ = value;
+}
+inline void RequestStatistics::set_query_auv(bool value) {
+  _internal_set_query_auv(value);
+  // @@protoc_insertion_point(field_set:RequestStatistics.query_auv)
+}
+
+// bool query_hov = 3;
+inline void RequestStatistics::clear_query_hov() {
+  _impl_.query_hov_ = false;
+}
+inline bool RequestStatistics::_internal_query_hov() const {
+  return _impl_.query_hov_;
+}
+inline bool RequestStatistics::query_hov() const {
+  // @@protoc_insertion_point(field_get:RequestStatistics.query_hov)
+  return _internal_query_hov();
+}
+inline void RequestStatistics::_internal_set_query_hov(bool value) {
+  
+  _impl_.query_hov_ = value;
+}
+inline void RequestStatistics::set_query_hov(bool value) {
+  _internal_set_query_hov(value);
+  // @@protoc_insertion_point(field_set:RequestStatistics.query_hov)
+}
+
+// bool query_ship = 4;
+inline void RequestStatistics::clear_query_ship() {
+  _impl_.query_ship_ = false;
+}
+inline bool RequestStatistics::_internal_query_ship() const {
+  return _impl_.query_ship_;
+}
+inline bool RequestStatistics::query_ship() const {
+  // @@protoc_insertion_point(field_get:RequestStatistics.query_ship)
+  return _internal_query_ship();
+}
+inline void RequestStatistics::_internal_set_query_ship(bool value) {
+  
+  _impl_.query_ship_ = value;
+}
+inline void RequestStatistics::set_query_ship(bool value) {
+  _internal_set_query_ship(value);
+  // @@protoc_insertion_point(field_set:RequestStatistics.query_ship)
+}
+
+// bool query_errorpoint = 5;
+inline void RequestStatistics::clear_query_errorpoint() {
+  _impl_.query_errorpoint_ = false;
+}
+inline bool RequestStatistics::_internal_query_errorpoint() const {
+  return _impl_.query_errorpoint_;
+}
+inline bool RequestStatistics::query_errorpoint() const {
+  // @@protoc_insertion_point(field_get:RequestStatistics.query_errorpoint)
+  return _internal_query_errorpoint();
+}
+inline void RequestStatistics::_internal_set_query_errorpoint(bool value) {
+  
+  _impl_.query_errorpoint_ = value;
+}
+inline void RequestStatistics::set_query_errorpoint(bool value) {
+  _internal_set_query_errorpoint(value);
+  // @@protoc_insertion_point(field_set:RequestStatistics.query_errorpoint)
+}
+
+// bool query_preface = 6;
+inline void RequestStatistics::clear_query_preface() {
+  _impl_.query_preface_ = false;
+}
+inline bool RequestStatistics::_internal_query_preface() const {
+  return _impl_.query_preface_;
+}
+inline bool RequestStatistics::query_preface() const {
+  // @@protoc_insertion_point(field_get:RequestStatistics.query_preface)
+  return _internal_query_preface();
+}
+inline void RequestStatistics::_internal_set_query_preface(bool value) {
+  
+  _impl_.query_preface_ = value;
+}
+inline void RequestStatistics::set_query_preface(bool value) {
+  _internal_set_query_preface(value);
+  // @@protoc_insertion_point(field_set:RequestStatistics.query_preface)
+}
+
+// bool query_chart_data = 7;
+inline void RequestStatistics::clear_query_chart_data() {
+  _impl_.query_chart_data_ = false;
+}
+inline bool RequestStatistics::_internal_query_chart_data() const {
+  return _impl_.query_chart_data_;
+}
+inline bool RequestStatistics::query_chart_data() const {
+  // @@protoc_insertion_point(field_get:RequestStatistics.query_chart_data)
+  return _internal_query_chart_data();
+}
+inline void RequestStatistics::_internal_set_query_chart_data(bool value) {
+  
+  _impl_.query_chart_data_ = value;
+}
+inline void RequestStatistics::set_query_chart_data(bool value) {
+  _internal_set_query_chart_data(value);
+  // @@protoc_insertion_point(field_set:RequestStatistics.query_chart_data)
+}
+
+// -------------------------------------------------------------------
+
+// RequestStatisticsResponse
+
+// bool status = 1;
+inline void RequestStatisticsResponse::clear_status() {
+  _impl_.status_ = false;
+}
+inline bool RequestStatisticsResponse::_internal_status() const {
+  return _impl_.status_;
+}
+inline bool RequestStatisticsResponse::status() const {
+  // @@protoc_insertion_point(field_get:RequestStatisticsResponse.status)
+  return _internal_status();
+}
+inline void RequestStatisticsResponse::_internal_set_status(bool value) {
+  
+  _impl_.status_ = value;
+}
+inline void RequestStatisticsResponse::set_status(bool value) {
+  _internal_set_status(value);
+  // @@protoc_insertion_point(field_set:RequestStatisticsResponse.status)
+}
+
+// string message = 2;
+inline void RequestStatisticsResponse::clear_message() {
+  _impl_.message_.ClearToEmpty();
+}
+inline const std::string& RequestStatisticsResponse::message() const {
+  // @@protoc_insertion_point(field_get:RequestStatisticsResponse.message)
+  return _internal_message();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void RequestStatisticsResponse::set_message(ArgT0&& arg0, ArgT... args) {
+ 
+ _impl_.message_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:RequestStatisticsResponse.message)
+}
+inline std::string* RequestStatisticsResponse::mutable_message() {
+  std::string* _s = _internal_mutable_message();
+  // @@protoc_insertion_point(field_mutable:RequestStatisticsResponse.message)
+  return _s;
+}
+inline const std::string& RequestStatisticsResponse::_internal_message() const {
+  return _impl_.message_.Get();
+}
+inline void RequestStatisticsResponse::_internal_set_message(const std::string& value) {
+  
+  _impl_.message_.Set(value, GetArenaForAllocation());
+}
+inline std::string* RequestStatisticsResponse::_internal_mutable_message() {
+  
+  return _impl_.message_.Mutable(GetArenaForAllocation());
+}
+inline std::string* RequestStatisticsResponse::release_message() {
+  // @@protoc_insertion_point(field_release:RequestStatisticsResponse.message)
+  return _impl_.message_.Release();
+}
+inline void RequestStatisticsResponse::set_allocated_message(std::string* message) {
+  if (message != nullptr) {
+    
+  } else {
+    
+  }
+  _impl_.message_.SetAllocated(message, GetArenaForAllocation());
+#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (_impl_.message_.IsDefault()) {
+    _impl_.message_.Set("", GetArenaForAllocation());
+  }
+#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:RequestStatisticsResponse.message)
+}
+
+// string errorpoint = 3;
+inline void RequestStatisticsResponse::clear_errorpoint() {
+  _impl_.errorpoint_.ClearToEmpty();
+}
+inline const std::string& RequestStatisticsResponse::errorpoint() const {
+  // @@protoc_insertion_point(field_get:RequestStatisticsResponse.errorpoint)
+  return _internal_errorpoint();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void RequestStatisticsResponse::set_errorpoint(ArgT0&& arg0, ArgT... args) {
+ 
+ _impl_.errorpoint_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:RequestStatisticsResponse.errorpoint)
+}
+inline std::string* RequestStatisticsResponse::mutable_errorpoint() {
+  std::string* _s = _internal_mutable_errorpoint();
+  // @@protoc_insertion_point(field_mutable:RequestStatisticsResponse.errorpoint)
+  return _s;
+}
+inline const std::string& RequestStatisticsResponse::_internal_errorpoint() const {
+  return _impl_.errorpoint_.Get();
+}
+inline void RequestStatisticsResponse::_internal_set_errorpoint(const std::string& value) {
+  
+  _impl_.errorpoint_.Set(value, GetArenaForAllocation());
+}
+inline std::string* RequestStatisticsResponse::_internal_mutable_errorpoint() {
+  
+  return _impl_.errorpoint_.Mutable(GetArenaForAllocation());
+}
+inline std::string* RequestStatisticsResponse::release_errorpoint() {
+  // @@protoc_insertion_point(field_release:RequestStatisticsResponse.errorpoint)
+  return _impl_.errorpoint_.Release();
+}
+inline void RequestStatisticsResponse::set_allocated_errorpoint(std::string* errorpoint) {
+  if (errorpoint != nullptr) {
+    
+  } else {
+    
+  }
+  _impl_.errorpoint_.SetAllocated(errorpoint, GetArenaForAllocation());
+#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (_impl_.errorpoint_.IsDefault()) {
+    _impl_.errorpoint_.Set("", GetArenaForAllocation());
+  }
+#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:RequestStatisticsResponse.errorpoint)
+}
+
+// string dt = 4;
+inline void RequestStatisticsResponse::clear_dt() {
+  _impl_.dt_.ClearToEmpty();
+}
+inline const std::string& RequestStatisticsResponse::dt() const {
+  // @@protoc_insertion_point(field_get:RequestStatisticsResponse.dt)
+  return _internal_dt();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void RequestStatisticsResponse::set_dt(ArgT0&& arg0, ArgT... args) {
+ 
+ _impl_.dt_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:RequestStatisticsResponse.dt)
+}
+inline std::string* RequestStatisticsResponse::mutable_dt() {
+  std::string* _s = _internal_mutable_dt();
+  // @@protoc_insertion_point(field_mutable:RequestStatisticsResponse.dt)
+  return _s;
+}
+inline const std::string& RequestStatisticsResponse::_internal_dt() const {
+  return _impl_.dt_.Get();
+}
+inline void RequestStatisticsResponse::_internal_set_dt(const std::string& value) {
+  
+  _impl_.dt_.Set(value, GetArenaForAllocation());
+}
+inline std::string* RequestStatisticsResponse::_internal_mutable_dt() {
+  
+  return _impl_.dt_.Mutable(GetArenaForAllocation());
+}
+inline std::string* RequestStatisticsResponse::release_dt() {
+  // @@protoc_insertion_point(field_release:RequestStatisticsResponse.dt)
+  return _impl_.dt_.Release();
+}
+inline void RequestStatisticsResponse::set_allocated_dt(std::string* dt) {
+  if (dt != nullptr) {
+    
+  } else {
+    
+  }
+  _impl_.dt_.SetAllocated(dt, GetArenaForAllocation());
+#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (_impl_.dt_.IsDefault()) {
+    _impl_.dt_.Set("", GetArenaForAllocation());
+  }
+#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:RequestStatisticsResponse.dt)
+}
+
+// string auv = 5;
+inline void RequestStatisticsResponse::clear_auv() {
+  _impl_.auv_.ClearToEmpty();
+}
+inline const std::string& RequestStatisticsResponse::auv() const {
+  // @@protoc_insertion_point(field_get:RequestStatisticsResponse.auv)
+  return _internal_auv();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void RequestStatisticsResponse::set_auv(ArgT0&& arg0, ArgT... args) {
+ 
+ _impl_.auv_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:RequestStatisticsResponse.auv)
+}
+inline std::string* RequestStatisticsResponse::mutable_auv() {
+  std::string* _s = _internal_mutable_auv();
+  // @@protoc_insertion_point(field_mutable:RequestStatisticsResponse.auv)
+  return _s;
+}
+inline const std::string& RequestStatisticsResponse::_internal_auv() const {
+  return _impl_.auv_.Get();
+}
+inline void RequestStatisticsResponse::_internal_set_auv(const std::string& value) {
+  
+  _impl_.auv_.Set(value, GetArenaForAllocation());
+}
+inline std::string* RequestStatisticsResponse::_internal_mutable_auv() {
+  
+  return _impl_.auv_.Mutable(GetArenaForAllocation());
+}
+inline std::string* RequestStatisticsResponse::release_auv() {
+  // @@protoc_insertion_point(field_release:RequestStatisticsResponse.auv)
+  return _impl_.auv_.Release();
+}
+inline void RequestStatisticsResponse::set_allocated_auv(std::string* auv) {
+  if (auv != nullptr) {
+    
+  } else {
+    
+  }
+  _impl_.auv_.SetAllocated(auv, GetArenaForAllocation());
+#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (_impl_.auv_.IsDefault()) {
+    _impl_.auv_.Set("", GetArenaForAllocation());
+  }
+#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:RequestStatisticsResponse.auv)
+}
+
+// string hov = 6;
+inline void RequestStatisticsResponse::clear_hov() {
+  _impl_.hov_.ClearToEmpty();
+}
+inline const std::string& RequestStatisticsResponse::hov() const {
+  // @@protoc_insertion_point(field_get:RequestStatisticsResponse.hov)
+  return _internal_hov();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void RequestStatisticsResponse::set_hov(ArgT0&& arg0, ArgT... args) {
+ 
+ _impl_.hov_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:RequestStatisticsResponse.hov)
+}
+inline std::string* RequestStatisticsResponse::mutable_hov() {
+  std::string* _s = _internal_mutable_hov();
+  // @@protoc_insertion_point(field_mutable:RequestStatisticsResponse.hov)
+  return _s;
+}
+inline const std::string& RequestStatisticsResponse::_internal_hov() const {
+  return _impl_.hov_.Get();
+}
+inline void RequestStatisticsResponse::_internal_set_hov(const std::string& value) {
+  
+  _impl_.hov_.Set(value, GetArenaForAllocation());
+}
+inline std::string* RequestStatisticsResponse::_internal_mutable_hov() {
+  
+  return _impl_.hov_.Mutable(GetArenaForAllocation());
+}
+inline std::string* RequestStatisticsResponse::release_hov() {
+  // @@protoc_insertion_point(field_release:RequestStatisticsResponse.hov)
+  return _impl_.hov_.Release();
+}
+inline void RequestStatisticsResponse::set_allocated_hov(std::string* hov) {
+  if (hov != nullptr) {
+    
+  } else {
+    
+  }
+  _impl_.hov_.SetAllocated(hov, GetArenaForAllocation());
+#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (_impl_.hov_.IsDefault()) {
+    _impl_.hov_.Set("", GetArenaForAllocation());
+  }
+#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:RequestStatisticsResponse.hov)
+}
+
+// string ship = 7;
+inline void RequestStatisticsResponse::clear_ship() {
+  _impl_.ship_.ClearToEmpty();
+}
+inline const std::string& RequestStatisticsResponse::ship() const {
+  // @@protoc_insertion_point(field_get:RequestStatisticsResponse.ship)
+  return _internal_ship();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void RequestStatisticsResponse::set_ship(ArgT0&& arg0, ArgT... args) {
+ 
+ _impl_.ship_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:RequestStatisticsResponse.ship)
+}
+inline std::string* RequestStatisticsResponse::mutable_ship() {
+  std::string* _s = _internal_mutable_ship();
+  // @@protoc_insertion_point(field_mutable:RequestStatisticsResponse.ship)
+  return _s;
+}
+inline const std::string& RequestStatisticsResponse::_internal_ship() const {
+  return _impl_.ship_.Get();
+}
+inline void RequestStatisticsResponse::_internal_set_ship(const std::string& value) {
+  
+  _impl_.ship_.Set(value, GetArenaForAllocation());
+}
+inline std::string* RequestStatisticsResponse::_internal_mutable_ship() {
+  
+  return _impl_.ship_.Mutable(GetArenaForAllocation());
+}
+inline std::string* RequestStatisticsResponse::release_ship() {
+  // @@protoc_insertion_point(field_release:RequestStatisticsResponse.ship)
+  return _impl_.ship_.Release();
+}
+inline void RequestStatisticsResponse::set_allocated_ship(std::string* ship) {
+  if (ship != nullptr) {
+    
+  } else {
+    
+  }
+  _impl_.ship_.SetAllocated(ship, GetArenaForAllocation());
+#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (_impl_.ship_.IsDefault()) {
+    _impl_.ship_.Set("", GetArenaForAllocation());
+  }
+#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:RequestStatisticsResponse.ship)
+}
+
+// string chart_data = 8;
+inline void RequestStatisticsResponse::clear_chart_data() {
+  _impl_.chart_data_.ClearToEmpty();
+}
+inline const std::string& RequestStatisticsResponse::chart_data() const {
+  // @@protoc_insertion_point(field_get:RequestStatisticsResponse.chart_data)
+  return _internal_chart_data();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void RequestStatisticsResponse::set_chart_data(ArgT0&& arg0, ArgT... args) {
+ 
+ _impl_.chart_data_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:RequestStatisticsResponse.chart_data)
+}
+inline std::string* RequestStatisticsResponse::mutable_chart_data() {
+  std::string* _s = _internal_mutable_chart_data();
+  // @@protoc_insertion_point(field_mutable:RequestStatisticsResponse.chart_data)
+  return _s;
+}
+inline const std::string& RequestStatisticsResponse::_internal_chart_data() const {
+  return _impl_.chart_data_.Get();
+}
+inline void RequestStatisticsResponse::_internal_set_chart_data(const std::string& value) {
+  
+  _impl_.chart_data_.Set(value, GetArenaForAllocation());
+}
+inline std::string* RequestStatisticsResponse::_internal_mutable_chart_data() {
+  
+  return _impl_.chart_data_.Mutable(GetArenaForAllocation());
+}
+inline std::string* RequestStatisticsResponse::release_chart_data() {
+  // @@protoc_insertion_point(field_release:RequestStatisticsResponse.chart_data)
+  return _impl_.chart_data_.Release();
+}
+inline void RequestStatisticsResponse::set_allocated_chart_data(std::string* chart_data) {
+  if (chart_data != nullptr) {
+    
+  } else {
+    
+  }
+  _impl_.chart_data_.SetAllocated(chart_data, GetArenaForAllocation());
+#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (_impl_.chart_data_.IsDefault()) {
+    _impl_.chart_data_.Set("", GetArenaForAllocation());
+  }
+#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:RequestStatisticsResponse.chart_data)
+}
+
 #ifdef __GNUC__
   #pragma GCC diagnostic pop
 #endif  // __GNUC__
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
 // -------------------------------------------------------------------
 
 // -------------------------------------------------------------------

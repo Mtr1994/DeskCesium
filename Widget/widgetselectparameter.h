@@ -1,13 +1,14 @@
 ﻿#ifndef WIDGETSELECTPARAMETER_H
 #define WIDGETSELECTPARAMETER_H
 
+#include "Proto/sidescansource.pb.h"
+
 #include <QWidget>
 
 namespace Ui {
 class WidgetSelectParameter;
 }
 
-class TcpSocket;
 class WidgetSelectParameter : public QWidget
 {
     Q_OBJECT
@@ -26,18 +27,10 @@ private:
     void init();
 
 private slots:
-    void slot_tcp_socket_connect(uint64_t dwconnid);
-
-    void slot_recv_socket_data(uint64_t dwconnid, const std::string &data);
-
-    void slot_tcp_socket_disconnect(uint64_t dwconnid);
+    void slot_query_search_filter_parameter_response(const SearchFilterParamterList &response);
 
 private:
     Ui::WidgetSelectParameter *ui;
-
-    // 网络通信服务
-    TcpSocket *mTcpSocket = nullptr;
-    bool mTcpSocketConnected = false;
 };
 
 #endif // WIDGETSELECTPARAMETER_H

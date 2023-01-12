@@ -42,7 +42,16 @@ function handleDragOver(event) {
 // 添加 年份 折线图
 function addYearCurveChart(obj) {
 	let jsObject = eval("(" + obj + ")")
-	if (jsObject == undefined) return;
+	if (jsObject == undefined)  return;
+	
+	let cruiseYearData = jsObject.curise_year_data
+	let size = cruiseYearData.length
+	let xAxisArray = []
+	let seriesDataArray = []
+	for (let i = 0; i < size; i++) {
+		xAxisArray.push(cruiseYearData[i].year)
+		seriesDataArray.push(cruiseYearData[i].number)
+	}
 	
 	chartOption = {
 		title: {
@@ -51,16 +60,19 @@ function addYearCurveChart(obj) {
 			left: 'center',
 			bottom: 'bottom'
 		},
+		tooltip: {
+			trigger: 'item'
+		},
 		xAxis: {
 			type: 'category',
-			data: jsObject.year
+			data: xAxisArray
 		},
 		yAxis: {
 			type: 'value'
 		},
 		series: [
 		{
-			data: jsObject.value,
+			data: seriesDataArray,
 			type: 'line',
 			smooth: true
 		}
@@ -74,6 +86,8 @@ function addYearCurveChart(obj) {
 function addPriorityPieChart(obj) {
 	let jsObject = eval("(" + obj + ")")
 	if (jsObject == undefined) return;
+	
+	let priorityData = jsObject.priority_data
 	
 	chartOption = {
 		title: {
@@ -96,7 +110,7 @@ function addPriorityPieChart(obj) {
 			label: {
 				show: false,
 			},
-			data: jsObject
+			data: priorityData
 		}
 		]
 	};
@@ -108,6 +122,8 @@ function addPriorityPieChart(obj) {
 function addCheckedPieChart(obj) {
 	let jsObject = eval("(" + obj + ")")
 	if (jsObject == undefined) return;
+	
+	let verifyData = jsObject.verify_data
 	
 	chartOption = {
 		title: {
@@ -130,7 +146,7 @@ function addCheckedPieChart(obj) {
 			  label: {
 				show: false,
 			  },
-			  data: jsObject,
+			  data: verifyData,
 			  emphasis: {
 				itemStyle: {
 				  shadowBlur: 10,

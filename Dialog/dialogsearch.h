@@ -8,7 +8,6 @@ namespace Ui {
 class DialogSearch;
 }
 
-class TcpSocket;
 class DialogSearch : public QDialog
 {
     Q_OBJECT
@@ -28,12 +27,6 @@ private:
     void init();
 
 private slots:
-    void slot_tcp_socket_connect(uint64_t dwconnid);
-
-    void slot_recv_socket_data(uint64_t dwconnid, const std::string &data);
-
-    void slot_tcp_socket_disconnect(uint64_t dwconnid);
-
     void slot_btn_search_side_scan_click();
 
     void slot_modify_search_parameter(const QString &target, const QString &value, bool append);
@@ -43,14 +36,16 @@ private slots:
     // remote entity add finish
     void slot_remote_entity_add_finish(const QString &id, bool status, const QString &message);
 
+    // 异常点信息查询结果
+    void slot_query_side_scan_source_data_response(const QList<QStringList>& list);
+
+    // 轨迹线数据查询结果
+    void slot_query_trajectory_data_response(bool status, const QString &id, const QStringList &list);
+
 private:
     Ui::DialogSearch *ui;
 
     QString mParameter;
-
-    // 网络通信服务
-    TcpSocket *mTcpSocket = nullptr;
-    bool mTcpSocketConnected = false;
 
     QStringList mListCruiseYear;
     QStringList mListCruiseNumber;
