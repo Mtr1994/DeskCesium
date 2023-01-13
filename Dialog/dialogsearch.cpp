@@ -438,6 +438,7 @@ void DialogSearch::slot_query_side_scan_source_data_response(const QList<QString
 void DialogSearch::slot_query_trajectory_data_response(bool status, const QString &id, const QStringList &list)
 {
     if (!status) return;
+    qDebug() << "list " << list;
     emit AppSignal::getInstance()->sgl_add_remote_trajectory_entity(id, list);
 }
 

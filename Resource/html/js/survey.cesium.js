@@ -109,6 +109,7 @@ function addRemoteTrajectoryEntitys(obj) {
 		return
 	}
 	
+	let lineColor = (remoteObject.type === "DT") ? Cesium.Color.CRIMSON : ((remoteObject.type === "AUV") ? Cesium.Color.DARKORANGE : ((remoteObject.type === "HOV") ? Cesium.Color.LIMEGREEN  : Cesium.Color.ORANGERED))
 	let daraArray = remoteObject.trajectory_data
 	let arraySize = daraArray.length
 	for (let i = 0; i < arraySize; i++) {
@@ -117,7 +118,7 @@ function addRemoteTrajectoryEntitys(obj) {
 			positions: Cesium.Cartesian3.fromDegreesArrayHeights(daraArray[i]),
 			width: 5,
 			material: new Cesium.PolylineOutlineMaterialProperty({
-			  color: Cesium.Color.ORANGE,
+			  color: lineColor,
 			  outlineWidth: 2,
 			  outlineColor: Cesium.Color.BLACK,
 			}),

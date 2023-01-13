@@ -100,6 +100,8 @@ PROTOBUF_CONSTEXPR CruiseRouteSource::CruiseRouteSource(
     /*decltype(_impl_.cruise_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
   , /*decltype(_impl_.type_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
   , /*decltype(_impl_.name_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
+  , /*decltype(_impl_.length_)*/0
+  , /*decltype(_impl_.area_)*/0
   , /*decltype(_impl_.status_flag_)*/0u
   , /*decltype(_impl_._cached_size_)*/{}} {}
 struct CruiseRouteSourceDefaultTypeInternal {
@@ -241,6 +243,7 @@ PROTOBUF_CONSTEXPR RequestStatisticsResponse::RequestStatisticsResponse(
   , /*decltype(_impl_.auv_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
   , /*decltype(_impl_.hov_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
   , /*decltype(_impl_.ship_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
+  , /*decltype(_impl_.preface_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
   , /*decltype(_impl_.chart_data_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
   , /*decltype(_impl_.status_)*/false
   , /*decltype(_impl_._cached_size_)*/{}} {}
@@ -324,6 +327,8 @@ const uint32_t TableStruct_sidescansource_2eproto::offsets[] PROTOBUF_SECTION_VA
   PROTOBUF_FIELD_OFFSET(::CruiseRouteSource, _impl_.cruise_),
   PROTOBUF_FIELD_OFFSET(::CruiseRouteSource, _impl_.type_),
   PROTOBUF_FIELD_OFFSET(::CruiseRouteSource, _impl_.name_),
+  PROTOBUF_FIELD_OFFSET(::CruiseRouteSource, _impl_.length_),
+  PROTOBUF_FIELD_OFFSET(::CruiseRouteSource, _impl_.area_),
   PROTOBUF_FIELD_OFFSET(::CruiseRouteSource, _impl_.status_flag_),
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::CruiseRouteSourceList, _internal_metadata_),
@@ -412,6 +417,7 @@ const uint32_t TableStruct_sidescansource_2eproto::offsets[] PROTOBUF_SECTION_VA
   PROTOBUF_FIELD_OFFSET(::RequestStatisticsResponse, _impl_.auv_),
   PROTOBUF_FIELD_OFFSET(::RequestStatisticsResponse, _impl_.hov_),
   PROTOBUF_FIELD_OFFSET(::RequestStatisticsResponse, _impl_.ship_),
+  PROTOBUF_FIELD_OFFSET(::RequestStatisticsResponse, _impl_.preface_),
   PROTOBUF_FIELD_OFFSET(::RequestStatisticsResponse, _impl_.chart_data_),
 };
 static const ::_pbi::MigrationSchema schemas[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
@@ -419,15 +425,15 @@ static const ::_pbi::MigrationSchema schemas[] PROTOBUF_SECTION_VARIABLE(protode
   { 42, -1, -1, sizeof(::SideScanSourceList)},
   { 49, -1, -1, sizeof(::StatusResponse)},
   { 57, -1, -1, sizeof(::CruiseRouteSource)},
-  { 67, -1, -1, sizeof(::CruiseRouteSourceList)},
-  { 74, -1, -1, sizeof(::SearchFilterParamter)},
-  { 84, -1, -1, sizeof(::SearchFilterParamterList)},
-  { 91, -1, -1, sizeof(::FilterSearchParameter)},
-  { 103, -1, -1, sizeof(::KeywordSearchParameter)},
-  { 110, -1, -1, sizeof(::RequestTrajectory)},
-  { 119, -1, -1, sizeof(::RequestTrajectoryResponse)},
-  { 128, -1, -1, sizeof(::RequestStatistics)},
-  { 141, -1, -1, sizeof(::RequestStatisticsResponse)},
+  { 69, -1, -1, sizeof(::CruiseRouteSourceList)},
+  { 76, -1, -1, sizeof(::SearchFilterParamter)},
+  { 86, -1, -1, sizeof(::SearchFilterParamterList)},
+  { 93, -1, -1, sizeof(::FilterSearchParameter)},
+  { 105, -1, -1, sizeof(::KeywordSearchParameter)},
+  { 112, -1, -1, sizeof(::RequestTrajectory)},
+  { 121, -1, -1, sizeof(::RequestTrajectoryResponse)},
+  { 130, -1, -1, sizeof(::RequestStatistics)},
+  { 143, -1, -1, sizeof(::RequestStatisticsResponse)},
 };
 
 static const ::_pb::Message* const file_default_instances[] = {
@@ -472,37 +478,38 @@ const char descriptor_table_protodef_sidescansource_2eproto[] PROTOBUF_SECTION_V
   "\022\023\n\013verify_flag\030# \001(\010\022\023\n\013status_flag\030$ \001"
   "(\r\"3\n\022SideScanSourceList\022\035\n\004list\030\001 \003(\0132\017"
   ".SideScanSource\"1\n\016StatusResponse\022\016\n\006sta"
-  "tus\030\001 \001(\010\022\017\n\007message\030\002 \001(\t\"T\n\021CruiseRout"
+  "tus\030\001 \001(\010\022\017\n\007message\030\002 \001(\t\"r\n\021CruiseRout"
   "eSource\022\016\n\006cruise\030\001 \001(\t\022\014\n\004type\030\002 \001(\t\022\014\n"
-  "\004name\030\003 \001(\t\022\023\n\013status_flag\030\035 \001(\r\"9\n\025Crui"
-  "seRouteSourceList\022 \n\004list\030\001 \003(\0132\022.Cruise"
-  "RouteSource\"s\n\024SearchFilterParamter\022\023\n\013c"
-  "ruise_year\030\001 \001(\t\022\025\n\rcruise_number\030\002 \001(\t\022"
-  "\023\n\013dive_number\030\003 \001(\t\022\032\n\022verify_dive_numb"
-  "er\030\004 \001(\t\"\?\n\030SearchFilterParamterList\022#\n\004"
-  "list\030\001 \003(\0132\025.SearchFilterParamter\"\233\001\n\025Fi"
-  "lterSearchParameter\022\023\n\013cruise_year\030\001 \001(\t"
-  "\022\025\n\rcruise_number\030\002 \001(\t\022\023\n\013dive_number\030\003"
-  " \001(\t\022\032\n\022verify_dive_number\030\004 \003(\t\022\020\n\010prio"
-  "rity\030\005 \001(\t\022\023\n\013verify_flag\030\006 \001(\t\")\n\026Keywo"
-  "rdSearchParameter\022\017\n\007keyword\030\001 \001(\t\"X\n\021Re"
-  "questTrajectory\022\025\n\rcruise_number\030\001 \001(\t\022\023"
-  "\n\013dive_number\030\002 \001(\t\022\027\n\017trajectory_type\030\003"
-  " \001(\t\"O\n\031RequestTrajectoryResponse\022\n\n\002id\030"
-  "\001 \001(\t\022\026\n\016position_chain\030\003 \003(\t\022\016\n\006status\030"
-  "\004 \001(\010\"\252\001\n\021RequestStatistics\022\020\n\010query_dt\030"
-  "\001 \001(\010\022\021\n\tquery_auv\030\002 \001(\010\022\021\n\tquery_hov\030\003 "
-  "\001(\010\022\022\n\nquery_ship\030\004 \001(\010\022\030\n\020query_errorpo"
-  "int\030\005 \001(\010\022\025\n\rquery_preface\030\006 \001(\010\022\030\n\020quer"
-  "y_chart_data\030\007 \001(\010\"\230\001\n\031RequestStatistics"
-  "Response\022\016\n\006status\030\001 \001(\010\022\017\n\007message\030\002 \001("
-  "\t\022\022\n\nerrorpoint\030\003 \001(\t\022\n\n\002dt\030\004 \001(\t\022\013\n\003auv"
-  "\030\005 \001(\t\022\013\n\003hov\030\006 \001(\t\022\014\n\004ship\030\007 \001(\t\022\022\n\ncha"
-  "rt_data\030\010 \001(\tb\006proto3"
+  "\004name\030\003 \001(\t\022\016\n\006length\030\004 \001(\002\022\014\n\004area\030\005 \001("
+  "\002\022\023\n\013status_flag\030\035 \001(\r\"9\n\025CruiseRouteSou"
+  "rceList\022 \n\004list\030\001 \003(\0132\022.CruiseRouteSourc"
+  "e\"s\n\024SearchFilterParamter\022\023\n\013cruise_year"
+  "\030\001 \001(\t\022\025\n\rcruise_number\030\002 \001(\t\022\023\n\013dive_nu"
+  "mber\030\003 \001(\t\022\032\n\022verify_dive_number\030\004 \001(\t\"\?"
+  "\n\030SearchFilterParamterList\022#\n\004list\030\001 \003(\013"
+  "2\025.SearchFilterParamter\"\233\001\n\025FilterSearch"
+  "Parameter\022\023\n\013cruise_year\030\001 \001(\t\022\025\n\rcruise"
+  "_number\030\002 \001(\t\022\023\n\013dive_number\030\003 \001(\t\022\032\n\022ve"
+  "rify_dive_number\030\004 \003(\t\022\020\n\010priority\030\005 \001(\t"
+  "\022\023\n\013verify_flag\030\006 \001(\t\")\n\026KeywordSearchPa"
+  "rameter\022\017\n\007keyword\030\001 \001(\t\"X\n\021RequestTraje"
+  "ctory\022\025\n\rcruise_number\030\001 \001(\t\022\023\n\013dive_num"
+  "ber\030\002 \001(\t\022\027\n\017trajectory_type\030\003 \001(\t\"O\n\031Re"
+  "questTrajectoryResponse\022\n\n\002id\030\001 \001(\t\022\026\n\016p"
+  "osition_chain\030\003 \003(\t\022\016\n\006status\030\004 \001(\010\"\252\001\n\021"
+  "RequestStatistics\022\020\n\010query_dt\030\001 \001(\010\022\021\n\tq"
+  "uery_auv\030\002 \001(\010\022\021\n\tquery_hov\030\003 \001(\010\022\022\n\nque"
+  "ry_ship\030\004 \001(\010\022\030\n\020query_errorpoint\030\005 \001(\010\022"
+  "\025\n\rquery_preface\030\006 \001(\010\022\030\n\020query_chart_da"
+  "ta\030\007 \001(\010\"\251\001\n\031RequestStatisticsResponse\022\016"
+  "\n\006status\030\001 \001(\010\022\017\n\007message\030\002 \001(\t\022\022\n\nerror"
+  "point\030\003 \001(\t\022\n\n\002dt\030\004 \001(\t\022\013\n\003auv\030\005 \001(\t\022\013\n\003"
+  "hov\030\006 \001(\t\022\014\n\004ship\030\007 \001(\t\022\017\n\007preface\030\010 \001(\t"
+  "\022\022\n\nchart_data\030\t \001(\tb\006proto3"
   ;
 static ::_pbi::once_flag descriptor_table_sidescansource_2eproto_once;
 const ::_pbi::DescriptorTable descriptor_table_sidescansource_2eproto = {
-    false, false, 2061, descriptor_table_protodef_sidescansource_2eproto,
+    false, false, 2108, descriptor_table_protodef_sidescansource_2eproto,
     "sidescansource.proto",
     &descriptor_table_sidescansource_2eproto_once, nullptr, 0, 13,
     schemas, file_default_instances, TableStruct_sidescansource_2eproto::offsets,
@@ -2649,6 +2656,8 @@ CruiseRouteSource::CruiseRouteSource(const CruiseRouteSource& from)
       decltype(_impl_.cruise_){}
     , decltype(_impl_.type_){}
     , decltype(_impl_.name_){}
+    , decltype(_impl_.length_){}
+    , decltype(_impl_.area_){}
     , decltype(_impl_.status_flag_){}
     , /*decltype(_impl_._cached_size_)*/{}};
 
@@ -2677,7 +2686,9 @@ CruiseRouteSource::CruiseRouteSource(const CruiseRouteSource& from)
     _this->_impl_.name_.Set(from._internal_name(), 
       _this->GetArenaForAllocation());
   }
-  _this->_impl_.status_flag_ = from._impl_.status_flag_;
+  ::memcpy(&_impl_.length_, &from._impl_.length_,
+    static_cast<size_t>(reinterpret_cast<char*>(&_impl_.status_flag_) -
+    reinterpret_cast<char*>(&_impl_.length_)) + sizeof(_impl_.status_flag_));
   // @@protoc_insertion_point(copy_constructor:CruiseRouteSource)
 }
 
@@ -2689,6 +2700,8 @@ inline void CruiseRouteSource::SharedCtor(
       decltype(_impl_.cruise_){}
     , decltype(_impl_.type_){}
     , decltype(_impl_.name_){}
+    , decltype(_impl_.length_){0}
+    , decltype(_impl_.area_){0}
     , decltype(_impl_.status_flag_){0u}
     , /*decltype(_impl_._cached_size_)*/{}
   };
@@ -2735,7 +2748,9 @@ void CruiseRouteSource::Clear() {
   _impl_.cruise_.ClearToEmpty();
   _impl_.type_.ClearToEmpty();
   _impl_.name_.ClearToEmpty();
-  _impl_.status_flag_ = 0u;
+  ::memset(&_impl_.length_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&_impl_.status_flag_) -
+      reinterpret_cast<char*>(&_impl_.length_)) + sizeof(_impl_.status_flag_));
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
@@ -2772,6 +2787,22 @@ const char* CruiseRouteSource::_InternalParse(const char* ptr, ::_pbi::ParseCont
           ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
           CHK_(ptr);
           CHK_(::_pbi::VerifyUTF8(str, "CruiseRouteSource.name"));
+        } else
+          goto handle_unusual;
+        continue;
+      // float length = 4;
+      case 4:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 37)) {
+          _impl_.length_ = ::PROTOBUF_NAMESPACE_ID::internal::UnalignedLoad<float>(ptr);
+          ptr += sizeof(float);
+        } else
+          goto handle_unusual;
+        continue;
+      // float area = 5;
+      case 5:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 45)) {
+          _impl_.area_ = ::PROTOBUF_NAMESPACE_ID::internal::UnalignedLoad<float>(ptr);
+          ptr += sizeof(float);
         } else
           goto handle_unusual;
         continue;
@@ -2842,6 +2873,26 @@ uint8_t* CruiseRouteSource::_InternalSerialize(
         3, this->_internal_name(), target);
   }
 
+  // float length = 4;
+  static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
+  float tmp_length = this->_internal_length();
+  uint32_t raw_length;
+  memcpy(&raw_length, &tmp_length, sizeof(tmp_length));
+  if (raw_length != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteFloatToArray(4, this->_internal_length(), target);
+  }
+
+  // float area = 5;
+  static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
+  float tmp_area = this->_internal_area();
+  uint32_t raw_area;
+  memcpy(&raw_area, &tmp_area, sizeof(tmp_area));
+  if (raw_area != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteFloatToArray(5, this->_internal_area(), target);
+  }
+
   // uint32 status_flag = 29;
   if (this->_internal_status_flag() != 0) {
     target = stream->EnsureSpace(target);
@@ -2885,6 +2936,24 @@ size_t CruiseRouteSource::ByteSizeLong() const {
         this->_internal_name());
   }
 
+  // float length = 4;
+  static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
+  float tmp_length = this->_internal_length();
+  uint32_t raw_length;
+  memcpy(&raw_length, &tmp_length, sizeof(tmp_length));
+  if (raw_length != 0) {
+    total_size += 1 + 4;
+  }
+
+  // float area = 5;
+  static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
+  float tmp_area = this->_internal_area();
+  uint32_t raw_area;
+  memcpy(&raw_area, &tmp_area, sizeof(tmp_area));
+  if (raw_area != 0) {
+    total_size += 1 + 4;
+  }
+
   // uint32 status_flag = 29;
   if (this->_internal_status_flag() != 0) {
     total_size += 2 +
@@ -2918,6 +2987,20 @@ void CruiseRouteSource::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, cons
   }
   if (!from._internal_name().empty()) {
     _this->_internal_set_name(from._internal_name());
+  }
+  static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
+  float tmp_length = from._internal_length();
+  uint32_t raw_length;
+  memcpy(&raw_length, &tmp_length, sizeof(tmp_length));
+  if (raw_length != 0) {
+    _this->_internal_set_length(from._internal_length());
+  }
+  static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
+  float tmp_area = from._internal_area();
+  uint32_t raw_area;
+  memcpy(&raw_area, &tmp_area, sizeof(tmp_area));
+  if (raw_area != 0) {
+    _this->_internal_set_area(from._internal_area());
   }
   if (from._internal_status_flag() != 0) {
     _this->_internal_set_status_flag(from._internal_status_flag());
@@ -2953,7 +3036,12 @@ void CruiseRouteSource::InternalSwap(CruiseRouteSource* other) {
       &_impl_.name_, lhs_arena,
       &other->_impl_.name_, rhs_arena
   );
-  swap(_impl_.status_flag_, other->_impl_.status_flag_);
+  ::PROTOBUF_NAMESPACE_ID::internal::memswap<
+      PROTOBUF_FIELD_OFFSET(CruiseRouteSource, _impl_.status_flag_)
+      + sizeof(CruiseRouteSource::_impl_.status_flag_)
+      - PROTOBUF_FIELD_OFFSET(CruiseRouteSource, _impl_.length_)>(
+          reinterpret_cast<char*>(&_impl_.length_),
+          reinterpret_cast<char*>(&other->_impl_.length_));
 }
 
 ::PROTOBUF_NAMESPACE_ID::Metadata CruiseRouteSource::GetMetadata() const {
@@ -5255,6 +5343,7 @@ RequestStatisticsResponse::RequestStatisticsResponse(const RequestStatisticsResp
     , decltype(_impl_.auv_){}
     , decltype(_impl_.hov_){}
     , decltype(_impl_.ship_){}
+    , decltype(_impl_.preface_){}
     , decltype(_impl_.chart_data_){}
     , decltype(_impl_.status_){}
     , /*decltype(_impl_._cached_size_)*/{}};
@@ -5308,6 +5397,14 @@ RequestStatisticsResponse::RequestStatisticsResponse(const RequestStatisticsResp
     _this->_impl_.ship_.Set(from._internal_ship(), 
       _this->GetArenaForAllocation());
   }
+  _impl_.preface_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.preface_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (!from._internal_preface().empty()) {
+    _this->_impl_.preface_.Set(from._internal_preface(), 
+      _this->GetArenaForAllocation());
+  }
   _impl_.chart_data_.InitDefault();
   #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
     _impl_.chart_data_.Set("", GetArenaForAllocation());
@@ -5331,6 +5428,7 @@ inline void RequestStatisticsResponse::SharedCtor(
     , decltype(_impl_.auv_){}
     , decltype(_impl_.hov_){}
     , decltype(_impl_.ship_){}
+    , decltype(_impl_.preface_){}
     , decltype(_impl_.chart_data_){}
     , decltype(_impl_.status_){false}
     , /*decltype(_impl_._cached_size_)*/{}
@@ -5359,6 +5457,10 @@ inline void RequestStatisticsResponse::SharedCtor(
   #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
     _impl_.ship_.Set("", GetArenaForAllocation());
   #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  _impl_.preface_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.preface_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
   _impl_.chart_data_.InitDefault();
   #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
     _impl_.chart_data_.Set("", GetArenaForAllocation());
@@ -5382,6 +5484,7 @@ inline void RequestStatisticsResponse::SharedDtor() {
   _impl_.auv_.Destroy();
   _impl_.hov_.Destroy();
   _impl_.ship_.Destroy();
+  _impl_.preface_.Destroy();
   _impl_.chart_data_.Destroy();
 }
 
@@ -5401,6 +5504,7 @@ void RequestStatisticsResponse::Clear() {
   _impl_.auv_.ClearToEmpty();
   _impl_.hov_.ClearToEmpty();
   _impl_.ship_.ClearToEmpty();
+  _impl_.preface_.ClearToEmpty();
   _impl_.chart_data_.ClearToEmpty();
   _impl_.status_ = false;
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
@@ -5480,9 +5584,19 @@ const char* RequestStatisticsResponse::_InternalParse(const char* ptr, ::_pbi::P
         } else
           goto handle_unusual;
         continue;
-      // string chart_data = 8;
+      // string preface = 8;
       case 8:
         if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 66)) {
+          auto str = _internal_mutable_preface();
+          ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(ptr);
+          CHK_(::_pbi::VerifyUTF8(str, "RequestStatisticsResponse.preface"));
+        } else
+          goto handle_unusual;
+        continue;
+      // string chart_data = 9;
+      case 9:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 74)) {
           auto str = _internal_mutable_chart_data();
           ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
           CHK_(ptr);
@@ -5585,14 +5699,24 @@ uint8_t* RequestStatisticsResponse::_InternalSerialize(
         7, this->_internal_ship(), target);
   }
 
-  // string chart_data = 8;
+  // string preface = 8;
+  if (!this->_internal_preface().empty()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->_internal_preface().data(), static_cast<int>(this->_internal_preface().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "RequestStatisticsResponse.preface");
+    target = stream->WriteStringMaybeAliased(
+        8, this->_internal_preface(), target);
+  }
+
+  // string chart_data = 9;
   if (!this->_internal_chart_data().empty()) {
     ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
       this->_internal_chart_data().data(), static_cast<int>(this->_internal_chart_data().length()),
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
       "RequestStatisticsResponse.chart_data");
     target = stream->WriteStringMaybeAliased(
-        8, this->_internal_chart_data(), target);
+        9, this->_internal_chart_data(), target);
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
@@ -5653,7 +5777,14 @@ size_t RequestStatisticsResponse::ByteSizeLong() const {
         this->_internal_ship());
   }
 
-  // string chart_data = 8;
+  // string preface = 8;
+  if (!this->_internal_preface().empty()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->_internal_preface());
+  }
+
+  // string chart_data = 9;
   if (!this->_internal_chart_data().empty()) {
     total_size += 1 +
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
@@ -5700,6 +5831,9 @@ void RequestStatisticsResponse::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_m
   }
   if (!from._internal_ship().empty()) {
     _this->_internal_set_ship(from._internal_ship());
+  }
+  if (!from._internal_preface().empty()) {
+    _this->_internal_set_preface(from._internal_preface());
   }
   if (!from._internal_chart_data().empty()) {
     _this->_internal_set_chart_data(from._internal_chart_data());
@@ -5749,6 +5883,10 @@ void RequestStatisticsResponse::InternalSwap(RequestStatisticsResponse* other) {
   ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
       &_impl_.ship_, lhs_arena,
       &other->_impl_.ship_, rhs_arena
+  );
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &_impl_.preface_, lhs_arena,
+      &other->_impl_.preface_, rhs_arena
   );
   ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
       &_impl_.chart_data_, lhs_arena,

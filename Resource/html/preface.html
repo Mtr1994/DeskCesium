@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<!-- Include the CesiumJS JavaScript and CSS files -->
+	<script src="./js/qwebchannel.js"></script>
+	<script src="./js/preface.js"></script>
+</head>
+<body>
+	<div id="prefaceContainer" class = "div-preface-viewer" ondrop="handleDrop(event)" ondragover="handleDragOver(event)">
+		<div class="CodeMirror-gutter-background CodeMirror-activeline-gutter" style="left: 0px; width: 0px;"></div>
+		<pre class="CodeMirror-line" ><span style="padding-left: 1em;">截止目前：</span></pre>
+		<pre class="CodeMirror-line" ><span style="padding-left: 3em;">累计执行 <span id="text-total-cruise-number"> -- </span> 个航次，探测行程 <span id="text-total-length"> -- </span> 公里, 探测面积 <span id="text-total-area"> -- </span> 平方公里，其中</span></pre>
+		<pre class="CodeMirror-line" ><span style="padding-left: 5em;">深拖 侧扫 <span id="text-dt-length"> -- </span> 公里，覆盖面积 <span id="text-dt-area"> -- </span> 平方公里，垂直航迹分辨率：2.5cm，深拖侧扫型号：Klein UUV-3500，频率为75khz/400khz</span></pre>
+		<pre class="CodeMirror-line" ><span style="padding-left: 5em;">AUV 侧扫 <span id="text-auv-length"> -- </span> 公里，覆盖面积 <span id="text-auv-area"> -- </span> 平方公里，分辨率为: 5cm（低频）/ 2cm（高频）</span></pre>
+		<pre class="CodeMirror-line" ><span style="padding-left: 5em;">载人深潜 测深侧扫 <span id="text-total-hov_number"> -- </span> 次，侧扫 <span id="text-hov-length"> -- </span> 公里，覆盖面积 <span id="text-hov-area"> -- </span> 平方公里</span></pre>
+		<pre class="CodeMirror-line" ><span style="padding-left: 3em;">累计发现 <span id="text-total-error-point-number"> -- </span> 处 声学疑似点，其中</span></pre>
+		<pre class="CodeMirror-line" ><span style="padding-left: 5em;">优先级为 1 的点 <span id="text-p1-number"> -- </span> 处， 优先级为 2 的点 <span id="text-p2-number"> -- </span> 处， 优先级为 3 的点 <span id="text-p3-number"> -- </span> 处</span></pre>
+		<pre class="CodeMirror-line" ><span style="padding-left: 3em;">累计查明 <span id="text-total-verify-number"> -- </span> 处 声学疑似点，其中</span></pre>
+		<pre class="CodeMirror-line" ><span style="padding-left: 5em;">优先级为 1 的点 <span id="text-verify-p1-number"> -- </span> 处， 优先级为 2 的点 <span id="text-verify-p2-number"> -- </span> 处， 优先级为 3 的点 <span id="text-verify-p3-number"> -- </span> 处</span></pre>
+	</div>                                                                
+<style>                                                                   
+	.div-preface-viewer {
+		font-size: 1rem;
+		padding: 0.5rem !important;
+		border-radius: 1em;
+		font-family: inherit !important;
+		word-wrap: normal;
+		color: #24292e;
+		background-color: #e5eaf0;
+		border: 1px solid #d5dadf;
+	}
+
+	body {
+		width: calc(100% - 16px);
+		height: 100%;
+		background-color: #ffffff;
+		overflow: hidden;
+		font-size: 14px;
+		line-height: 14px;
+		margin: 0;
+		font-family: "Helvetica Neue",Helvetica,Arial,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","WenQuanYi Micro Hei",sans-serif, monospace !important;
+	}
+	.CodeMirror-line {
+		font-family: inherit !important;
+		font-size: 14px;
+	}
+	
+	::-webkit-scrollbar {
+		display: none;
+	}
+</style>
+
+<script type="text/javascript">
+	init();
+</script>
+
+</body>
+</html>

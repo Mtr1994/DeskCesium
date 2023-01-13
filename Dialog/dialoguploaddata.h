@@ -54,6 +54,11 @@ private:
 
     QFileInfoList traverseFolder(const QString &dir);
 
+    // 计算两个经纬度之间的距离
+    double getDistanceOfPoint(double longitude1, double latitude1, double longitude2, double latitude2);
+
+    double getDistanceOfFile(const QString &path);
+
 private slots:
     void slot_btn_upload_data_click();
 

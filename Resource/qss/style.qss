@@ -535,10 +535,3 @@ QFrame[TitleLine]
     margin: 0em 0em;
 }
 
-/* QTextBrowser */
-QTextBrowser#textBrowserSurvey
-{
-    border: 1px solid transparent;
-}
-
-

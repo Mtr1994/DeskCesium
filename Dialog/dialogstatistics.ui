@@ -68,7 +68,7 @@
           <item row="0" column="0">
            <widget class="QWidget" name="widgetSurveyBase" native="true">
             <layout class="QGridLayout" name="gridLayout_2">
-             <item row="0" column="0">
+             <item row="0" column="1">
               <layout class="QHBoxLayout" name="horizontalLayout_3">
                <property name="spacing">
                 <number>6</number>
@@ -117,29 +117,8 @@
                </item>
               </layout>
              </item>
-             <item row="1" column="0">
-              <widget class="QTextBrowser" name="textBrowserSurvey">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <property name="styleSheet">
-                <string notr="true">font: 290 12pt &quot;Microsoft YaHei&quot;;</string>
-               </property>
-               <property name="html">
-                <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;meta charset=&quot;utf-8&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Microsoft YaHei'; font-size:12pt; font-weight:290; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Microsoft YaHei UI'; font-size:11pt; font-weight:400; color:#242424;&quot;&gt;累计执行 1 个航次，探测面积&lt;/span&gt;&lt;span style=&quot; font-family:'Microsoft YaHei UI'; font-size:11pt; font-weight:400; color:#55ff00;&quot;&gt; &lt;/span&gt;&lt;span style=&quot; font-family:'Microsoft YaHei UI'; font-size:11pt; font-weight:700; font-style:italic; color:#55ff00;&quot;&gt;1&lt;/span&gt;&lt;span style=&quot; font-family:'Microsoft YaHei UI'; font-size:11pt; font-weight:700; color:#55ff00;&quot;&gt; &lt;/span&gt;&lt;span style=&quot; font-family:'Microsoft YaHei UI'; font-size:11pt; font-weight:400; color:#242424;&quot;&gt;平方公里，其中深拖侧扫&lt;/span&gt;&lt;span style=&quot; font-family:'Microsoft YaHei UI'; font-size:11pt; font-weight:400; color:#55ff7f;&quot;&gt; &lt;/span&gt;&lt;span style=&quot; font-family:'Microsoft YaHei UI'; font-size:11pt; font-weight:700; font-style:italic; color:#55ff7f;&quot;&gt;1&lt;/span&gt;&lt;span style=&quot; font-family:'Microsoft YaHei UI'; font-size:11pt; font-weight:700; color:#55ff7f;&quot;&gt; &lt;/span&gt;&lt;span style=&quot; font-family:'Microsoft YaHei UI'; font-size:11pt; font-weight:400; color:#242424;&quot;&gt;公里，覆盖面积 1 平方公里，分辨率为 1&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Microsoft YaHei UI'; font-size:11pt; font-weight:400; color:#242424;&quot;&gt;AUV 侧扫 1 公里。。。。。。。。。。。。。&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Microsoft YaHei UI'; font-size:11pt; font-weight:400; color:#242424;&quot;&gt;载人深潜测深侧扫 1 次&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Microsoft YaHei UI'; font-size:11pt; font-weight:400; color:#242424;&quot;&gt;累计发现 &lt;/span&gt;&lt;span style=&quot; font-family:'Microsoft YaHei UI'; font-size:11pt; font-weight:700; font-style:italic; color:#55ffff;&quot;&gt;1&lt;/span&gt;&lt;span style=&quot; font-family:'Microsoft YaHei UI'; font-size:11pt; font-weight:400; color:#242424;&quot;&gt; 处 声学疑似点，优先级1 1 处，优先级2 1 处，优先级 3 一处&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Microsoft YaHei UI'; font-size:11pt; font-weight:400; color:#242424;&quot;&gt;共查明 1 处，其中优先级1 1 处，优先级2 1 处，优先级 &lt;/span&gt;&lt;span style=&quot; font-family:'Microsoft YaHei UI'; font-size:11pt; font-weight:700; font-style:italic; color:#ff557f;&quot;&gt;3&lt;/span&gt;&lt;span style=&quot; font-family:'Microsoft YaHei UI'; font-size:11pt; font-weight:400; color:#242424;&quot;&gt; 一处&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-               </property>
-              </widget>
+             <item row="1" column="0" colspan="2">
+              <widget class="QWebEngineView" name="widgetWebPreface" native="true"/>
              </item>
             </layout>
            </widget>

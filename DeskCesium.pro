@@ -42,6 +42,7 @@ DESTDIR = ../output
 SOURCES += \
     Channel/chartcontext.cpp \
     Channel/jscontext.cpp \
+    Channel/prefacejscontext.cpp \
     Channel/surveycontext.cpp \
     Control/Message/messagewidget.cpp \
     Dialog/dialogabout.cpp \
@@ -65,6 +66,7 @@ SOURCES += \
 HEADERS += \
     Channel/chartcontext.h \
     Channel/jscontext.h \
+    Channel/prefacejscontext.h \
     Channel/surveycontext.h \
     Common/common.h \
     Control/Message/messagewidget.h \

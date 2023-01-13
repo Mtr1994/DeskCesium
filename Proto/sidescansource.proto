@@ -56,6 +56,8 @@ message CruiseRouteSource
 	string cruise = 1;
 	string type = 2;
 	string name = 3;
+	float  length = 4;
+	float  area = 5;
 	uint32 status_flag = 29;
 }
 
@@ -134,5 +136,6 @@ message RequestStatisticsResponse
 	string auv = 5;
 	string hov = 6;
 	string ship = 7;
-	string chart_data = 8;
+	string preface = 8;
+	string chart_data = 9;
 }

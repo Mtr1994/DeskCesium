@@ -6,6 +6,7 @@
 #include <dirent.h>
 #include <fstream>
 #include <regex>
+#include <set>
 
 std::string errorMessage = "消息数据异常，请联系管理员";
 std::string errorParseMessage = "消息解析失败，请联系管理员";
@@ -258,7 +259,9 @@ void CBaseCommand::logic_insert_cruise_route_source_data(const CMessage_Source& 
     {
         CruiseRouteSource source = sourceDataList.list().at(i);
 
-		sprintf(sql, "REPLACE INTO t_source_data_cruise_route VALUES('%s', '%s', '%s', 0)",  source.cruise().data(), source.type().data(), source.name().data());
+		sprintf(sql, "REPLACE INTO t_source_data_cruise_route VALUES('%s', '%s', '%s', %f, %f, 0)",  
+																	source.cruise().data(), source.type().data(), 
+																	source.name().data(), source.length(), source.area());
 		status = conn->update(sql);
 		
 		if (!status) break;
@@ -783,7 +786,114 @@ void CBaseCommand::logic_query_statistics_data_by_condition(const CMessage_Sourc
     // 查询前言信息
     if (requestStatistics.query_preface()) 
     {
-    	
+    	std::string preface = "{sidescan: ";
+		shared_ptr<MysqlConnection> conn = mMysqlConnectionPool->getConnection();
+		std::string sql = "select cruise_number, priority, verify_flag from t_source_data_side_scan where status_flag = 0;";
+		PSS_LOGGER_DEBUG("statistics sql {0}", sql.data());
+		status = conn->query(sql);
+		if (!status)
+		{
+			std::string error = conn->lastError();
+			PSS_LOGGER_DEBUG("{0} logic_query_statistics_data_by_condition {1}", errorQueryMySQL, error.data());
+			
+			preface.append("{total_cruise_number: 0, total_error_number: 0, p1: 0, p2: 0, p3: 0, verify_number: 0, verify_p1: 0, verify_p2: 0, verify_p3: 0},");
+		}
+		else
+		{
+			int total_cruise_number = 0, total_error_number = 0, p1 = 0, p2 = 0, p3 = 0, verify_number= 0, verify_p1 = 0, verify_p2 = 0, verify_p3 = 0;
+			std::set<string>  setCruiseNumber;
+			while (conn->next())
+			{
+				setCruiseNumber.insert(conn->value(0));
+				total_error_number++;
+				if (stoi(conn->value(1)) == 1) 
+				{
+					p1++;
+					if (stoi(conn->value(2)) == 1)
+					{
+						verify_number++;
+						verify_p1++;
+					}
+				}
+				else if (stoi(conn->value(1)) == 2) 
+				{
+					p2++;
+					if (stoi(conn->value(2)) == 1)
+					{
+						verify_number++;
+						verify_p2++;
+					}
+				}
+				else if (stoi(conn->value(1)) == 3) 
+				{
+					p2++;
+					if (stoi(conn->value(2)) == 1)
+					{
+						verify_number++;
+						verify_p2++;
+					}
+				}
+			}
+			
+			total_cruise_number = setCruiseNumber.size();
+			preface.append("{total_cruise_number: " + std::to_string(total_cruise_number) + 
+							", total_error_number: " + std::to_string(total_error_number) + 
+							", p1: " + std::to_string(p1) + 
+							", p2: " + std::to_string(p2) + 
+							", p3: " + std::to_string(p3) + 
+							", verify_number: " + std::to_string(verify_number) + 
+							", verify_p1: " + std::to_string(verify_p1) + 
+							", verify_p2: " + std::to_string(verify_p2) + 
+							", verify_p3: " + std::to_string(verify_p3) + "}, cruiseroute: ");
+		}
+		
+		sql = "select type, length, area from t_source_data_cruise_route where status_flag = 0;";
+		status = conn->query(sql);
+		if (!status)
+		{
+			std::string error = conn->lastError();
+			PSS_LOGGER_DEBUG("{0} logic_query_statistics_data_by_condition {1}", errorQueryMySQL, error.data());
+			
+			preface.append("{total_length: 0, total_area: 0, dt_total_length: 0, dt_total_area: 0, auv_total_length: 0, auv_total_area: 0, hov_total_length: 0, hov_total_area: 0}}");
+		}
+		else
+		{
+			float total_length = 0, total_area = 0, total_hov_number = 0, dt_total_length = 0, dt_total_area = 0, auv_total_length = 0, auv_total_area = 0, hov_total_length = 0, hov_total_area = 0;
+			while (conn->next())
+			{
+				if (conn->value(0) == "DT")
+				{
+					dt_total_length += stof(conn->value(1));
+					dt_total_area += stof(conn->value(2));
+				}
+				else if (conn->value(0) == "AUV")
+				{
+					auv_total_length += stof(conn->value(1));
+					auv_total_area += stof(conn->value(2));
+				}
+				else if (conn->value(0) == "HOV")
+				{
+					hov_total_length += stof(conn->value(1));
+					hov_total_area += stof(conn->value(2));
+					total_hov_number++;
+				}
+			}
+			
+			total_length = dt_total_length + auv_total_area + hov_total_length;
+			total_area = dt_total_area + auv_total_area + hov_total_area;
+			
+			preface.append("{total_length: " + std::to_string(total_length) + 
+							", total_area: " + std::to_string(total_area) + 
+							", total_hov_number: " + std::to_string(total_hov_number) + 
+							", dt_total_length: " + std::to_string(dt_total_length) + 
+							", dt_total_area: " + std::to_string(dt_total_area) + 
+							", auv_total_length: " + std::to_string(auv_total_length) + 
+							", auv_total_area: " + std::to_string(auv_total_area) + 
+							", hov_total_length: " + std::to_string(hov_total_length) + 
+							", hov_total_area: " + std::to_string(hov_total_area) + "}}");
+		}
+		
+		response.set_preface(preface);
     }
     
     // 查询分类信息

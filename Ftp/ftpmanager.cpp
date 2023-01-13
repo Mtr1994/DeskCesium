@@ -182,7 +182,7 @@ void FtpProtocol::slot_socket_file_data_recv()
 
 void FtpProtocol::slot_socket_file_data_close()
 {
-    qDebug() << "FtpProtocol::slot_socket_file_data_close " << mListCommand;
+    //qDebug() << "FtpProtocol::slot_socket_file_data_close " << mListCommand;
     mDataRecvFlag = true;
     if (!mCommandRecvFlag) return;
     if (mListCommand.size() == 0) return;
@@ -229,7 +229,7 @@ void FtpProtocol::slot_socket_command_data_recv()
     QString cmd = mListCommand.first().left(4).trimmed();
     QString status = mStatusObject.value(cmd).toObject().value(str.at(0)).toString();
 
-    qDebug() << "mResultMessage " << str << " " << status << " " << mListCommand << " " << cmd;
+    //qDebug() << "mResultMessage " << str << " " << status << " " << mListCommand << " " << cmd;
     if (cmd != "QUIT") mResultMessage = str;
 
     // 如果命令失败，立即返回
@@ -280,7 +280,7 @@ void FtpProtocol::slot_socket_command_data_recv()
         }
         if (mSocketData->state() == QTcpSocket::ConnectedState) mSocketData->close();
 
-        qDebug() << "PASV TO SERVER " << mFtpHost << " " << p1 + p2;
+        //qDebug() << "PASV TO SERVER " << mFtpHost << " " << p1 + p2;
 
         mSocketData->connectToHost(QHostAddress(mFtpHost), p1 + p2);
     }
@@ -454,7 +454,7 @@ void FtpProtocol::sendNextCommannd()
     if (mListCommand.length() == 0) return;
 
     QString cmd = mListCommand.first();
-    qDebug() << "FtpProtocol::sendNextCommannd " << cmd << " size " << mListCommand;
+    //qDebug() << "FtpProtocol::sendNextCommannd " << cmd << " size " << mListCommand;
     mSocketCommand->write(cmd.toStdString().data());
     mSocketCommand->flush();
 }
@@ -462,7 +462,7 @@ void FtpProtocol::sendNextCommannd()
 int64_t FtpProtocol::parseFileSize()
 {
     auto list =  mServerFileInfo.split(' ', Qt::SkipEmptyParts);
-    qDebug() << "FtpProtocol::parseFileSize " << mServerFileInfo;
+    //qDebug() << "FtpProtocol::parseFileSize " << mServerFileInfo;
     if (mServerFileInfo.startsWith('-')) // linux 下的文件标志
     {
         if (list.size() != 9)
@@ -528,7 +528,7 @@ void FtpProtocol::uploadFile()
 
 void FtpProtocol::parse_nlst_data_pack()
 {
-    qDebug() << "FtpProtocol::parse_nlst_data_pack " << mServerDirInfo << " " << mFileName;
+    //qDebug() << "FtpProtocol::parse_nlst_data_pack " << mServerDirInfo << " " << mFileName;
     mCommandRecvFlag = false;
     mDataRecvFlag = false;
     mListCommand.removeFirst();

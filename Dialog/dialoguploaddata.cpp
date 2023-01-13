@@ -15,6 +15,7 @@
 #include <QFileDialog>
 #include <QStandardPaths>
 #include <regex>
+#include <QtMath>
 
 // test
 #include <QDebug>
@@ -672,9 +673,12 @@ void DialogUploadData::checkData()
         DataUploadTask task = {"upload", QString("upload/%1/Navigation/AUV").arg(cruiseNumber).toStdString(), track.absoluteFilePath().toStdString()};
         mTaskQueue.append(task);
 
+        double length = getDistanceOfFile(track.absoluteFilePath());
         CruiseRouteSource *source = routeSourceList.add_list();
         source->set_cruise(cruiseNumber.toStdString());
         source->set_type("AUV");
+        source->set_length(length);
+        source->set_area(length * 700 * 2);
         source->set_name(track.fileName().toStdString());
     }
 
@@ -694,9 +698,13 @@ void DialogUploadData::checkData()
             return;
         }
 
+        // 打开文件，计算长度
+        double length = getDistanceOfFile(track.absoluteFilePath());
         CruiseRouteSource *source = routeSourceList.add_list();
         source->set_cruise(cruiseNumber.toStdString());
         source->set_type("DT");
+        source->set_length(length);
+        source->set_area(length * 700 * 2);
         source->set_name(track.fileName().toStdString());
     }
 
@@ -716,9 +724,12 @@ void DialogUploadData::checkData()
             return;
         }
 
+        double length = getDistanceOfFile(track.absoluteFilePath());
         CruiseRouteSource *source = routeSourceList.add_list();
         source->set_cruise(cruiseNumber.toStdString());
         source->set_type("HOV");
+        source->set_length(length);
+        source->set_area(length * 700 * 2);
         source->set_name(track.fileName().toStdString());
     }
 
@@ -738,9 +749,12 @@ void DialogUploadData::checkData()
             return;
         }
 
+        double length = getDistanceOfFile(track.absoluteFilePath());
         CruiseRouteSource *source = routeSourceList.add_list();
         source->set_cruise(cruiseNumber.toStdString());
         source->set_type("SHIP");
+        source->set_length(length);
+        source->set_area(length * 700 * 2);
         source->set_name(track.fileName().toStdString());
     }
 
@@ -781,6 +795,49 @@ QFileInfoList DialogUploadData::traverseFolder(const QString &dir)
     // qDebug() << "listFileB " << dir << " " << listFile;
 
     return listFile;
+}
+
+double DialogUploadData::getDistanceOfPoint(double longitude1, double latitude1, double longitude2, double latitude2)
+{
+    // 半正矢公式 Haversine formula
+
+    double radLng1 = longitude1 * M_PI / 180.0;
+    double radLat1 = latitude1 * M_PI / 180.0;
+    double radLng2 = longitude2 * M_PI / 180.0;
+    double radLat2 = latitude2 * M_PI / 180.0;
+
+    double a = radLat1 - radLat2;
+    double b = radLng1 - radLng2;
+
+    return 2 * asin(sqrt(sin(a / 2) * sin(a / 2) + cos(radLat1) * cos(radLat2) * sin(b / 2) * sin(b / 2))) * 6378.137;
+}
+
+double DialogUploadData::getDistanceOfFile(const QString &path)
+{
+    double length = 0;
+    double p1x = -1, p1y = -1;
+    bool isFirstPoint = true;
+
+    ifstream fileDescripter(path.toStdString());
+    for (string line = ""; getline(fileDescripter, line); )
+    {
+        auto list = QString::fromStdString(line).split(" ", Qt::SkipEmptyParts);
+        if (list.size() != 3) continue;
+
+        if (isFirstPoint)
+        {
+            p1x = list.at(0).toDouble();
+            p1y = list.at(1).toDouble();
+            isFirstPoint = false;
+        }
+        else
+        {
+            length += getDistanceOfPoint(p1x, p1y, list.at(0).toDouble(), list.at(1).toDouble());
+            p1x = list.at(0).toDouble();
+            p1y = list.at(1).toDouble();
+        }
+    }
+    return length;
 }
 
 void DialogUploadData::slot_btn_upload_data_click()
@@ -865,7 +922,7 @@ void DialogUploadData::slot_thread_check_data_finish()
 
 void DialogUploadData::slot_start_next_task()
 {
-    qDebug() << "DialogUploadData::slot_start_next_task " << mTaskQueue.size();
+    //qDebug() << "DialogUploadData::slot_start_next_task " << mTaskQueue.size();
     if (mTaskQueue.isEmpty())
     {
         emit sgl_thread_report_check_status(STATUS_INFO, QString("数据录入流程结束"), false);

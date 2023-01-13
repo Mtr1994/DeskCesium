@@ -2,6 +2,7 @@
 #include "ui_dialogstatistics.h"
 #include "Channel/surveycontext.h"
 #include "Channel/chartcontext.h"
+#include "Channel/prefacejscontext.h"
 #include "Protocol/protocolhelper.h"
 #include "Net/usernetworker.h"
 #include "Common/common.h"
@@ -37,6 +38,24 @@ void DialogStatistics::init()
 
     connect(AppSignal::getInstance(), &AppSignal::sgl_query_statistics_data_by_condition_response, this, &DialogStatistics::slot_query_statistics_data_by_condition_response);
 
+    QString htmlRoot = QApplication::applicationDirPath() + "/../Resource/html";
+    //QString htmlRoot = QApplication::applicationDirPath() + "/resource/html";
+
+    mJsContextPreface = new PrefaceJsContext(this);
+    QWebChannel *channelPreface = new QWebChannel(this);
+    channelPreface->registerObject("context", mJsContextPreface);
+    ui->widgetWebPreface->page()->setWebChannel(channelPreface);
+
+    ui->widgetWebPreface->settings()->setAttribute(QWebEngineSettings::LocalContentCanAccessFileUrls, true);
+    ui->widgetWebPreface->settings()->setAttribute(QWebEngineSettings::WebGLEnabled, true);
+    ui->widgetWebPreface->settings()->setAttribute(QWebEngineSettings::LocalContentCanAccessRemoteUrls, true);
+
+    ui->widgetWebPreface->page()->setWebChannel(channelPreface);
+    ui->widgetWebPreface->page()->load(QUrl(QString("%1/preface.html").arg(htmlRoot)));
+    ui->widgetWebPreface->page()->setBackgroundColor(QColor(255, 255, 255));
+
+    connect(mJsContextPreface, &PrefaceJsContext::sgl_web_view_init_finish, this, [this]{ requestStatisticsData(); });
+
     mSurveyContext = new SurveyContext(this);
     QWebChannel *channel = new QWebChannel(this);
     channel->registerObject("context", mSurveyContext);
@@ -46,9 +65,6 @@ void DialogStatistics::init()
     ui->widgetStatisticsCesium->settings()->setAttribute(QWebEngineSettings::LocalContentCanAccessFileUrls, true);
     ui->widgetStatisticsCesium->settings()->setAttribute(QWebEngineSettings::WebGLEnabled, true);
     ui->widgetStatisticsCesium->settings()->setAttribute(QWebEngineSettings::LocalContentCanAccessRemoteUrls, true);
-
-    QString htmlRoot = QApplication::applicationDirPath() + "/../Resource/html";
-    //QString htmlRoot = QApplication::applicationDirPath() + "/resource/html";
 
     ui->widgetStatisticsCesium->page()->setWebChannel(channel);
     ui->widgetStatisticsCesium->page()->load(QUrl(QString("%1/indexStatisticsCesium.html").arg(htmlRoot)));
@@ -113,7 +129,7 @@ void DialogStatistics::init()
 void DialogStatistics::requestStatisticsData()
 {
     mNumberInitWebView++;
-    if (mNumberInitWebView < 4) return;
+    if (mNumberInitWebView < 5) return;
     qDebug() << "DialogStatistics::requestStatisticsData Start";
 
     RequestStatistics requestStatistics;
@@ -132,6 +148,9 @@ void DialogStatistics::requestStatisticsData()
 void DialogStatistics::slot_query_statistics_data_by_condition_response(const RequestStatisticsResponse &response)
 {
     if (!response.status()) return;
+
+    // 前言信息
+    emit mJsContextPreface->sgl_change_preface_info(response.preface().data());
 
     emit mSurveyContext->sgl_add_remote_trajectory_entitys(response.dt().data());
     emit mSurveyContext->sgl_add_remote_trajectory_entitys(response.auv().data());

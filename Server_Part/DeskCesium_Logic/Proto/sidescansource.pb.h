@@ -1179,6 +1179,8 @@ class CruiseRouteSource final :
     kCruiseFieldNumber = 1,
     kTypeFieldNumber = 2,
     kNameFieldNumber = 3,
+    kLengthFieldNumber = 4,
+    kAreaFieldNumber = 5,
     kStatusFlagFieldNumber = 29,
   };
   // string cruise = 1;
@@ -1223,6 +1225,24 @@ class CruiseRouteSource final :
   std::string* _internal_mutable_name();
   public:
 
+  // float length = 4;
+  void clear_length();
+  float length() const;
+  void set_length(float value);
+  private:
+  float _internal_length() const;
+  void _internal_set_length(float value);
+  public:
+
+  // float area = 5;
+  void clear_area();
+  float area() const;
+  void set_area(float value);
+  private:
+  float _internal_area() const;
+  void _internal_set_area(float value);
+  public:
+
   // uint32 status_flag = 29;
   void clear_status_flag();
   uint32_t status_flag() const;
@@ -1243,6 +1263,8 @@ class CruiseRouteSource final :
     ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr cruise_;
     ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr type_;
     ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr name_;
+    float length_;
+    float area_;
     uint32_t status_flag_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   };
@@ -2878,7 +2900,8 @@ class RequestStatisticsResponse final :
     kAuvFieldNumber = 5,
     kHovFieldNumber = 6,
     kShipFieldNumber = 7,
-    kChartDataFieldNumber = 8,
+    kPrefaceFieldNumber = 8,
+    kChartDataFieldNumber = 9,
     kStatusFieldNumber = 1,
   };
   // string message = 2;
@@ -2965,7 +2988,21 @@ class RequestStatisticsResponse final :
   std::string* _internal_mutable_ship();
   public:
 
-  // string chart_data = 8;
+  // string preface = 8;
+  void clear_preface();
+  const std::string& preface() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_preface(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_preface();
+  PROTOBUF_NODISCARD std::string* release_preface();
+  void set_allocated_preface(std::string* preface);
+  private:
+  const std::string& _internal_preface() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_preface(const std::string& value);
+  std::string* _internal_mutable_preface();
+  public:
+
+  // string chart_data = 9;
   void clear_chart_data();
   const std::string& chart_data() const;
   template <typename ArgT0 = const std::string&, typename... ArgT>
@@ -3002,6 +3039,7 @@ class RequestStatisticsResponse final :
     ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr auv_;
     ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr hov_;
     ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr ship_;
+    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr preface_;
     ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr chart_data_;
     bool status_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
@@ -4612,6 +4650,46 @@ inline void CruiseRouteSource::set_allocated_name(std::string* name) {
   // @@protoc_insertion_point(field_set_allocated:CruiseRouteSource.name)
 }
 
+// float length = 4;
+inline void CruiseRouteSource::clear_length() {
+  _impl_.length_ = 0;
+}
+inline float CruiseRouteSource::_internal_length() const {
+  return _impl_.length_;
+}
+inline float CruiseRouteSource::length() const {
+  // @@protoc_insertion_point(field_get:CruiseRouteSource.length)
+  return _internal_length();
+}
+inline void CruiseRouteSource::_internal_set_length(float value) {
+  
+  _impl_.length_ = value;
+}
+inline void CruiseRouteSource::set_length(float value) {
+  _internal_set_length(value);
+  // @@protoc_insertion_point(field_set:CruiseRouteSource.length)
+}
+
+// float area = 5;
+inline void CruiseRouteSource::clear_area() {
+  _impl_.area_ = 0;
+}
+inline float CruiseRouteSource::_internal_area() const {
+  return _impl_.area_;
+}
+inline float CruiseRouteSource::area() const {
+  // @@protoc_insertion_point(field_get:CruiseRouteSource.area)
+  return _internal_area();
+}
+inline void CruiseRouteSource::_internal_set_area(float value) {
+  
+  _impl_.area_ = value;
+}
+inline void CruiseRouteSource::set_area(float value) {
+  _internal_set_area(value);
+  // @@protoc_insertion_point(field_set:CruiseRouteSource.area)
+}
+
 // uint32 status_flag = 29;
 inline void CruiseRouteSource::clear_status_flag() {
   _impl_.status_flag_ = 0u;
@@ -6078,7 +6156,57 @@ inline void RequestStatisticsResponse::set_allocated_ship(std::string* ship) {
   // @@protoc_insertion_point(field_set_allocated:RequestStatisticsResponse.ship)
 }
 
-// string chart_data = 8;
+// string preface = 8;
+inline void RequestStatisticsResponse::clear_preface() {
+  _impl_.preface_.ClearToEmpty();
+}
+inline const std::string& RequestStatisticsResponse::preface() const {
+  // @@protoc_insertion_point(field_get:RequestStatisticsResponse.preface)
+  return _internal_preface();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void RequestStatisticsResponse::set_preface(ArgT0&& arg0, ArgT... args) {
+ 
+ _impl_.preface_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:RequestStatisticsResponse.preface)
+}
+inline std::string* RequestStatisticsResponse::mutable_preface() {
+  std::string* _s = _internal_mutable_preface();
+  // @@protoc_insertion_point(field_mutable:RequestStatisticsResponse.preface)
+  return _s;
+}
+inline const std::string& RequestStatisticsResponse::_internal_preface() const {
+  return _impl_.preface_.Get();
+}
+inline void RequestStatisticsResponse::_internal_set_preface(const std::string& value) {
+  
+  _impl_.preface_.Set(value, GetArenaForAllocation());
+}
+inline std::string* RequestStatisticsResponse::_internal_mutable_preface() {
+  
+  return _impl_.preface_.Mutable(GetArenaForAllocation());
+}
+inline std::string* RequestStatisticsResponse::release_preface() {
+  // @@protoc_insertion_point(field_release:RequestStatisticsResponse.preface)
+  return _impl_.preface_.Release();
+}
+inline void RequestStatisticsResponse::set_allocated_preface(std::string* preface) {
+  if (preface != nullptr) {
+    
+  } else {
+    
+  }
+  _impl_.preface_.SetAllocated(preface, GetArenaForAllocation());
+#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (_impl_.preface_.IsDefault()) {
+    _impl_.preface_.Set("", GetArenaForAllocation());
+  }
+#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:RequestStatisticsResponse.preface)
+}
+
+// string chart_data = 9;
 inline void RequestStatisticsResponse::clear_chart_data() {
   _impl_.chart_data_.ClearToEmpty();
 }

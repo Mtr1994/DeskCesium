@@ -11,6 +11,7 @@ class DialogStatistics;
 
 class SurveyContext;
 class ChartContext;
+class PrefaceJsContext;
 class DialogStatistics : public QDialog
 {
     Q_OBJECT
@@ -43,6 +44,9 @@ private:
 
     // 图表专属通信类
     ChartContext *mJsContextChartChecked = nullptr;
+
+    // 前言通信类
+    PrefaceJsContext *mJsContextPreface = nullptr;
 
     uint16_t mNumberInitWebView = 0;
 };
