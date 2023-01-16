@@ -7,6 +7,7 @@
 #include <fstream>
 #include <regex>
 #include <set>
+#include <vector>
 
 std::string errorMessage = "消息数据异常，请联系管理员";
 std::string errorParseMessage = "消息解析失败，请联系管理员";
@@ -218,7 +219,6 @@ void CBaseCommand::logic_query_ftp_server_status(const CMessage_Source& source, 
 void CBaseCommand::logic_insert_cruise_route_source_data(const CMessage_Source& source, std::shared_ptr<CMessage_Packet> recv_packet, std::shared_ptr<CMessage_Packet> send_packet)
 {
 	PSS_LOGGER_DEBUG("logic_insert_cruise_route_source_data.");
-	
 	std::string sourceData = recv_packet->buffer_.substr(8);
     if (sourceData.empty())
     {
@@ -242,11 +242,41 @@ void CBaseCommand::logic_insert_cruise_route_source_data(const CMessage_Source& 
    
 	StatusResponse response;
 	response.set_status(false);
+	
+	std::vector<uint32_t> vectorCoverErrorNumber;
+	
+	// 先查询每一个轨迹文件覆盖的异常点数量，便于后期查询，因为上传轨迹前，异常点已经上传了，不会遗漏
+	{
+		uint32_t size = sourceDataList.list_size();
+		for (uint32_t i = 0; i < size; i++)
+		{
+		    std::string mask = sourceDataList.list().at(i).name();
+		    if (mask.length() <= 4) 
+		    {
+		    	vectorCoverErrorNumber.push_back(0);
+				continue;
+			}
+		    mask = mask.substr(0, mask.length() - 4);
 
-    shared_ptr<MysqlConnection> conn = mMysqlConnectionPool->getConnection();
-    status = conn->transaction();
-    if (!status)
-    {
+			shared_ptr<MysqlConnection> conn = mMysqlConnectionPool->getConnection();
+			std:string sql = "select count(*) from t_source_data_side_scan where id like \"%" + mask + "%\" and status_flag = 0;";
+			PSS_LOGGER_DEBUG("sql {0}", sql);
+			status = conn->query(sql);
+			
+			if (!status)
+			{
+				vectorCoverErrorNumber.push_back(0);
+				continue;
+			}
+			while (conn->next()) vectorCoverErrorNumber.push_back(stoi(conn->value(0)));
+		}
+	}
+	
+	shared_ptr<MysqlConnection> conn = mMysqlConnectionPool->getConnection();
+	// 写入数据
+	status = conn->transaction();
+	if (!status) 
+	{
 		response.set_message(conn->lastError());
 		std::string pack = createPackage(CMD_INSERT_CRUISE_ROUTE_SOURCE_DATA_RESPONSE, response.SerializeAsString());
         sendAsyncPack(source.connect_id_, pack);
@@ -259,9 +289,9 @@ void CBaseCommand::logic_insert_cruise_route_source_data(const CMessage_Source& 
     {
         CruiseRouteSource source = sourceDataList.list().at(i);
 
-		sprintf(sql, "REPLACE INTO t_source_data_cruise_route VALUES('%s', '%s', '%s', %f, %f, 0)",  
+		sprintf(sql, "REPLACE INTO t_source_data_cruise_route VALUES('%s', '%s', '%s', %f, %f, %d, 0)",  
 																	source.cruise().data(), source.type().data(), 
-																	source.name().data(), source.length(), source.area());
+																	source.name().data(), source.length(), source.area(), vectorCoverErrorNumber.at(i));
 		status = conn->update(sql);
 		
 		if (!status) break;
@@ -616,7 +646,7 @@ void CBaseCommand::logic_query_trajectory_by_cruise_and_dive(const CMessage_Sour
 	std::string dive_number = requestTrajectory.dive_number();
 	shared_ptr<MysqlConnection> conn = mMysqlConnectionPool->getConnection();
 
-    std::string sql = "select name from t_source_data_cruise_route where ";
+    std::string sql = "select name, length, area, cover_error_number from t_source_data_cruise_route where ";
     sql.append("cruise_number = \"" + requestTrajectory.cruise_number() + "\"");
     sql.append(" and type = \"" + requestTrajectory.trajectory_type() + "\"");
     sql.append(" and name like \"%" + requestTrajectory.dive_number() + "%\"");
@@ -638,17 +668,25 @@ void CBaseCommand::logic_query_trajectory_by_cruise_and_dive(const CMessage_Sour
 	}
 	
 	std::vector<string> vectorFileNames;
+	std::vector<string> vectorLength;
+	std::vector<string> vectorArea;
+	std::vector<string> vectorCoverErrorNumber;
 	
 	while (conn->next())
 	{
 		vectorFileNames.push_back(conn->value(0));
+		vectorLength.push_back(conn->value(1));
+		vectorArea.push_back(conn->value(2));
+		vectorCoverErrorNumber.push_back(conn->value(3));
 	}
 	
 	std::string targetPath = "/home/ftp_root/upload/" + requestTrajectory.cruise_number() + "/Navigation/" + requestTrajectory.trajectory_type();
 
-	uint16_t cruiseCount = 0;
+	std::string position_chains = "position_chains: [";
+	int16_t cruiseCount = -1;
 	for (auto &name : vectorFileNames)
 	{
+		cruiseCount++;
 		if (name.find(dive_number) == name.npos ) continue;
 		std::ifstream fileDescripter(targetPath + "/" + name);
 		PSS_LOGGER_DEBUG("open file {0}", targetPath + "/" + name);
@@ -656,7 +694,7 @@ void CBaseCommand::logic_query_trajectory_by_cruise_and_dive(const CMessage_Sour
 		std::string line;
 		while(std::getline(fileDescripter, line))
 		{
-			std::regex reg("^([0-9]+\\.[0-9]+) ([0-9]+\\.[0-9]+) (.*)");
+			std::regex reg("^([0-9]+\\.[0-9]+)[ ]+([0-9]+\\.[0-9]+)[ ]+(.*)");
 			std::smatch match;
 			bool status = regex_search(line, match, reg);
 			if (!status) continue;
@@ -667,12 +705,21 @@ void CBaseCommand::logic_query_trajectory_by_cruise_and_dive(const CMessage_Sour
 		}
 		if (position_chain.length() > 0)
 		{	
-			response.add_position_chain(position_chain);
-			cruiseCount++;
+			if (position_chains.length() > 19) position_chains.append(", ");
+			std::string lineName = name.substr(0, name.length() - 4);
+			position_chains.append("{id: \"" + lineName + "\", length: " + 
+												vectorLength.at(cruiseCount) + ", area: " + 
+												vectorArea.at(cruiseCount) + ", cover_error_number: " + 
+												vectorCoverErrorNumber.at(cruiseCount) + ", type: \"" + 
+												requestTrajectory.trajectory_type() + "\", position_chain: \"" + 
+												position_chain + "\"}");
+			
 		}
 	}
+	position_chains.append("]");
 	
-	response.set_status(cruiseCount > 0);
+	response.set_status(position_chains.length() > 20);
+	response.set_position_chains(position_chains);
 
 	response.set_id(requestTrajectory.cruise_number() + "-" + dive_number);
 	std::string pack = createPackage(CMD_QUERY_TRAJECTORY_BY_CURSE_AND_DIVE_RESPONSE, response.SerializeAsString());
@@ -705,8 +752,6 @@ void CBaseCommand::logic_query_statistics_data_by_condition(const CMessage_Sourc
 		return;
     }
     
-    // 公用函数，用于查询
-    
     // 查询深拖信息
     if (requestStatistics.query_dt()) 
     {
@@ -722,6 +767,7 @@ void CBaseCommand::logic_query_statistics_data_by_condition(const CMessage_Sourc
     if (requestStatistics.query_auv()) 
     {
     	std::string positionChains = generateCesiumPositionChain("AUV");
+    	PSS_LOGGER_DEBUG("AUV length {0}", positionChains.length());
 		if (positionChains.length() > 4)
 		{
 			response.set_status(true);
@@ -788,7 +834,7 @@ void CBaseCommand::logic_query_statistics_data_by_condition(const CMessage_Sourc
     {
     	std::string preface = "{sidescan: ";
 		shared_ptr<MysqlConnection> conn = mMysqlConnectionPool->getConnection();
-		std::string sql = "select cruise_number, priority, verify_flag from t_source_data_side_scan where status_flag = 0;";
+		std::string sql = "select cruise_number, priority, verify_flag, dive_number from t_source_data_side_scan where status_flag = 0;";
 		PSS_LOGGER_DEBUG("statistics sql {0}", sql.data());
 		status = conn->query(sql);
 		if (!status)
@@ -800,16 +846,18 @@ void CBaseCommand::logic_query_statistics_data_by_condition(const CMessage_Sourc
 		}
 		else
 		{
-			int total_cruise_number = 0, total_error_number = 0, p1 = 0, p2 = 0, p3 = 0, verify_number= 0, verify_p1 = 0, verify_p2 = 0, verify_p3 = 0;
+			int total_cruise_number = 0, total_error_number = 0, p1 = 0, p2 = 0, p3 = 0, verify_number= 0, verify_p1 = 0, verify_p2 = 0, verify_p3 = 0, verify_auv = 0, verify_hov = 0;
 			std::set<string>  setCruiseNumber;
 			while (conn->next())
 			{
 				setCruiseNumber.insert(conn->value(0));
 				total_error_number++;
+				
+				bool verifyFlag = stoi(conn->value(2));
 				if (stoi(conn->value(1)) == 1) 
 				{
 					p1++;
-					if (stoi(conn->value(2)) == 1)
+					if (verifyFlag)
 					{
 						verify_number++;
 						verify_p1++;
@@ -818,7 +866,7 @@ void CBaseCommand::logic_query_statistics_data_by_condition(const CMessage_Sourc
 				else if (stoi(conn->value(1)) == 2) 
 				{
 					p2++;
-					if (stoi(conn->value(2)) == 1)
+					if (verifyFlag)
 					{
 						verify_number++;
 						verify_p2++;
@@ -827,11 +875,21 @@ void CBaseCommand::logic_query_statistics_data_by_condition(const CMessage_Sourc
 				else if (stoi(conn->value(1)) == 3) 
 				{
 					p2++;
-					if (stoi(conn->value(2)) == 1)
+					if (verifyFlag)
 					{
 						verify_number++;
 						verify_p2++;
 					}
+				}
+				
+				if (verifyFlag && (conn->value(3).find("HS") != std::string::npos))
+				{
+					verify_auv++;
+				}
+				
+				if (verifyFlag && ((conn->value(3).find("FDZ") != std::string::npos) || (conn->value(3).find("SY") != std::string::npos)))
+				{
+					verify_hov++;
 				}
 			}
 			
@@ -844,7 +902,9 @@ void CBaseCommand::logic_query_statistics_data_by_condition(const CMessage_Sourc
 							", verify_number: " + std::to_string(verify_number) + 
 							", verify_p1: " + std::to_string(verify_p1) + 
 							", verify_p2: " + std::to_string(verify_p2) + 
-							", verify_p3: " + std::to_string(verify_p3) + "}, cruiseroute: ");
+							", verify_p3: " + std::to_string(verify_p3) + 
+							", verify_auv: " + std::to_string(verify_auv) + 
+							", verify_hov: " + std::to_string(verify_hov) + "}, cruiseroute: ");
 		}
 		
 		sql = "select type, length, area from t_source_data_cruise_route where status_flag = 0;";
@@ -858,18 +918,20 @@ void CBaseCommand::logic_query_statistics_data_by_condition(const CMessage_Sourc
 		}
 		else
 		{
-			float total_length = 0, total_area = 0, total_hov_number = 0, dt_total_length = 0, dt_total_area = 0, auv_total_length = 0, auv_total_area = 0, hov_total_length = 0, hov_total_area = 0;
+			float total_length = 0, total_area = 0, total_hov_number = 0, total_dt_number = 0, total_auv_number = 0, dt_total_length = 0, dt_total_area = 0, auv_total_length = 0, auv_total_area = 0, hov_total_length = 0, hov_total_area = 0;
 			while (conn->next())
 			{
 				if (conn->value(0) == "DT")
 				{
 					dt_total_length += stof(conn->value(1));
 					dt_total_area += stof(conn->value(2));
+					total_dt_number++;
 				}
 				else if (conn->value(0) == "AUV")
 				{
 					auv_total_length += stof(conn->value(1));
 					auv_total_area += stof(conn->value(2));
+					total_auv_number++;
 				}
 				else if (conn->value(0) == "HOV")
 				{
@@ -885,6 +947,8 @@ void CBaseCommand::logic_query_statistics_data_by_condition(const CMessage_Sourc
 			preface.append("{total_length: " + std::to_string(total_length) + 
 							", total_area: " + std::to_string(total_area) + 
 							", total_hov_number: " + std::to_string(total_hov_number) + 
+							", total_dt_number: " + std::to_string(total_dt_number) + 
+							", total_auv_number: " + std::to_string(total_auv_number) + 
 							", dt_total_length: " + std::to_string(dt_total_length) + 
 							", dt_total_area: " + std::to_string(dt_total_area) + 
 							", auv_total_length: " + std::to_string(auv_total_length) + 
@@ -1030,7 +1094,7 @@ std::string CBaseCommand::generateCesiumPositionChain(const std::string &type)
 		while(std::getline(fileDescripter, line))
 		{
 			if (lineCount++ % 5 != 0) continue;
-			std::regex reg("^([0-9]+\\.[0-9]+) ([0-9]+\\.[0-9]+) (.*)");
+			std::regex reg("^([0-9]+\\.[0-9]+)[ ]+([0-9]+\\.[0-9]+)[ ]+(.*)");
 			std::smatch match;
 			bool status = regex_search(line, match, reg);
 			if (!status) continue;

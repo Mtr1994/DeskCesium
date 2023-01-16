@@ -58,6 +58,7 @@ message CruiseRouteSource
 	string name = 3;
 	float  length = 4;
 	float  area = 5;
+	uint32 cover_error_number = 6;
 	uint32 status_flag = 29;
 }
 
@@ -110,7 +111,7 @@ message RequestTrajectory
 message RequestTrajectoryResponse
 {
 	string id = 1;
-	repeated string position_chain = 3;
+	string position_chains = 3;
 	bool status = 4;
 }
 

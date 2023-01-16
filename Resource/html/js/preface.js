@@ -15,6 +15,11 @@ function init() {
     {
         alert("qt对象获取失败！");
     }
+	
+	// 禁止右键菜单
+	document.oncontextmenu = function() {
+		event.returnValue = false
+	}
 }
 
 function handleDrop(event) {
@@ -27,6 +32,8 @@ function handleDragOver(event) {
 
 // 修改 preface 信息
 function changePrefaceInfo(obj) {
+	if (obj.length === 0) return
+	
 	let remoteObject = eval("(" + obj + ")")
 	if (remoteObject === undefined) return
 	
@@ -44,6 +51,10 @@ function changePrefaceInfo(obj) {
 	elementTextTotalArea.innerHTML = parseFloat(remoteObject.cruiseroute.total_area).toFixed(2)
 	elementTextTotalArea.title = parseFloat(remoteObject.cruiseroute.total_area).toFixed(2)
 	
+	let elementTextDtNumber = document.getElementById("text-total-dt-number")
+	elementTextDtNumber.innerHTML = remoteObject.cruiseroute.total_dt_number
+	elementTextDtNumber.title = remoteObject.cruiseroute.total_dt_number
+	
 	let elementTextDTLength = document.getElementById("text-dt-length")
 	elementTextDTLength.innerHTML = parseFloat(remoteObject.cruiseroute.dt_total_length).toFixed(2)
 	elementTextDTLength.title = parseFloat(remoteObject.cruiseroute.dt_total_length).toFixed(2)
@@ -52,15 +63,19 @@ function changePrefaceInfo(obj) {
 	elementTextDTArea.innerHTML = parseFloat(remoteObject.cruiseroute.dt_total_area).toFixed(2)
 	elementTextDTArea.title = parseFloat(remoteObject.cruiseroute.dt_total_area).toFixed(2)
 	
+	let elementTextAuvNumber = document.getElementById("text-total-auv-number")
+	elementTextAuvNumber.innerHTML = remoteObject.cruiseroute.total_auv_number
+	elementTextAuvNumber.title = remoteObject.cruiseroute.total_auv_number
+	
 	let elementTextAUVLength = document.getElementById("text-auv-length")
 	elementTextAUVLength.innerHTML = parseFloat(remoteObject.cruiseroute.auv_total_length).toFixed(2)
 	elementTextAUVLength.title = parseFloat(remoteObject.cruiseroute.auv_total_length).toFixed(2)
 	
-	let elementTextAUVArea = document.getElementById("text-auv-area")
-	elementTextAUVArea.innerHTML = parseFloat(remoteObject.cruiseroute.auv_total_area).toFixed(2)
-	elementTextAUVArea.title = parseFloat(remoteObject.cruiseroute.auv_total_area).toFixed(2)
+	let elementTextAUVVerifyNumber = document.getElementById("text-auv-verify-number")
+	elementTextAUVVerifyNumber.innerHTML = remoteObject.sidescan.verify_auv
+	elementTextAUVVerifyNumber.title = remoteObject.sidescan.verify_auv
 		
-	let elementTextHovNumber = document.getElementById("text-total-hov_number")
+	let elementTextHovNumber = document.getElementById("text-total-hov-number")
 	elementTextHovNumber.innerHTML = remoteObject.cruiseroute.total_hov_number
 	elementTextHovNumber.title = remoteObject.cruiseroute.total_hov_number
 	
@@ -68,9 +83,9 @@ function changePrefaceInfo(obj) {
 	elementTextHovLength.innerHTML = parseFloat(remoteObject.cruiseroute.hov_total_length).toFixed(2)
 	elementTextHovLength.title = parseFloat(remoteObject.cruiseroute.hov_total_length).toFixed(2)
 	
-	let elementTextHovArea = document.getElementById("text-hov-area")
-	elementTextHovArea.innerHTML = parseFloat(remoteObject.cruiseroute.hov_total_area).toFixed(2)
-	elementTextHovArea.title = parseFloat(remoteObject.cruiseroute.hov_total_area).toFixed(2)
+	let elementTextHOVVerifyNumber = document.getElementById("text-hov-verify-number")
+	elementTextHOVVerifyNumber.innerHTML = remoteObject.sidescan.verify_hov
+	elementTextHOVVerifyNumber.title = remoteObject.sidescan.verify_hov
 	
 	let elementTextTotalErrorPointNumber = document.getElementById("text-total-error-point-number")
 	elementTextTotalErrorPointNumber.innerHTML = remoteObject.sidescan.total_error_number

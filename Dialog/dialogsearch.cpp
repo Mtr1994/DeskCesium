@@ -1,6 +1,5 @@
 ﻿#include "dialogsearch.h"
 #include "ui_dialogsearch.h"
-#include "Proto/sidescansource.pb.h"
 #include "Protocol/protocolhelper.h"
 #include "Common/common.h"
 #include "Control/Message/messagewidget.h"
@@ -435,10 +434,11 @@ void DialogSearch::slot_query_side_scan_source_data_response(const QList<QString
     ui->lbStatisticsNumber->setText(QString("总计： %1 条记录").arg(QString::number(size)));
 }
 
-void DialogSearch::slot_query_trajectory_data_response(bool status, const QString &id, const QStringList &list)
+void DialogSearch::slot_query_trajectory_data_response(const RequestTrajectoryResponse &response)
 {
-    if (!status) return;
-    qDebug() << "list " << list;
-    emit AppSignal::getInstance()->sgl_add_remote_trajectory_entity(id, list);
+    qDebug() << "slot_query_trajectory_data_response " << response.status();
+    if (!response.status()) return;
+    qDebug() << "list " << response.position_chains().length();
+    emit AppSignal::getInstance()->sgl_add_remote_trajectory_entity(response.id().data(), response.position_chains().data());
 }
 

@@ -44,7 +44,7 @@ public slots:
     void slot_add_remote_tiff_entity(const QString &path, const QString &remoteobject);
 
     // 添加远程 轨迹 对象
-    void slot_add_remote_trajectory_entity(const QString &id, const QStringList &positionchains);
+    void slot_add_remote_trajectory_entity(const QString &id, const QString &positionchains);
 
     void slot_add_grd_entity(const QString &path);
     void slot_change_entity_status(const QString &type, const QString &name, bool visible, const QString &parentid = "");

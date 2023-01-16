@@ -117,8 +117,8 @@ void DialogStatistics::init()
 
 //    ////// 网页调试部分，发布时请注释此段代码 S
 //    QWebEngineView *debugPage = new QWebEngineView;
-//    ui->widgetStatisticsCesium->page()->setDevToolsPage(debugPage->page());
-//    ui->widgetStatisticsCesium->page()->triggerAction(QWebEnginePage::WebAction::InspectElement);
+//    ui->widgetWebPreface->page()->setDevToolsPage(debugPage->page());
+//    ui->widgetWebPreface->page()->triggerAction(QWebEnginePage::WebAction::InspectElement);
 //    debugPage->show();
 //    ////// 网页调试部分，发布时请注释此段代码 E
 

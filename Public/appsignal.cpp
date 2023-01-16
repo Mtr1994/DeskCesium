@@ -9,6 +9,7 @@ AppSignal::AppSignal(QObject *parent) : QObject(parent)
     qRegisterMetaType<QList<QStringList>>("QList<QStringList>");
     qRegisterMetaType<SearchFilterParamterList>("SearchFilterParamterList");
     qRegisterMetaType<RequestStatisticsResponse>("RequestStatisticsResponse");
+    qRegisterMetaType<RequestTrajectoryResponse>("RequestTrajectoryResponse");
 }
 
 AppSignal *AppSignal::getInstance()

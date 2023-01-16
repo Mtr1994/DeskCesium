@@ -1,6 +1,8 @@
 ﻿#ifndef DIALOGSEARCH_H
 #define DIALOGSEARCH_H
 
+#include "Proto/sidescansource.pb.h"
+
 #include <QDialog>
 #include <QStandardItemModel>
 
@@ -40,7 +42,7 @@ private slots:
     void slot_query_side_scan_source_data_response(const QList<QStringList>& list);
 
     // 轨迹线数据查询结果
-    void slot_query_trajectory_data_response(bool status, const QString &id, const QStringList &list);
+    void slot_query_trajectory_data_response(const RequestTrajectoryResponse &response);
 
 private:
     Ui::DialogSearch *ui;

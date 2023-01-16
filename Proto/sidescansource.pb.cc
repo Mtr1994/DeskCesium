@@ -102,6 +102,7 @@ PROTOBUF_CONSTEXPR CruiseRouteSource::CruiseRouteSource(
   , /*decltype(_impl_.name_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
   , /*decltype(_impl_.length_)*/0
   , /*decltype(_impl_.area_)*/0
+  , /*decltype(_impl_.cover_error_number_)*/0u
   , /*decltype(_impl_.status_flag_)*/0u
   , /*decltype(_impl_._cached_size_)*/{}} {}
 struct CruiseRouteSourceDefaultTypeInternal {
@@ -203,8 +204,8 @@ struct RequestTrajectoryDefaultTypeInternal {
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 RequestTrajectoryDefaultTypeInternal _RequestTrajectory_default_instance_;
 PROTOBUF_CONSTEXPR RequestTrajectoryResponse::RequestTrajectoryResponse(
     ::_pbi::ConstantInitialized): _impl_{
-    /*decltype(_impl_.position_chain_)*/{}
-  , /*decltype(_impl_.id_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
+    /*decltype(_impl_.id_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
+  , /*decltype(_impl_.position_chains_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
   , /*decltype(_impl_.status_)*/false
   , /*decltype(_impl_._cached_size_)*/{}} {}
 struct RequestTrajectoryResponseDefaultTypeInternal {
@@ -329,6 +330,7 @@ const uint32_t TableStruct_sidescansource_2eproto::offsets[] PROTOBUF_SECTION_VA
   PROTOBUF_FIELD_OFFSET(::CruiseRouteSource, _impl_.name_),
   PROTOBUF_FIELD_OFFSET(::CruiseRouteSource, _impl_.length_),
   PROTOBUF_FIELD_OFFSET(::CruiseRouteSource, _impl_.area_),
+  PROTOBUF_FIELD_OFFSET(::CruiseRouteSource, _impl_.cover_error_number_),
   PROTOBUF_FIELD_OFFSET(::CruiseRouteSource, _impl_.status_flag_),
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::CruiseRouteSourceList, _internal_metadata_),
@@ -389,7 +391,7 @@ const uint32_t TableStruct_sidescansource_2eproto::offsets[] PROTOBUF_SECTION_VA
   ~0u,  // no _weak_field_map_
   ~0u,  // no _inlined_string_donated_
   PROTOBUF_FIELD_OFFSET(::RequestTrajectoryResponse, _impl_.id_),
-  PROTOBUF_FIELD_OFFSET(::RequestTrajectoryResponse, _impl_.position_chain_),
+  PROTOBUF_FIELD_OFFSET(::RequestTrajectoryResponse, _impl_.position_chains_),
   PROTOBUF_FIELD_OFFSET(::RequestTrajectoryResponse, _impl_.status_),
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::RequestStatistics, _internal_metadata_),
@@ -425,15 +427,15 @@ static const ::_pbi::MigrationSchema schemas[] PROTOBUF_SECTION_VARIABLE(protode
   { 42, -1, -1, sizeof(::SideScanSourceList)},
   { 49, -1, -1, sizeof(::StatusResponse)},
   { 57, -1, -1, sizeof(::CruiseRouteSource)},
-  { 69, -1, -1, sizeof(::CruiseRouteSourceList)},
-  { 76, -1, -1, sizeof(::SearchFilterParamter)},
-  { 86, -1, -1, sizeof(::SearchFilterParamterList)},
-  { 93, -1, -1, sizeof(::FilterSearchParameter)},
-  { 105, -1, -1, sizeof(::KeywordSearchParameter)},
-  { 112, -1, -1, sizeof(::RequestTrajectory)},
-  { 121, -1, -1, sizeof(::RequestTrajectoryResponse)},
-  { 130, -1, -1, sizeof(::RequestStatistics)},
-  { 143, -1, -1, sizeof(::RequestStatisticsResponse)},
+  { 70, -1, -1, sizeof(::CruiseRouteSourceList)},
+  { 77, -1, -1, sizeof(::SearchFilterParamter)},
+  { 87, -1, -1, sizeof(::SearchFilterParamterList)},
+  { 94, -1, -1, sizeof(::FilterSearchParameter)},
+  { 106, -1, -1, sizeof(::KeywordSearchParameter)},
+  { 113, -1, -1, sizeof(::RequestTrajectory)},
+  { 122, -1, -1, sizeof(::RequestTrajectoryResponse)},
+  { 131, -1, -1, sizeof(::RequestStatistics)},
+  { 144, -1, -1, sizeof(::RequestStatisticsResponse)},
 };
 
 static const ::_pb::Message* const file_default_instances[] = {
@@ -478,38 +480,39 @@ const char descriptor_table_protodef_sidescansource_2eproto[] PROTOBUF_SECTION_V
   "\022\023\n\013verify_flag\030# \001(\010\022\023\n\013status_flag\030$ \001"
   "(\r\"3\n\022SideScanSourceList\022\035\n\004list\030\001 \003(\0132\017"
   ".SideScanSource\"1\n\016StatusResponse\022\016\n\006sta"
-  "tus\030\001 \001(\010\022\017\n\007message\030\002 \001(\t\"r\n\021CruiseRout"
-  "eSource\022\016\n\006cruise\030\001 \001(\t\022\014\n\004type\030\002 \001(\t\022\014\n"
-  "\004name\030\003 \001(\t\022\016\n\006length\030\004 \001(\002\022\014\n\004area\030\005 \001("
-  "\002\022\023\n\013status_flag\030\035 \001(\r\"9\n\025CruiseRouteSou"
-  "rceList\022 \n\004list\030\001 \003(\0132\022.CruiseRouteSourc"
-  "e\"s\n\024SearchFilterParamter\022\023\n\013cruise_year"
-  "\030\001 \001(\t\022\025\n\rcruise_number\030\002 \001(\t\022\023\n\013dive_nu"
-  "mber\030\003 \001(\t\022\032\n\022verify_dive_number\030\004 \001(\t\"\?"
-  "\n\030SearchFilterParamterList\022#\n\004list\030\001 \003(\013"
-  "2\025.SearchFilterParamter\"\233\001\n\025FilterSearch"
-  "Parameter\022\023\n\013cruise_year\030\001 \001(\t\022\025\n\rcruise"
-  "_number\030\002 \001(\t\022\023\n\013dive_number\030\003 \001(\t\022\032\n\022ve"
-  "rify_dive_number\030\004 \003(\t\022\020\n\010priority\030\005 \001(\t"
-  "\022\023\n\013verify_flag\030\006 \001(\t\")\n\026KeywordSearchPa"
-  "rameter\022\017\n\007keyword\030\001 \001(\t\"X\n\021RequestTraje"
-  "ctory\022\025\n\rcruise_number\030\001 \001(\t\022\023\n\013dive_num"
-  "ber\030\002 \001(\t\022\027\n\017trajectory_type\030\003 \001(\t\"O\n\031Re"
-  "questTrajectoryResponse\022\n\n\002id\030\001 \001(\t\022\026\n\016p"
-  "osition_chain\030\003 \003(\t\022\016\n\006status\030\004 \001(\010\"\252\001\n\021"
-  "RequestStatistics\022\020\n\010query_dt\030\001 \001(\010\022\021\n\tq"
-  "uery_auv\030\002 \001(\010\022\021\n\tquery_hov\030\003 \001(\010\022\022\n\nque"
-  "ry_ship\030\004 \001(\010\022\030\n\020query_errorpoint\030\005 \001(\010\022"
-  "\025\n\rquery_preface\030\006 \001(\010\022\030\n\020query_chart_da"
-  "ta\030\007 \001(\010\"\251\001\n\031RequestStatisticsResponse\022\016"
-  "\n\006status\030\001 \001(\010\022\017\n\007message\030\002 \001(\t\022\022\n\nerror"
-  "point\030\003 \001(\t\022\n\n\002dt\030\004 \001(\t\022\013\n\003auv\030\005 \001(\t\022\013\n\003"
-  "hov\030\006 \001(\t\022\014\n\004ship\030\007 \001(\t\022\017\n\007preface\030\010 \001(\t"
-  "\022\022\n\nchart_data\030\t \001(\tb\006proto3"
+  "tus\030\001 \001(\010\022\017\n\007message\030\002 \001(\t\"\216\001\n\021CruiseRou"
+  "teSource\022\016\n\006cruise\030\001 \001(\t\022\014\n\004type\030\002 \001(\t\022\014"
+  "\n\004name\030\003 \001(\t\022\016\n\006length\030\004 \001(\002\022\014\n\004area\030\005 \001"
+  "(\002\022\032\n\022cover_error_number\030\006 \001(\r\022\023\n\013status"
+  "_flag\030\035 \001(\r\"9\n\025CruiseRouteSourceList\022 \n\004"
+  "list\030\001 \003(\0132\022.CruiseRouteSource\"s\n\024Search"
+  "FilterParamter\022\023\n\013cruise_year\030\001 \001(\t\022\025\n\rc"
+  "ruise_number\030\002 \001(\t\022\023\n\013dive_number\030\003 \001(\t\022"
+  "\032\n\022verify_dive_number\030\004 \001(\t\"\?\n\030SearchFil"
+  "terParamterList\022#\n\004list\030\001 \003(\0132\025.SearchFi"
+  "lterParamter\"\233\001\n\025FilterSearchParameter\022\023"
+  "\n\013cruise_year\030\001 \001(\t\022\025\n\rcruise_number\030\002 \001"
+  "(\t\022\023\n\013dive_number\030\003 \001(\t\022\032\n\022verify_dive_n"
+  "umber\030\004 \003(\t\022\020\n\010priority\030\005 \001(\t\022\023\n\013verify_"
+  "flag\030\006 \001(\t\")\n\026KeywordSearchParameter\022\017\n\007"
+  "keyword\030\001 \001(\t\"X\n\021RequestTrajectory\022\025\n\rcr"
+  "uise_number\030\001 \001(\t\022\023\n\013dive_number\030\002 \001(\t\022\027"
+  "\n\017trajectory_type\030\003 \001(\t\"P\n\031RequestTrajec"
+  "toryResponse\022\n\n\002id\030\001 \001(\t\022\027\n\017position_cha"
+  "ins\030\003 \001(\t\022\016\n\006status\030\004 \001(\010\"\252\001\n\021RequestSta"
+  "tistics\022\020\n\010query_dt\030\001 \001(\010\022\021\n\tquery_auv\030\002"
+  " \001(\010\022\021\n\tquery_hov\030\003 \001(\010\022\022\n\nquery_ship\030\004 "
+  "\001(\010\022\030\n\020query_errorpoint\030\005 \001(\010\022\025\n\rquery_p"
+  "reface\030\006 \001(\010\022\030\n\020query_chart_data\030\007 \001(\010\"\251"
+  "\001\n\031RequestStatisticsResponse\022\016\n\006status\030\001"
+  " \001(\010\022\017\n\007message\030\002 \001(\t\022\022\n\nerrorpoint\030\003 \001("
+  "\t\022\n\n\002dt\030\004 \001(\t\022\013\n\003auv\030\005 \001(\t\022\013\n\003hov\030\006 \001(\t\022"
+  "\014\n\004ship\030\007 \001(\t\022\017\n\007preface\030\010 \001(\t\022\022\n\nchart_"
+  "data\030\t \001(\tb\006proto3"
   ;
 static ::_pbi::once_flag descriptor_table_sidescansource_2eproto_once;
 const ::_pbi::DescriptorTable descriptor_table_sidescansource_2eproto = {
-    false, false, 2108, descriptor_table_protodef_sidescansource_2eproto,
+    false, false, 2138, descriptor_table_protodef_sidescansource_2eproto,
     "sidescansource.proto",
     &descriptor_table_sidescansource_2eproto_once, nullptr, 0, 13,
     schemas, file_default_instances, TableStruct_sidescansource_2eproto::offsets,
@@ -2658,6 +2661,7 @@ CruiseRouteSource::CruiseRouteSource(const CruiseRouteSource& from)
     , decltype(_impl_.name_){}
     , decltype(_impl_.length_){}
     , decltype(_impl_.area_){}
+    , decltype(_impl_.cover_error_number_){}
     , decltype(_impl_.status_flag_){}
     , /*decltype(_impl_._cached_size_)*/{}};
 
@@ -2702,6 +2706,7 @@ inline void CruiseRouteSource::SharedCtor(
     , decltype(_impl_.name_){}
     , decltype(_impl_.length_){0}
     , decltype(_impl_.area_){0}
+    , decltype(_impl_.cover_error_number_){0u}
     , decltype(_impl_.status_flag_){0u}
     , /*decltype(_impl_._cached_size_)*/{}
   };
@@ -2806,6 +2811,14 @@ const char* CruiseRouteSource::_InternalParse(const char* ptr, ::_pbi::ParseCont
         } else
           goto handle_unusual;
         continue;
+      // uint32 cover_error_number = 6;
+      case 6:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 48)) {
+          _impl_.cover_error_number_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
       // uint32 status_flag = 29;
       case 29:
         if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 232)) {
@@ -2893,6 +2906,12 @@ uint8_t* CruiseRouteSource::_InternalSerialize(
     target = ::_pbi::WireFormatLite::WriteFloatToArray(5, this->_internal_area(), target);
   }
 
+  // uint32 cover_error_number = 6;
+  if (this->_internal_cover_error_number() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteUInt32ToArray(6, this->_internal_cover_error_number(), target);
+  }
+
   // uint32 status_flag = 29;
   if (this->_internal_status_flag() != 0) {
     target = stream->EnsureSpace(target);
@@ -2954,6 +2973,11 @@ size_t CruiseRouteSource::ByteSizeLong() const {
     total_size += 1 + 4;
   }
 
+  // uint32 cover_error_number = 6;
+  if (this->_internal_cover_error_number() != 0) {
+    total_size += ::_pbi::WireFormatLite::UInt32SizePlusOne(this->_internal_cover_error_number());
+  }
+
   // uint32 status_flag = 29;
   if (this->_internal_status_flag() != 0) {
     total_size += 2 +
@@ -3001,6 +3025,9 @@ void CruiseRouteSource::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, cons
   memcpy(&raw_area, &tmp_area, sizeof(tmp_area));
   if (raw_area != 0) {
     _this->_internal_set_area(from._internal_area());
+  }
+  if (from._internal_cover_error_number() != 0) {
+    _this->_internal_set_cover_error_number(from._internal_cover_error_number());
   }
   if (from._internal_status_flag() != 0) {
     _this->_internal_set_status_flag(from._internal_status_flag());
@@ -4737,8 +4764,8 @@ RequestTrajectoryResponse::RequestTrajectoryResponse(const RequestTrajectoryResp
   : ::PROTOBUF_NAMESPACE_ID::Message() {
   RequestTrajectoryResponse* const _this = this; (void)_this;
   new (&_impl_) Impl_{
-      decltype(_impl_.position_chain_){from._impl_.position_chain_}
-    , decltype(_impl_.id_){}
+      decltype(_impl_.id_){}
+    , decltype(_impl_.position_chains_){}
     , decltype(_impl_.status_){}
     , /*decltype(_impl_._cached_size_)*/{}};
 
@@ -4751,6 +4778,14 @@ RequestTrajectoryResponse::RequestTrajectoryResponse(const RequestTrajectoryResp
     _this->_impl_.id_.Set(from._internal_id(), 
       _this->GetArenaForAllocation());
   }
+  _impl_.position_chains_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.position_chains_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (!from._internal_position_chains().empty()) {
+    _this->_impl_.position_chains_.Set(from._internal_position_chains(), 
+      _this->GetArenaForAllocation());
+  }
   _this->_impl_.status_ = from._impl_.status_;
   // @@protoc_insertion_point(copy_constructor:RequestTrajectoryResponse)
 }
@@ -4760,14 +4795,18 @@ inline void RequestTrajectoryResponse::SharedCtor(
   (void)arena;
   (void)is_message_owned;
   new (&_impl_) Impl_{
-      decltype(_impl_.position_chain_){arena}
-    , decltype(_impl_.id_){}
+      decltype(_impl_.id_){}
+    , decltype(_impl_.position_chains_){}
     , decltype(_impl_.status_){false}
     , /*decltype(_impl_._cached_size_)*/{}
   };
   _impl_.id_.InitDefault();
   #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
     _impl_.id_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  _impl_.position_chains_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.position_chains_.Set("", GetArenaForAllocation());
   #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
 }
 
@@ -4782,8 +4821,8 @@ RequestTrajectoryResponse::~RequestTrajectoryResponse() {
 
 inline void RequestTrajectoryResponse::SharedDtor() {
   GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
-  _impl_.position_chain_.~RepeatedPtrField();
   _impl_.id_.Destroy();
+  _impl_.position_chains_.Destroy();
 }
 
 void RequestTrajectoryResponse::SetCachedSize(int size) const {
@@ -4796,8 +4835,8 @@ void RequestTrajectoryResponse::Clear() {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  _impl_.position_chain_.Clear();
   _impl_.id_.ClearToEmpty();
+  _impl_.position_chains_.ClearToEmpty();
   _impl_.status_ = false;
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
@@ -4818,18 +4857,13 @@ const char* RequestTrajectoryResponse::_InternalParse(const char* ptr, ::_pbi::P
         } else
           goto handle_unusual;
         continue;
-      // repeated string position_chain = 3;
+      // string position_chains = 3;
       case 3:
         if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 26)) {
-          ptr -= 1;
-          do {
-            ptr += 1;
-            auto str = _internal_add_position_chain();
-            ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
-            CHK_(ptr);
-            CHK_(::_pbi::VerifyUTF8(str, "RequestTrajectoryResponse.position_chain"));
-            if (!ctx->DataAvailable(ptr)) break;
-          } while (::PROTOBUF_NAMESPACE_ID::internal::ExpectTag<26>(ptr));
+          auto str = _internal_mutable_position_chains();
+          ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(ptr);
+          CHK_(::_pbi::VerifyUTF8(str, "RequestTrajectoryResponse.position_chains"));
         } else
           goto handle_unusual;
         continue;
@@ -4880,14 +4914,14 @@ uint8_t* RequestTrajectoryResponse::_InternalSerialize(
         1, this->_internal_id(), target);
   }
 
-  // repeated string position_chain = 3;
-  for (int i = 0, n = this->_internal_position_chain_size(); i < n; i++) {
-    const auto& s = this->_internal_position_chain(i);
+  // string position_chains = 3;
+  if (!this->_internal_position_chains().empty()) {
     ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
-      s.data(), static_cast<int>(s.length()),
+      this->_internal_position_chains().data(), static_cast<int>(this->_internal_position_chains().length()),
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
-      "RequestTrajectoryResponse.position_chain");
-    target = stream->WriteString(3, s, target);
+      "RequestTrajectoryResponse.position_chains");
+    target = stream->WriteStringMaybeAliased(
+        3, this->_internal_position_chains(), target);
   }
 
   // bool status = 4;
@@ -4912,19 +4946,18 @@ size_t RequestTrajectoryResponse::ByteSizeLong() const {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  // repeated string position_chain = 3;
-  total_size += 1 *
-      ::PROTOBUF_NAMESPACE_ID::internal::FromIntSize(_impl_.position_chain_.size());
-  for (int i = 0, n = _impl_.position_chain_.size(); i < n; i++) {
-    total_size += ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
-      _impl_.position_chain_.Get(i));
-  }
-
   // string id = 1;
   if (!this->_internal_id().empty()) {
     total_size += 1 +
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
         this->_internal_id());
+  }
+
+  // string position_chains = 3;
+  if (!this->_internal_position_chains().empty()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->_internal_position_chains());
   }
 
   // bool status = 4;
@@ -4950,9 +4983,11 @@ void RequestTrajectoryResponse::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_m
   uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
-  _this->_impl_.position_chain_.MergeFrom(from._impl_.position_chain_);
   if (!from._internal_id().empty()) {
     _this->_internal_set_id(from._internal_id());
+  }
+  if (!from._internal_position_chains().empty()) {
+    _this->_internal_set_position_chains(from._internal_position_chains());
   }
   if (from._internal_status() != 0) {
     _this->_internal_set_status(from._internal_status());
@@ -4976,10 +5011,13 @@ void RequestTrajectoryResponse::InternalSwap(RequestTrajectoryResponse* other) {
   auto* lhs_arena = GetArenaForAllocation();
   auto* rhs_arena = other->GetArenaForAllocation();
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
-  _impl_.position_chain_.InternalSwap(&other->_impl_.position_chain_);
   ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
       &_impl_.id_, lhs_arena,
       &other->_impl_.id_, rhs_arena
+  );
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &_impl_.position_chains_, lhs_arena,
+      &other->_impl_.position_chains_, rhs_arena
   );
   swap(_impl_.status_, other->_impl_.status_);
 }

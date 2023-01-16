@@ -82,6 +82,8 @@ function handleDragOver(event) {
 
 // 添加 remote point 实体
 function addRemotePointEntitys(obj) {
+	if (obj.length === 0) return
+	
 	let remoteObject = eval("(" + obj + ")")
 	if (remoteObject === undefined) return
 	
@@ -103,7 +105,10 @@ function addRemotePointEntitys(obj) {
 
 // 添加 remote trajectory 实体
 function addRemoteTrajectoryEntitys(obj) {
+	if (obj.length === 0) return
+	
 	let remoteObject = eval("(" + obj + ")")
+	console.log("remoteObject", remoteObject.type)
 	if (undefined == remoteObject) {
 		context.recvWebMsg("add", false)
 		return

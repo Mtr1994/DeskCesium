@@ -338,7 +338,59 @@ function init() {
 					entityDescription.style.visibility = "hidden"
 					
 					entityTrajectoryDescription.style.visibility = "visible"
-					console.log("click remote line")
+					console.log("click remote line ", remoteObject)
+					
+					if (remoteObject.type === "DT")
+					{
+						let elementDivCustomLineInfo = document.getElementById("div-custom-line-info")
+						elementDivCustomLineInfo.style.display = "none"
+						
+						let elementDivDtLineInfo = document.getElementById("div-dt-line-info")
+						elementDivDtLineInfo.style.display = "block"
+						
+						let elementTextDTLineName = document.getElementById("text-dt-line-name")
+						let textDTLineName = remoteObject.id === "" ? "---" : remoteObject.id
+						elementTextDTLineName.innerHTML = textDTLineName
+						elementTextDTLineName.parentNode.title = textDTLineName
+						
+						let elementTextDTLineLength = document.getElementById("text-dt-line-length")
+						let textDTLineLength = remoteObject.length === "" ? "---" : remoteObject.length
+						elementTextDTLineLength.innerHTML = textDTLineLength
+						elementTextDTLineLength.parentNode.title = textDTLineLength
+						
+						let elementTextDTLineArea = document.getElementById("text-dt-line-area")
+						let textDTLineArea = remoteObject.area === "" ? "---" : remoteObject.area
+						elementTextDTLineArea.innerHTML = textDTLineArea
+						elementTextDTLineArea.parentNode.title = textDTLineArea
+						
+						let elementTextDTCoverErrorNumber = document.getElementById("text-dt-cover-error-number")
+						let textDTLineCoverErrorNumber = remoteObject.cover_error_number === "" ? "---" : remoteObject.cover_error_number
+						elementTextDTCoverErrorNumber.innerHTML = textDTLineCoverErrorNumber
+						elementTextDTCoverErrorNumber.parentNode.title = textDTLineCoverErrorNumber
+					}
+					else
+					{
+						let elementDivCustomLineInfo = document.getElementById("div-custom-line-info")
+						elementDivCustomLineInfo.style.display = "block"
+						
+						let elementDivDtLineInfo = document.getElementById("div-dt-line-info")
+						elementDivDtLineInfo.style.display = "none"
+						
+						let elementTextCusotmLineName = document.getElementById("text-custom-line-name")
+						let textCusotmLineName = remoteObject.id === "" ? "---" : remoteObject.id
+						elementTextCusotmLineName.innerHTML = textCusotmLineName
+						elementTextCusotmLineName.parentNode.title = textCusotmLineName
+						
+						let elementTextCusotmLineLength = document.getElementById("text-custom-line-length")
+						let textCusotmLineLength = remoteObject.length === "" ? "---" : remoteObject.length
+						elementTextCusotmLineLength.innerHTML = textCusotmLineLength
+						elementTextCusotmLineLength.parentNode.title = textCusotmLineLength
+
+						let elementTextCusotmCoverErrorNumber = document.getElementById("text-custom-cover-error-number")
+						let textCusotmLineCoverErrorNumber = remoteObject.cover_error_number === "" ? "---" : remoteObject.cover_error_number
+						elementTextCusotmCoverErrorNumber.innerHTML = textCusotmLineCoverErrorNumber
+						elementTextCusotmCoverErrorNumber.parentNode.title = textCusotmLineCoverErrorNumber	
+					}
 				}
 			}
 		}
@@ -445,6 +497,8 @@ function addGrdEntity(arg) {
 
 // 添加 remote point 实体
 function addRemotePointEntity(arg) {
+	if (arg.length === 0) return
+	
 	let remoteObject = eval("(" + arg + ")")
 	if ((remoteObject.longitude == undefined) || (remoteObject.latitude === undefined)) return;
 	
@@ -470,6 +524,8 @@ function addRemotePointEntity(arg) {
 
 // 添加 remote tif 实体
 function addRemoteTiffEntity(arg) {
+	if (arg.length === 0) return
+	
 	let remoteObject = eval("(" + arg + ")")
 	if (undefined == remoteObject) {
 		context.recvMsg("add", "remote tif", false, remoteObject.id, "元数据对象异常");
@@ -529,6 +585,8 @@ function addRemoteTiffEntity(arg) {
 
 // 添加 remote trajectory 实体
 function addRemoteTrajectoryEntity(arg) {
+	if (arg.length === 0) return
+	
 	let remoteObject = eval("(" + arg + ")")
 	if (undefined == remoteObject) {
 		context.recvMsg("add", "remote trajectory", false, "", "元数据异常")
@@ -541,16 +599,18 @@ function addRemoteTrajectoryEntity(arg) {
 		return;
 	}
 	
+	console.log("remoteObject ", remoteObject)
+	
 	const options = {
 	  camera: cesiumViewer.scene.camera,
 	  canvas: cesiumViewer.scene.canvas,
 	  screenOverlayContainer: cesiumViewer.container,
 	};
 	
-	let lineSize = remoteObject.positionchains.length
+	let lineSize = remoteObject.position_chains.length
 	let positionChainValue = ""
 	for (let i = 0; i < lineSize; i++) {
-		positionChainValue += "<Placemark> <name>" + remoteObject.positionchains[i].id + "</name> <styleUrl>#linestyle</styleUrl> <LineString> <extrude>1</extrude> <tessellate>1</tessellate> <coordinates>" + remoteObject.positionchains[i].positionchain + "</coordinates> </LineString> </Placemark>"
+		positionChainValue += "<Placemark> <name>" + remoteObject.position_chains[i].id + "</name> <styleUrl>#linestyle</styleUrl> <LineString> <extrude>1</extrude> <tessellate>1</tessellate> <coordinates>" + remoteObject.position_chains[i].position_chain + "</coordinates> </LineString> </Placemark>"
 	}
 	
 	let xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Document> <name>" + remoteObject.id + "</name> <open>1</open> <Style id=\"linestyle\"> <LineStyle> <color>7f0000ff</color> <width>2</width> </LineStyle> </Style>" + positionChainValue + "</Document>";
@@ -569,9 +629,17 @@ function addRemoteTrajectoryEntity(arg) {
 		for (let i = 0; i < entitySize; i++) {
 			let entity = dataSource.entities.values[i]
 			entity.show = true;
-			entity.remoteDescription = {"value": 1},
+			
 			entity.remoteType = "remote trajectory"
 			entityList = entityList + entity.name + "," + entity.id + "#";
+			
+			// 设置额外信息
+			for (let i = 0; i < lineSize; i++) {
+				if (remoteObject.position_chains[i].id == entity._name) {
+					entity.remoteDescription = remoteObject.position_chains[i]
+					break;
+				}
+			}
 		}
 
 		context.recvMsg("add", "remote trajectory", true, dataSource.name, entityList);

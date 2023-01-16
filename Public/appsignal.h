@@ -31,7 +31,7 @@ signals:
     void sgl_add_remote_tiff_entity(const QString &path, const QString &remoteobject);
 
     // 添加远程 Trajectory 实体
-    void sgl_add_remote_trajectory_entity(const QString &id, const QStringList &positionchains);
+    void sgl_add_remote_trajectory_entity(const QString &id, const QString &positionchains);
 
     // 添加 grd 实体
     void sgl_add_grd_entity(const QString &path);
@@ -82,7 +82,7 @@ signals:
     void sgl_query_side_scan_source_data_response(const QList<QStringList> &list);
 
     // 轨迹线数据查询结果
-    void sgl_query_trajectory_data_response(bool status, const QString &id, const QStringList &list);
+    void sgl_query_trajectory_data_response(const RequestTrajectoryResponse &response);
 
     // 查询检索条件结果
     void sgl_query_search_filter_parameter_response(const SearchFilterParamterList &response);

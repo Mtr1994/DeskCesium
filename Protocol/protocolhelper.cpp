@@ -214,18 +214,7 @@ void ProtocolHelper::parse()
                 qDebug() << "数据包 CMD_QUERY_TRAJECTORY_BY_CURSE_AND_DIVE_RESPONSE 解析异常";
                 continue;
             }
-
-            // 没有找到轨迹线，直接返回
-            if (!response.status()) return;
-
-            // 添加 kml 文件轨迹
-            int cruiseCount = response.position_chain_size();
-            QStringList list;
-            for (int i = 0; i < cruiseCount; i++)
-            {
-                list.append(response.position_chain(i).data());
-            }
-            emit AppSignal::getInstance()->sgl_query_trajectory_data_response(response.status(), QString::fromStdString(response.id()), list);
+            emit AppSignal::getInstance()->sgl_query_trajectory_data_response(response);
             break;
         }
         case CMD_QUERY_SEARCH_FILTER_PARAMETER_DATA_RESPONSE:

@@ -75,7 +75,7 @@ void DialogUploadData::init()
 
     if (UserNetWorker::getInstance()->getSocketStatus())
     {
-        emit sgl_send_system_notice_message(STATUS_SUCCESS, QString("远程数据服务已连接"));
+        emit sgl_send_system_notice_message(STATUS_SUCCESS, QString("数据服务已连接"));
 
         // 数据服务连接后，通过数据服务查询文件服务是否开启
         QByteArray pack = ProtocolHelper::getInstance()->createPackage(CMD_QUERY_FTP_SERVER_STATUS);
@@ -287,6 +287,12 @@ void DialogUploadData::checkData()
             if (source->cruise_year().size() >= 16)
             {
                 emit sgl_thread_report_check_status(STATUS_ERROR, QString("编号 【%1】 的航次年份长度【%2】超过最大阈值 【16】").arg(source->id().data(), QString::number(source->dt_time().size())));
+                return;
+            }
+
+            if (QString::fromStdString(source->cruise_year()).trimmed().length() == 0)
+            {
+                emit sgl_thread_report_check_status(STATUS_ERROR, QString("编号 【%1】 的航次年份为空，系统判定异常").arg(source->id().data()));
                 return;
             }
 
@@ -679,6 +685,7 @@ void DialogUploadData::checkData()
         source->set_type("AUV");
         source->set_length(length);
         source->set_area(length * 700 * 2);
+        source->set_cover_error_number(0);
         source->set_name(track.fileName().toStdString());
     }
 
@@ -686,7 +693,7 @@ void DialogUploadData::checkData()
     listTrack = navigationDTVDir.entryInfoList(QStringList("*.txt"), QDir::Files | QDir::NoSymLinks);
     for (auto &track : listTrack)
     {
-        bool status = std::regex_match(track.fileName().toStdString(), std::regex(QString("^%1-([^-]*)(-[0-9][0-9])?.txt$").arg(cruiseNumber).toStdString()));
+        bool status = std::regex_match(track.fileName().toStdString(), std::regex(QString("^%1-([^-]*)-([^-]*)(.*)?.txt$").arg(cruiseNumber).toStdString()));
         if (!status) continue;
 
         DataUploadTask task = {"upload", QString("upload/%1/Navigation/DT").arg(cruiseNumber).toStdString(), track.absoluteFilePath().toStdString()};
@@ -705,6 +712,7 @@ void DialogUploadData::checkData()
         source->set_type("DT");
         source->set_length(length);
         source->set_area(length * 700 * 2);
+        source->set_cover_error_number(0);
         source->set_name(track.fileName().toStdString());
     }
 
@@ -730,6 +738,7 @@ void DialogUploadData::checkData()
         source->set_type("HOV");
         source->set_length(length);
         source->set_area(length * 700 * 2);
+        source->set_cover_error_number(0);
         source->set_name(track.fileName().toStdString());
     }
 
@@ -755,6 +764,7 @@ void DialogUploadData::checkData()
         source->set_type("SHIP");
         source->set_length(length);
         source->set_area(length * 700 * 2);
+        source->set_cover_error_number(0);
         source->set_name(track.fileName().toStdString());
     }
 
@@ -765,6 +775,8 @@ void DialogUploadData::checkData()
         mTaskQueue.append(taskSideScan);
         increaceTaskNumber++;
     }
+
+    qDebug() << "routeSourceList size " << routeSourceList.list_size();
 
     if (routeSourceList.list_size() > 0)
     {
@@ -850,7 +862,7 @@ void DialogUploadData::slot_btn_upload_data_click()
 
     if (!UserNetWorker::getInstance()->getSocketStatus())
     {
-        emit sgl_send_system_notice_message(STATUS_INFO, "请检查远程数据服务状态");
+        emit sgl_send_system_notice_message(STATUS_INFO, "请检查数据服务状态");
         return;
     }
 
@@ -982,7 +994,7 @@ void DialogUploadData::slot_ftp_server_work_status(bool status, const QString &m
         connect(mFtpManager, &FtpManager::sgl_ftp_connect_status_change, this, [this](bool status)
         {
             mFtpServerConnected = status;
-            emit sgl_thread_report_check_status(status ? STATUS_SUCCESS : STATUS_ERROR, status ? "文件服务连接成功" : QString("文件服务连接失败"), false);
+            emit sgl_thread_report_check_status(status ? STATUS_SUCCESS : STATUS_ERROR, status ? "文件服务已连接" : QString("文件服务已断开"), false);
         });
         connect(mFtpManager, &FtpManager::sgl_ftp_upload_task_finish, this, [this](const QString &file, bool status, const QString &message)
         {

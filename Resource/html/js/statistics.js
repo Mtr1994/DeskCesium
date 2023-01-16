@@ -41,6 +41,8 @@ function handleDragOver(event) {
 
 // 添加 年份 折线图
 function addYearCurveChart(obj) {
+	if (obj.length === 0) return
+	
 	let jsObject = eval("(" + obj + ")")
 	if (jsObject == undefined)  return;
 	
@@ -84,6 +86,8 @@ function addYearCurveChart(obj) {
 
 // 添加 优先级饼图
 function addPriorityPieChart(obj) {
+	if (obj.length === 0) return
+	
 	let jsObject = eval("(" + obj + ")")
 	if (jsObject == undefined) return;
 	
@@ -120,6 +124,8 @@ function addPriorityPieChart(obj) {
 
 // 添加 查证饼图
 function addCheckedPieChart(obj) {
+	if (obj.length === 0) return
+	
 	let jsObject = eval("(" + obj + ")")
 	if (jsObject == undefined) return;
 	
@@ -159,32 +165,4 @@ function addCheckedPieChart(obj) {
 	};
 	
 	chartOption && myChart.setOption(chartOption);
-}
-
-
-// 时间转换
-function formatDate (d) {
-    var now = new Date(parseFloat(d));
-    var year=now.getFullYear();
-    var month=now.getMonth()+1;
-    var date=now.getDate();
-    if (month >= 1 && month <= 9) {
-		month = "0" + month;
-    }
-    if (date >= 0 && date <= 9) {
-		date = "0" + date;
-    }
-    var hour=now.getHours();
-    var minute=now.getMinutes();
-    var second=now.getSeconds();
-    if (hour >= 1 && hour <= 9) {
-		hour = "0" + hour;
-    }
-    if (minute >= 0 && minute <= 9) {
-		minute = "0" + minute;
-    }
-    if (second >= 0 && second <= 9) {
-		second = "0" + second;
-    }
-    return year+"-"+month+"-"+date+" "+hour+":"+minute+":"+second;
 }
