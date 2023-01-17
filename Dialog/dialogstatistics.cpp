@@ -38,8 +38,8 @@ void DialogStatistics::init()
 
     connect(AppSignal::getInstance(), &AppSignal::sgl_query_statistics_data_by_condition_response, this, &DialogStatistics::slot_query_statistics_data_by_condition_response);
 
-    //QString htmlRoot = QApplication::applicationDirPath() + "/../Resource/html";
-    QString htmlRoot = QApplication::applicationDirPath() + "/resource/html";
+    QString htmlRoot = QApplication::applicationDirPath() + "/../Resource/html";
+    //QString htmlRoot = QApplication::applicationDirPath() + "/resource/html";
 
     mJsContextPreface = new PrefaceJsContext(this);
     QWebChannel *channelPreface = new QWebChannel(this);
