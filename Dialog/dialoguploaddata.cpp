@@ -476,7 +476,7 @@ void DialogUploadData::checkData()
 
             // 优先级
             cell = xlsxDocument.cellAt(i, CELL_PRIORITY);
-            source->set_priority(getCellValue(cell).toInt() & 0xff);
+            source->set_priority((uint32_t)getCellValue(cell).toFloat() & 0xff);
 
             // 查证照片描述
             cell = xlsxDocument.cellAt(i, CELL_IMAGE_DESCRIPTION);
@@ -684,7 +684,7 @@ void DialogUploadData::checkData()
         source->set_cruise(cruiseNumber.toStdString());
         source->set_type("AUV");
         source->set_length(length);
-        source->set_area(length * 700 * 2);
+        source->set_area(length * 0.6 * 2);
         source->set_cover_error_number(0);
         source->set_name(track.fileName().toStdString());
     }
@@ -711,7 +711,7 @@ void DialogUploadData::checkData()
         source->set_cruise(cruiseNumber.toStdString());
         source->set_type("DT");
         source->set_length(length);
-        source->set_area(length * 700 * 2);
+        source->set_area(length * 0.6 * 2);
         source->set_cover_error_number(0);
         source->set_name(track.fileName().toStdString());
     }
@@ -737,7 +737,7 @@ void DialogUploadData::checkData()
         source->set_cruise(cruiseNumber.toStdString());
         source->set_type("HOV");
         source->set_length(length);
-        source->set_area(length * 700 * 2);
+        source->set_area(length * 0.6 * 2);
         source->set_cover_error_number(0);
         source->set_name(track.fileName().toStdString());
     }
@@ -763,7 +763,7 @@ void DialogUploadData::checkData()
         source->set_cruise(cruiseNumber.toStdString());
         source->set_type("SHIP");
         source->set_length(length);
-        source->set_area(length * 700 * 2);
+        source->set_area(length * 0.6 * 2);
         source->set_cover_error_number(0);
         source->set_name(track.fileName().toStdString());
     }
@@ -830,7 +830,7 @@ double DialogUploadData::getDistanceOfFile(const QString &path)
     double p1x = -1, p1y = -1;
     bool isFirstPoint = true;
 
-    ifstream fileDescripter(path.toStdString());
+    ifstream fileDescripter(path.toLocal8Bit());
     for (string line = ""; getline(fileDescripter, line); )
     {
         auto list = QString::fromStdString(line).split(" ", Qt::SkipEmptyParts);
@@ -849,6 +849,7 @@ double DialogUploadData::getDistanceOfFile(const QString &path)
             p1y = list.at(1).toDouble();
         }
     }
+
     return length;
 }
 

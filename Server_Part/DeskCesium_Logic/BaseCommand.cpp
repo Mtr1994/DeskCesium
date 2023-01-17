@@ -834,7 +834,7 @@ void CBaseCommand::logic_query_statistics_data_by_condition(const CMessage_Sourc
     {
     	std::string preface = "{sidescan: ";
 		shared_ptr<MysqlConnection> conn = mMysqlConnectionPool->getConnection();
-		std::string sql = "select cruise_number, priority, verify_flag, dive_number from t_source_data_side_scan where status_flag = 0;";
+		std::string sql = "select cruise_number, priority, verify_flag, verify_dive_number from t_source_data_side_scan where status_flag = 0;";
 		PSS_LOGGER_DEBUG("statistics sql {0}", sql.data());
 		status = conn->query(sql);
 		if (!status)
@@ -874,11 +874,11 @@ void CBaseCommand::logic_query_statistics_data_by_condition(const CMessage_Sourc
 				}
 				else if (stoi(conn->value(1)) == 3) 
 				{
-					p2++;
+					p3++;
 					if (verifyFlag)
 					{
 						verify_number++;
-						verify_p2++;
+						verify_p3++;
 					}
 				}
 				
@@ -907,7 +907,7 @@ void CBaseCommand::logic_query_statistics_data_by_condition(const CMessage_Sourc
 							", verify_hov: " + std::to_string(verify_hov) + "}, cruiseroute: ");
 		}
 		
-		sql = "select type, length, area from t_source_data_cruise_route where status_flag = 0;";
+		sql = "select type, length, area, name, cruise_number from t_source_data_cruise_route where status_flag = 0;";
 		status = conn->query(sql);
 		if (!status)
 		{
@@ -919,30 +919,40 @@ void CBaseCommand::logic_query_statistics_data_by_condition(const CMessage_Sourc
 		else
 		{
 			float total_length = 0, total_area = 0, total_hov_number = 0, total_dt_number = 0, total_auv_number = 0, dt_total_length = 0, dt_total_area = 0, auv_total_length = 0, auv_total_area = 0, hov_total_length = 0, hov_total_area = 0;
+			std::set<string>  setDTNumber;
 			while (conn->next())
 			{
 				if (conn->value(0) == "DT")
 				{
 					dt_total_length += stof(conn->value(1));
 					dt_total_area += stof(conn->value(2));
-					total_dt_number++;
+					
+					std::string dtNumber = conn->value(3).substr(conn->value(4).length() + 1);
+					int index = dtNumber.find("-");
+					if (index == std::string::npos) dtNumber = dtNumber.substr(0, dtNumber.length() - 4);
+					else dtNumber = dtNumber.substr(0, index);
+					
+					setDTNumber.insert(dtNumber);
 				}
 				else if (conn->value(0) == "AUV")
 				{
 					auv_total_length += stof(conn->value(1));
-					auv_total_area += stof(conn->value(2));
+					//auv_total_area += stof(conn->value(2));
 					total_auv_number++;
 				}
 				else if (conn->value(0) == "HOV")
 				{
 					hov_total_length += stof(conn->value(1));
-					hov_total_area += stof(conn->value(2));
+					//hov_total_area += stof(conn->value(2));
 					total_hov_number++;
 				}
+				
 			}
 			
-			total_length = dt_total_length + auv_total_area + hov_total_length;
-			total_area = dt_total_area + auv_total_area + hov_total_area;
+			total_dt_number = setDTNumber.size();
+			
+			total_length = dt_total_length; // + auv_total_length + hov_total_length;
+			total_area = dt_total_area; // + auv_total_area + hov_total_area;
 			
 			preface.append("{total_length: " + std::to_string(total_length) + 
 							", total_area: " + std::to_string(total_area) + 

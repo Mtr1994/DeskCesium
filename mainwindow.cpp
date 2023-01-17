@@ -86,8 +86,8 @@ void MainWindow::init()
     QWebChannel *channel = new QWebChannel(this);
     channel->registerObject("context", mJsContext);
     ui->widgetCesium->page()->setWebChannel(channel);
-    //ui->widgetCesium->page()->load(QUrl(QString("%1/resource/html/index.html").arg(QApplication::applicationDirPath())).toString());
-    ui->widgetCesium->page()->load(QUrl(QString("%1/../Resource/html/index.html").arg(QApplication::applicationDirPath())).toString());
+    ui->widgetCesium->page()->load(QUrl(QString("%1/resource/html/index.html").arg(QApplication::applicationDirPath())).toString());
+    //ui->widgetCesium->page()->load(QUrl(QString("%1/../Resource/html/index.html").arg(QApplication::applicationDirPath())).toString());
     ui->widgetCesium->page()->setBackgroundColor(QColor(0, 0, 0));
     connect(mJsContext, &JsContext::sgl_web_view_init_finish, this, [this]
     {

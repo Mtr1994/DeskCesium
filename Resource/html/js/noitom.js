@@ -355,13 +355,13 @@ function init() {
 						
 						let elementTextDTLineLength = document.getElementById("text-dt-line-length")
 						let textDTLineLength = remoteObject.length === "" ? "---" : remoteObject.length
-						elementTextDTLineLength.innerHTML = textDTLineLength
-						elementTextDTLineLength.parentNode.title = textDTLineLength
+						elementTextDTLineLength.innerHTML = textDTLineLength + " km"
+						elementTextDTLineLength.parentNode.title = textDTLineLength + " km"
 						
 						let elementTextDTLineArea = document.getElementById("text-dt-line-area")
 						let textDTLineArea = remoteObject.area === "" ? "---" : remoteObject.area
-						elementTextDTLineArea.innerHTML = textDTLineArea
-						elementTextDTLineArea.parentNode.title = textDTLineArea
+						elementTextDTLineArea.innerHTML = textDTLineArea  + " km²"
+						elementTextDTLineArea.parentNode.title = textDTLineArea + " km²"
 						
 						let elementTextDTCoverErrorNumber = document.getElementById("text-dt-cover-error-number")
 						let textDTLineCoverErrorNumber = remoteObject.cover_error_number === "" ? "---" : remoteObject.cover_error_number
@@ -383,8 +383,8 @@ function init() {
 						
 						let elementTextCusotmLineLength = document.getElementById("text-custom-line-length")
 						let textCusotmLineLength = remoteObject.length === "" ? "---" : remoteObject.length
-						elementTextCusotmLineLength.innerHTML = textCusotmLineLength
-						elementTextCusotmLineLength.parentNode.title = textCusotmLineLength
+						elementTextCusotmLineLength.innerHTML = textCusotmLineLength + " km"
+						elementTextCusotmLineLength.parentNode.title = textCusotmLineLength + " km"
 
 						let elementTextCusotmCoverErrorNumber = document.getElementById("text-custom-cover-error-number")
 						let textCusotmLineCoverErrorNumber = remoteObject.cover_error_number === "" ? "---" : remoteObject.cover_error_number
@@ -567,12 +567,24 @@ function addRemoteTiffEntity(arg) {
 		let tiff = new Tiff({buffer: xhr.response});
 		let canvas = tiff.toCanvas();
 		let size = cesiumViewer.entities.values.length;
+		
+		let leftX = parseFloat(remoteObject.image_top_left_longitude)
+		let leftY = parseFloat(remoteObject.image_top_left_latitude)
+		let rightX = parseFloat(remoteObject.image_bottom_right_longitude)
+		let rightY = parseFloat(remoteObject.image_bottom_right_latitude)
+		
 		cesiumViewer.entities.add({
 		  id: remoteObject.id,
 		  rectangle: {
-			coordinates: Cesium.Rectangle.fromDegrees(parseFloat(remoteObject.image_top_left_longitude), parseFloat(remoteObject.image_top_left_latitude), parseFloat(remoteObject.image_bottom_right_longitude), parseFloat(remoteObject.image_bottom_right_latitude)),
+			coordinates: Cesium.Rectangle.fromDegrees(leftX, leftY, rightX, rightY),
 			material: canvas,
 			zIndex: size,
+		  },
+		  position: Cesium.Cartesian3.fromDegrees(leftX + (rightX - leftX) * 0.5, rightY + (leftY - rightY) * 0.5),
+		  point: {
+			color:  Cesium.Color.ORANGE,
+			pixelSize: 8,
+			zIndex: size + 1
 		  },
 		  remoteDescription: remoteObject,
 		  remoteType: "remote error point"
@@ -629,6 +641,7 @@ function addRemoteTrajectoryEntity(arg) {
 		for (let i = 0; i < entitySize; i++) {
 			let entity = dataSource.entities.values[i]
 			entity.show = true;
+			entity.zIndex = 1
 			
 			entity.remoteType = "remote trajectory"
 			entityList = entityList + entity.name + "," + entity.id + "#";

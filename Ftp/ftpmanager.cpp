@@ -344,7 +344,7 @@ void FtpProtocol::slot_socket_command_data_recv()
                 mResultMessage = "无法连接到服务器";
                 mListCommand.clear();
                 mFileStream.close();
-                emit sgl_ftp_upload_task_finish(mFileName, false, "无法连接到文件服务器 " + QString::number(mSocketData->state()));
+                emit sgl_ftp_upload_task_finish(mFileName, false, "无法连接到文件服务器 ");
                 return;
             }
             std::this_thread::sleep_for(std::chrono::milliseconds(1000));
