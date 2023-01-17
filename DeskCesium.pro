@@ -11,7 +11,7 @@ unix: QMAKE_LFLAGS += -no-pie
 
 # Qt 5.14 VERSION can only contains numbers, no any others type of character please
 # please do not put 0 before any version number, because this will cause a warnning on Qt 5.14
-win32:  VERSION = 21.5.9.1140                # major.minor.patch.build
+win32:  VERSION = 23.5.9.1140                # major.minor.patch.build
 else:   VERSION = 21.5.9                    # major.minor.patch
 
 QMAKE_TARGET_COPYRIGHT = mtr company Co., Ltd
