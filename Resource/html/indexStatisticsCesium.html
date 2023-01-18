@@ -12,24 +12,21 @@
 	<div id="cesiumContainer" class = "div-cesium-viewer" ondrop="handleDrop(event)" ondragover="handleDragOver(event)"> </div>
 	<div id="legend" class="div-legend-info-base">
 	    <ul>
-			
-		
-			<li><div class="div-legend-info" style="background-color:#5470c6; height: 8px; width: 8px; margin-left: 8px; margin-right: 19px; border-radius: 4px;"></div>优先级 0</li>
-			<li><div class="div-legend-info" style="background-color:#5470c6; height: 12px; width: 12px; margin-left: 6px; margin-right: 17px; border-radius: 6px;"></div>优先级 1</li>
-			<li><div class="div-legend-info" style="background-color:#5470c6; height: 16px; width: 16px; margin-left: 4px; margin-right: 15px; border-radius: 8px;"></div>优先级 2</li>
-			<li><div class="div-legend-info" style="background-color:#5470c6; height: 20px; width: 20px; margin-left: 2px; margin-right: 13px; border-radius: 10px;"></div>优先级 3</li>
+			<li><div class="div-legend-info" id="p1" legendType = "priority" check = true checkColor = "#5470c6" onclick="handleLegendClick(event)" style="background-color:#5470c6; height: 12px; width: 12px; margin-left: 6px; margin-right: 17px; border-radius: 6px;"></div>优先级 1</li>
+			<li><div class="div-legend-info" id="p2" legendType = "priority" check = true checkColor = "#5470c6" onclick="handleLegendClick(event)" style="background-color:#5470c6; height: 16px; width: 16px; margin-left: 4px; margin-right: 15px; border-radius: 8px;"></div>优先级 2</li>
+			<li><div class="div-legend-info" id="p3" legendType = "priority" check = true checkColor = "#5470c6" onclick="handleLegendClick(event)" style="background-color:#5470c6; height: 20px; width: 20px; margin-left: 2px; margin-right: 13px; border-radius: 10px;"></div>优先级 3</li>
 			
 			<li><div class="div-legend-info" style="background-color:#dc143c00;"></div></li>
 			
-			<li><div class="div-legend-line-info" style="background-color:#FF8C00;"></div>AUV</li>
-			<li><div class="div-legend-line-info" style="background-color:#32CD32;"></div>HOV</li>
-			<li><div class="div-legend-line-info" style="background-color:#DC143C;"></div>DT</li>
-			<li><div class="div-legend-line-info" style="background-color:#FF4500;"></div>SHIP</li>
+			<li><div class="div-legend-line-info" id="AUV" legendType = "line" check = true checkColor = "#FF8C00" onclick="handleLegendClick(event)" style="background-color:#FF8C00;"></div>AUV</li>
+			<li><div class="div-legend-line-info" id="HOV" legendType = "line" check = true checkColor = "#32CD32" onclick="handleLegendClick(event)" style="background-color:#32CD32;"></div>HOV</li>
+			<li><div class="div-legend-line-info" id="DT" legendType = "line" check = true checkColor = "#DC143C" onclick="handleLegendClick(event)" style="background-color:#DC143C;"></div>DT</li>
+			<li><div class="div-legend-line-info" id="SHIP" legendType = "line" check = true checkColor = "#FF4500" onclick="handleLegendClick(event)" style="background-color:#FF4500;"></div>SHIP</li>
 			
 			<li><div class="div-legend-info" style="background-color:#dc143c00;"></div></li>
 			
-			<li><div class="div-legend-info" style="background-color:#dc143c;"></div>未查证</li>
-			<li><div class="div-legend-info" style="background-color:#00ff00;"></div>已查证</li>
+			<li><div class="div-legend-info" id="unverify" legendType = "verifyFlag" check = true checkColor = "#dc143c" onclick="handleLegendClick(event)" style="background-color:#dc143c;"></div>未查证</li>
+			<li><div class="div-legend-info" id="verify" legendType = "verifyFlag" check = true checkColor = "#00ff00" onclick="handleLegendClick(event)" style="background-color:#00ff00;"></div>已查证</li>
 		</ul>
 	</div>
 <style>
@@ -81,10 +78,10 @@
 		border-radius: 3px;
 	}
 	.div-legend-line-info {
-		height: 2px;
+		height: 14px;
 		width: 25px;
 		margin-right: 10px;
-		border-radius: 1px;
+		border-radius: 3px;
 	}
 	
 	::-webkit-scrollbar {

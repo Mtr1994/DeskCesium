@@ -834,7 +834,7 @@ void CBaseCommand::logic_query_statistics_data_by_condition(const CMessage_Sourc
     {
     	std::string preface = "{sidescan: ";
 		shared_ptr<MysqlConnection> conn = mMysqlConnectionPool->getConnection();
-		std::string sql = "select cruise_number, priority, verify_flag, verify_dive_number from t_source_data_side_scan where status_flag = 0;";
+		std::string sql = "select cruise_number, priority, verify_flag, verify_dive_number, verify_cruise_number from t_source_data_side_scan where status_flag = 0;";
 		PSS_LOGGER_DEBUG("statistics sql {0}", sql.data());
 		status = conn->query(sql);
 		if (!status)
@@ -851,6 +851,25 @@ void CBaseCommand::logic_query_statistics_data_by_condition(const CMessage_Sourc
 			while (conn->next())
 			{
 				setCruiseNumber.insert(conn->value(0));
+				std::string verify_cruise_number = conn->value(4);
+				while (true)
+				{
+					uint64_t index = verify_cruise_number.find("/"); 
+					if(index != std::string::npos)
+					{
+						setCruiseNumber.insert(verify_cruise_number.substr(0, index));
+						verify_cruise_number = verify_cruise_number.substr(index + 1);
+					}
+					else
+					{
+						if (verify_cruise_number.length() > 0)
+						{
+							setCruiseNumber.insert(verify_cruise_number);
+						}
+						break;
+					}
+				}
+				
 				total_error_number++;
 				
 				bool verifyFlag = stoi(conn->value(2));
@@ -920,6 +939,7 @@ void CBaseCommand::logic_query_statistics_data_by_condition(const CMessage_Sourc
 		{
 			float total_length = 0, total_area = 0, total_hov_number = 0, total_dt_number = 0, total_auv_number = 0, dt_total_length = 0, dt_total_area = 0, auv_total_length = 0, auv_total_area = 0, hov_total_length = 0, hov_total_area = 0;
 			std::set<string>  setDTNumber;
+			std::set<string>  setAUVNumber;
 			while (conn->next())
 			{
 				if (conn->value(0) == "DT")
@@ -938,7 +958,13 @@ void CBaseCommand::logic_query_statistics_data_by_condition(const CMessage_Sourc
 				{
 					auv_total_length += stof(conn->value(1));
 					//auv_total_area += stof(conn->value(2));
-					total_auv_number++;
+					
+					std::string auvNumber = conn->value(3).substr(conn->value(4).length() + 1);
+					int index = auvNumber.find("-");
+					if (index == std::string::npos) auvNumber = auvNumber.substr(0, auvNumber.length() - 4);
+					else auvNumber = auvNumber.substr(0, index);
+					
+					setAUVNumber.insert(auvNumber);
 				}
 				else if (conn->value(0) == "HOV")
 				{
@@ -950,6 +976,7 @@ void CBaseCommand::logic_query_statistics_data_by_condition(const CMessage_Sourc
 			}
 			
 			total_dt_number = setDTNumber.size();
+			total_auv_number = setAUVNumber.size();
 			
 			total_length = dt_total_length; // + auv_total_length + hov_total_length;
 			total_area = dt_total_area; // + auv_total_area + hov_total_area;
