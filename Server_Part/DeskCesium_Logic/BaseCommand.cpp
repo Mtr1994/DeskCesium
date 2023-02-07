@@ -449,12 +449,13 @@ void CBaseCommand::logic_query_side_scan_source_data_by_filter(const CMessage_So
 		sql.append("priority in (" + searchParameter.priority() +")");
 	}
 	
-	if (searchParameter.verify_flag().length() > 0) 
+	if (searchParameter.verify_flag().length() > 0)
     {
     	if (sql.length() > 44) sql.append(" and ");
 		sql.append("verify_flag in (" + searchParameter.verify_flag() +")");
 	}
-	sql.append(" and status_flag = 0;");
+	if (sql.length() == 44) sql.append("status_flag = 0;");
+	else sql.append(" and status_flag = 0;");
     
     PSS_LOGGER_DEBUG("sql {0}", sql.data());
     
